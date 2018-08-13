@@ -6,5 +6,8 @@
   "repository": "git@github.com:prajjwaldimri/Campzy.git",
   "author": "Prajjwal <prajjwaldimri@hotmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
