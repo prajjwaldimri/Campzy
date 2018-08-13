@@ -1,0 +1,10 @@
+{
+  "name": "Campzy",
+  "version": "1.0.0",
+  "description": "Website for campzy.in",
+  "main": "app.js",
+  "repository": "git@github.com:prajjwaldimri/Campzy.git",
+  "author": "Prajjwal <prajjwaldimri@hotmail.com>",
+  "license": "MIT",
+  "private": true
+}
