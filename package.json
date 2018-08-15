@@ -7,7 +7,14 @@
   "author": "Prajjwal <prajjwaldimri@hotmail.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "dev": "webpack"
+  },
   "dependencies": {
     "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
   }
 }
