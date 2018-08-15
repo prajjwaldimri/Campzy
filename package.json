@@ -8,7 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "webpack"
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development"
   },
   "dependencies": {
     "express": "^4.16.3"
