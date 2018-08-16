@@ -1,5 +1,9 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  entry: { main: "./frontend/src/index.js" }
+  entry: { main: './frontend/src/index.js' },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js',
+  },
 };
