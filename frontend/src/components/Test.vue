@@ -1,4 +1,3 @@
 <template lang="pug">
-  div
-    v-btn(color='error') Test
+  v-alert(:value="true" type="success")
 </template>

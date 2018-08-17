@@ -1,7 +1,6 @@
-<template>
-  <div>
-    <test></test>
-  </div>
+<template lang="pug">
+  v-app
+    test
 </template>
 
 <script>
