@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    test
+    router-view
 </template>
 
 <script>
