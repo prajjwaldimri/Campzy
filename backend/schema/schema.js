@@ -66,7 +66,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     users: {
-      type: new GraphQLList(),
+      type: new GraphQLList(UserType),
       resolve(parent, args) {
         // TODO: Return all users
       },
