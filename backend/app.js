@@ -7,7 +7,10 @@ const schema = require('./schema/schema.js');
 const app = express();
 
 // Connect to MLab Database
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(
+  process.env.MONGODB_URI,
+  { useNewUrlParser: true },
+);
 mongoose.connection.once('open', () => {
   console.log('Wassup');
 });

@@ -2,6 +2,8 @@
 /* eslint-disable */
 
 const graphql = require('graphql');
+const User = require('../models/user.js');
+const Camp = require('../models/camp.js');
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
 
@@ -70,6 +72,21 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         // TODO: Return all users
       },
+    },
+  },
+});
+
+// GraphQL Mutations
+
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addUser: {
+      type: User,
+      args: {
+        name: { type: GraphQLString },
+      },
+      resolve(parent, args) {},
     },
   },
 });
