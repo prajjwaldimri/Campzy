@@ -1,6 +1,7 @@
 <template>
   <div>
     <test></test>
+    h1 {{message}}
   </div>
 </template>
 
@@ -17,3 +18,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "./scss/main.scss";
+</style>

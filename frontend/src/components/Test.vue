@@ -1,4 +1,4 @@
 <template lang="pug">
   div
-    h1 Hello
+    v-btn(color='error') Test
 </template>
