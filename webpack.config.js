@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
   entry: { main: './frontend/src/index.js' },
@@ -23,18 +24,23 @@ module.exports = {
         use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.pug$/,
-        use: ['html-loader?attrs=false', 'pug-html-loader'],
+        test: /\.pug/,
+        use: ['pug-html-loader'],
+      },
+      {
+        test: /\.vue$/,
+        exclude: /node_modules/,
+        use: 'vue-loader',
       },
     ],
   },
   plugins: [
     new CleanWebpackPlugin('frontend/dist', {}),
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({ filename: 'style.css' }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'frontend/src/index.pug',
-      inject: false,
+      template: './frontend/src/index.html',
     }),
   ],
 };
