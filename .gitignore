@@ -1,6 +1,11 @@
 # Env
 *.env
 
+#Dist
+
+dist/
+frontend/dist/
+
 # Logs
 logs
 *.log
