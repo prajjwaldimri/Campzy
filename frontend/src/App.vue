@@ -1,7 +1,6 @@
 <template>
   <div>
     <test></test>
-    h1 {{message}}
   </div>
 </template>
 

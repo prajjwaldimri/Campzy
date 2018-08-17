@@ -24,6 +24,10 @@ module.exports = {
         use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
+        test: /\.css$/,
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
         test: /\.pug/,
         use: ['pug-html-loader'],
       },
