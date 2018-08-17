@@ -10,7 +10,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "start": "node backend/app.js"
   },
   "lint-staged": {
     "*.js": [
@@ -21,6 +22,8 @@
   "dependencies": {
     "eslint-plugin-vue": "^5.0.0-beta.3",
     "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2",
     "vue": "^2.5.17",
     "vue-loader": "^15.3.0",
     "vue-router": "^3.0.1"
