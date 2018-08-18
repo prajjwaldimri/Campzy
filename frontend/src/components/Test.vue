@@ -1,3 +1,4 @@
 <template lang="pug">
-  h2 HEllo
+  h1 Hello
+
 </template>

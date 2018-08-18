@@ -1,14 +1,15 @@
 <template lang="pug">
   v-app
+    navbar#navbar
     router-view
 </template>
 
 <script>
-import Test from './components/Test.vue';
+import Navbar from './components/Navbar.vue';
 
 export default {
   name: 'app',
-  components: { test: Test },
+  components: { navbar: Navbar },
   data() {
     return {
       message: 'Hello, Vue!',
