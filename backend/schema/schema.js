@@ -4,6 +4,8 @@ const graphql = require('graphql');
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/user.js');
 const CampModel = require('../models/camp.js');
+const auth = require('../config/auth');
+const jwt = require('jsonwebtoken');
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
 
@@ -12,7 +14,6 @@ const CampType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-
     phone_number: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     owner: {
@@ -58,8 +59,13 @@ const RootQuery = new GraphQLObjectType({
     },
     camps: {
       type: new GraphQLList(CampType),
-      resolve(parent, args) {
-        // TODO: Return all camps
+      resolve(parent, args, context) {
+        // TODO:
+        let token = auth(context);
+        jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+          if (err) console.log(err);
+          console.log(payload);
+        });
       },
     },
     user: {
@@ -98,11 +104,29 @@ const Mutation = new GraphQLObjectType({
             password: passwordHash,
             phone_number: args.phoneNumber,
           });
-          return userDocument.save();
+          let user = userDocument.save();
+          console.log(userDocument.generateJWT());
+          console.log(userDocument.toAuthJSON());
         } catch (error) {
           throw new Error(error);
         }
       },
+    },
+    addCamp: {
+      type: CampType,
+      args: {
+        name: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
+      },
+      resolve(parent, args, context) {},
+    },
+    loginUser: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      resolve(parent, args, context) {},
     },
   },
 });

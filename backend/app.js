@@ -4,8 +4,9 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-const bodyParser = require('body-parser-graphql');
+const bodyParserGraph = require('body-parser-graphql');
 const schema = require('./schema/schema.js');
+require('./models/user');
 require('./config/passport');
 
 const app = express();
@@ -16,12 +17,12 @@ mongoose.connect(
   { useNewUrlParser: true },
 );
 mongoose.connection.once('open', () => {
-  console.log('Wassup');
+  console.log('Database connected');
 });
 
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/graphql', bodyParser.graphql(), graphqlHTTP({ schema, graphiql: true }));
+app.use('/graphql', bodyParserGraph.graphql(), graphqlHTTP({ schema, graphiql: true }));
 
 app.listen(process.env.PORT || 4444);
