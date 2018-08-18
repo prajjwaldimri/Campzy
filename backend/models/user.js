@@ -5,11 +5,17 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   name: String,
   email: {
-    type: String, required: true, index: true, unique: true, dropDups: true,
+    type: String,
+    required: true,
+    index: true,
+    unique: true,
+    dropDups: true,
   },
   password: { type: String, required: true },
   type: { type: String, required: true, default: 'Camper' },
-  phone_number: { type: String, required: true },
+  phone_number: {
+    type: String, required: true, unique: true, dropDups: true,
+  },
   facebook: {
     oauth_token: String,
   },

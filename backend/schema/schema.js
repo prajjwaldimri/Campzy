@@ -1,9 +1,9 @@
-// HACK: Remove eslint disable after integrating mlab
 /* eslint-disable */
 
 const graphql = require('graphql');
-const User = require('../models/user.js');
-const Camp = require('../models/camp.js');
+const bcrypt = require('bcrypt');
+const UserModel = require('../models/user.js');
+const CampModel = require('../models/camp.js');
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
 
@@ -12,8 +12,9 @@ const CampType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    tags: new GraphQLList(GraphQLString),
+
+    phone_number: { type: GraphQLString },
+    tags: { type: new GraphQLList(GraphQLString) },
     owner: {
       type: UserType, // eslint-disable-line
       resolve(parent, args) {
@@ -28,7 +29,8 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
+    email: { type: GraphQLString },
+    phone_number: { type: GraphQLString },
     ownedCamps: {
       type: new GraphQLList(CampType),
       resolve(parent, args) {
@@ -51,7 +53,7 @@ const RootQuery = new GraphQLObjectType({
       type: CampType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        // TODO: Write code to retrieve camp from database
+        return CampModel.findById(args.id);
       },
     },
     camps: {
@@ -64,13 +66,13 @@ const RootQuery = new GraphQLObjectType({
       type: UserType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        // TODO: Write code to retrieve user from database
+        return UserModel.findById(args.id);
       },
     },
     users: {
       type: new GraphQLList(UserType),
       resolve(parent, args) {
-        // TODO: Return all users
+        return UserModel.find({});
       },
     },
   },
@@ -84,13 +86,28 @@ const Mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
       },
-      resolve(parent, args) {},
+      async resolve(parent, args) {
+        try {
+          const passwordHash = await bcrypt.hash(args.password, 10);
+          const userDocument = new UserModel({
+            email: args.email,
+            password: passwordHash,
+            phone_number: args.phoneNumber,
+          });
+          return userDocument.save();
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
     },
   },
 });
 
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: Mutation,
 });
