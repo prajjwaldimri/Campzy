@@ -7,7 +7,7 @@
     v-btn(flat) ABOUT
     v-menu(offset-y :close-on-content-click='false')
       v-avatar(size='32' slot='activator')
-        img(src='https://cdn.iconscout.com/icon/premium/png-512-thumb/account-71-144933.png')
+        i.fas.fa-user-circle.fa-lg
       v-card
         v-flex.text-xs-center(xs12 style='margin:10px').pt-2
           span SIGN IN
@@ -20,10 +20,10 @@
         v-flex.text-xs-center
           a(href='#')
             v-avatar(size='32' style='margin:10px')
-              img(src='https://cdn.freebiesupply.com/logos/large/2x/google-icon-logo-png-transparent.png')
+              i.fab.fa-google.fa-2x
           a(href="#")
             v-avatar(size='32' style='margin:10px')
-              img(src='https://image.flaticon.com/icons/png/512/69/69407.png')
+              i.fab.fa-facebook.fa-2x
 </template>
 <script>
 export default {
