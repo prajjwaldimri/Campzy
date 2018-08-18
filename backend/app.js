@@ -2,9 +2,21 @@ require('dotenv').config();
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const session = require('express-session');
 const schema = require('./schema/schema.js');
 
 const app = express();
+
+app.use(cors());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
 
 // Connect to MLab Database
 mongoose.connect(
