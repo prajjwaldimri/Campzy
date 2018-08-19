@@ -6,6 +6,9 @@ const cors = require('cors');
 const passport = require('passport');
 const { bodyParserGraphQL } = require('body-parser-graphql');
 const depthLimit = require('graphql-depth-limit');
+const webpackMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
 require('./config/passport');
@@ -23,6 +26,8 @@ mongoose.connection.once('open', () => {
 
 app.use(cors());
 app.use(bodyParserGraphQL());
+
+app.use(webpackMiddleware(webpack(webpackConfig)));
 
 app.use(
   '/graphql',
