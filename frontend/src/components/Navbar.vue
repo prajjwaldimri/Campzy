@@ -62,6 +62,8 @@
                   i.fab.fa-facebook.fa-2x
 </template>
 <script>
+import gql from 'graphql-tag';
+
 export default {
   data: () => ({
     drawer: null,
@@ -76,5 +78,8 @@ export default {
       v => !!v || 'Password is required',
     ],
   }),
+  apollo: {
+    hello: gql`{hello}`,
+  },
 };
 </script>
