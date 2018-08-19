@@ -1,11 +1,12 @@
 <template lang="pug">
   .home-flex
-    .search-flex
-      .campzy-logo
-        span Camp
-        span.light-green--text.text--accent-4 zy
-      v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
-      autofocus="true" color="green" full-width="true" outline single-line)
+    transition(appear name="slide-y-reverse-transition")
+      .search-flex
+        .campzy-logo
+          span Camp
+          span.light-green--text.text--accent-4 zy
+        v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
+        autofocus="true" color="green" full-width="true" outline single-line)
 
 </template>
 
@@ -15,7 +16,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .home-flex {
   display: flex;
   flex-direction: column;
