@@ -131,15 +131,18 @@ const Mutation = new GraphQLObjectType({
     },
     loginUser: {
       type: UserType,
-      args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
-      },
       async resolve(parent, args, context) {
-        // TODO: Only allow to send email and password through request body
         try {
-          const email = args.email || context.req.body.variables.email;
-          const password = args.password || context.req.body.variables.email;
+          if (!context.req.body) {
+            return new Error('Please fill both email and password');
+          }
+
+          if (!context.req.body.variables) {
+            return new Error('Please fill both email and password');
+          }
+
+          const email = context.req.body.variables.email;
+          const password = context.req.body.variables.email;
 
           if (!email || !password) {
             return new Error('Please fill both email and password');
