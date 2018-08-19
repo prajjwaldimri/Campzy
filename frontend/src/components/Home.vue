@@ -2,3 +2,9 @@
   h1 Hello
 
 </template>
+
+<script>
+export default {
+  name: 'Home',
+};
+</script>
