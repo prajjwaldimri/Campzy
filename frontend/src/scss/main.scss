@@ -1,3 +1,12 @@
 body {
-  background: #eee;
+  background-color: #eee;
+}
+
+@font-face {
+  font-family: "ProductSans";
+  src: url(/fonts/ProductSansRegular.ttf);
+}
+
+#app {
+  font-family: ProductSans;
 }
