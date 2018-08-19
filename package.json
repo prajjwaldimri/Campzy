@@ -30,6 +30,7 @@
     "express-graphql": "^0.6.12",
     "express-session": "^1.15.6",
     "graphql": "^0.13.2",
+    "graphql-depth-limit": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.8",
     "passport": "^0.4.0",
