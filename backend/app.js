@@ -4,7 +4,7 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-const bodyParserGraph = require('body-parser-graphql');
+const { bodyParserGraphQL } = require('body-parser-graphql');
 const schema = require('./schema/schema.js');
 require('./models/user');
 require('./config/passport');
@@ -21,11 +21,10 @@ mongoose.connection.once('open', () => {
 });
 
 app.use(cors());
-app.use(passport.initialize());
+app.use(bodyParserGraphQL());
 
 app.use(
   '/graphql',
-  bodyParserGraph.graphql(),
   graphqlHTTP(request => ({
     schema,
     graphiql: true,

@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const UserModel = require('../models/user.js');
 const CampModel = require('../models/camp.js');
 const auth = require('../config/auth');
-const jwt = require('jsonwebtoken');
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
 
@@ -14,7 +13,7 @@ const CampType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    phone_number: { type: GraphQLString },
+    phoneNumber: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     owner: {
       type: UserType, // eslint-disable-line
@@ -31,7 +30,8 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
-    phone_number: { type: GraphQLString },
+    phoneNumber: { type: GraphQLString },
+    jwt: { type: GraphQLString },
     ownedCamps: {
       type: new GraphQLList(CampType),
       resolve(parent, args) {
@@ -53,32 +53,40 @@ const RootQuery = new GraphQLObjectType({
     camp: {
       type: CampType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return CampModel.findById(args.id);
+      resolve(parent, args, context) {
+        // TODO:
       },
     },
     camps: {
       type: new GraphQLList(CampType),
-      resolve(parent, args, context) {
-        // TODO:
-        let token = auth(context.req);
-        jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-          if (err) console.log(err);
-          console.log(payload);
-        });
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+        } catch (err) {
+          return err;
+        }
       },
     },
-    user: {
+    currentUser: {
       type: UserType,
-      args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return UserModel.findById(args.id);
+      args: {},
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          return userData;
+        } catch (err) {
+          return err;
+        }
       },
     },
     users: {
       type: new GraphQLList(UserType),
-      resolve(parent, args) {
-        return UserModel.find({});
+      resolve(parent, args, context) {
+        // TODO:
       },
     },
   },
@@ -102,13 +110,12 @@ const Mutation = new GraphQLObjectType({
           const userDocument = new UserModel({
             email: args.email,
             password: passwordHash,
-            phone_number: args.phoneNumber,
+            phoneNumber: args.phoneNumber,
           });
-          let user = userDocument.save();
-          console.log(userDocument.generateJWT());
-          console.log(userDocument.toAuthJSON());
-        } catch (error) {
-          throw new Error(error);
+          let user = await userDocument.save();
+          return 'Successfully created account';
+        } catch (err) {
+          return err;
         }
       },
     },
@@ -118,7 +125,9 @@ const Mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         phoneNumber: { type: GraphQLString },
       },
-      resolve(parent, args, context) {},
+      resolve(parent, args, context) {
+        // TODO:
+      },
     },
     loginUser: {
       type: UserType,
@@ -126,12 +135,27 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve(parent, args, context) {
-        context.passport.authenticate('local', (err, user, info) => {
-          if (err) {
-            return next(err);
+      async resolve(parent, args, context) {
+        // TODO: Only allow to send email and password through request body
+        try {
+          const email = args.email || context.req.body.variables.email;
+          const password = args.password || context.req.body.variables.email;
+
+          if (!email || !password) {
+            return new Error('Please fill both email and password');
           }
-        });
+
+          const userDocument = await UserModel.findOne({ email: email });
+          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
+          if (passwordsMatch) {
+            // Returns the jwt containing user's id, email and token
+            return { jwt: JSON.stringify(userDocument.toAuthJSON()) };
+          } else {
+            return new Error('Invalid Username or Password');
+          }
+        } catch (err) {
+          return err;
+        }
       },
     },
   },

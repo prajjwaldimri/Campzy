@@ -11,7 +11,6 @@ passport.use(
     },
     async (username, password, done) => {
       try {
-        console.log(username);
         const userDocument = await UserModel.findOne({ email: username }).exec();
         const passwordsMatch = await bcrypt.compare(password, userDocument.password);
         if (passwordsMatch) {
