@@ -1,7 +1,7 @@
 <template lang="pug">
   v-app
     navbar#navbar
-    router-view
+    router-view(style='margin-top:5rem')
 </template>
 
 <script>

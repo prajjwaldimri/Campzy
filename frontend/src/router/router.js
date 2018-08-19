@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Test from '../components/Test.vue';
+import Home from '../components/Home.vue';
 import BookCampSite from '../components/user/BookCampSite.vue';
 import CampOwnerDashboard from '../components/camp_owner/CampOwnerDashboard.vue';
 import RegisterCamp from '../components/camp_owner/RegisterCamp.vue';
 import ManageCamps from '../components/admin/ManageCamps.vue';
 import AdminDashboard from '../components/admin/AdminDashboard.vue';
+import SignInSignOut from '../components/user/SignInSignOut.vue';
 
 Vue.use(Router);
 
@@ -14,7 +15,7 @@ const router = new Router({
     {
       path: '/',
       name: 'landing-page',
-      component: Test,
+      component: Home,
     },
     {
       path: '/bookCamp',
@@ -40,6 +41,11 @@ const router = new Router({
       path: '/adminDashboard',
       name: '/admin-dashboard',
       component: AdminDashboard,
+    },
+    {
+      path: '/signIn',
+      name: 'sign-in',
+      component: SignInSignOut,
     },
   ],
 });

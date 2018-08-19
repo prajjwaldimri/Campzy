@@ -41,28 +41,28 @@
       v-toolbar-items.hidden-sm-and-down
         v-btn(flat) HOME
         v-btn(flat) ABOUT
-        v-menu(offset-y :close-on-content-click='false')
-          v-btn(size='32' slot='activator' flat)
-            i.fas.fa-user-circle.fa-lg
-          v-card
-            v-flex.text-xs-center(xs12 style='margin:10px').pt-2
-              span SIGN IN
-            form(v-model='valid' style='margin:10px')
-              v-text-field(v-model="email" :rules='emailRules' label='Email' required)
-              v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password' required)
-            .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-              v-btn(round color='primary' dark) Sign In
-              p Or Using
-            v-flex.text-xs-center
-              a(href='#')
-                v-avatar(size='32' style='margin:10px')
-                  i.fab.fa-google.fa-2x
-              a(href="#")
-                v-avatar(size='32' style='margin:10px')
-                  i.fab.fa-facebook.fa-2x
+        //- v-menu(offset-y :close-on-content-click='false')
+        //-   v-btn(size='32' slot='activator' flat)
+        //-     i.fas.fa-user-circle.fa-lg
+        //-   v-card
+        //-     v-flex.text-xs-center(xs12 style='margin:10px').pt-2
+        //-       span SIGN IN
+        //-     form(v-model='valid' style='margin:10px')
+        //-       v-text-field(v-model="email" :rules='emailRules' label='Email' required)
+        //-       v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password' required)
+        //-     .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
+        //-       v-btn(round color='primary' dark) Sign In
+        //-       p Or Using
+        //-     v-flex.text-xs-center
+        //-       a(href='#')
+        //-         v-avatar(size='32' style='margin:10px')
+        //-           i.fab.fa-google.fa-2x
+        //-       a(href="#")
+        //-         v-avatar(size='32' style='margin:10px')
+        //-           i.fab.fa-facebook.fa-2x
 </template>
 <script>
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
 
 export default {
   data: () => ({
@@ -79,7 +79,7 @@ export default {
     ],
   }),
   apollo: {
-    hello: gql`{hello}`,
+
   },
 };
 </script>
