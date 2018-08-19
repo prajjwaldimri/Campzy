@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    router-view(style='margin-top:5rem')
+    router-view
 </template>
 
 <script>
