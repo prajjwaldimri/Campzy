@@ -4,9 +4,10 @@ body {
 
 @font-face {
   font-family: "ProductSans";
-  src: url(/fonts/ProductSansRegular.ttf);
+  src: url(/fonts/Product-Sans-Bold.ttf);
 }
 
-#app {
-  font-family: ProductSans;
+#navbar {
+  font-family: "ProductSans";
+  font-weight: normal;
 }
