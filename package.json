@@ -9,9 +9,9 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack-dev-server --mode development",
+    "dev": "nodemon backend/app.js",
     "precommit": "lint-staged",
-    "start": "node backend/app.js"
+    "start": "webpack --mode production; node backend/app.js"
   },
   "lint-staged": {
     "*.js": [

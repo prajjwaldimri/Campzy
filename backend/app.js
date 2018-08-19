@@ -27,7 +27,13 @@ mongoose.connection.once('open', () => {
 app.use(cors());
 app.use(bodyParserGraphQL());
 
-app.use(webpackMiddleware(webpack(webpackConfig)));
+if (process.env.ENVIRONMENT === 'development') {
+  app.use(webpackMiddleware(webpack(webpackConfig)));
+} else {
+  app.get('/', (req, res) => {
+    res.status(200).send('/frontend/dist/index.html');
+  });
+}
 
 app.use(
   '/graphql',
