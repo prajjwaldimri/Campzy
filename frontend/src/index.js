@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
 import App from './App.vue';
 import router from './router/router';
+import 'vuetify/dist/vuetify.min.css';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4444/graphql',
