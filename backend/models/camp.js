@@ -2,29 +2,21 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-// Schema of paid packages that camp provides
-const packageSchema = new Schema({
-  name: String,
-  number_of_guests: Number,
-  price: Number,
-  facilities: [String],
-  discount_percent: Number,
-});
-
 const CampSchema = new Schema({
-  name: String,
-  phone_number: String,
+  name: { type: String, required: true },
+  phoneNumber: String,
   email: String,
   location: String,
-  short_description: String,
-  long_description: String,
+  isAvailable: { type: Boolean, required: true, default: false },
+  shortDescription: { type: String, required: true },
+  longDescription: String,
   tags: [String],
   amenities: [String],
   services: [String],
-  places_of_interest: [String],
+  placesOfInterest: [String],
   coordinates: [String],
-  packages: [packageSchema],
-  ownerId: String,
+  ownerId: Schema.Types.ObjectId,
+  inventory: [Schema.Types.ObjectId],
 });
 
 module.exports = mongoose.model('Camp', CampSchema);
