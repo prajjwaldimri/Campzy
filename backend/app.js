@@ -23,6 +23,14 @@ mongoose.connection.once('open', () => {
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/graphql', bodyParserGraph.graphql(), graphqlHTTP({ schema, graphiql: true }));
+app.use(
+  '/graphql',
+  bodyParserGraph.graphql(),
+  graphqlHTTP(request => ({
+    schema,
+    graphiql: true,
+    context: { req: request, passport },
+  })),
+);
 
 app.listen(process.env.PORT || 4444);

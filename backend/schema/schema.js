@@ -61,7 +61,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(CampType),
       resolve(parent, args, context) {
         // TODO:
-        let token = auth(context);
+        let token = auth(context.req);
         jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
           if (err) console.log(err);
           console.log(payload);
@@ -126,7 +126,13 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve(parent, args, context) {},
+      resolve(parent, args, context) {
+        context.passport.authenticate('local', (err, user, info) => {
+          if (err) {
+            return next(err);
+          }
+        });
+      },
     },
   },
 });

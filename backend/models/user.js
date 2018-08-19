@@ -14,17 +14,17 @@ const UserSchema = new Schema({
   },
   password: { type: String, required: true },
   type: { type: String, required: true, default: 'Camper' },
-  phone_number: {
+  phoneNumber: {
     type: String,
     required: true,
     unique: true,
     dropDups: true,
   },
   facebook: {
-    oauth_token: String,
+    oauthToken: String,
   },
   google: {
-    oauth_token: String,
+    oauthToken: String,
   },
   date_of_birth: Date,
 });
