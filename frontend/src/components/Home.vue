@@ -5,7 +5,7 @@
         span Camp
         span.light-green--text.text--accent-4 zy
       v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
-      autofocus="true" color="green" full-width="true" outline)
+      autofocus="true" color="green" full-width="true" outline single-line)
 
 </template>
 
