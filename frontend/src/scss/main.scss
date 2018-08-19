@@ -3,11 +3,10 @@ body {
 }
 
 @font-face {
-  font-family: "ProductSans";
-  src: url(/fonts/Product-Sans-Bold.ttf);
+  font-family: "Product Sans";
+  src: url(/fonts/Product-Sans-Regular.ttf);
 }
 
-#navbar {
-  font-family: "ProductSans";
-  font-weight: normal;
+* {
+  font-family: "Product Sans", sans-serif;
 }
