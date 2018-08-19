@@ -3,19 +3,19 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const CampSchema = new Schema({
-  name: String,
+  name: { type: String, required: true },
   phoneNumber: String,
   email: String,
   location: String,
-  isAvailable: Boolean,
-  shortDescription: String,
+  isAvailable: { type: Boolean, required: true, default: false },
+  shortDescription: { type: String, required: true },
   longDescription: String,
   tags: [String],
   amenities: [String],
   services: [String],
   placesOfInterest: [String],
   coordinates: [String],
-  ownerId: [Schema.Types.ObjectId],
+  ownerId: Schema.Types.ObjectId,
   inventory: [Schema.Types.ObjectId],
 });
 
