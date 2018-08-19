@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
 const { bodyParserGraphQL } = require('body-parser-graphql');
+const depthLimit = require('graphql-depth-limit');
 const schema = require('./schema/schema.js');
 require('./models/user');
 require('./config/passport');
@@ -28,6 +29,7 @@ app.use(
   graphqlHTTP(request => ({
     schema,
     graphiql: true,
+    validationRules: [depthLimit(10)],
     context: { req: request, passport },
   })),
 );
