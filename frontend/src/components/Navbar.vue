@@ -30,7 +30,7 @@
           i.fa.fa-phone
         v-list-tile-content
           v-list-tile-title Contact
-    v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" color="blue darken-3" dark app fixed)
+    v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" lights-out dark app fixed)
       v-toolbar-title
         v-toolbar-side-icon.pt-0.hidden-lg-only(@click.stop="drawer = !drawer")
         span.hidden-sm-and-down CAMPZY
@@ -39,27 +39,11 @@
         span.hidden-md-and-up CAMPZY
       v-spacer
       v-toolbar-items.hidden-sm-and-down
-        v-btn(flat) HOME
-        v-btn(flat) ABOUT
-        //- v-menu(offset-y :close-on-content-click='false')
-        //-   v-btn(size='32' slot='activator' flat)
-        //-     i.fas.fa-user-circle.fa-lg
-        //-   v-card
-        //-     v-flex.text-xs-center(xs12 style='margin:10px').pt-2
-        //-       span SIGN IN
-        //-     form(v-model='valid' style='margin:10px')
-        //-       v-text-field(v-model="email" :rules='emailRules' label='Email' required)
-        //-       v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password' required)
-        //-     .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-        //-       v-btn(round color='primary' dark) Sign In
-        //-       p Or Using
-        //-     v-flex.text-xs-center
-        //-       a(href='#')
-        //-         v-avatar(size='32' style='margin:10px')
-        //-           i.fab.fa-google.fa-2x
-        //-       a(href="#")
-        //-         v-avatar(size='32' style='margin:10px')
-        //-           i.fab.fa-facebook.fa-2x
+        v-btn(flat @click='goHome') HOME
+        v-btn(flat @click='goHome') ABOUT
+        v-btn(size='32' @click='registerUser' flat)
+          i.fas.fa-user-circle.fa-lg
+
 </template>
 <script>
 // import gql from 'graphql-tag';
@@ -78,8 +62,13 @@ export default {
       v => !!v || 'Password is required',
     ],
   }),
-  apollo: {
-
+  methods: {
+    registerUser() {
+      window.location.href = `${window.location.origin}/#/signIN`;
+    },
+    goHome() {
+      window.location.href = `${window.location.origin}/#/`;
+    },
   },
 };
 </script>

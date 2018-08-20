@@ -6,7 +6,7 @@ import CampOwnerDashboard from '../components/camp_owner/CampOwnerDashboard.vue'
 import RegisterCamp from '../components/camp_owner/RegisterCamp.vue';
 import ManageCamps from '../components/admin/ManageCamps.vue';
 import AdminDashboard from '../components/admin/AdminDashboard.vue';
-import SignInSignOut from '../components/user/SignInSignOut.vue';
+import LoginRegister from '../components/user/LoginRegister.vue';
 
 Vue.use(Router);
 
@@ -45,7 +45,7 @@ const router = new Router({
     {
       path: '/signIn',
       name: 'sign-in',
-      component: SignInSignOut,
+      component: LoginRegister,
     },
   ],
 });

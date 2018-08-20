@@ -4,6 +4,8 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import App from './App.vue';
 import router from './router/router';
 import 'vuetify/dist/vuetify.min.css';
@@ -20,7 +22,7 @@ const apolloClient = new ApolloClient({
 });
 
 // Install the vue plugin
-Vue.use(VueApollo);
+Vue.use(VueApollo, axios, VueAxios);
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 });
