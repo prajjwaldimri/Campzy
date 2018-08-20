@@ -27,7 +27,7 @@
             v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password'
             required)
           .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-            v-btn(round color='primary' @click.native="regUser()" dark) Sign Up
+            v-btn(round color='primary' @click="regUser()" dark) Sign Up
             p Or Using
           v-flex.text-xs-center
             a(href='#')
@@ -39,7 +39,9 @@
 
 </template>
 <script>
-import gql from 'vue-apollo';
+import { request } from 'graphql-request';
+
+// import gql from 'graphql-tag';
 
 export default {
   data: () => ({
@@ -57,31 +59,29 @@ export default {
     phoneRules: [
       v => !!v || 'Phone Number Required',
     ],
+    testCamp: '',
 
   }),
 
   methods: {
     regUser() {
-      // this.$apollo.mutate({
-      //   mutation: gql`mutation ($phone: String!, $email: String!, $password: String!){
-      //     register(phone: $phone, email: $email, password: $password){
-      //       phone
-      //       email
-      //       password
-      //     }
-      //   }`,
-      //   variables: {
-      //     phone: this.phone,
-      //     email: this.email,
-      //     password: this.password,
-      //   },
-      // }).then((data) => {
-      //   console.log(data);
-      // }).catch((error) => {
-      //   console.log(error);
-      // });
+      const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
+            id
+        }
+      }`;
+      const variables = {
+        email: this.email,
+        password: this.password,
+        phoneNumber: this.phone,
+      };
+      request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
+        console.log(err.response.errors);
+        console.log(err.response.data);
+      });
     },
-  },
 
+  },
 };
+
 </script>
