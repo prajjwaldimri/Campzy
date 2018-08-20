@@ -15,6 +15,7 @@ require('./models/user');
 require('./config/passport');
 
 const app = express();
+app.use(cors());
 
 // Connect to MLab Database
 mongoose.connect(
@@ -25,7 +26,6 @@ mongoose.connection.once('open', () => {
   console.log('Database connected');
 });
 
-app.use(cors());
 app.use(bodyParserGraphQL());
 
 if (process.env.ENVIRONMENT === 'development') {
