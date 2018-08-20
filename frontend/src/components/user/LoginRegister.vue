@@ -17,10 +17,10 @@
               v-tab-item(id='signin')
                 v-card(flat)
                   form(v-model='valid' style='margin:10px')
-                    v-text-field(v-model="email" :rules='emailRules' label='Email' required)
-                    v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password' required)
+                    v-text-field(v-model="loginEmail" :rules='emailRules' label='Email' required)
+                    v-text-field(v-model="loginPassword" :rules='passwordRules' type='password' label='Password' required)
                   .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-                    v-btn(round color='primary' dark) Sign In
+                    v-btn(round color='primary' @click='logIn' dark) Sign In
               v-tab-item(id='signup')
                 v-card(flat)
                   form(v-model='valid' style='margin:10px')
@@ -42,11 +42,13 @@ export default {
   data: () => ({
     valid: false,
     email: '',
+    loginEmail: '',
     emailRules: [
       v => !!v || 'E-mail is required',
       v => /.+@.+/.test(v) || 'E-mail must be valid',
     ],
     password: '',
+    loginPassword: '',
     passwordRules: [
       v => !!v || 'Password is required',
     ],
@@ -73,6 +75,15 @@ export default {
       request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
         console.log(err.response.errors);
         console.log(err.response.data);
+      });
+    },
+    logIn() {
+      this.$auth.login({
+        body: { email: this.loginEmail, password: this.loginPassword },
+
+
+      }).then(() => {
+        console.log('Waah!');
       });
     },
 
