@@ -9,8 +9,8 @@ const UserSchema = new Schema({
     type: String,
     lowercase: true,
     required: true,
-    index: true,
     unique: true,
+    sparse: true,
   },
   password: { type: String, required: true },
   type: { type: String, required: true, default: 'Camper' },
@@ -18,6 +18,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    sparse: true,
   },
   facebook: {
     oauthToken: String,
