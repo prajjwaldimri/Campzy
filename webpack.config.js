@@ -5,6 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
+  mode: process.env.ENVIRONMENT,
   entry: { main: './frontend/src/index.js' },
   output: {
     path: path.resolve(__dirname, './frontend/dist'),
