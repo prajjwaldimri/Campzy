@@ -143,6 +143,7 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         try {
+          console.log('Data received');
           const passwordHash = await bcrypt.hash(args.password, 10);
           const userDocument = new UserModel({
             email: args.email,
