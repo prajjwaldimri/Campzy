@@ -3,28 +3,44 @@
     transition(name="slide-y-transition")
       navbar(v-show="searchClicked")
     transition(name="slide-y-transition")
-      v-container(fluid grid-list-md).top-search
-        v-layout(row wrap)
-          v-flex(sm4 xs12)
+      v-container(fluid grid-list-md v-show="searchClicked").top-search
+        v-layout(row wrap justify-center)
+          v-flex(md4 xs12)
             v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
-            autofocus color="green" outline single-line required)
-          v-flex(md3)
+            autofocus color="green" outline single-line required v-model="searchInput"
+            @click:append="searchClick" @keyup.enter="searchClick")
+          v-flex(md4 xs12 justify-center style="display:flex")
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy)
-              v-select(readonly label="21 August - 25 August" slot="activator" color="primary"
-              outline single-line)
+              v-select(hint="Select your trip duration" readonly label="21 August - 25 August"
+              slot="activator" color="primary" outline single-line persistent-hint)
               v-date-picker(v-model="fromDate" no-title scrollable)
               v-date-picker(v-model="toDate" no-title scrollable)
-          v-flex(md2)
-          v-flex(md2)
-          v-flex(md2)
+          v-flex(md4 xs12)
+            v-layout(row)
+              v-flex(xs3)
+                v-text-field(outline single-line readonly v-model="priceRange[0]" hint="Min. Price"
+                persistent-hint)
+              v-flex(xs6 style="margin: 0 1rem;")
+                v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
+                hint="Price Range" persistent-hint height="3.5rem")
+              v-flex(xs3)
+                v-text-field(outline single-line readonly v-model="priceRange[1]" hint="Max. Price"
+                persistent-hint)
+
+    v-container(grid-list-md v-show="searchComplete")
+      v-layout(column)
+        v-flex(v-for="result in searchResults" :key="result").search-results
+          v-card(height="300")
+            h1 {{result}}
     .home-flex
       .search-flex
         .campzy-logo
           span Camp
           span.light-green--text.text--accent-4 zy
         v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
-        @click:append="searchClick" autofocus color="green" outline single-line required)
+        @click:append="searchClick" autofocus color="green" outline single-line required ticks
+        v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
 </template>
 
@@ -40,16 +56,26 @@ export default {
   },
   data() {
     return {
+      searchInput: '',
       searchClicked: false,
+      searchResults: [1, 2, 3],
+      searchComplete: false,
       fromDate: null,
       toDate: null,
       tripDurationMenu: false,
+      minPrice: 5000,
+      maxPrice: 20000,
+      priceRange: [5000, 20000],
+      priceLabels: [],
     };
   },
   mounted() {
+    for (let i = this.minPrice; i <= this.maxPrice; i += 500) {
+      this.priceLabels.push(i);
+    }
     // Animate Home Elements
     anime({
-      targets: ['.campzy-logo', '.v-input'],
+      targets: ['.campzy-logo', '.search-flex .v-input'],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
@@ -62,18 +88,44 @@ export default {
   },
   methods: {
     searchClick() {
-      anime({
-        targets: ['.campzy-logo', '.v-input'],
-        translateY: [{ value: -1000, duration: 1000 }],
-        easing: 'easeInOutQuad',
-        complete: () => {
-          document.querySelector('.search-flex').style.display = 'none';
-          this.searchClicked = true;
-        },
-        delay(target, index) {
-          return index * 100;
-        },
-      });
+      if (this.searchInput === '') {
+        anime({
+          targets: '.search-flex .v-input',
+          translateX: [{ value: -50, duration: 100 }, { value: 0, duration: 100 }],
+          easing: 'easeInOutQuad',
+          loop: 2,
+          delay(target, index) {
+            return index * 100;
+          },
+        });
+      } else {
+        anime({
+          targets: ['.campzy-logo', '.search-flex .v-input'],
+          translateY: [{ value: -500, duration: 500 }],
+          easing: 'easeInOutQuad',
+          complete: () => {
+            document.querySelector('.home-flex').style.display = 'none';
+            this.searchClicked = true;
+          },
+          delay(target, index) {
+            return index * 100;
+          },
+        });
+      }
+    },
+  },
+  watch: {
+    searchComplete(val) {
+      if (val === true) {
+        anime({
+          targets: '.search-results',
+          translateY: [{ value: 100, duration: 250 }, { value: 0, duration: 250 }],
+          easing: 'easeInOutQuad',
+          opacity: [0, 1],
+          duration: 500,
+          delay(el, index) { return index * 100; },
+        });
+      }
     },
   },
 };
@@ -81,7 +133,7 @@ export default {
 
 <style lang="scss">
 .top-search {
-  margin-top: 5rem !important;
+  margin-top: 4rem !important;
 }
 
 .home {

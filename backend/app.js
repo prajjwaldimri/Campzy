@@ -37,6 +37,7 @@ if (process.env.ENVIRONMENT === 'development') {
 }
 
 app.use(express.static(path.join(__dirname, '../frontend/static')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 app.use(
   '/graphql',
