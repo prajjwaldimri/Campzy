@@ -140,10 +140,10 @@ export default {
   height: 100vh;
   // background: lightgrey;
   background: linear-gradient(
-      rgba(255, 255, 255, 0.4),
-      rgba(255, 255, 255, 0.4)
+      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.3)
     ),
-    url("https://images.pexels.com/photos/355241/pexels-photo-355241.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    url("https://images.pexels.com/photos/869258/pexels-photo-869258.jpeg?cs=srgb&dl=adventure-alpine-climb-869258.jpg&fm=jpg");
   background-size: cover;
 }
 
@@ -154,7 +154,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 90vh;
+  min-height: 100vh;
 
   .search-flex {
     position: absolute;
