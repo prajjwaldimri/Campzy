@@ -39,9 +39,7 @@
 
 </template>
 <script>
-import { request } from 'graphql-request';
-
-// import gql from 'graphql-tag';
+import { request, GraphQLClient } from 'graphql-request';
 
 export default {
   data: () => ({
@@ -69,12 +67,18 @@ export default {
 
   methods: {
     regUser() {
+      const token = this.$cookie.get('sessionToken');
+      const client = new GraphQLClient('http://localhost:4444/graphql', {
+        headers: {
+          Authorization: `Bearer ${token} `,
+        },
+      });
       const getUsr = `{
         allUsers {
           id
         }
         }`;
-      request('http://localhost:4444/graphql', getUsr).then(data => console.log(data));
+      client.request(getUsr).then(data => console.log(data));
       // const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
       //     register(email: $email, password: $password, phoneNumber: $phoneNumber) {
       //       id
@@ -103,7 +107,7 @@ export default {
       };
       request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
         console.log(data);
-        this.$cookie.set('LoggedIn', data.loginUser.jwt, 1, 'secure');
+        this.$cookie.set('sessionToken', data.loginUser.jwt, 1, 'secure');
       }).catch((err) => {
         console.log(err.response.errors);
         console.log(err.response.data);
