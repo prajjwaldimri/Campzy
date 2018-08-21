@@ -23,7 +23,7 @@ export default {
       opacity: [0, 1],
       easing: 'easeInOutQuad',
       duration: 1000,
-      delay(target, index, totalTargets) {
+      delay(target, index) {
         return index * 100;
       },
     });
