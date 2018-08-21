@@ -7,7 +7,8 @@
         v-layout(row wrap justify-center)
           v-flex(md4 xs12)
             v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
-            autofocus color="green" outline single-line required v-model="searchInput")
+            autofocus color="green" outline single-line required v-model="searchInput"
+            @click:append="searchClick" @keyup.enter="searchClick")
           v-flex(md4 xs12 justify-center style="display:flex")
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy)
