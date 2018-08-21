@@ -1,53 +1,60 @@
 <template lang="pug">
   .reg-flex
-    div
-      h1
-        span Welcome to Camp
-        span.light-green--text.text--accent-4 zy
-    v-card(color="transparent" width='30%' height='60%' style='margin-top:2rem;box-shadow:none')
-      v-tabs(color="transparent" dark)
-        v-tabs-slider(color='yellow' )
-        v-tab.tab-size(href="#signin" ) Sign In
-        v-tab.tab-size(href="#signup") Sign Up
-        v-tab-item.tab-content(id='signin')
-          v-card.text-xs-center(color="transparent" flat)
-            form(v-model='valid' style='margin:10px')
-              v-text-field(v-model="loginEmail" :rules='emailRules' label='Email' required)
-              v-text-field(v-model="loginPassword" :rules='passwordRules' type='password' label='Password' required)
-            v-btn.btn-size(round color='green accent-4' @click='logIn' dark) Sign In
-            h3(style='margin:1rem')
-              span O
-              span.light-green--text.text--accent-4 r
-            img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
-            img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
-        v-tab-item.tab-content(id='signup')
-          v-card.text-xs-center(color="transparent" flat)
-            form(v-model='valid' style='margin:10px')
-              v-text-field(v-model="email" :rules='emailRules' label='Email' required)
-              v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password'
-              required)
-              v-text-field(v-model="phone" :rules='phoneRules' label='Phone Number' required)
-              v-btn.btn-size(round color='green accent-4' @click='regUser' dark) Sign Up
+    v-container(fluid grid-list-sm)
+      v-layout(row wrap)
+        v-flex(d-flex xs12 sm4)
+          v-layout(column wrap)
+            h1
+              span.welcome-title Welcome to Camp
+              span.light-green--text.text--accent-4.welcome-title zy..
+            p.hidden-sm-and-down.about-campzy Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        v-spacer
+        v-flex(sm3 d-flex xs12)
+          v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='!forRegister')
+            div(style='margin:1.5rem;')
+              h1
+                span Log
+                span.light-green--text.text--accent-4 in
+              form(v-model='valid' style='margin:1.5rem')
+                v-text-field(v-model="loginEmail" :rules='emailRules' color='green accent-4' label='Email' required)
+                v-text-field(v-model="loginPassword" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
+              v-btn.btn-size(round color='green accent-4' @click='logIn' @keyup.enter='logIn') Sign In
               h3(style='margin:1rem')
                 span O
                 span.light-green--text.text--accent-4 r
-              img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
-              img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
-    v-alert(:value='signed' color='success') Sign up Successful
-    v-alert(:value='signedfail' color='error') Sign up Fail
+              //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+              //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+              v-btn.btn-size( flat small color='green accent-4' @click='forRegister = true') New User? Register
 
-
+          v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='forRegister')
+            div(style='margin:1.5rem;')
+              h1
+                span Sign
+                span.light-green--text.text--accent-4 up
+              form(v-model='valid' style='margin:1.5rem')
+                v-text-field(v-model="email" :rules='emailRules' color='green accent-4' label='Email' required)
+                v-text-field(v-model="password" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
+                v-text-field(v-model="phone" :rules='phoneRules' color='green accent-4' label='Phone Number' required)
+              v-btn.btn-size(round color='green accent-4' @click='regUser' @keyup.enter='regUser') Sign Up
+              h3(style='margin:1rem')
+                span O
+                span.light-green--text.text--accent-4 r
+              //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+              //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+              v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
 </template>
 <script>
-import { request, GraphQLClient } from 'graphql-request';
+import { request } from 'graphql-request';
 
 export default {
   data: () => ({
+    forRegister: false,
     valid: false,
     signed: false,
     signedfail: false,
     email: '',
     loginEmail: '',
+    loggedIn: false,
     emailRules: [
       v => !!v || 'E-mail is required',
       v => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -67,18 +74,6 @@ export default {
 
   methods: {
     regUser() {
-      // const token = this.$cookie.get('sessionToken');
-      // const client = new GraphQLClient('http://localhost:4444/graphql', {
-      //   headers: {
-      //     Authorization: `Bearer ${token} `,
-      //   },
-      // });
-      // const getUsr = `{
-      //   allUsers {
-      //     id
-      //   }
-      //   }`;
-      // client.request(getUsr).then((data) => { console.log(data); }).catch(err => console.log(err));
       const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
           register(email: $email, password: $password, phoneNumber: $phoneNumber) {
             id
@@ -89,10 +84,20 @@ export default {
         password: this.password,
         phoneNumber: this.phone,
       };
-      request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
-        this.signedfail = true;
-        console.log(err.response.errors);
-        console.log(err.response.data);
+      request('http://localhost:4444/graphql', registerUser, variables).then((data) => {
+        if (data != null) {
+          this.signed = true;
+        }
+        this.email = '';
+        this.password = '';
+        this.phone = '';
+      }).catch((err) => {
+        if (err) {
+          this.signedfail = true;
+        }
+        this.email = '';
+        this.password = '';
+        this.phone = '';
       });
     },
     logIn() {
@@ -106,12 +111,9 @@ export default {
         loginPassword: this.loginPassword,
       };
       request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
-        console.log(data.loginUser.jwt);
-        console.log(JSON.parse(data.loginUser.jwt));
         this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
       }).catch((err) => {
-        console.log(err.response.errors);
-        console.log(err.response.data);
+        this.loggedIn = true;
       });
     },
   },
@@ -125,25 +127,27 @@ export default {
   height: 100vh;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+  background: linear-gradient(
+      rgba(236, 236, 236, 0.9),
+      rgba(236, 236, 236, 0.9)
+    ),
     url("https://images.pexels.com/photos/93858/pexels-photo-93858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
   background-size: cover;
 }
 
-.tab-size {
-  width: 50%;
-}
-
 .btn-size {
-  width: 30%;
+  width: 50%;
   margin: 1rem;
 }
 
-.spacer-img {
-  margin-left: 1rem;
+.welcome-title {
+  font-size: 4rem;
+  font-weight: 400;
 }
-
-.tab-content {
-  margin-top: 3rem;
+.about-campzy {
+  margin-top: 2rem;
+  line-height: 1.5rem;
+  text-align: justify;
+  font-weight: 100;
 }
 </style>
