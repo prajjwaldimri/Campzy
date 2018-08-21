@@ -140,8 +140,8 @@ export default {
   height: 100vh;
   // background: lightgrey;
   background: linear-gradient(
-      rgba(255, 255, 255, 0.3),
-      rgba(255, 255, 255, 0.3)
+      rgba(236, 236, 236, 0.9),
+      rgba(236, 236, 236, 0.9)
     ),
     url("https://images.pexels.com/photos/869258/pexels-photo-869258.jpeg?cs=srgb&dl=adventure-alpine-climb-869258.jpg&fm=jpg");
   background-size: cover;
