@@ -24,9 +24,14 @@
                 v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
                 hint="Price Range" persistent-hint height="3.5rem")
               v-flex(xs3)
-                 v-text-field(outline single-line readonly v-model="priceRange[1]" hint="Max. Price"
+                v-text-field(outline single-line readonly v-model="priceRange[1]" hint="Max. Price"
                 persistent-hint)
-          v-flex(md2)
+
+    v-container(grid-list-md v-show="searchComplete")
+      v-layout(column)
+        v-flex(v-for="result in searchResults" :key="result").search-results
+          v-card(height="300")
+            h1 {{result}}
     .home-flex
       .search-flex
         .campzy-logo
@@ -52,6 +57,8 @@ export default {
     return {
       searchInput: '',
       searchClicked: false,
+      searchResults: [1, 2, 3],
+      searchComplete: false,
       fromDate: null,
       toDate: null,
       tripDurationMenu: false,
@@ -106,12 +113,26 @@ export default {
       }
     },
   },
+  watch: {
+    searchComplete(val) {
+      if (val === true) {
+        anime({
+          targets: '.search-results',
+          translateY: [{ value: 100, duration: 250 }, { value: 0, duration: 250 }],
+          easing: 'easeInOutQuad',
+          opacity: [0, 1],
+          duration: 500,
+          delay(el, index) { return index * 100; },
+        });
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .top-search {
-  margin-top: 5rem !important;
+  margin-top: 4rem !important;
 }
 
 .home {
