@@ -67,33 +67,33 @@ export default {
 
   methods: {
     regUser() {
-      const token = this.$cookie.get('sessionToken');
-      const client = new GraphQLClient('http://localhost:4444/graphql', {
-        headers: {
-          Authorization: `Bearer ${token} `,
-        },
-      });
-      const getUsr = `{
-        allUsers {
-          id
-        }
-        }`;
-      client.request(getUsr).then((data) => { console.log(data); }).catch(err => console.log(err));
-      // const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
-      //     register(email: $email, password: $password, phoneNumber: $phoneNumber) {
-      //       id
-      //   }
-      // }`;
-      // const variables = {
-      //   email: this.email,
-      //   password: this.password,
-      //   phoneNumber: this.phone,
-      // };
-      // request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
-      //   this.signedfail = true;
-      //   console.log(err.response.errors);
-      //   console.log(err.response.data);
+      // const token = this.$cookie.get('sessionToken');
+      // const client = new GraphQLClient('http://localhost:4444/graphql', {
+      //   headers: {
+      //     Authorization: `Bearer ${token} `,
+      //   },
       // });
+      // const getUsr = `{
+      //   allUsers {
+      //     id
+      //   }
+      //   }`;
+      // client.request(getUsr).then((data) => { console.log(data); }).catch(err => console.log(err));
+      const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
+            id
+        }
+      }`;
+      const variables = {
+        email: this.email,
+        password: this.password,
+        phoneNumber: this.phone,
+      };
+      request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
+        this.signedfail = true;
+        console.log(err.response.errors);
+        console.log(err.response.data);
+      });
     },
     logIn() {
       const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
