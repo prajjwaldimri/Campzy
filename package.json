@@ -46,6 +46,7 @@
     "vue-router": "^3.0.1",
     "vuetify": "^1.1.13",
     "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
     "webpack-dev-middleware": "^3.1.3"
   },
   "devDependencies": {
@@ -74,7 +75,6 @@
     "style-loader": "^0.22.1",
     "vue-cookie": "^1.1.4",
     "vue-template-compiler": "^2.5.17",
-    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   }
 }
