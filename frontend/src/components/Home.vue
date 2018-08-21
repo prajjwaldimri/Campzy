@@ -1,5 +1,6 @@
 <template lang="pug">
   .home-flex
+    v-transition
     .search-flex
       .campzy-logo
         span Camp
@@ -32,11 +33,12 @@ export default {
   methods: {
     searchClick() {
       anime({
-        targets: ['.search-flex'],
-        top: { value: 0 },
-        left: { value: 0 },
+        targets: ['.campzy-logo', '.v-input'],
+        translateY: [{ value: -1000, duration: 1000 }],
         easing: 'easeInOutQuad',
-        duration: 500,
+        complete: () => {
+          document.querySelector('.search-flex').style.display = 'none';
+        },
         delay(target, index) {
           return index * 100;
         },
