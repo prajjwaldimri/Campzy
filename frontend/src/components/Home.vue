@@ -40,7 +40,7 @@
           span.light-green--text.text--accent-4 zy
         v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
         @click:append="searchClick" autofocus color="green" outline single-line required ticks
-        v-model="searchInput" @keyup.enter="searchClick")
+        v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
 </template>
 
