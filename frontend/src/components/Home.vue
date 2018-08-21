@@ -1,12 +1,11 @@
 <template lang="pug">
   .home-flex
-    transition(appear name="slide-y-reverse-transition")
-      .search-flex
-        .campzy-logo
-          span Camp
-          span.light-green--text.text--accent-4 zy
-        v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
-        autofocus color="green" full-width outline single-line)
+    .search-flex
+      .campzy-logo
+        span Camp
+        span.light-green--text.text--accent-4 zy
+      v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
+      autofocus color="green" full-width outline single-line)
 
 </template>
 
@@ -16,6 +15,19 @@ import anime from 'animejs';
 
 export default {
   name: 'Home',
+  mounted() {
+    // Animate Home Elements
+    anime({
+      targets: ['.campzy-logo', '.v-input'],
+      translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 1000 }],
+      opacity: [0, 1],
+      easing: 'easeInOutQuad',
+      duration: 1000,
+      delay(target, index, totalTargets) {
+        return index * 100;
+      },
+    });
+  },
 };
 </script>
 
@@ -35,6 +47,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transform: translateY(100);
 
     .v-input {
       min-width: 50vw;
