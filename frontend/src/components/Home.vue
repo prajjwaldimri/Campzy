@@ -34,9 +34,9 @@
           v-card
             v-container(fluid grid-list-md)
               v-layout(row wrap)
-                v-flex(md3).image-wrapper
+                v-flex(sm12 md3).image-wrapper
                   img(src="https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%", width="100%")
-                v-flex(md3).result-column
+                v-flex(sm12 md3).result-column
                   h1.font-weight-thin.grey--text.text--darken-3 Chopta Camp
                   h3.grey--text.mb-2 Chamoli, Uttarakhand
 
@@ -48,7 +48,7 @@
 
                   //- v-btn(color="green") BOOK NOW!
 
-                v-flex(sm4 md3).result-column
+                v-flex(md3).result-column.hidden-sm-and-down
                   .row.feature-row
                     v-icon.mr-3 directions_car
                     span.increase-letter-spacing-1 3 Hour Drive
@@ -65,11 +65,16 @@
                     v-icon.mr-3.green--text check_circle
                     span.increase-letter-spacing-1 Campzy Quality Assurance
 
-                v-flex(sm2 md3).pr-2.result-column
+                v-flex(md3).pr-2.result-column.hidden-sm-and-down
                   v-btn(small color="green" block).white--text Book Now!
                     v-icon(right dark) shop_two
                   v-btn(small dark block).white--text Learn More
                   v-btn(small dark block).white--text Location on Map
+
+                v-flex(sm12).px-2.hidden-md-and-up.result-column
+                  v-btn(color="green").white--text Book Now!
+                    v-icon(right dark) shop_two
+
 
     .home-flex
       .search-flex
@@ -191,10 +196,15 @@ export default {
   margin-bottom: 2rem;
 
   .result-column {
+    @media screen and (max-width: 960px) {
+      align-items: center;
+    }
+    @media screen and (min-width: 961px) {
+      align-items: flex-start;
+    }
+    justify-content: space-around;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-around;
   }
 
   .container {
@@ -202,6 +212,9 @@ export default {
   }
   .image-wrapper {
     height: 13rem;
+    @media screen and (max-width: 960px) {
+      padding: 0 0 0 0 !important;
+    }
     padding: 0 1rem 0 0 !important;
   }
 }
