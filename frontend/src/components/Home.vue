@@ -5,7 +5,7 @@
         span Camp
         span.light-green--text.text--accent-4 zy
       v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
-      autofocus color="green" full-width outline single-line)
+      @click:append="searchClick" autofocus color="green" outline single-line required)
 
 </template>
 
@@ -19,14 +19,29 @@ export default {
     // Animate Home Elements
     anime({
       targets: ['.campzy-logo', '.v-input'],
-      translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 1000 }],
+      translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
-      duration: 1000,
+      duration: 500,
+      elasticity: 1200,
       delay(target, index) {
         return index * 100;
       },
     });
+  },
+  methods: {
+    searchClick() {
+      anime({
+        targets: ['.search-flex'],
+        top: { value: 0 },
+        left: { value: 0 },
+        easing: 'easeInOutQuad',
+        duration: 500,
+        delay(target, index) {
+          return index * 100;
+        },
+      });
+    },
   },
 };
 </script>
@@ -43,14 +58,17 @@ export default {
   background-size: cover;
 
   .search-flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(100);
+    position: absolute;
 
     .v-input {
       min-width: 50vw;
+      user-select: none;
+    }
+
+    .campzy-logo {
+      min-width: 50vw;
+      text-align: center;
+      user-select: none;
     }
   }
 

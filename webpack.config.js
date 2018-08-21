@@ -22,11 +22,17 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.css$/,
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'],
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.pug/,
@@ -42,6 +48,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin('frontend/dist', {}),
     new VueLoaderPlugin(),
+    // eslint-disable-next-line
+    require('autoprefixer'),
     new MiniCssExtractPlugin({ filename: 'style.css' }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
