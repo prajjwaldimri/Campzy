@@ -23,7 +23,7 @@
                 persistent-hint)
               v-flex(xs6 style="margin: 0 1rem;")
                 v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
-                hint="Price Range" persistent-hint height="3.5rem")
+                hint="Price Range" persistent-hint height="3.5rem" color="green")
               v-flex(xs3)
                 v-text-field(solo single-line readonly v-model="priceRange[1]" hint="Max. Price"
                 persistent-hint)
@@ -31,14 +31,57 @@
     v-container(grid-list-md v-show="searchComplete")
       v-layout(column)
         v-flex(v-for="result in searchResults" :key="result").search-results
-          v-card(height="300")
-            h1 {{result}}
+          v-card
+            v-container(fluid grid-list-md)
+              v-layout(row wrap)
+                v-flex(sm12 md3).image-wrapper
+                  img(src="https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%", width="100%")
+                v-flex(sm12 md3).result-column
+                  h1.font-weight-thin.grey--text.text--darken-3 Chopta Camp
+                  h3.grey--text.mb-2 Chamoli, Uttarakhand
+
+                  h3.title.mb-2 Starting @ ₹ 5000
+
+                  v-chip(label color="green" text-color="white").ma-0
+                    v-avatar(tile class="green darken-4") 4.5
+                    span.caption.increase-letter-spacing-2 Excellent
+
+                  //- v-btn(color="green") BOOK NOW!
+
+                v-flex(md3).result-column.hidden-sm-and-down
+                  .row.feature-row
+                    v-icon.mr-3 directions_car
+                    span.increase-letter-spacing-1 3 Hour Drive
+                  .row.feature-row
+                    v-icon.mr-3 airplanemode_active
+                    span.increase-letter-spacing-1 1 Hour Flight
+                  .row.feature-row
+                    v-icon.mr-3 wifi_off
+                    span.increase-letter-spacing-1 No Internet
+                  .row.feature-row
+                    v-icon.mr-3 accessible
+                    span.increase-letter-spacing-1 Wheel Chair Accessible
+                  .row.feature-row
+                    v-icon.mr-3.green--text check_circle
+                    span.increase-letter-spacing-1 Campzy Quality Assurance
+
+                v-flex(md3).pr-2.result-column.hidden-sm-and-down
+                  v-btn(small color="green" block).white--text Book Now!
+                    v-icon(right dark) shop_two
+                  v-btn(small dark block).white--text Learn More
+                  v-btn(small dark block).white--text Location on Map
+
+                v-flex(sm12).px-2.hidden-md-and-up.result-column
+                  v-btn(color="green").white--text Book Now!
+                    v-icon(right dark) shop_two
+
+
     .home-flex
       .search-flex
         .campzy-logo
           span Camp
           span.green--text zy
-        v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
+        v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
         @click:append="searchClick" autofocus color="green" solo single-line required ticks
         v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
@@ -106,6 +149,7 @@ export default {
           complete: () => {
             document.querySelector('.home-flex').style.display = 'none';
             this.searchClicked = true;
+            this.searchComplete = true;
           },
           delay(target, index) {
             return index * 100;
@@ -134,6 +178,45 @@ export default {
 <style lang="scss">
 .top-search {
   margin-top: 4rem !important;
+}
+
+.feature-row {
+  display: flex;
+  align-items: center;
+}
+
+.increase-letter-spacing-2 {
+  letter-spacing: 2px;
+}
+
+.increase-letter-spacing-1 {
+  letter-spacing: 1px;
+}
+.search-results {
+  margin-bottom: 2rem;
+
+  .result-column {
+    @media screen and (max-width: 960px) {
+      align-items: center;
+    }
+    @media screen and (min-width: 961px) {
+      align-items: flex-start;
+    }
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    padding: 0;
+  }
+  .image-wrapper {
+    height: 13rem;
+    @media screen and (max-width: 960px) {
+      padding: 0 0 0 0 !important;
+    }
+    padding: 0 1rem 0 0 !important;
+  }
 }
 
 .home {
