@@ -11,7 +11,8 @@
     "build": "webpack --mode production",
     "dev": "nodemon backend/app.js",
     "precommit": "lint-staged",
-    "start": "webpack --mode production; node backend/app.js"
+    "start": "node backend/app.js",
+    "heroku-postbuild": "webpack --mode production"
   },
   "lint-staged": {
     "*.js": [
