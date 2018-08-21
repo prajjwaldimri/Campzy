@@ -78,7 +78,7 @@ export default {
           id
         }
         }`;
-      client.request(getUsr).then(data => console.log(data));
+      client.request(getUsr).then((data) => { console.log(data); }).catch(err => console.log(err));
       // const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
       //     register(email: $email, password: $password, phoneNumber: $phoneNumber) {
       //       id
@@ -106,8 +106,9 @@ export default {
         loginPassword: this.loginPassword,
       };
       request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
-        console.log(data);
-        this.$cookie.set('sessionToken', data.loginUser.jwt, 1, 'secure');
+        console.log(data.loginUser.jwt);
+        console.log(JSON.parse(data.loginUser.jwt));
+        this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
       }).catch((err) => {
         console.log(err.response.errors);
         console.log(err.response.data);

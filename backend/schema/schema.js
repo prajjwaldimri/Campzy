@@ -111,11 +111,9 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       async resolve(parent, args, context) {
         try {
-          console.log('hello');
           const user = await auth.getAuthenticatedUser(context.req);
-          console.log(user);
           const userData = await UserModel.findById(user.id);
-          const isUserAdmin = await auth.isUserAdmin(userData);
+          const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
             return new Error('Not Logged In');
           }

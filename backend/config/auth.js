@@ -16,7 +16,6 @@ const getTokenFromHeaders = (req) => {
 // Retrieves the authenticated user details from JWT
 const getAuthenticatedUser = request => new Promise((resolve, reject) => {
   const token = getTokenFromHeaders(request);
-  console.log(token);
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err) {
       reject(new Error('Incorrect or Expired JWT'));
