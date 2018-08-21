@@ -7,25 +7,25 @@
         v-layout(row wrap justify-center)
           v-flex(md4 xs12)
             v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
-            autofocus color="green" outline single-line required v-model="searchInput"
+            autofocus color="green" solo single-line required v-model="searchInput"
             @click:append="searchClick" @keyup.enter="searchClick")
           v-flex(md4 xs12 justify-center style="display:flex")
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy)
               v-select(hint="Select your trip duration" readonly label="21 August - 25 August"
-              slot="activator" color="primary" outline single-line persistent-hint)
+              slot="activator" color="primary" solo single-line persistent-hint)
               v-date-picker(v-model="fromDate" no-title scrollable)
               v-date-picker(v-model="toDate" no-title scrollable)
           v-flex(md4 xs12)
             v-layout(row)
               v-flex(xs3)
-                v-text-field(outline single-line readonly v-model="priceRange[0]" hint="Min. Price"
+                v-text-field(solo single-line readonly v-model="priceRange[0]" hint="Min. Price"
                 persistent-hint)
               v-flex(xs6 style="margin: 0 1rem;")
                 v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
                 hint="Price Range" persistent-hint height="3.5rem")
               v-flex(xs3)
-                v-text-field(outline single-line readonly v-model="priceRange[1]" hint="Max. Price"
+                v-text-field(solo single-line readonly v-model="priceRange[1]" hint="Max. Price"
                 persistent-hint)
 
     v-container(grid-list-md v-show="searchComplete")
@@ -37,9 +37,9 @@
       .search-flex
         .campzy-logo
           span Camp
-          span.light-green--text.text--accent-4 zy
+          span.green--text zy
         v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
-        @click:append="searchClick" autofocus color="green" outline single-line required ticks
+        @click:append="searchClick" autofocus color="green" solo single-line required ticks
         v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
 </template>
@@ -138,8 +138,12 @@ export default {
 
 .home {
   height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("https://images.pexels.com/photos/45241/tent-camp-night-star-45241.jpeg?cs=srgb&dl=camp-camping-dark-45241.jpg&fm=jpg");
+  // background: lightgrey;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.4)
+    ),
+    url("https://images.pexels.com/photos/355241/pexels-photo-355241.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
   background-size: cover;
 }
 
