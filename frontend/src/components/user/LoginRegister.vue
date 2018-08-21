@@ -30,6 +30,8 @@
                     v-text-field(v-model="phone" :rules='phoneRules' label='Phone Number' required)
                   .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
                     v-btn(round color='primary' @click="regUser()" dark) Sign Up
+    v-alert(:value='signed' color='success') Sign up Successful
+    v-alert(:value='signedfail' color='error') Sign up Fail
 
 
 </template>
@@ -41,6 +43,8 @@ import { request } from 'graphql-request';
 export default {
   data: () => ({
     valid: false,
+    signed: false,
+    signedfail: false,
     email: '',
     loginEmail: '',
     emailRules: [
@@ -56,7 +60,7 @@ export default {
     phoneRules: [
       v => !!v || 'Phone Number Required',
     ],
-    testCamp: '',
+
 
   }),
 
@@ -73,20 +77,26 @@ export default {
         phoneNumber: this.phone,
       };
       request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
+        this.signedfail = true;
         console.log(err.response.errors);
         console.log(err.response.data);
       });
     },
     logIn() {
-      this.$auth.login({
-        body: { email: this.loginEmail, password: this.loginPassword },
-
-
-      }).then(() => {
-        console.log('Waah!');
+      const sendUserCredientials = `query ($email: String!,$password: String!){
+        loginUser(email: $email, password: $password){
+          id
+        }
+      }`;
+      const variables = {
+        email: this.loginEmail,
+        password: this.loginPassword,
+      };
+      request('http://localhost:4444/graphql', sendUserCredientials, variables).then(data => console.log(data)).catch((err) => {
+        console.log(err.response.errors);
+        console.log(err.response.data);
       });
     },
-
   },
 };
 

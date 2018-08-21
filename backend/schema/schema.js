@@ -126,6 +126,37 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
+    loginUser: {
+      type: UserType,
+      async resolve(parent, args, context) {
+        try {
+          if (!context.req.body) {
+            return new Error('Please fill both email and password');
+          }
+
+          if (!context.req.body.variables) {
+            return new Error('Please fill both email and password');
+          }
+
+          const { email } = context.req.body.variables;
+          const { password } = context.req.body.variables;
+
+          if (!email || !password) {
+            return new Error('Please fill both email and password');
+          }
+
+          const userDocument = await UserModel.findOne({ email });
+          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
+          if (passwordsMatch) {
+            // Returns the jwt containing user's id, email and token
+            return { jwt: JSON.stringify(userDocument.toAuthJSON()) };
+          }
+          return new Error('Invalid Username or Password');
+        } catch (err) {
+          return err;
+        }
+      },
+    },
   },
 });
 
@@ -181,37 +212,6 @@ const Mutation = new GraphQLObjectType({
             email: args.email,
           });
           return await camp.save();
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    loginUser: {
-      type: UserType,
-      async resolve(parent, args, context) {
-        try {
-          if (!context.req.body) {
-            return new Error('Please fill both email and password');
-          }
-
-          if (!context.req.body.variables) {
-            return new Error('Please fill both email and password');
-          }
-
-          const { email } = context.req.body.variables;
-          const { password } = context.req.body.variables;
-
-          if (!email || !password) {
-            return new Error('Please fill both email and password');
-          }
-
-          const userDocument = await UserModel.findOne({ email });
-          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
-          if (passwordsMatch) {
-            // Returns the jwt containing user's id, email and token
-            return { jwt: JSON.stringify(userDocument.toAuthJSON()) };
-          }
-          return new Error('Invalid Username or Password');
         } catch (err) {
           return err;
         }
