@@ -4,10 +4,11 @@ import App from './App.vue';
 import router from './router/router';
 import 'vuetify/dist/vuetify.min.css';
 
-// Vue.http.options.root = 'http://localhost:4444/graphql';
+const VueCookie = require('vue-cookie');
 
 // Vuetify
 Vue.use(Vuetify);
+Vue.use(VueCookie);
 Vue.config.productionTip = false;
 // eslint-disable-next-line
 new Vue({

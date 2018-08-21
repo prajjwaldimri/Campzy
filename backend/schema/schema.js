@@ -112,6 +112,7 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args, context) {
         try {
           const user = await auth.getAuthenticatedUser(context.req);
+          console.log(user);
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
           if (userData === null) {
@@ -133,7 +134,6 @@ const RootQuery = new GraphQLObjectType({
         password: { type: GraphQLString },
       },
       async resolve(parent, args) {
-        console.log(args);
         try {
           const { email } = args;
           const { password } = args;

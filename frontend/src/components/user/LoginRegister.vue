@@ -1,35 +1,38 @@
 <template lang="pug">
   .reg-flex
     div
-      h1 Welcome to Campzy
-    v-card(width='50%')
-      v-layout(row style="min-height:50%")
-        v-flex(xs6)
-          v-card.welcome
-            v-card-title(primary-title)
-              h2 Please Login or Sign Up for Campzy
-        v-flex(xs6)
-          v-card
-            v-tabs(color='cyan' dark)
-              v-tabs-slider(color='yellow')
-              v-tab(href="#signin") Sign In
-              v-tab(href="#signup") Sign Up
-              v-tab-item(id='signin')
-                v-card(flat)
-                  form(v-model='valid' style='margin:10px')
-                    v-text-field(v-model="loginEmail" :rules='emailRules' label='Email' required)
-                    v-text-field(v-model="loginPassword" :rules='passwordRules' type='password' label='Password' required)
-                  .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-                    v-btn(round color='primary' @click='logIn' dark) Sign In
-              v-tab-item(id='signup')
-                v-card(flat)
-                  form(v-model='valid' style='margin:10px')
-                    v-text-field(v-model="email" :rules='emailRules' label='Email' required)
-                    v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password'
-                    required)
-                    v-text-field(v-model="phone" :rules='phoneRules' label='Phone Number' required)
-                  .text-xs-center(style='margin:10px;display:flex;flex-direction:column')
-                    v-btn(round color='primary' @click="regUser()" dark) Sign Up
+      h1
+        span Welcome to Camp
+        span.light-green--text.text--accent-4 zy
+    v-card(color="transparent" width='30%' height='60%' style='margin-top:2rem;box-shadow:none')
+      v-tabs(color="transparent" dark)
+        v-tabs-slider(color='yellow' )
+        v-tab.tab-size(href="#signin" ) Sign In
+        v-tab.tab-size(href="#signup") Sign Up
+        v-tab-item.tab-content(id='signin')
+          v-card.text-xs-center(color="transparent" flat)
+            form(v-model='valid' style='margin:10px')
+              v-text-field(v-model="loginEmail" :rules='emailRules' label='Email' required)
+              v-text-field(v-model="loginPassword" :rules='passwordRules' type='password' label='Password' required)
+            v-btn.btn-size(round color='green accent-4' @click='logIn' dark) Sign In
+            h3(style='margin:1rem')
+              span O
+              span.light-green--text.text--accent-4 r
+            img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+            img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+        v-tab-item.tab-content(id='signup')
+          v-card.text-xs-center(color="transparent" flat)
+            form(v-model='valid' style='margin:10px')
+              v-text-field(v-model="email" :rules='emailRules' label='Email' required)
+              v-text-field(v-model="password" :rules='passwordRules' type='password' label='Password'
+              required)
+              v-text-field(v-model="phone" :rules='phoneRules' label='Phone Number' required)
+              v-btn.btn-size(round color='green accent-4' @click='regUser' dark) Sign Up
+              h3(style='margin:1rem')
+                span O
+                span.light-green--text.text--accent-4 r
+              img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+              img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
     v-alert(:value='signed' color='success') Sign up Successful
     v-alert(:value='signedfail' color='error') Sign up Fail
 
@@ -66,21 +69,27 @@ export default {
 
   methods: {
     regUser() {
-      const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
-            id
+      const getUsr = `{
+        allUsers {
+          id
         }
-      }`;
-      const variables = {
-        email: this.email,
-        password: this.password,
-        phoneNumber: this.phone,
-      };
-      request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
-        this.signedfail = true;
-        console.log(err.response.errors);
-        console.log(err.response.data);
-      });
+        }`;
+      request('http://localhost:4444/graphql', getUsr).then(data => console.log(data));
+      // const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
+      //     register(email: $email, password: $password, phoneNumber: $phoneNumber) {
+      //       id
+      //   }
+      // }`;
+      // const variables = {
+      //   email: this.email,
+      //   password: this.password,
+      //   phoneNumber: this.phone,
+      // };
+      // request('http://localhost:4444/graphql', registerUser, variables).then(data => console.log(data)).catch((err) => {
+      //   this.signedfail = true;
+      //   console.log(err.response.errors);
+      //   console.log(err.response.data);
+      // });
     },
     logIn() {
       const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
@@ -94,6 +103,7 @@ export default {
       };
       request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
         console.log(data);
+        this.$cookie.set('LoggedIn', data.loginUser.jwt, 1, 'secure');
       }).catch((err) => {
         console.log(err.response.errors);
         console.log(err.response.data);
@@ -111,15 +121,24 @@ export default {
   align-items: center;
   justify-content: center;
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("https://static1.squarespace.com/static/56957ff1d82d5e93424a02f3/t/56b2a2aa3c44d8191689df8c/1454547627840/Camp+Leo+Landing.jpg?format=1500w");
+    url("https://images.pexels.com/photos/93858/pexels-photo-93858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
   background-size: cover;
 }
 
-.welcome {
-  justify-content: center;
-  height: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("https://www.adelaidechristiancentre.com.au/wp-content/uploads/2016/03/church-camp.jpg");
-  background-size: cover;
+.tab-size {
+  width: 50%;
+}
+
+.btn-size {
+  width: 30%;
+  margin: 1rem;
+}
+
+.spacer-img {
+  margin-left: 1rem;
+}
+
+.tab-content {
+  margin-top: 3rem;
 }
 </style>
