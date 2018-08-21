@@ -8,6 +8,9 @@ import ManageCamps from '../components/admin/ManageCamps.vue';
 import AdminDashboard from '../components/admin/AdminDashboard.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
 
+// const auth = require('@websanova/vue-auth/drivers/auth/bearer.js');
+// const http = require('@websanova/vue-auth/drivers/http/axios.1.x.js');
+
 Vue.use(Router);
 
 const router = new Router({
@@ -50,13 +53,8 @@ const router = new Router({
   ],
 });
 
-// Vue.use(require('@websanova/vue-auth'), {
-//   auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
-//   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
-//   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-//   rolesVar: 'type',
-// });
+// Vue.use(require('@websanova/vue-auth'), auth, http);
 
-Vue.http.options.root = 'http://localhost:4444/graphql';
+// Vue.http.options.root = 'http://localhost:4444/graphql';
 
 export default router;
