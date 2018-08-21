@@ -23,7 +23,7 @@
                 persistent-hint)
               v-flex(xs6 style="margin: 0 1rem;")
                 v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
-                hint="Price Range" persistent-hint height="3.5rem")
+                hint="Price Range" persistent-hint height="3.5rem" color="green")
               v-flex(xs3)
                 v-text-field(solo single-line readonly v-model="priceRange[1]" hint="Max. Price"
                 persistent-hint)
@@ -39,7 +39,7 @@
         .campzy-logo
           span Camp
           span.green--text zy
-        v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
+        v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
         @click:append="searchClick" autofocus color="green" solo single-line required ticks
         v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
