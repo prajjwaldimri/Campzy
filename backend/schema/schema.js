@@ -153,7 +153,7 @@ const RootQuery = new GraphQLObjectType({
           const passwordsMatch = await bcrypt.compare(password, userDocument.password);
           if (passwordsMatch) {
             // Returns the jwt containing user's id, email and token
-            return { jwt: JSON.stringify(userDocument.toAuthJSON()) };
+            return { jwt: JSON.stringify(userDocument.generateJWT()) };
           }
           return new Error('Invalid Username or Password');
         } catch (err) {

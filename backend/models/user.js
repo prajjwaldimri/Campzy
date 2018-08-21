@@ -46,14 +46,4 @@ UserSchema.methods.generateJWT = function() {
   );
 };
 
-// eslint-disable-next-line
-UserSchema.methods.toAuthJSON = function() {
-  return {
-    // eslint-disable-next-line
-    _id: this._id,
-    email: this.email,
-    token: this.generateJWT(),
-  };
-};
-
 module.exports = mongoose.model('User', UserSchema);
