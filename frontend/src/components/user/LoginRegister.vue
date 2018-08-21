@@ -83,16 +83,18 @@ export default {
       });
     },
     logIn() {
-      const sendUserCredientials = `query ($email: String!,$password: String!){
-        loginUser(email: $email, password: $password){
-          id
+      const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
+        loginUser(email: $loginEmail, password: $loginPassword){
+          jwt
         }
       }`;
       const variables = {
-        email: this.loginEmail,
-        password: this.loginPassword,
+        loginEmail: this.loginEmail,
+        loginPassword: this.loginPassword,
       };
-      request('http://localhost:4444/graphql', sendUserCredientials, variables).then(data => console.log(data)).catch((err) => {
+      request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
+        console.log(data);
+      }).catch((err) => {
         console.log(err.response.errors);
         console.log(err.response.data);
       });

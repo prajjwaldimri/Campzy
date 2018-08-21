@@ -133,17 +133,10 @@ const RootQuery = new GraphQLObjectType({
         password: { type: GraphQLString },
       },
       async resolve(parent, args) {
+        console.log(args);
         try {
-          if (!args.email) {
-            return new Error('Please fill both email and password');
-          }
-
-          if (!args.password) {
-            return new Error('Please fill both email and password');
-          }
-
-          const { email } = args.email;
-          const { password } = args.password;
+          const { email } = args;
+          const { password } = args;
 
           if (!email || !password) {
             return new Error('Please fill both email and password');
