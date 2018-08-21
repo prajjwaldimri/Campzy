@@ -1,21 +1,35 @@
 <template lang="pug">
-  .home-flex
-    v-transition
-    .search-flex
-      .campzy-logo
-        span Camp
-        span.light-green--text.text--accent-4 zy
-      v-text-field(label="Try Nature, Leh, Mountains....." append-icon="fas fa-search"
-      @click:append="searchClick" autofocus color="green" outline single-line required)
+  .home
+    transition(name="slide-y-transition")
+      navbar(v-show="searchClicked")
+    transition(name="slide-y-transition")
+      .top-search
+        h1 Hello
+    .home-flex
+      .search-flex
+        .campzy-logo
+          span Camp
+          span.light-green--text.text--accent-4 zy
+        v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
+        @click:append="searchClick" autofocus color="green" outline single-line required)
 
 </template>
 
 <script>
 
 import anime from 'animejs';
+import navbar from './Navbar.vue';
 
 export default {
   name: 'Home',
+  components: {
+    navbar,
+  },
+  data() {
+    return {
+      searchClicked: false,
+    };
+  },
   mounted() {
     // Animate Home Elements
     anime({
@@ -38,6 +52,7 @@ export default {
         easing: 'easeInOutQuad',
         complete: () => {
           document.querySelector('.search-flex').style.display = 'none';
+          this.searchClicked = true;
         },
         delay(target, index) {
           return index * 100;
