@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@websanova/vue-auth": "^2.21.14-beta",
+    "animejs": "^2.2.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "body-parser-graphql": "^1.1.0",
