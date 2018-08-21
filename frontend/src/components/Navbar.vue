@@ -6,9 +6,9 @@
         span.light-green--text.text--accent-4 zy
       v-spacer
       v-toolbar-items.hidden-sm-and-down
-        v-btn(flat @click='goHome') HOME
-        v-btn(flat @click='goHome') CAMPS
-        v-btn(flat @click='goHome') LOGIN/SIGNUP
+        v-btn(flat ) HOME
+        v-btn(flat ) CAMPS
+        v-btn(flat ) LOGIN/SIGNUP
 
       v-toolbar-items.hidden-md-and-up
         v-btn(icon @click='goHome')
