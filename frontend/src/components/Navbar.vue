@@ -2,7 +2,7 @@
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent)
     v-toolbar-title
       span Camp
-      span.light-green--text.text--accent-4 zy
+      span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat) HOME

@@ -33,6 +33,7 @@
         v-flex(v-for="result in searchResults" :key="result").search-results
           v-card(height="300")
             h1 {{result}}
+
     .home-flex
       .search-flex
         .campzy-logo
