@@ -26,24 +26,24 @@ const getAuthenticatedUser = request => new Promise((resolve, reject) => {
 });
 
 // Checks if a user owns any camps
-const isUserCampOwner = user => new Promise((resolve, reject) => {
+const isUserCampOwner = (user) => {
   if (!user) {
-    reject(new Error('Cannot check null user'));
+    return false;
   }
   if (user.type === 'CampOwner') {
-    resolve(true);
+    return true;
   }
   return false;
-});
+};
 
-const isUserAdmin = user => new Promise((resolve, reject) => {
+const isUserAdmin = (user) => {
   if (!user) {
-    reject(new Error('Cannot check null user'));
+    return false;
   }
   if (user.type === 'Admin') {
-    resolve(true);
+    return true;
   }
   return false;
-});
+};
 
 module.exports = { getAuthenticatedUser, isUserCampOwner, isUserAdmin };
