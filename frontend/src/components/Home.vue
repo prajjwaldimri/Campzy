@@ -11,6 +11,9 @@
 </template>
 
 <script>
+
+import anime from 'animejs';
+
 export default {
   name: 'Home',
 };
