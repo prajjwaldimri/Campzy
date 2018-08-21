@@ -128,18 +128,22 @@ const RootQuery = new GraphQLObjectType({
     },
     loginUser: {
       type: UserType,
-      async resolve(parent, args, context) {
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
         try {
-          if (!context.req.body) {
+          if (!args.email) {
             return new Error('Please fill both email and password');
           }
 
-          if (!context.req.body.variables) {
+          if (!args.password) {
             return new Error('Please fill both email and password');
           }
 
-          const { email } = context.req.body.variables;
-          const { password } = context.req.body.variables;
+          const { email } = args.email;
+          const { password } = args.password;
 
           if (!email || !password) {
             return new Error('Please fill both email and password');
