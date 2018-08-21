@@ -4,6 +4,8 @@ import App from './App.vue';
 import router from './router/router';
 import 'vuetify/dist/vuetify.min.css';
 
+// Vue.http.options.root = 'http://localhost:4444/graphql';
+
 // Vuetify
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
