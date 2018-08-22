@@ -1,3 +1,15 @@
 <template lang="pug">
-  h1 Add Camp
+  v-container
+    h1 Add Camp
 </template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
