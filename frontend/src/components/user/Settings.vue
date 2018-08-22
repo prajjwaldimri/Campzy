@@ -19,15 +19,17 @@
                 type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                  :error-messages="errors.collect('currentPassword')")
                 v-text-field(label="New Password" v-model="user.newPassword" clearable
-                type="password" counter data-vv-name="newPassword" v-validate="'min:8'"
-                 :error-messages="errors.collect('newPassword')")
+                type="password" counter data-vv-name="New Password" v-validate="'min:8'"
+                 :error-messages="errors.collect('New Password')" ref="newPassword")
                 v-text-field(label="Confirm New Password" type="password"
-                v-model="user.confirmNewPassword" clearable counter v-validate="'min:8'"
-                data-vv-name="confirmNewPassword"
-                :error-messages="errors.collect('confirmNewPassword')")
+                v-model="user.confirmNewPassword" clearable counter
+                v-validate="'confirmed:newPassword'"
+                data-vv-name="Confirm New Password"
+                :error-messages="errors.collect('Confirm New Password')")
               v-card-actions
                 v-spacer
-                v-btn(:disabled="editProfileValid" color="green" text-color="white") Update Profile
+                v-btn(:disabled="editProfileValid" color="green" text-color="white"
+                @click="updateProfile") Update Profile
           v-flex(xs12 md6)
             v-card().settings-card
               v-card-title(primary-title)
@@ -75,6 +77,9 @@ export default {
         .then((data) => { this.user = data.currentUser; })
         .catch(() => this.$router.push({ name: 'login' }));
     }
+  },
+  methods: {
+    updateProfile() { },
   },
 };
 </script>
