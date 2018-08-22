@@ -43,7 +43,7 @@ const router = new Router({
       component: AdminDashboard,
     },
     {
-      path: '/signIn',
+      path: '/login',
       name: 'sign-in',
       meta: { auth: true },
       component: LoginRegister,
