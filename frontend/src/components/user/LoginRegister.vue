@@ -2,7 +2,7 @@
   v-container.reg-flex(fluid)
     v-layout(row)
       v-flex(sm5 xs12 style='border-right:2px solid')
-        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent" v-show='!forRegister')
+        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent")
           div(style='margin:1.5rem;')
             h1
               span Log
@@ -18,7 +18,7 @@
             //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
             v-btn.btn-size( flat small color='green accent-4' @click='forRegister = true') New User? Register
       v-flex(sm7 xs12)
-        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent" v-show='!forRegister')
+        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent")
             div(style='margin:1.5rem;')
               h1
                 span Sign
