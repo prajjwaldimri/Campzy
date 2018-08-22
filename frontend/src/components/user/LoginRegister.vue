@@ -6,7 +6,7 @@
           v-layout(row)
             v-flex(xs12 md6)
               transition(name="fade-transition" appear key="login" mode="out-in")
-                .login-content(v-if="isLogin")
+                .login-content(v-if="loginState == 0")
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
@@ -21,10 +21,10 @@
                     v-btn(block dark).white--text.ml-1 Forgot Password?
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Need an account?
-                    v-btn(flat @click="isLogin = false")
+                    v-btn(flat @click="loginState = 1")
                       h4 Sign up here!
 
-                .signup-content(v-else key="signup")
+                .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Create an Account
                   v-form(ref="form" v-model="isLoginValid")
@@ -34,11 +34,27 @@
                   v-text-field(label="Password" v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green").white--text.mt-3 Create your account
+                  v-btn(block color="green" @click="loginState = 2").white--text.mt-3
+                    | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
-                    v-btn(flat @click="isLogin = true")
+                    v-btn(flat @click="loginState = 0")
                       h4 LOGIN
+
+                .phone-otp-content(v-else key="phone-otp")
+                  v-card-title(align-center justify-center).d-flex
+                    h1.font-weight-light Verify your Phone Number
+                  v-form(ref="form" v-model="isLoginValid")
+                  v-flex(align-center).d-flex
+                    v-text-field(label="Phone Number" v-validate="'required|email'" required
+                      v-model="email" clearable data-vv-name="email"
+                      :error-messages="errors.collect('email')")
+                    v-btn(dark) Send OTP
+                  v-flex(align-center).d-flex
+                    v-text-field(shrink label="One Time Password" v-model="otp" clearable
+                    type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
+                      :error-messages="errors.collect('OTP')" )
+                    v-btn(color="green" @click="regUser").white--text.mt-3 Verify OTP
 
             v-flex(md6).hidden-sm-and-down.right-image
 
@@ -54,10 +70,12 @@ export default {
   },
   data() {
     return {
-      isLogin: true,
+      loginState: 1,
       isLoginValid: false,
       password: '',
       email: '',
+      phoneNumber: '',
+      otp: '',
     };
   },
 
@@ -131,6 +149,15 @@ export default {
   }
 
   .signup-content {
+    @media screen and (min-width: 960px) {
+      padding: 7rem 4rem;
+    }
+    @media screen and (max-width: 960px) {
+      padding: 1rem;
+    }
+  }
+
+  .phone-otp-content {
     @media screen and (min-width: 960px) {
       padding: 7rem 4rem;
     }

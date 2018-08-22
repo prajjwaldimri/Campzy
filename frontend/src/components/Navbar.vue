@@ -1,6 +1,6 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent)
-    v-toolbar-title
+    v-toolbar-title(@click="goToHome" style="cursor: pointer")
       span Camp
       span.green--text zy
     v-spacer
@@ -56,6 +56,9 @@ export default {
   methods: {
     goToSettings() {
       this.$router.push('settings');
+    },
+    goToHome() {
+      this.$router.push('/');
     },
   },
 };

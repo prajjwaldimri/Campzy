@@ -2,7 +2,7 @@
   div
     navbar
     .settings-page
-      v-container(grid-list-md)
+      v-container(grid-list-lg)
         v-layout(row)
           v-flex(xs12 md6)
             v-card().settings-card
@@ -16,7 +16,7 @@
                  v-model="user.email" clearable data-vv-name="email"
                  :error-messages="errors.collect('email')")
                 v-text-field(label="Current Password" v-model="user.currentPassword" clearable
-                type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
+                type="password" counter data-vv-name="currentPassword" v-validate="'min:8|required'"
                  :error-messages="errors.collect('currentPassword')")
                 v-text-field(label="New Password" v-model="user.newPassword" clearable
                 type="password" counter data-vv-name="New Password" v-validate="'min:8'"
@@ -28,7 +28,8 @@
                 :error-messages="errors.collect('Confirm New Password')")
               v-card-actions.mt-2
                 v-spacer
-                v-btn(color="green" @click="updateProfile").white--text Update Profile
+                v-btn(color="green" @click="updateProfile" :loading="isProfileUpdating").white--text
+                  | Update Profile
           v-flex(xs12 md6)
             v-card().settings-card
               v-card-title(primary-title)
@@ -57,6 +58,7 @@ export default {
   data() {
     return {
       user: {},
+      isProfileUpdating: false,
     };
   },
   mounted() {
@@ -68,18 +70,20 @@ export default {
   },
   methods: {
     updateProfile() {
+      this.isProfileUpdating = true;
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
-          const query = `mutation UpdateUser($name: String, $currentPassword: String, $newPassword:String)
-            { updateUser (name:$name, currentPassword:$currentPassword, newPassword:$newPassword) {
+          const query = `mutation updateUser($name: String!, $currentPassword: String!,   $newPassword: String) {
+             updateUser (name: $name, currentPassword: $currentPassword, newPassword: $newPassword) {
             name,
             email,
             dateOfBirth
-          }}`;
+              }
+            }`;
           const variables = {
-            name: this.name,
-            currentPassword: this.currentPassword,
-            newPassword: this.newPassword,
+            name: this.user.name,
+            currentPassword: this.user.currentPassword,
+            newPassword: this.user.newPassword,
           };
           const client = new GraphQLClient('/graphql', {
             headers: {
@@ -88,8 +92,10 @@ export default {
           });
 
           client.request(query, variables)
-            .then((data) => { this.user = data.currentUser; })
-            .catch(() => this.$router.push({ name: 'login' }));
+            .then((data) => { this.user = data.updateUser; this.isProfileUpdating = false; })
+            .catch(() => { this.$router.push({ name: 'login' }); this.isProfileUpdating = false; });
+        } else {
+          this.isProfileUpdating = false;
         }
       });
     },
