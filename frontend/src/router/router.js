@@ -7,6 +7,7 @@ import RegisterCamp from '../components/camp_owner/RegisterCamp.vue';
 import ManageCamps from '../components/admin/ManageCamps.vue';
 import AdminDashboard from '../components/admin/AdminDashboard.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
+import Settings from '../components/user/Settings.vue';
 
 Vue.use(Router);
 
@@ -45,8 +46,12 @@ const router = new Router({
     {
       path: '/login',
       name: 'sign-in',
-      meta: { auth: true },
       component: LoginRegister,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
     },
   ],
 });
