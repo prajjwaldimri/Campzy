@@ -4,7 +4,7 @@ import Home from '../components/Home.vue';
 import BookCampSite from '../components/user/BookCampSite.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
 import Settings from '../components/user/Settings.vue';
-import DashBoard from '../components/Dashboard.vue';
+import Dashboard from '../components/Dashboard.vue';
 import Pricing from '../components/dashboard_components/camp-owner-dashboard/Pricing.vue';
 
 Vue.use(Router);
@@ -35,7 +35,7 @@ const router = new Router({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: DashBoard,
+      component: Dashboard,
       children: [
         {
           path: 'pricing',

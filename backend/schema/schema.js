@@ -171,7 +171,6 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         try {
-          console.log('Data received');
           const passwordHash = await bcrypt.hash(args.password, 10);
           const userDocument = new UserModel({
             email: args.email,
@@ -180,6 +179,26 @@ const Mutation = new GraphQLObjectType({
           });
           await userDocument.save();
           return 'Successfully created account';
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    updateUser: {
+      type: UserType,
+      args: {
+        name: { type: GraphQLString },
+        currentPassword: { type: GraphQLString },
+        newPassword: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          // const passwordHash = await bcrypt.hash(args.currentPassword, 10);
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          console.log(userData);
+
+          return 'Successfully updated!';
         } catch (err) {
           return err;
         }

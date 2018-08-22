@@ -8,9 +8,9 @@
             v-card().settings-card
               v-card-title(primary-title)
                 h2.font-weight-light EDIT PROFILE
-              v-form(ref="form" v-model="editProfileValid")
+              v-form
                 v-text-field(label="Name" required v-model="user.name" clearable
-                data-vv-name="Name" v-validate="'alpha_spaces|min:3'"
+                data-vv-name="Name" v-validate="'alpha_spaces|min:3|required'"
                 :error-messages="errors.collect('Name')")
                 v-text-field(label="Email" v-validate="'required|email'" required
                  v-model="user.email" clearable data-vv-name="email"
@@ -19,15 +19,16 @@
                 type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                  :error-messages="errors.collect('currentPassword')")
                 v-text-field(label="New Password" v-model="user.newPassword" clearable
-                type="password" counter data-vv-name="newPassword" v-validate="'min:8'"
-                 :error-messages="errors.collect('newPassword')")
+                type="password" counter data-vv-name="New Password" v-validate="'min:8'"
+                 :error-messages="errors.collect('New Password')" ref="newPassword")
                 v-text-field(label="Confirm New Password" type="password"
-                v-model="user.confirmNewPassword" clearable counter v-validate="'min:8'"
-                data-vv-name="confirmNewPassword"
-                :error-messages="errors.collect('confirmNewPassword')")
-              v-card-actions
+                v-model="user.confirmNewPassword" clearable counter
+                v-validate="'confirmed:newPassword'"
+                data-vv-name="Confirm New Password"
+                :error-messages="errors.collect('Confirm New Password')")
+              v-card-actions.mt-2
                 v-spacer
-                v-btn(:disabled="editProfileValid" color="green" text-color="white") Update Profile
+                v-btn(color="green" @click="updateProfile").white--text Update Profile
           v-flex(xs12 md6)
             v-card().settings-card
               v-card-title(primary-title)
@@ -47,24 +48,57 @@ import { GraphQLClient } from 'graphql-request';
 import navbar from '../Navbar.vue';
 
 export default {
+  $_veeValidate: {
+    validator: 'new',
+  },
   components: {
     navbar,
   },
   data() {
     return {
       user: {},
-      editProfileValid: false,
     };
   },
   mounted() {
     if (!this.$cookie.get('sessionToken')) {
       this.$router.push({ name: 'login' });
     } else {
+      this.getCurrentUser();
+    }
+  },
+  methods: {
+    updateProfile() {
+      this.$validator.validateAll().then((isValid) => {
+        if (isValid) {
+          const query = `mutation UpdateUser($name: String, $currentPassword: String, $newPassword:String)
+            { updateUser (name:$name, currentPassword:$currentPassword, newPassword:$newPassword) {
+            name,
+            email,
+            dateOfBirth
+          }}`;
+          const variables = {
+            name: this.name,
+            currentPassword: this.currentPassword,
+            newPassword: this.newPassword,
+          };
+          const client = new GraphQLClient('/graphql', {
+            headers: {
+              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+            },
+          });
+
+          client.request(query, variables)
+            .then((data) => { this.user = data.currentUser; })
+            .catch(() => this.$router.push({ name: 'login' }));
+        }
+      });
+    },
+    getCurrentUser() {
       const query = `{currentUser {
-        name,
-        email,
-        dateOfBirth
-      }}`;
+            name,
+            email,
+            dateOfBirth
+          }}`;
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -74,7 +108,7 @@ export default {
       client.request(query)
         .then((data) => { this.user = data.currentUser; })
         .catch(() => this.$router.push({ name: 'login' }));
-    }
+    },
   },
 };
 </script>

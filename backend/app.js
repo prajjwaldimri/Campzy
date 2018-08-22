@@ -32,12 +32,12 @@ app.use(bodyParserGraphQL());
 // History mode fallback
 app.use(
   history({
-    rewrites: [
-      {
-        from: /\/#/,
-        to: context => `/${context.parsedUrl.pathname}`,
-      },
-    ],
+    // rewrites: [
+    //   {
+    //     from: /\/#/,
+    //     to: context => `/${context.parsedUrl.pathname}`,
+    //   },
+    // ],
   }),
 );
 
