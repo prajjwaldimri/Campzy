@@ -19,7 +19,7 @@
               v-btn(icon @click.stop='mini=!mini')
                 v-icon chevron_left
         v-list.pt-5(dense)
-          v-list-tile.pt-3(@click='user')
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon wc
             v-list-tile-content User Management
@@ -45,8 +45,9 @@
             v-list-tile-content Pricing
           v-list-tile.pt-5
             v-list-tile-content.center-item
-              v-btn(flat color='green accent-4' large) Sign Out
+              v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
       router-view.router-display
+    v-snackbar(v-model='signOutfail' top multi-line :timeout='timeout') Sign Out Fail
 
 
 </template>
@@ -63,13 +64,25 @@ export default {
       drawer: true,
       mini: false,
       right: null,
+      signOutfail: false,
+      timeout: 6000,
+      load: false,
     };
   },
   methods: {
     goHomePage() {
       this.$router.push('/');
     },
+
+    signOut() {
+      this.load = true;
+      this.$cookie.delete('sessionToken');
+      this.$router.push('login');
+      this.signOutfail = true;
+    },
   },
+
+
 };
 </script>
 <style lang="scss" scoped>

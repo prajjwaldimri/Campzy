@@ -10,10 +10,10 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" v-validate="'required|email'" required
+                  v-text-field(label="Email" color='green accent-4' v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
                     :error-messages="errors.collect('email')")
-                  v-text-field(label="Current Password" v-model="password" clearable
+                  v-text-field(label="Current Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
@@ -28,10 +28,10 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Create an Account
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" v-validate="'required|email'" required
+                  v-text-field(label="Email" color='green accent-4' v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
                     :error-messages="errors.collect('email')")
-                  v-text-field(label="Password" v-model="password" clearable
+                  v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
                   v-btn(block color="green" @click="loginState = 2").white--text.mt-3
@@ -46,12 +46,12 @@
                     h1.font-weight-light Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                   v-flex(align-center).d-flex
-                    v-text-field(label="Phone Number" v-validate="'required|email'" required
+                    v-text-field(label="Phone Number" color='green accent-4' v-validate="'required|email'" required
                       v-model="email" clearable data-vv-name="email"
                       :error-messages="errors.collect('email')")
                     v-btn(dark) Send OTP
                   v-flex(align-center).d-flex
-                    v-text-field(shrink label="One Time Password" v-model="otp" clearable
+                    v-text-field(shrink label="One Time Password" color='green accent-4' v-model="otp" clearable
                     type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
                       :error-messages="errors.collect('OTP')" )
                     v-btn(color="green" @click="regUser").white--text.mt-3 Verify OTP
