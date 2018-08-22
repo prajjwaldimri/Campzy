@@ -1,52 +1,52 @@
 <template lang="pug">
   .reg-flex
-    v-container(fluid grid-list-sm)
-      v-layout(row wrap)
-        v-flex(d-flex xs12 sm4)
-          v-layout(column wrap)
+    navbar
+    v-container(fluid grid-list-md)
+      v-flex(sm5 xs12)
+        v-card.text-xs-center(style='margin-top:5rem;box-shadow:none' v-show='!forRegister')
+          div(style='margin:1.5rem;')
             h1
-              span.welcome-title Welcome to Camp
-              span.light-green--text.text--accent-4.welcome-title zy..
-            p.hidden-sm-and-down.about-campzy Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        v-spacer
-        v-flex(sm3 d-flex xs12)
-          v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='!forRegister')
-            div(style='margin:1.5rem;')
-              h1
-                span Log
-                span.light-green--text.text--accent-4 in
-              form(v-model='valid' style='margin:1.5rem')
-                v-text-field(v-model="loginEmail" :rules='emailRules' color='green accent-4' label='Email' required)
-                v-text-field(v-model="loginPassword" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
-              v-btn.btn-size(round color='green accent-4' @click='logIn' @keyup.enter='logIn') Sign In
-              h3(style='margin:1rem')
-                span O
-                span.light-green--text.text--accent-4 r
-              //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
-              //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
-              v-btn.btn-size( flat small color='green accent-4' @click='forRegister = true') New User? Register
+              span Log
+              span.light-green--text.text--accent-4 in
+            form(v-model='valid' style='margin:1.5rem')
+              v-text-field(v-model="loginEmail" :rules='emailRules' color='green accent-4' label='Email' required)
+              v-text-field(v-model="loginPassword" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
+            v-btn.btn-size(round color='green accent-4' @click='logIn' @keyup.enter='logIn') Sign In
+            h3(style='margin:1rem')
+              span O
+              span.light-green--text.text--accent-4 r
+            //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+            //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+            v-btn.btn-size( flat small color='green accent-4' @click='forRegister = true') New User? Register
 
-          v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='forRegister')
-            div(style='margin:1.5rem;')
-              h1
-                span Sign
-                span.light-green--text.text--accent-4 up
-              form(v-model='valid' style='margin:1.5rem')
-                v-text-field(v-model="email" :rules='emailRules' color='green accent-4' label='Email' required)
-                v-text-field(v-model="password" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
-                v-text-field(v-model="phone" :rules='phoneRules' color='green accent-4' label='Phone Number' required)
-              v-btn.btn-size(round color='green accent-4' @click='regUser' @keyup.enter='regUser') Sign Up
-              h3(style='margin:1rem')
-                span O
-                span.light-green--text.text--accent-4 r
-              //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
-              //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
-              v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
+        v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='forRegister')
+          div(style='margin:1.5rem;')
+            h1
+              span Sign
+              span.light-green--text.text--accent-4 up
+            form(v-model='valid' style='margin:1.5rem')
+              v-text-field(v-model="email" :rules='emailRules' color='green accent-4' label='Email' required)
+              v-text-field(v-model="password" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
+              v-text-field(v-model="phone" :rules='phoneRules' color='green accent-4' label='Phone Number' required)
+            v-btn.btn-size(round color='green accent-4' @click='regUser' @keyup.enter='regUser') Sign Up
+            h3(style='margin:1rem')
+              span O
+              span.light-green--text.text--accent-4 r
+            //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+            //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+            v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
+      //- v-flex.side-image(sm5 xs12)
+
 </template>
 <script>
 import { request } from 'graphql-request';
+import navbar from '../Navbar.vue';
 
 export default {
+  name: 'Home',
+  components: {
+    navbar,
+  },
   data: () => ({
     forRegister: false,
     valid: false,
@@ -112,8 +112,10 @@ export default {
       };
       request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
         this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
+        window.location.href = `${window.location.origin}/#/settings`;
       }).catch((err) => {
         this.loggedIn = true;
+        console.log(err);
       });
     },
   },
@@ -132,6 +134,16 @@ export default {
       rgba(236, 236, 236, 0.9)
     ),
     url("https://images.pexels.com/photos/93858/pexels-photo-93858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background-size: cover;
+}
+
+.side-image {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: url("https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350");
   background-size: cover;
 }
 
