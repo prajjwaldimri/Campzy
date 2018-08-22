@@ -35,39 +35,16 @@
               //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
               v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
 </template>
+
 <script>
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 
 export default {
-  name: 'Home',
   components: {
     navbar,
   },
-  data: () => ({
-    forRegister: false,
-    valid: false,
-    signed: false,
-    signedfail: false,
-    email: '',
-    loginEmail: '',
-    loggedIn: false,
-    emailRules: [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+/.test(v) || 'E-mail must be valid',
-    ],
-    password: '',
-    loginPassword: '',
-    passwordRules: [
-      v => !!v || 'Password is required',
-    ],
-    phone: '',
-    phoneRules: [
-      v => !!v || 'Phone Number Required',
-    ],
-
-
-  }),
+  data() { return {}; },
 
   methods: {
     regUser() {
@@ -119,31 +96,6 @@ export default {
 };
 
 </script>
+
 <style lang="scss" scoped>
-.reg-flex {
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    rgba(236, 236, 236, 0.9),
-    rgba(236, 236, 236, 0.9)
-  );
-  background-size: cover;
-}
-
-.btn-size {
-  width: 50%;
-  margin: 1rem;
-}
-
-.welcome-title {
-  font-size: 4rem;
-  font-weight: 400;
-}
-.about-campzy {
-  margin-top: 2rem;
-  line-height: 1.5rem;
-  text-align: justify;
-  font-weight: 100;
-}
 </style>
