@@ -193,12 +193,28 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args, context) {
         try {
-          // const passwordHash = await bcrypt.hash(args.currentPassword, 10);
           const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          console.log(userData);
+          let userData = await UserModel.findById(user.id, 'password');
+          const isPasswordCorrect = await bcrypt.compare(args.currentPassword, userData.password);
 
-          return 'Successfully updated!';
+          if (isPasswordCorrect) {
+            if (args.newPassword) {
+              const password = await bcrypt.hash(args.newPassword, 10);
+              userData = await UserModel.findByIdAndUpdate(
+                user.id,
+                { name: args.name, password },
+                { select: 'email name' },
+              );
+            } else {
+              userData = await UserModel.findByIdAndUpdate(
+                user.id,
+                { name: args.name },
+                { select: 'email name' },
+              );
+            }
+            return userData;
+          }
+          return new Error('Wrong Password');
         } catch (err) {
           return err;
         }
