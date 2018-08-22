@@ -12,6 +12,7 @@ import Settings from '../components/user/Settings.vue';
 Vue.use(Router);
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
