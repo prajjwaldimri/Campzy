@@ -2,7 +2,7 @@
   div
     navbar
     .settings-page
-      v-container(grid-list-md)
+      v-container(grid-list-lg)
         v-layout(row)
           v-flex(xs12 md6)
             v-card().settings-card
