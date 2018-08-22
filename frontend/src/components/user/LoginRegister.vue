@@ -142,7 +142,7 @@ export default {
   .right-image {
     background-image: url(https://images.pexels.com/photos/1004119/pexels-photo-1004119.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
     background-size: cover;
-    border-radius: 2px;
+    border-radius: 0 2px 2px 0;
   }
 }
 </style>
