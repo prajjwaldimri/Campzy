@@ -41,6 +41,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pbkdf2": "^3.0.16",
+    "vee-validate": "^2.1.0-beta.8",
     "vue": "^2.5.17",
     "vue-cookie": "^1.1.4",
     "vue-loader": "^15.3.0",
@@ -51,8 +52,6 @@
     "webpack-dev-middleware": "^3.1.3"
   },
   "devDependencies": {
-    "webpack-cli": "^3.1.0",
-    "mini-css-extract-plugin": "^0.4.1",
     "autoprefixer": "^9.1.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -68,6 +67,7 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
+    "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.3",
     "postcss-loader": "^3.0.0",
     "pug": "^2.0.3",
@@ -76,6 +76,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.22.1",
     "vue-template-compiler": "^2.5.17",
+    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   }
 }
