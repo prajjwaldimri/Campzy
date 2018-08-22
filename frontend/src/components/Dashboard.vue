@@ -1,8 +1,8 @@
 <template lang="pug">
   div
     navbar
-    div(style="margin-top:4.5rem;")
-      v-navigation-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay prominent style="box-shadow: 2px 0px 15px #888888;")
+    v-container.display
+      v-navigation-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay style="box-shadow: 1px 0px 15px 0px #888888;")
         v-toolbar(flat)
           v-list.pa-0
             v-list-tile(avatar)
@@ -44,7 +44,7 @@
             v-list-tile-action
               v-icon add
             v-list-tile-content Pricing
-    router-view
+      router-view.router-display
 
 
 </template>
@@ -65,3 +65,13 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.display {
+  margin: 4.6rem 0px 0px 0px;
+  padding: 0px;
+  display: flex;
+}
+.router-display {
+  margin: 0 0 0 1rem;
+}
+</style>
