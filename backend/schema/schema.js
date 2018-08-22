@@ -32,6 +32,7 @@ const UserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     phoneNumber: { type: GraphQLString },
     jwt: { type: GraphQLString },
+    dateOfBirth: { type: GraphQLString },
   }),
 });
 
