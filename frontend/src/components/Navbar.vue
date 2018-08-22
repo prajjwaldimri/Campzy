@@ -7,7 +7,8 @@
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat) HOME
       v-btn(flat) CAMPS
-      v-btn(flat) LOGIN/SIGNUP
+      v-btn(flat v-show="!isLoggedIn") LOGIN/SIGNUP
+      v-btn(flat v-show="isLoggedIn" @click="goToSettings") Hey, &nbsp; {{user.name}}
 
     v-toolbar-items.hidden-md-and-up
       v-btn(icon)
@@ -18,9 +19,44 @@
 
 </template>
 <script>
+import { GraphQLClient } from 'graphql-request';
+
 export default {
   data: () => ({
     drawer: null,
+    isLoggedIn: false,
+    user: {},
   }),
+  mounted() {
+    if (!this.$cookie.get('sessionToken')) {
+      this.isLoggedIn = false;
+      return;
+    }
+    const query = `{currentUser {
+        name,
+        email,
+        dateOfBirth
+      }}`;
+    const client = new GraphQLClient('/graphql', {
+      headers: {
+        Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+      },
+    });
+
+    client.request(query)
+      .then((data) => {
+        this.user = data.currentUser;
+        this.isLoggedIn = true;
+        if (this.user.name === null) {
+          this.user.name = 'Unnamed User';
+        }
+      })
+      .catch(() => { this.user = {}; this.isLoggedIn = false; });
+  },
+  methods: {
+    goToSettings() {
+      this.$router.push('settings');
+    },
+  },
 };
 </script>
