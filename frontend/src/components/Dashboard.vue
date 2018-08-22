@@ -2,7 +2,7 @@
   div
     navbar
     v-container.display
-      v-navigation-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay style="box-shadow: 1px 0px 15px 0px #888888;")
+      v-navigation-drawer.side-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay)
         v-toolbar(flat)
           v-list.pa-0
             v-list-tile(avatar)
@@ -73,5 +73,9 @@ export default {
 }
 .router-display {
   margin: 0 0 0 1rem;
+}
+.side-drawer {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 </style>
