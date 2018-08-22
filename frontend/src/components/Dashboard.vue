@@ -1,46 +1,44 @@
 <template lang="pug">
   div
-    navbar
     v-container.display
-      v-navigation-drawer.side-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay)
-        v-toolbar(flat)
-          v-list.pa-0
-            v-list-tile(avatar)
-              v-list-tile-avatar
-                img(src='https://randomuser.me/api/portraits/men/85.jpg')
-              v-list-tile-content
-                v-list-tile-title Ayush Bahuguna
-              v-list-tile-action
-                v-btn(icon @click.stop='mini=!mini')
-                  v-icon chevron_left
-        v-list.pt-0(dense)
-          v-divider
-          v-list-tile
+      v-navigation-drawer.side-drawer(:mini-variant.sync="mini" color='transparent' style="background-color:#fafafa" v-model="drawer" hide-overlay)
+        v-list.pt-4
+          v-list-tile(@click='goHomePage')
+            v-list-tile-content.logo
+              h1
+                span Camp
+                span.green--text zy
+        v-list.pt-3
+          v-list-tile(avatar)
+            v-list-tile-avatar
+              img(src='https://randomuser.me/api/portraits/men/85.jpg')
+            v-list-tile-content
+              v-list-tile-title Ayush Bahuguna
             v-list-tile-action
-              v-icon add
+              v-btn(icon @click.stop='mini=!mini')
+                v-icon chevron_left
+        v-list.pt-5(dense)
+          v-list-tile.pt-3(@click='')
+            v-list-tile-action
+              v-icon wc
             v-list-tile-content User Management
-          v-divider
-          v-list-tile
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
-              v-icon add
+              v-icon beach_access
             v-list-tile-content Camp Management
-          v-divider
-          v-list-tile
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
-              v-icon add
-            v-list-tile-content Add Camps
-          v-divider
-          v-list-tile
+              v-icon room_service
+            v-list-tile-content Camps
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
             v-list-tile-content Camp Details
-          v-divider
-          v-list-tile
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
             v-list-tile-content Inventory
-          v-divider
-          v-list-tile
+          v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
             v-list-tile-content Pricing
@@ -63,11 +61,16 @@ export default {
       right: null,
     };
   },
+  methods: {
+    goHomePage() {
+      this.$router.push('/');
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .display {
-  margin: 4.6rem 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
   padding: 0px;
   display: flex;
 }
@@ -75,7 +78,9 @@ export default {
   margin: 0 0 0 1rem;
 }
 .side-drawer {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-    0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  border-right: 1px sloid;
+}
+.logo {
+  align-items: center;
 }
 </style>
