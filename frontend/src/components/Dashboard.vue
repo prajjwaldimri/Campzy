@@ -1,8 +1,8 @@
 <template lang="pug">
   div
     navbar
-    div(style="margin-top:4.5rem;box-shadow: 5px 0px #888888;")
-      v-navigation-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay prominent)
+    div(style="margin-top:4.5rem;")
+      v-navigation-drawer(:mini-variant.sync="mini" v-model="drawer" hide-overlay prominent style="box-shadow: 2px 0px 15px #888888;")
         v-toolbar(flat)
           v-list.pa-0
             v-list-tile(avatar)
