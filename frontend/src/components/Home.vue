@@ -31,7 +31,7 @@
     v-container(grid-list-md v-show="searchComplete")
       v-layout(column)
         v-flex(v-for="result in searchResults" :key="result").search-results
-          v-card
+          v-card(hover)
             v-container(fluid grid-list-md)
               v-layout(row wrap)
                 v-flex(sm12 md3).image-wrapper
