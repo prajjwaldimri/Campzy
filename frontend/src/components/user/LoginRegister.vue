@@ -17,7 +17,7 @@
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
-                    v-btn(block color="green").white--text.mr-1 Login
+                    v-btn(block color="green" @click="login").white--text.mr-1 Login
                     v-btn(block dark).white--text.ml-1 Forgot Password?
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Need an account?
@@ -73,7 +73,7 @@ export default {
         password: this.password,
         phoneNumber: this.phone,
       };
-      request('http://localhost:4444/graphql', registerUser, variables).then((data) => {
+      request('/graphql', registerUser, variables).then((data) => {
         if (data != null) {
           this.signed = true;
         }
@@ -89,19 +89,19 @@ export default {
         this.phone = '';
       });
     },
-    logIn() {
+    login() {
       const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
         loginUser(email: $loginEmail, password: $loginPassword){
           jwt
         }
       }`;
       const variables = {
-        loginEmail: this.loginEmail,
-        loginPassword: this.loginPassword,
+        loginEmail: this.email,
+        loginPassword: this.password,
       };
-      request('http://localhost:4444/graphql', sendUserCredientials, variables).then((data) => {
+      request('/graphql', sendUserCredientials, variables).then((data) => {
         this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
-        window.location.href = `${window.location.origin}/#/settings`;
+        this.$router.push('settings');
       }).catch((err) => {
         this.loggedIn = true;
         console.log(err);
@@ -123,7 +123,7 @@ export default {
 
   .login-content {
     @media screen and (min-width: 960px) {
-      padding: 7rem 5rem;
+      padding: 7rem 4rem;
     }
     @media screen and (max-width: 960px) {
       padding: 1rem;
@@ -132,7 +132,7 @@ export default {
 
   .signup-content {
     @media screen and (min-width: 960px) {
-      padding: 7rem 5rem;
+      padding: 7rem 4rem;
     }
     @media screen and (max-width: 960px) {
       padding: 1rem;
