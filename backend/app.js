@@ -9,6 +9,7 @@ const depthLimit = require('graphql-depth-limit');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const path = require('path');
+const history = require('connect-history-api-fallback');
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
@@ -38,6 +39,18 @@ if (process.env.ENVIRONMENT === 'development') {
 
 app.use(express.static(path.join(__dirname, '../frontend/static')));
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// History mode fallback
+app.use(
+  history({
+    rewrites: [
+      {
+        from: /\/#/,
+        to: context => `/${context.parsedUrl.pathname}`,
+      },
+    ],
+  }),
+);
 
 app.use(
   '/graphql',
