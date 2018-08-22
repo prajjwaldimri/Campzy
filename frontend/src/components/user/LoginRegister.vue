@@ -1,9 +1,8 @@
 <template lang="pug">
-  .reg-flex
-    navbar
-    v-container(fluid grid-list-md)
-      v-flex(sm5 xs12)
-        v-card.text-xs-center(style='margin-top:5rem;box-shadow:none' v-show='!forRegister')
+  v-container.reg-flex(fluid)
+    v-layout(row)
+      v-flex(sm5 xs12 style='border-right:2px solid')
+        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent" v-show='!forRegister')
           div(style='margin:1.5rem;')
             h1
               span Log
@@ -18,25 +17,23 @@
             //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
             //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
             v-btn.btn-size( flat small color='green accent-4' @click='forRegister = true') New User? Register
-
-        v-card.text-xs-center(style='margin-top:5rem;border-radius:0.5rem' v-show='forRegister')
-          div(style='margin:1.5rem;')
-            h1
-              span Sign
-              span.light-green--text.text--accent-4 up
-            form(v-model='valid' style='margin:1.5rem')
-              v-text-field(v-model="email" :rules='emailRules' color='green accent-4' label='Email' required)
-              v-text-field(v-model="password" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
-              v-text-field(v-model="phone" :rules='phoneRules' color='green accent-4' label='Phone Number' required)
-            v-btn.btn-size(round color='green accent-4' @click='regUser' @keyup.enter='regUser') Sign Up
-            h3(style='margin:1rem')
-              span O
-              span.light-green--text.text--accent-4 r
-            //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
-            //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
-            v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
-      //- v-flex.side-image(sm5 xs12)
-
+      v-flex(sm7 xs12)
+        v-card.text-xs-center(flat tile style='box-shadow:none' color="transparent" v-show='!forRegister')
+            div(style='margin:1.5rem;')
+              h1
+                span Sign
+                span.light-green--text.text--accent-4 up
+              form(v-model='valid' style='margin:1.5rem')
+                v-text-field(v-model="email" :rules='emailRules' color='green accent-4' label='Email' required)
+                v-text-field(v-model="password" :rules='passwordRules' color='green accent-4' type='password' label='Password' required)
+                v-text-field(v-model="phone" :rules='phoneRules' color='green accent-4' label='Phone Number' required)
+              v-btn.btn-size(round color='green acce  nt-4' @click='regUser' @keyup.enter='regUser') Sign Up
+              h3(style='margin:1rem')
+                span O
+                span.light-green--text.text--accent-4 r
+              //- img(src='/vectors/google-plus.svg' style="width:40px;height:40px;margin-right:2rem")
+              //- img(src='/vectors/facebook.svg' style='width:30px;height:30px;')
+              v-btn.btn-size( flat small color='green accent-4' @click='forRegister = false') Existing User? Sign in
 </template>
 <script>
 import { request } from 'graphql-request';
@@ -124,26 +121,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .reg-flex {
-  display: flex;
-  flex-direction: column;
   height: 100vh;
   align-items: center;
   justify-content: center;
   background: linear-gradient(
-      rgba(236, 236, 236, 0.9),
-      rgba(236, 236, 236, 0.9)
-    ),
-    url("https://images.pexels.com/photos/93858/pexels-photo-93858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-  background-size: cover;
-}
-
-.side-image {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background: url("https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350");
+    rgba(236, 236, 236, 0.9),
+    rgba(236, 236, 236, 0.9)
+  );
   background-size: cover;
 }
 
