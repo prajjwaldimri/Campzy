@@ -28,6 +28,11 @@
           v-list-tile
             v-list-tile-action
               v-icon add
+            v-list-tile-content Add Camps
+          v-divider
+          v-list-tile
+            v-list-tile-action
+              v-icon add
             v-list-tile-content Camp Details
           v-divider
           v-list-tile
