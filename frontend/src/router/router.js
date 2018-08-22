@@ -45,7 +45,7 @@ const router = new Router({
     },
     {
       path: '/login',
-      name: 'sign-in',
+      name: 'login',
       component: LoginRegister,
     },
     {

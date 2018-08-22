@@ -26,7 +26,7 @@ const UserSchema = new Schema({
   google: {
     oauthToken: String,
   },
-  date_of_birth: Date,
+  dateOfBirth: Date,
 });
 
 // eslint-disable-next-line
