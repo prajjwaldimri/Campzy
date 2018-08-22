@@ -220,8 +220,7 @@ export default {
 }
 
 .home {
-  height: 100vh;
-  // background: lightgrey;
+  min-height: 100vh;
   background: linear-gradient(
       rgba(236, 236, 236, 0.9),
       rgba(236, 236, 236, 0.9)
