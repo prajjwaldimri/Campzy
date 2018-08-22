@@ -8,6 +8,8 @@ import ManageCamps from '../components/admin/ManageCamps.vue';
 import AdminDashboard from '../components/admin/AdminDashboard.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
 import Settings from '../components/user/Settings.vue';
+import DashBoard from '../components/Dashboard.vue';
+import Pricing from '../components/dashboard_components/camp-owner-dashboard/Pricing.vue';
 
 Vue.use(Router);
 
@@ -53,6 +55,17 @@ const router = new Router({
       path: '/settings',
       name: 'settings',
       component: Settings,
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashBoard,
+      children: [
+        {
+          path: 'pricing',
+          component: Pricing,
+        },
+      ],
     },
   ],
 });
