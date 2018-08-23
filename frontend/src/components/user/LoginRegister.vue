@@ -107,7 +107,7 @@ export default {
         this.isSignedup = false;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('fail', 'Signup Failed');
+          EventBus.$emit('error', 'Signup Failed');
         }
         this.email = '';
         this.password = '';
@@ -133,7 +133,7 @@ export default {
         this.isLoggedin = false;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('fail', 'Login Failed');
+          EventBus.$emit('error', 'Login Failed');
           this.isLoggedin = false;
         }
       });
