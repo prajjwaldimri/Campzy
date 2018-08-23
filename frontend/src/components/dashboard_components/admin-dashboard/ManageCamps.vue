@@ -25,7 +25,7 @@
             v-icon(right dark) add_box
           addCamp
 
-    v-layout(row v-on:close-add-camp-dialog="fire")
+    v-layout(row)
       v-data-table(:headers="headers" :items="camps" style="width: 100%" hide-actions
       must-sort).elevation-1
         template(slot="items" slot-scope="props")
@@ -35,13 +35,15 @@
           td {{props.item.location}}
           td {{props.item.creationDate}}
           td.align-center
-            v-icon(small).mr-2 edit
+            v-dialog(v-model="modifyCampDialog" persistent max-width="500px")
+              v-icon(small slot="activator").mr-2 edit
             v-icon(small @click="deleteDialog=true") delete
 </template>
 
 <script>
 // import { GraphQLClient } from 'graphql-request';
 import AddCamp from './ManageCamps/AddCamp.vue';
+import { EventBus } from '../../../event-bus';
 
 export default {
   components: {
@@ -73,8 +75,7 @@ export default {
     };
   },
   mounted() {
-    this.$on('close-add-camp-dialog', () => {
-      console.log('Gottem');
+    EventBus.$on('close-add-camp-dialog', () => {
       this.modifyCampDialog = false;
     });
   },
