@@ -6,7 +6,7 @@
       v-btn(flat @click='snackbarFail = false') close
     v-snackbar(v-model='snackbarInfo' top color='blue') {{message}}
       v-btn(flat @click='snackbarInfo = false') close
-    v-snackbar(v-model='snackbarWarning' top) {{message}}
+    v-snackbar(v-model='snackbarWarning' top color='yellow') {{message}}
       v-btn(flat @click='snackbarWarning = false') close
     router-view
 </template>
