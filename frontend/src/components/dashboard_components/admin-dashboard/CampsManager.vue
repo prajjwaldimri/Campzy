@@ -44,8 +44,8 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import AddCamp from './ManageCamps/AddCamp.vue';
-import EditCamp from './ManageCamps/EditCamp.vue';
+import AddCamp from './CampsManager/AddCamp.vue';
+import EditCamp from './CampsManager/EditCamp.vue';
 import { EventBus } from '../../../event-bus';
 
 export default {
