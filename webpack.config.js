@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './frontend/dist'),
     filename: 'main.bundle.js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -54,7 +55,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './frontend/src/index.html',
-      inject: false,
     }),
   ],
 };
