@@ -17,7 +17,7 @@
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
-                    v-btn(block color="green" @click="login").white--text.mr-1 Login
+                    v-btn(block color="green" @click="login" :loading='isLoggedin').white--text.mr-1 Login
                     v-btn(block dark).white--text.ml-1 Forgot Password?
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Need an account?
@@ -34,7 +34,7 @@
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" @click="loginState = 2").white--text.mt-3
+                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
@@ -77,11 +77,14 @@ export default {
       email: '',
       phoneNumber: '',
       otp: '',
+      isLoggedin: false,
+      isSignedup: false,
     };
   },
 
   methods: {
     regUser() {
+      this.isSignedup = true;
       const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
           register(email: $email, password: $password, phoneNumber: $phoneNumber) {
             id
@@ -96,22 +99,24 @@ export default {
       };
       request('/graphql', registerUser, variables).then((data) => {
         if (data != null) {
-          this.signed = true;
+          EventBus.$emit('success', 'Signup Successfull');
         }
-        EventBus.$emit('signed-in');
         this.email = '';
         this.password = '';
         this.phone = '';
+        this.isSignedup = false;
       }).catch((err) => {
         if (err) {
-          this.signedfail = true;
+          EventBus.$emit('error', 'Signup Failed');
         }
         this.email = '';
         this.password = '';
         this.phone = '';
+        this.isSignedup = false;
       });
     },
     login() {
+      this.isLoggedin = true;
       const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
         loginUser(email: $loginEmail, password: $loginPassword){
           jwt
@@ -124,9 +129,13 @@ export default {
       request('/graphql', sendUserCredientials, variables).then((data) => {
         this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
         this.$router.push('settings');
+        EventBus.$emit('success', 'Login Successfull');
+        this.isLoggedin = false;
       }).catch((err) => {
-        this.loggedIn = true;
-        console.log(err);
+        if (err) {
+          EventBus.$emit('error', 'Login Failed');
+          this.isLoggedin = false;
+        }
       });
     },
   },

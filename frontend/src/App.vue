@@ -1,5 +1,13 @@
 <template lang="pug">
   v-app
+    v-snackbar(v-model='snackbarSuccess' top timeout='3000' color='green') {{message}}
+      v-btn(flat @click='snackbarSuccess = false') close
+    v-snackbar(v-model='snackbarFail' top timeout='3000' color='red') {{message}}
+      v-btn(flat @click='snackbarFail = false') close
+    v-snackbar(v-model='snackbarInfo' top timeout='3000' color='blue') {{message}}
+      v-btn(flat @click='snackbarInfo = false') close
+    v-snackbar(v-model='snackbarWarning' top timeout='3000') {{message}}
+      v-btn(flat @click='snackbarWarning = false') close
     router-view
 </template>
 
@@ -10,12 +18,31 @@ export default {
   name: 'app',
   data() {
     return {
-      message: 'Hello, Vue!',
+      snackbarSuccess: false,
+      snackbarFail: false,
+      snackbarInfo: false,
+      snackbarWarning: false,
+      message: '',
     };
   },
   created() {
-    EventBus.$on('signed-in', () => {
-      console.log('signed in');
+    EventBus.$on('success', (message) => {
+      this.message = message;
+      this.snackbarSuccess = true;
+    });
+
+    EventBus.$on('error', (message) => {
+      this.message = message;
+      this.snackbarFail = true;
+    });
+
+    EventBus.$on('info', (message) => {
+      this.message = message;
+      this.snackbarInfo = true;
+    });
+    EventBus.$on('warning', (message) => {
+      this.message = message;
+      this.snackbarWarning = true;
     });
   },
 };
