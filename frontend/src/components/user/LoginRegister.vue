@@ -63,6 +63,7 @@
 <script>
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
+import { EventBus } from '../../event-bus';
 
 export default {
   components: {
@@ -97,6 +98,7 @@ export default {
         if (data != null) {
           this.signed = true;
         }
+        EventBus.$emit('signed-in');
         this.email = '';
         this.password = '';
         this.phone = '';
