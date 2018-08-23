@@ -1,8 +1,8 @@
 <template lang="pug">
   v-app
-    v-snackbar(v-model='snackbarSuccess' top multi-line) {{message}}
+    v-snackbar(v-model='snackbarSuccess' top timeout='3000') {{message}}
       v-btn(color='green' flat @click='snackbarSuccess = false') close
-    v-snackbar(v-model='snackbarFail' top multi-line) {{message}}
+    v-snackbar(v-model='snackbarFail' top timeout='3000') {{message}}
       v-btn(color='green' flat @click='snackbarFail = false') close
     router-view
 </template>
