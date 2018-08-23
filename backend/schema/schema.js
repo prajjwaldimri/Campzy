@@ -135,10 +135,7 @@ const RootQuery = new GraphQLObjectType({
           if (!isUserAdmin) {
             return new Error('Not Privileged Enough');
           }
-          return await UserModel.find(
-            { $text: { $search: args.searchTerm } },
-            { score: { $meta: 'textScore' } },
-          ).sort({ score: { $meta: 'textScore' } });
+          return await UserModel.find({ name: { $regex: args.searchTerm } });
         } catch (err) {
           return err;
         }
@@ -352,7 +349,9 @@ const Mutation = new GraphQLObjectType({
             return new Error('Not Privileged Enough');
           }
 
-          return await CampModel.deleteOne({ id: args.id });
+          const deleted = await CampModel.findByIdAndRemove(args.id);
+          console.log(deleted);
+          return deleted;
         } catch (err) {
           return err;
         }

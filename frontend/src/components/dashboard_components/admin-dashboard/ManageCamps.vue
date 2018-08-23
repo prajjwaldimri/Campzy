@@ -6,11 +6,12 @@
           span.headline.orange--text Are you absolutely sure?
         v-card-text
           span.subheading This action cannot be undone. This will permanently delete all records of
-            |  this camp from the database. Please type in the camp name to confirm!
+          span.title.font-weight-black  {{deleteCampName}}
+          span.subheading  from the database. Please type in the camp name to confirm!
         v-card-actions(style="flex-direction: column").d-flex
-          v-text-field(label="Camp Name")
-          v-btn(block).increase-letter-spacing-1.red--text I understand the consequences,
-            | delete this camp
+          v-text-field(label="Camp Name" v-model="deleteCampNameConfirmation")
+          v-btn(block @click="deleteCamp").increase-letter-spacing-1.red--text I understand the
+            | consequences, delete {{deleteCampName}}
 
 
     v-layout(row)
@@ -28,7 +29,7 @@
 
     v-layout(row)
       v-data-table(:headers="headers" :items="camps" style="width: 100%" hide-actions
-      must-sort).elevation-1
+      must-sort :loading="isTableLoading").elevation-1
         template(slot="items" slot-scope="props")
           td {{props.item.id}}
           td.font-weight-bold {{props.item.name}}
@@ -38,7 +39,7 @@
           td {{props.item.creationDate}}
           td.align-center
             v-icon(small @click="editCamp(props.item.id)").mr-2 edit
-            v-icon(small @click="deleteDialog=true") delete
+            v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
 </template>
 
 <script>
@@ -72,7 +73,10 @@ export default {
       camps: [],
       deleteDialog: false,
       addCampDialog: false,
-
+      deleteCampId: null,
+      deleteCampName: '',
+      deleteCampNameConfirmation: null,
+      isTableLoading: false,
     };
   },
   mounted() {
@@ -116,14 +120,55 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
+      this.isTableLoading = true;
       client.request(getCampsQuery).then((data) => {
         this.camps = data.allCamps;
       }).catch((err) => {
         console.log(err);
-      });
+      }).finally(() => { this.isTableLoading = false; });
     },
     editCamp(id) {
       EventBus.$emit('admin-open-edit-camp', id);
+    },
+    showDeleteDialog(id, name) {
+      this.deleteDialog = true;
+      this.deleteCampName = name;
+      this.deleteCampId = id;
+    },
+    deleteCamp() {
+      if (this.deleteCampName === this.deleteCampNameConfirmation) {
+        if (!this.$cookie.get('sessionToken')) {
+          this.$router.push('/');
+        }
+        if (!this.deleteCampId) {
+          return;
+        }
+        const deleteCampQuery = `mutation deleteCamp($id: String!){
+          deleteCamp(id: $id){
+            id,
+          }
+        }`;
+        const variables = {
+          id: this.deleteCampId,
+        };
+        const client = new GraphQLClient('/graphql', {
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+          },
+        });
+        client.request(deleteCampQuery, variables).then((data) => {
+          console.log(data);
+          EventBus.$emit('success', 'Successfully Deleted');
+        }).catch((err) => {
+          EventBus.$emit('error', err);
+        }).finally(() => {
+          this.deleteDialog = false;
+          this.getAllCamps();
+        });
+      } else {
+        EventBus.$emit('error', 'Wrong Confirmation Name');
+        this.deleteDialog = false;
+      }
     },
   },
 };

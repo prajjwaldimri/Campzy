@@ -153,7 +153,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-      if (!this.searchUsers || this.searchUsers.indexOf(' ') < 0) {
+      if (!this.searchUsers) {
         return;
       }
       this.isOwnerFieldLoading = true;

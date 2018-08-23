@@ -86,11 +86,13 @@ export default {
         },
       });
       client.request(addCampsQuery, variables).then(() => {
-        // TODO: Show success notification
+        this.camp = {};
+        this.isOwnerSelected = false;
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('error', err);
       }).finally(() => {
         this.closeDialog();
+        this.isOwnerFieldLoading = false;
       });
     },
   },
@@ -104,7 +106,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-      if (!this.searchUsers || this.searchUsers.indexOf(' ') < 0) {
+      if (!this.searchUsers) {
         return;
       }
       this.isOwnerFieldLoading = true;
@@ -124,6 +126,7 @@ export default {
         },
       });
       client.request(searchQuery, variables).then((data) => {
+        console.log(data);
         this.searchedUsers = data.searchUser;
       }).catch(() => {
         this.searchedUsers = [];
