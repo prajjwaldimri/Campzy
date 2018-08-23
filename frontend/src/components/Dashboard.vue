@@ -93,7 +93,6 @@ export default {
   height: 100vh;
 }
 .router-display {
-  margin: 0 0 0 1rem;
   width: 100%;
 }
 .side-drawer {
