@@ -60,8 +60,6 @@
         v-btn
           span Inventory
           v-icon add
-    v-snackbar(v-model='signOutfail' top multi-line :timeout='timeout') Sign Out Fail
-
 
 </template>
 <script>
@@ -78,8 +76,6 @@ export default {
       drawer: true,
       mini: false,
       right: null,
-      signOutfail: false,
-      timeout: 6000,
       load: false,
       user: {},
     };
