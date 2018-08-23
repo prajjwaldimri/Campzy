@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent)
+  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent dark)
     v-toolbar-title(@click="goToHome" style="cursor: pointer")
       span Camp
       span.green--text zy

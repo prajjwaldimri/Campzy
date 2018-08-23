@@ -46,9 +46,9 @@
                     h1.font-weight-light Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                   v-flex(align-center).d-flex
-                    v-text-field(label="Phone Number" color='green accent-4' v-validate="'required|email'" required
-                      v-model="email" clearable data-vv-name="email"
-                      :error-messages="errors.collect('email')")
+                    v-text-field(label="Phone Number" color='green accent-4' v-validate="'required|numeric'" required
+                      v-model="phoneNumber" clearable data-vv-name="phoneNumber"
+                      :error-messages="errors.collect('phoneNumber')")
                     v-btn(dark) Send OTP
                   v-flex(align-center).d-flex
                     v-text-field(shrink label="One Time Password" color='green accent-4' v-model="otp" clearable
@@ -84,12 +84,14 @@ export default {
       const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
           register(email: $email, password: $password, phoneNumber: $phoneNumber) {
             id
+            name
+            email
         }
       }`;
       const variables = {
         email: this.email,
         password: this.password,
-        phoneNumber: this.phone,
+        phoneNumber: this.phoneNumber,
       };
       request('/graphql', registerUser, variables).then((data) => {
         if (data != null) {

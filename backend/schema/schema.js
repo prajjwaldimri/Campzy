@@ -107,6 +107,31 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
+    searchUser: {
+      type: new GraphQLList(UserType),
+      args: {
+        searchTerm: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserAdmin = auth.isUserAdmin(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserAdmin) {
+            return new Error('Not Privileged Enough');
+          }
+          return await UserModel.find(
+            { $text: { $search: args.searchTerm } },
+            { score: { $meta: 'textScore' } },
+          ).sort({ score: { $meta: 'textScore' } });
+        } catch (err) {
+          return err;
+        }
+      },
+    },
     allUsers: {
       // Returns all users from DB
       type: new GraphQLList(UserType),
@@ -180,6 +205,7 @@ const Mutation = new GraphQLObjectType({
           await userDocument.save();
           return 'Successfully created account';
         } catch (err) {
+          console.log(err);
           return err;
         }
       },
@@ -231,11 +257,11 @@ const Mutation = new GraphQLObjectType({
         try {
           const user = await auth.getAuthenticatedUser(context.req);
           const userData = await UserModel.findById(user.id);
-          const isUserCampOwner = await auth.isUserCampOwner(userData);
+          const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
             return new Error('Not Logged In');
           }
-          if (!isUserCampOwner) {
+          if (!isUserAdmin) {
             return new Error('Not Privileged Enough');
           }
           const camp = new CampModel({

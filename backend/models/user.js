@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  name: String,
+  name: { type: String, text: true },
   email: {
     type: String,
+    text: true,
     lowercase: true,
     required: true,
     unique: true,
@@ -16,6 +17,7 @@ const UserSchema = new Schema({
   type: { type: String, required: true, default: 'Camper' },
   phoneNumber: {
     type: String,
+    text: true,
     required: true,
     unique: true,
     sparse: true,
