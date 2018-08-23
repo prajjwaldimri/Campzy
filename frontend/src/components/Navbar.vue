@@ -5,10 +5,23 @@
       span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
-      v-btn(flat) HOME
+      v-btn(flat @click='goToHome') HOME
       v-btn(flat) CAMPS
       v-btn(flat v-show="!isLoggedIn") LOGIN/SIGNUP
-      v-btn(flat v-show="isLoggedIn" @click="goToSettings") Hey, &nbsp; {{user.name}}
+      v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
+        v-btn(flat slot="activator" v-show="isLoggedIn" @click="goToSettings") Hey, &nbsp; {{user.name}}
+        v-card
+          v-list
+            v-list-tile(@click='goToSettings')
+              v-list-tile-action
+                v-icon settings
+              v-list-tile-content
+                v-list-tile-title Settings
+            v-list-tile(@click='signOut')
+              v-list-tile-action
+                v-icon directions_walk
+              v-list-tile-content
+                v-list-tile-title Sign out
 
     v-toolbar-items.hidden-md-and-up
       v-btn(icon)
@@ -25,6 +38,7 @@ export default {
   data: () => ({
     drawer: null,
     isLoggedIn: false,
+    dropdown: false,
     user: {},
   }),
   mounted() {
@@ -59,6 +73,10 @@ export default {
     },
     goToHome() {
       this.$router.push('/');
+    },
+    signOut() {
+      this.$cookie.delete('sessionToken');
+      this.$router.push('login');
     },
   },
 };
