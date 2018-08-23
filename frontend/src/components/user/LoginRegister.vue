@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      loginState: 1,
+      loginState: 0,
       isLoginValid: false,
       password: '',
       email: '',
