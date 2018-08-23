@@ -14,7 +14,7 @@
             v-list-tile-avatar
               img(src='https://randomuser.me/api/portraits/men/85.jpg')
             v-list-tile-content
-              v-list-tile-title Ayush Bahuguna
+              v-list-tile-title {{user.name}}
             v-list-tile-action
               v-btn(icon @click.stop='mini=!mini')
                 v-icon chevron_left
@@ -52,6 +52,7 @@
 
 </template>
 <script>
+import { GraphQLClient } from 'graphql-request';
 import navbar from './Navbar.vue';
 
 export default {
@@ -67,7 +68,11 @@ export default {
       signOutfail: false,
       timeout: 6000,
       load: false,
+      user: {},
     };
+  },
+  mounted() {
+    this.getCurrentUser();
   },
   methods: {
     goHomePage() {
@@ -79,6 +84,31 @@ export default {
       this.$cookie.delete('sessionToken');
       this.$router.push('login');
       this.signOutfail = true;
+    },
+
+    getCurrentUser() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+      const query = `{currentUser {
+        name,
+        email
+      }}`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(query)
+        .then((data) => {
+          this.user = data.currentUser;
+          this.isLoggedIn = true;
+          if (this.user.name === null) {
+            this.user.name = 'Unnamed User';
+          }
+        })
+        .catch(() => { this.user = {}; this.isLoggedIn = false; });
     },
   },
 
