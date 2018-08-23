@@ -47,6 +47,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import navbar from '../Navbar.vue';
+import { EventBus } from '../../event-bus';
 
 export default {
   $_veeValidate: {
@@ -92,7 +93,11 @@ export default {
           });
 
           client.request(query, variables)
-            .then((data) => { this.user = data.updateUser; this.isProfileUpdating = false; })
+            .then((data) => {
+              this.user = data.updateUser;
+              this.isProfileUpdating = false;
+              EventBus.$emit('success', 'Profile updated! Please Refresh');
+            })
             .catch(() => { this.$router.push({ name: 'login' }); this.isProfileUpdating = false; });
         } else {
           this.isProfileUpdating = false;

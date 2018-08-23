@@ -54,7 +54,7 @@
                     v-text-field(shrink label="One Time Password" color='green accent-4' v-model="otp" clearable
                     type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
                       :error-messages="errors.collect('OTP')" )
-                    v-btn(color="green" @click="regUser").white--text.mt-3 Verify OTP
+                    v-btn(color="green" :loading='isSignedup' @click="regUser").white--text.mt-3 Verify OTP
 
             v-flex(md6).hidden-sm-and-down.right-image
 
@@ -64,6 +64,8 @@
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
+import { sendUserCredientials } from '../../queries/queries';
+import { registerUser } from '../../queries/mutationQueries';
 
 export default {
   components: {
@@ -85,13 +87,6 @@ export default {
   methods: {
     regUser() {
       this.isSignedup = true;
-      const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
-            id
-            name
-            email
-        }
-      }`;
       const variables = {
         email: this.email,
         password: this.password,
@@ -101,9 +96,7 @@ export default {
         if (data != null) {
           EventBus.$emit('success', 'Signup Successfull');
         }
-        this.email = '';
-        this.password = '';
-        this.phone = '';
+        this.loginState = 0;
         this.isSignedup = false;
       }).catch((err) => {
         if (err) {
@@ -117,11 +110,6 @@ export default {
     },
     login() {
       this.isLoggedin = true;
-      const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
-        loginUser(email: $loginEmail, password: $loginPassword){
-          jwt
-        }
-      }`;
       const variables = {
         loginEmail: this.email,
         loginPassword: this.password,
