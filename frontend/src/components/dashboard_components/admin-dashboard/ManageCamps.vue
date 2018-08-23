@@ -93,7 +93,6 @@ export default {
       this.getAllCamps();
     });
 
-    // Get All Camps
     this.getAllCamps();
   },
   methods: {
@@ -124,7 +123,7 @@ export default {
       client.request(getCampsQuery).then((data) => {
         this.camps = data.allCamps;
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('error', err);
       }).finally(() => { this.isTableLoading = false; });
     },
     editCamp(id) {
@@ -156,8 +155,7 @@ export default {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
           },
         });
-        client.request(deleteCampQuery, variables).then((data) => {
-          console.log(data);
+        client.request(deleteCampQuery, variables).then(() => {
           EventBus.$emit('success', 'Successfully Deleted');
         }).catch((err) => {
           EventBus.$emit('error', err);

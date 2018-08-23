@@ -117,7 +117,7 @@ export default {
         this.camp.owner = data.camp.owner.id;
         this.searchedUsers.push(data.camp.owner);
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('error', err);
       });
     },
     saveCamp() {
@@ -154,7 +154,7 @@ export default {
           client.request(updateCampsQuery, variables).then(() => {
             EventBus.$emit('success', 'Successfully Updated');
           }).catch((err) => {
-            console.log(err);
+            EventBus.$emit('error', err);
           }).finally(() => {
             this.closeDialog();
           });
