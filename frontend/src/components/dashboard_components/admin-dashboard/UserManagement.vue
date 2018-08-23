@@ -15,7 +15,7 @@
 
 
     v-layout(row)
-      h1.font-weight-light.pl-2.pb-3 Camps
+      h1.font-weight-light.pl-2.pb-3 All Users
     v-layout(row)
       v-flex(sm5)
         v-text-field(solo label="Search" append-icon="search")
