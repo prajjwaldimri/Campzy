@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     v-container.display(fluid)
-      v-navigation-drawer.side-drawer(:mini-variant.sync="mini" dark v-model="drawer" hide-overlay)
+      v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark v-model="drawer" hide-overlay)
         v-list.pt-4
           v-list-tile
             v-list-tile-content.center-item
@@ -12,9 +12,9 @@
         v-list.pt-3
           v-list-tile(avatar)
             v-list-tile-avatar
-              img(src='https://randomuser.me/api/portraits/men/85.jpg')
+              img(src="https://randomuser.me/api/portraits/men/85.jpg")
             v-list-tile-content
-              v-list-tile-title {{user.name}}
+              v-list-tile-title.increase-letter-spacing-2 {{user.name}}
             v-list-tile-action
               v-btn(icon @click.stop='mini=!mini')
                 v-icon chevron_left
@@ -22,31 +22,44 @@
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon wc
-            v-list-tile-content User Management
+            v-list-tile-content.increase-letter-spacing-2 User Management
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon beach_access
-            v-list-tile-content Camp Management
+            v-list-tile-content.increase-letter-spacing-2 Camp Management
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon room_service
-            v-list-tile-content Camps
+            v-list-tile-content.increase-letter-spacing-2 Camps
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
-            v-list-tile-content Camp Details
+            v-list-tile-content.increase-letter-spacing-2 Camp Details
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
-            v-list-tile-content Inventory
+            v-list-tile-content.increase-letter-spacing-2 Inventory
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
-            v-list-tile-content Pricing
+            v-list-tile-content.increase-letter-spacing-2 Pricing
           v-list-tile.pt-5
             v-list-tile-content.center-item
               v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
       router-view.router-display
+      v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute)
+        v-btn
+          span User Management
+          v-icon wc
+        v-btn
+          span Camp Management
+          v-icon beach_access
+        v-btn
+          span Camps
+          v-icon room_service
+        v-btn
+          span Inventory
+          v-icon add
     v-snackbar(v-model='signOutfail' top multi-line :timeout='timeout') Sign Out Fail
 
 
@@ -132,6 +145,7 @@ export default {
   align-items: center;
 }
 .link-text {
+  font-size: 2rem;
   text-decoration: none;
   color: #fff;
 }
