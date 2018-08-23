@@ -29,6 +29,7 @@ const UserSchema = new Schema({
     oauthToken: String,
   },
   dateOfBirth: Date,
+  ownedCampId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
 });
 
 // eslint-disable-next-line

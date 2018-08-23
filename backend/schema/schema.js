@@ -287,7 +287,11 @@ const Mutation = new GraphQLObjectType({
             tags: args.tags,
             ownerId: args.ownerId,
           });
-          return await camp.save();
+          const createdCamp = await camp.save();
+          return await UserModel.findByIdAndUpdate(args.ownerId, {
+            ownedCampId: createdCamp.id,
+            type: 'CampOwner',
+          });
         } catch (err) {
           return err;
         }
@@ -317,7 +321,14 @@ const Mutation = new GraphQLObjectType({
             return new Error('Not Privileged Enough');
           }
 
-          return await CampModel.findByIdAndUpdate(args.id, {
+          // Remove the relation between old owner of that camp site and camp
+          const oldCampData = await CampModel.findById(args.id, 'id ownerId');
+          await UserModel.findByIdAndUpdate(oldCampData.ownerId, {
+            ownedCampId: null,
+            type: 'Camper',
+          });
+
+          await CampModel.findByIdAndUpdate(args.id, {
             name: args.name,
             phoneNumber: args.phoneNumber,
             email: args.email,
@@ -326,6 +337,11 @@ const Mutation = new GraphQLObjectType({
             url: args.url,
             tags: args.tags,
             ownerId: args.ownerId,
+          });
+
+          return await UserModel.findByIdAndUpdate(args.ownerId, {
+            ownedCampId: args.id,
+            type: 'CampOwner',
           });
         } catch (err) {
           return err;
