@@ -1,5 +1,9 @@
 <template lang="pug">
   v-app
+    v-snackbar(v-model='snackbarSuccess' top multi-line) {{message}}
+      v-btn(color='green' flat @click='snackbarSuccess = false') close
+    v-snackbar(v-model='snackbarFail' top multi-line) {{message}}
+      v-btn(color='green' flat @click='snackbarFail = false') close
     router-view
 </template>
 
@@ -10,12 +14,20 @@ export default {
   name: 'app',
   data() {
     return {
-      message: 'Hello, Vue!',
+      snackbarSuccess: false,
+      snackbarFail: false,
+      message: '',
     };
   },
   created() {
-    EventBus.$on('signed-in', () => {
-      console.log('signed in');
+    EventBus.$on('success', (message) => {
+      this.message = message;
+      this.snackbarSuccess = true;
+    });
+
+    EventBus.$on('fail', (message) => {
+      this.message = message;
+      this.snackbarFail = true;
     });
   },
 };
