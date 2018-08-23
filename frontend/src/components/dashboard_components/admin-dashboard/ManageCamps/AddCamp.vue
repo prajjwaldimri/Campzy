@@ -1,7 +1,7 @@
 <template lang="pug">
   v-card
     v-card-title
-      span.headline {{headline}}
+      span.headline Add Camp
     v-card-text
       v-text-field(v-model="camp.name" label="Camp Name" prepend-icon="subject" clearable)
       v-text-field(v-model="camp.location" label="Location"
@@ -50,12 +50,11 @@ export default {
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
       searchUsers: null,
-      headline: 'Add a camp',
     };
   },
   methods: {
     closeDialog() {
-      EventBus.$emit('close-add-camp-dialog');
+      EventBus.$emit('admin-close-add-camp-dialog');
     },
     saveCamp() {
       if (!this.$cookie.get('sessionToken')) {
@@ -133,6 +132,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

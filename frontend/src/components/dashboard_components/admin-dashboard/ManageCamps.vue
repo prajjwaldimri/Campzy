@@ -20,10 +20,11 @@
         v-text-field(solo label="Search" append-icon="search")
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
-        v-dialog(v-model="modifyCampDialog" persistent max-width="500px")
+        v-dialog(v-model="addCampDialog" persistent max-width="500px")
           v-btn(color="green" slot="activator").white--text Add New Camp
             v-icon(right dark) add_box
           addCamp
+        editCamp
 
     v-layout(row)
       v-data-table(:headers="headers" :items="camps" style="width: 100%" hide-actions
@@ -31,23 +32,25 @@
         template(slot="items" slot-scope="props")
           td {{props.item.id}}
           td.font-weight-bold {{props.item.name}}
-          td {{props.item.owner}}
+          td {{props.item.owner.name}}
+          td {{props.item.phoneNumber}}
           td {{props.item.location}}
           td {{props.item.creationDate}}
           td.align-center
-            v-dialog(v-model="modifyCampDialog" persistent max-width="500px")
-              v-icon(small slot="activator").mr-2 edit
+            v-icon(small @click="editCamp(props.item.id)").mr-2 edit
             v-icon(small @click="deleteDialog=true") delete
 </template>
 
 <script>
-// import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
 import AddCamp from './ManageCamps/AddCamp.vue';
+import EditCamp from './ManageCamps/EditCamp.vue';
 import { EventBus } from '../../../event-bus';
 
 export default {
   components: {
     addCamp: AddCamp,
+    editCamp: EditCamp,
   },
   data() {
     return {
@@ -60,24 +63,68 @@ export default {
           text: 'Camp Name',
           value: 'name',
         },
-        { text: 'Camp Owner', value: 'owner' },
+        { text: 'Camp Owner', value: 'owner.name' },
+        { text: 'Phone Number', value: 'phoneNumber' },
         { text: 'Camp Location', value: 'location' },
         { text: 'Creation Date', value: 'creationDate' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      camps: [{
-        name: 'Chopta Camp', id: '123123', owner: 'Tej Pal', creationDate: '02-Aug-2018',
-      }, {
-        name: 'Rishikesh Camp', id: '187873', owner: 'Ram Pal', creationDate: '10-Aug-2018',
-      }],
+      camps: [],
       deleteDialog: false,
-      modifyCampDialog: false,
+      addCampDialog: false,
+
     };
   },
   mounted() {
-    EventBus.$on('close-add-camp-dialog', () => {
-      this.modifyCampDialog = false;
+    EventBus.$on('admin-close-add-camp-dialog', () => {
+      this.addCampDialog = false;
+      this.getAllCamps();
     });
+    EventBus.$on('admin-close-edit-camp-dialog', () => {
+      this.editCampDialog = false;
+      this.getAllCamps();
+    });
+
+    EventBus.$on('admin-refresh-all-camps', () => {
+      this.getAllCamps();
+    });
+
+    // Get All Camps
+    this.getAllCamps();
+  },
+  methods: {
+    getAllCamps() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const getCampsQuery = `query allCamps {
+          allCamps {
+            id,
+            tags,
+            name,
+            phoneNumber,
+            email,
+            location,
+            url,
+            owner {
+              name
+            }
+          }
+        }`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(getCampsQuery).then((data) => {
+        this.camps = data.allCamps;
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    editCamp(id) {
+      EventBus.$emit('admin-open-edit-camp', id);
+    },
   },
 };
 </script>

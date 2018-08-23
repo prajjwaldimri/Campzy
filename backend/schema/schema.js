@@ -15,10 +15,13 @@ const CampType = new GraphQLObjectType({
     name: { type: GraphQLString },
     phoneNumber: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
+    email: { type: GraphQLString },
+    location: { type: GraphQLString },
+    url: { type: GraphQLString },
     owner: {
       type: UserType, // eslint-disable-line
       resolve(parent) {
-        return UserModel.findById(parent.ownerId, 'name');
+        return UserModel.findById(parent.ownerId, 'name email');
       },
     },
   }),
@@ -41,9 +44,18 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     camp: {
       type: CampType,
-      args: { id: { type: GraphQLID } },
-      async resolve(parent, args) {
+      args: { id: { type: GraphQLString } },
+      async resolve(parent, args, context) {
         try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserAdmin = await auth.isUserAdmin(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserAdmin) {
+            return new Error('Not Privileged Enough');
+          }
           return await CampModel.findById(args.id);
         } catch (err) {
           return err;
@@ -272,8 +284,75 @@ const Mutation = new GraphQLObjectType({
             name: args.name,
             phoneNumber: args.phoneNumber,
             email: args.email,
+            shortDescription: 'Unfilled Description',
+            location: args.location,
+            url: args.url,
+            tags: args.tags,
+            ownerId: args.ownerId,
           });
           return await camp.save();
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    updateCamp: {
+      type: CampType,
+      args: {
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
+        email: { type: GraphQLString },
+        location: { type: GraphQLString },
+        url: { type: GraphQLString },
+        tags: { type: new GraphQLList(GraphQLString) },
+        ownerId: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserAdmin = auth.isUserAdmin(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserAdmin) {
+            return new Error('Not Privileged Enough');
+          }
+
+          return await CampModel.findByIdAndUpdate(args.id, {
+            name: args.name,
+            phoneNumber: args.phoneNumber,
+            email: args.email,
+            shortDescription: 'Unfilled Description',
+            location: args.location,
+            url: args.url,
+            tags: args.tags,
+            ownerId: args.ownerId,
+          });
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    deleteCamp: {
+      type: CampType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserAdmin = auth.isUserAdmin(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserAdmin) {
+            return new Error('Not Privileged Enough');
+          }
+
+          return await CampModel.deleteOne({ id: args.id });
         } catch (err) {
           return err;
         }
