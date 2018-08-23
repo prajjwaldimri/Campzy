@@ -33,6 +33,7 @@
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
+import { EventBus } from '../event-bus';
 
 export default {
   data: () => ({
@@ -76,7 +77,12 @@ export default {
     },
     signOut() {
       this.$cookie.delete('sessionToken');
-      this.$router.push('login');
+      if (this.$cookie.get('sessionToken') == null) {
+        EventBus.$emit('success', 'Logout Successful');
+        this.$router.push('login');
+      } else {
+        EventBus.$emit('error', 'Failed to Logout');
+      }
     },
   },
 };
