@@ -252,6 +252,10 @@ const Mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         phoneNumber: { type: GraphQLString },
         email: { type: GraphQLString },
+        location: { type: GraphQLString },
+        url: { type: GraphQLString },
+        tags: { type: new GraphQLList(GraphQLString) },
+        ownerId: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
         try {

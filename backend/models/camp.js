@@ -6,6 +6,7 @@ const CampSchema = new Schema({
   name: { type: String, required: true, text: true },
   phoneNumber: { type: String, text: true },
   email: String,
+  url: { type: String, unique: true },
   location: { type: String, text: true },
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },

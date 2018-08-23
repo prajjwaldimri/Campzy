@@ -10,7 +10,6 @@ import CampDetails from '../components/dashboard_components/camp_owner_dashboard
 import CampInventory from '../components/dashboard_components/camp_owner_dashboard/CampInventory.vue';
 import ManageCamps from '../components/dashboard_components/admin-dashboard/ManageCamps.vue';
 import UserManagement from '../components/dashboard_components/admin-dashboard/UserManagement.vue';
-import AddCamps from '../components/dashboard_components/admin-dashboard/AddCamps.vue';
 
 Vue.use(Router);
 
@@ -61,10 +60,6 @@ const router = new Router({
         {
           path: 'userManagement',
           component: UserManagement,
-        },
-        {
-          path: 'addCamps',
-          component: AddCamps,
         },
       ],
     },
