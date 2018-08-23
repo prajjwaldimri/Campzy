@@ -4,14 +4,26 @@
       v-card-title
         span.headline Edit Camp
       v-card-text
-        v-text-field(v-model="camp.name" label="Camp Name" prepend-icon="subject" clearable)
+        v-text-field(v-model="camp.name" label="Camp Name" prepend-icon="subject" clearable
+        data-vv-name="campName" v-validate="'min:4|required|alpha_spaces'"
+        :error-messages="errors.collect('campName')")
+
         v-text-field(v-model="camp.location" label="Location"
-        prepend-icon="edit_location" clearable)
-        v-text-field(v-model="camp.url" label="Url" prepend-icon="link" clearable)
+        prepend-icon="edit_location" clearable  data-vv-name="campLocation"
+        v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
+
+        v-text-field(v-model="camp.url" label="Url" prepend-icon="link" clearable
+        data-vv-name="campUrl" v-validate="'min:4|required|alpha_dash'"
+        :error-messages="errors.collect('campUrl')")
+
         v-text-field(v-model="camp.phoneNumber" label="Phone Number" prepend-icon="phone"
-        clearable)
+        clearable  data-vv-name="campPhone" v-validate="'digits:10|required'" type="number"
+        :error-messages="errors.collect('campPhone')")
+
         v-text-field(v-model="camp.email" label="Email" type="email" prepend-icon="email"
-        clearable)
+        clearable  data-vv-name="campEmail" v-validate="'min:4|required|email'"
+        :error-messages="errors.collect('campEmail')")
+
         v-combobox(v-model="camp.tags" label="Tags" prepend-icon="filter_list" clearable chips
           multiple hint="Used in searches")
           template(slot="selection" slot-scope="data")
@@ -43,6 +55,9 @@ import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../../event-bus';
 
 export default {
+  $_veeValidate: {
+    validator: 'new',
+  },
   data() {
     return {
       camp: {},
@@ -106,40 +121,44 @@ export default {
       });
     },
     saveCamp() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
-      }
-      if (!this.camp) {
-        return;
-      }
-      this.isOwnerFieldLoading = true;
-      const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $location: String!, $url: String!, $ownerId: String!){
+      this.$validator.validateAll().then((isValid) => {
+        if (isValid) {
+          if (!this.$cookie.get('sessionToken')) {
+            this.$router.push('/');
+          }
+          if (!this.camp || !isValid) {
+            return;
+          }
+          this.isOwnerFieldLoading = true;
+          const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $location: String!, $url: String!, $ownerId: String!){
           updateCamp(id: $id, tags: $tags, name: $name, phoneNumber: $phoneNumber,
           email: $email, location: $location, url: $url, ownerId: $ownerId){
             id,
           }
         }`;
-      const variables = {
-        id: this.campId,
-        tags: this.camp.tags,
-        name: this.camp.name,
-        phoneNumber: this.camp.phoneNumber,
-        email: this.camp.email,
-        location: this.camp.location,
-        url: this.camp.url,
-        ownerId: this.camp.owner,
-      };
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-      client.request(updateCampsQuery, variables).then(() => {
-        EventBus.$emit('success', 'Successfully Updated');
-      }).catch((err) => {
-        console.log(err);
-      }).finally(() => {
-        this.closeDialog();
+          const variables = {
+            id: this.campId,
+            tags: this.camp.tags,
+            name: this.camp.name,
+            phoneNumber: this.camp.phoneNumber,
+            email: this.camp.email,
+            location: this.camp.location,
+            url: this.camp.url,
+            ownerId: this.camp.owner,
+          };
+          const client = new GraphQLClient('/graphql', {
+            headers: {
+              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+            },
+          });
+          client.request(updateCampsQuery, variables).then(() => {
+            EventBus.$emit('success', 'Successfully Updated');
+          }).catch((err) => {
+            console.log(err);
+          }).finally(() => {
+            this.closeDialog();
+          });
+        }
       });
     },
   },
