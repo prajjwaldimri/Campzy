@@ -39,6 +39,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
+import { EventBus } from '../../../../event-bus';
 
 export default {
   name: 'addCamp',
@@ -54,7 +55,7 @@ export default {
   },
   methods: {
     closeDialog() {
-      this.$emit('close-add-camp-dialog');
+      EventBus.$emit('close-add-camp-dialog');
     },
     saveCamp() {
       if (!this.$cookie.get('sessionToken')) {
@@ -86,11 +87,11 @@ export default {
         },
       });
       client.request(addCampsQuery, variables).then(() => {
-        this.$parent.modifyCampDialog = false;
+        // TODO: Show success notification
       }).catch((err) => {
         console.log(err);
       }).finally(() => {
-        this.$parent.modifyCampDialog = false;
+        this.closeDialog();
       });
     },
   },
