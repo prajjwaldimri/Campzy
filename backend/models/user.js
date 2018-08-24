@@ -28,6 +28,7 @@ const UserSchema = new Schema({
   google: {
     oauthToken: String,
   },
+  isBlacklisted: { type: Boolean, default: false },
   dateOfBirth: Date,
   ownedCampId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
 });

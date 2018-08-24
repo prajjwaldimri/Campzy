@@ -11,7 +11,7 @@ const CampSchema = new Schema({
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },
   longDescription: String,
-  tags: { type: [String] },
+  tags: { type: [String] }, // TODO: Limit to 10 tags
   amenities: { type: [String] },
   services: { type: [String] },
   placesOfInterest: { type: [String] },
