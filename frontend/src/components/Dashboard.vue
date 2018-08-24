@@ -6,7 +6,7 @@
           v-list-tile
             v-list-tile-content.center-item
               router-link.link-text(to='/')
-                h1
+                h1.font-weight-light
                   span Camp
                   span.green--text zy
         v-list.pt-3
@@ -141,7 +141,7 @@ export default {
   align-items: center;
 }
 .link-text {
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-decoration: none;
   color: #fff;
 }
