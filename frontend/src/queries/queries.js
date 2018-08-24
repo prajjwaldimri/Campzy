@@ -1,5 +1,5 @@
 // User log in
-const sendUserCredientials = `query loginUsr($loginEmail: String!,$loginPassword: String!){
+const sendUserCredentials = `query loginUser($loginEmail: String!,$loginPassword: String!){
         loginUser(email: $loginEmail, password: $loginPassword){
           jwt
         }
@@ -15,4 +15,4 @@ const getAllUsers = `query {
   }
 }`;
 // eslint-disable-next-line
-export { sendUserCredientials, getAllUsers };
+export { sendUserCredentials, getAllUsers };

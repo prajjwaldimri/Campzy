@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const fs = require('fs');
 const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -10,12 +11,14 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const path = require('path');
 const history = require('connect-history-api-fallback');
+const https = require('https');
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
 require('./config/passport');
 
 const app = express();
+
 app.use(cors());
 
 // Connect to MLab Database
@@ -30,16 +33,7 @@ mongoose.connection.once('open', () => {
 app.use(bodyParserGraphQL());
 
 // History mode fallback
-app.use(
-  history({
-    // rewrites: [
-    //   {
-    //     from: /\/#/,
-    //     to: context => `/${context.parsedUrl.pathname}`,
-    //   },
-    // ],
-  }),
-);
+app.use(history({}));
 
 if (process.env.ENVIRONMENT === 'development') {
   app.use(webpackMiddleware(webpack(webpackConfig)));
@@ -62,4 +56,13 @@ app.use(
   })),
 );
 
-app.listen(process.env.PORT || 4444);
+if (process.env.ENVIRONMENT === 'development') {
+  // HTTPS on localhost
+  const certOptions = {
+    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt')),
+  };
+  https.createServer(certOptions, app).listen(443);
+} else {
+  app.listen(process.env.PORT || 4444);
+}

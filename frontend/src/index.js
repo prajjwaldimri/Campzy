@@ -9,6 +9,7 @@ const VueCookie = require('vue-cookie');
 
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
+// Tell Vue to use the plugin
 Vue.use(VueCookie);
 Vue.config.productionTip = false;
 // eslint-disable-next-line

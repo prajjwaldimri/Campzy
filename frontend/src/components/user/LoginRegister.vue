@@ -64,7 +64,7 @@
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
-import { sendUserCredientials } from '../../queries/queries';
+import { sendUserCredentials } from '../../queries/queries';
 import { registerUser } from '../../queries/mutationQueries';
 
 export default {
@@ -114,8 +114,9 @@ export default {
         loginEmail: this.email,
         loginPassword: this.password,
       };
-      request('/graphql', sendUserCredientials, variables).then((data) => {
-        this.$cookie.set('sessionToken', JSON.parse(data.loginUser.jwt), 1, 'secure');
+      request('/graphql', sendUserCredentials, variables).then((data) => {
+        const jwt = JSON.parse(data.loginUser.jwt);
+        this.$cookie.set('sessionToken', jwt, { secure: true });
         this.$router.push('settings');
         EventBus.$emit('success', 'Login Successfull');
         this.isLoggedin = false;

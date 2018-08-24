@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "nodemon backend/app.js",
+    "dev": "sudo nodemon backend/app.js",
     "precommit": "lint-staged",
     "start": "node backend/app.js",
     "heroku-postbuild": "webpack --mode production"
