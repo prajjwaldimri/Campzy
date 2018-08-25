@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    EmailVerification
     navbar
     .settings-page
       v-container(grid-list-lg)
@@ -47,6 +48,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import navbar from '../Navbar.vue';
+import EmailVerification from './EmailVerification.vue';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -55,6 +57,7 @@ export default {
   },
   components: {
     navbar,
+    EmailVerification,
   },
   data() {
     return {

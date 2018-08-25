@@ -1,3 +1,5 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/user.js');
@@ -5,7 +7,12 @@ const CampModel = require('../models/camp.js');
 const auth = require('../config/auth');
 
 const {
-  GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLList,
+  GraphQLBoolean,
 } = graphql;
 
 const CampType = new GraphQLObjectType({
@@ -16,6 +23,8 @@ const CampType = new GraphQLObjectType({
     phoneNumber: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     email: { type: GraphQLString },
+    isEmailVerified: { type: GraphQLBoolean },
+    isBlacklisted: { type: GraphQLBoolean },
     location: { type: GraphQLString },
     url: { type: GraphQLString },
     owner: {
@@ -51,6 +60,13 @@ const TentType = new GraphQLObjectType({
     surgePrice: { type: GraphQLString },
     preBookPeriod: { type: GraphQLString },
     bookedBy: { type: GraphQLID },
+  }),
+});
+
+const TokenType = new GraphQLObjectType({
+  name: 'Token',
+  fields: () => ({
+    tokenValue: { type: GraphQLString },
   }),
 });
 
@@ -192,12 +208,16 @@ const RootQuery = new GraphQLObjectType({
           }
 
           const userDocument = await UserModel.findOne({ email });
-          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
-          if (passwordsMatch) {
-            // Returns the jwt containing user's id, email and token
-            return { jwt: JSON.stringify(userDocument.generateJWT()) };
+          if (userDocument.isBlacklisted) {
+            return new Error('Your account has been disabled. Please contact Campzy support');
           }
-          return new Error('Invalid Username or Password');
+          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
+          if (!passwordsMatch) {
+            return new Error('Invalid Username or Password');
+          }
+          // Returns the jwt containing user's id, email and token
+
+          return { jwt: JSON.stringify(userDocument.generateJWT()) };
         } catch (err) {
           return err;
         }
@@ -226,10 +246,38 @@ const Mutation = new GraphQLObjectType({
             password: passwordHash,
             phoneNumber: args.phoneNumber,
           });
-          await userDocument.save();
+          const createdUser = await userDocument.save();
+          await auth.sendUserToken(createdUser._id, args.email);
           return 'Successfully created account';
         } catch (err) {
-          console.log(err);
+          return err;
+        }
+      },
+    },
+    // Confirms the user's email
+    confirmEmailToken: {
+      type: TokenType,
+      args: {
+        tokenValue: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          await auth.verifyUserToken(args.tokenValue);
+          return 'Successfully Verified';
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    // Resends the email token
+    resendEmailToken: {
+      type: UserType,
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          await auth.sendUserToken(user.id, user.email);
+          return 'Sent Verification Email';
+        } catch (err) {
           return err;
         }
       },

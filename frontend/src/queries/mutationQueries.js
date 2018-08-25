@@ -6,5 +6,16 @@ const registerUser = `mutation register($email: String!, $password: String!, $ph
         }
       }`;
 
-// eslint-disable-next-line
-export { registerUser };
+const verifyEmailToken = `mutation confirmEmailToken($tokenValue: String!) {
+  confirmEmailToken(tokenValue: $tokenValue) {
+    tokenValue
+  }
+}`;
+
+const sendVerificationEmail = `mutation resendEmailToken {
+  resendEmailToken {
+    id
+  }
+}`;
+
+module.exports = { registerUser, verifyEmailToken, sendVerificationEmail };

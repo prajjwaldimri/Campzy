@@ -16,7 +16,9 @@ const CampSchema = new Schema({
   services: { type: [String] },
   placesOfInterest: { type: [String] },
   coordinates: [String],
-  ownerId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+  ownerId: {
+    type: Schema.Types.ObjectId, unique: true, sparse: true, ref: 'User',
+  },
   inventory: [Schema.Types.ObjectId],
 });
 

@@ -13,7 +13,10 @@ const UserSchema = new Schema({
     unique: true,
     sparse: true,
   },
+  isEmailVerified: { type: Boolean, default: false },
   password: { type: String, required: true },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   type: { type: String, required: true, default: 'Camper' },
   phoneNumber: {
     type: String,
@@ -30,7 +33,12 @@ const UserSchema = new Schema({
   },
   isBlacklisted: { type: Boolean, default: false },
   dateOfBirth: Date,
-  ownedCampId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+  ownedCampId: {
+    type: Schema.Types.ObjectId,
+    unique: true,
+    sparse: true,
+    ref: 'Camp',
+  },
 });
 
 // eslint-disable-next-line
