@@ -6,5 +6,4 @@ const registerUser = `mutation register($email: String!, $password: String!, $ph
         }
       }`;
 
-// eslint-disable-next-line
-export { registerUser };
+module.exports = { registerUser };

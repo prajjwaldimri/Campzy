@@ -5,11 +5,11 @@ import BookCampSite from '../components/user/BookCampSite.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
 import Settings from '../components/user/Settings.vue';
 import Dashboard from '../components/Dashboard.vue';
+import UserManagement from '../components/dashboard_components/admin-dashboard/UserManagement.vue';
 import Pricing from '../components/dashboard_components/camp_owner_dashboard/Pricing.vue';
 import CampDetails from '../components/dashboard_components/camp_owner_dashboard/CampDetails.vue';
 import CampInventory from '../components/dashboard_components/camp_owner_dashboard/CampInventory.vue';
 import ManageCamps from '../components/dashboard_components/admin-dashboard/CampsManager.vue';
-import UserManagement from '../components/dashboard_components/admin-dashboard/UserManagement.vue';
 
 Vue.use(Router);
 

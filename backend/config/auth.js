@@ -1,4 +1,12 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const mailjet = require('node-mailjet').connect(
+  process.env.MAILJET_PUBLIC,
+  process.env.MAILJET_PRIVATE,
+);
+
+const TokenModel = require('../models/token');
+const UserModel = require('../models/user');
 
 // Gets the JWT from HTTP Header
 const getTokenFromHeaders = (req) => {
@@ -45,4 +53,46 @@ const isUserAdmin = (user) => {
   return false;
 };
 
-module.exports = { getAuthenticatedUser, isUserCampOwner, isUserAdmin };
+const sendUserToken = async (userId, email) => {
+  try {
+    const token = new TokenModel({
+      _userId: userId,
+      tokenValue: crypto.randomBytes(16).toString('hex'),
+    });
+    await token.save();
+    // TODO: Switch to main domain
+    return await mailjet.post('send').request({
+      FromEmail: 'support@campzy.in',
+      From: 'Mailjet Pilot',
+      Subject: 'Campzy Verification Email',
+      'Html-part': `<html><body>Hi, Please enter this verification code into the prompt at Campzy. \n ${
+        token.tokenValue
+      }</body></html>`,
+      Recipients: [{ Email: email }],
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
+const verifyUserToken = async (tokenValue) => {
+  try {
+    const token = await TokenModel.findOne({ token: tokenValue });
+    const matchingUser = UserModel.findById(token.id);
+    if (!matchingUser.isEmailVerified) {
+      matchingUser.isEmailVerified = true;
+      await matchingUser.save();
+    }
+    return 'Verified';
+  } catch (err) {
+    return err;
+  }
+};
+
+module.exports = {
+  getAuthenticatedUser,
+  isUserCampOwner,
+  isUserAdmin,
+  sendUserToken,
+  verifyUserToken,
+};
