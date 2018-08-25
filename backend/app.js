@@ -12,6 +12,14 @@ const webpack = require('webpack');
 const path = require('path');
 const history = require('connect-history-api-fallback');
 const https = require('https');
+const Rollbar = require('rollbar');
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_KEY,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  environment: process.env.ENVIRONMENT,
+});
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
@@ -55,6 +63,12 @@ app.use(
     context: { req: request, passport },
   })),
 );
+
+// Last ditch error handler
+app.use((err, req, res) => {
+  rollbar.log(err.stack);
+  res.redirect('back');
+});
 
 if (process.env.ENVIRONMENT === 'development') {
   // HTTPS on localhost
