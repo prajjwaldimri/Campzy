@@ -46,6 +46,7 @@ const UserType = new GraphQLObjectType({
     phoneNumber: { type: GraphQLString },
     jwt: { type: GraphQLString },
     dateOfBirth: { type: GraphQLString },
+    isEmailVerified: { type: GraphQLBoolean },
   }),
 });
 

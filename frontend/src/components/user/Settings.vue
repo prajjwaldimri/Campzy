@@ -2,6 +2,7 @@
   div
     EmailVerification
     navbar
+    v-alert.alert-dailog(:value='isEmailVerified' color='error' icon='warning' outline) Your Email is not verified!
     .settings-page
       v-container(grid-list-lg)
         v-layout(row)
@@ -63,7 +64,7 @@ export default {
     return {
       user: {},
       isProfileUpdating: false,
-      isEmailVerfied: false,
+      isEmailVerified: false,
     };
   },
   mounted() {
@@ -114,7 +115,7 @@ export default {
       const query = `{currentUser {
             name,
             email,
-            dateOfBirth
+            dateOfBirth,
             isEmailVerified
           }}`;
       const client = new GraphQLClient('/graphql', {
@@ -126,7 +127,9 @@ export default {
       client.request(query)
         .then((data) => {
           this.user = data.currentUser;
-          console.log(this.user);
+          if (this.user.isEmailVerified === false) {
+            this.isEmailVerified = true;
+          }
         })
         .catch(() => this.$router.push({ name: 'login' }));
     },
@@ -147,5 +150,10 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.alert-dailog {
+  position: relative;
+  top: 4.5rem;
 }
 </style>
