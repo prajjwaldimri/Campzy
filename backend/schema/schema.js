@@ -4,6 +4,7 @@ const graphql = require('graphql');
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/user.js');
 const CampModel = require('../models/camp.js');
+const TentModel = require('../models/tent.js');
 const auth = require('../config/auth');
 
 const {
@@ -48,13 +49,12 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
-// eslint-disable-next-line
 const TentType = new GraphQLObjectType({
   name: 'Tent',
   fields: () => ({
     id: { type: GraphQLID },
     capacity: { type: GraphQLString },
-    type: { type: GraphQLString },
+    type: { type: GraphQLBoolean },
     isBooked: { type: GraphQLString },
     bookingPrice: { type: GraphQLString },
     surgePrice: { type: GraphQLString },
@@ -429,8 +429,109 @@ const Mutation = new GraphQLObjectType({
           }
 
           const deleted = await CampModel.findByIdAndRemove(args.id);
-          console.log(deleted);
           return deleted;
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    // Inventory Management
+    addTent: {
+      type: TentType,
+      args: {
+        capacity: { type: GraphQLString },
+        type: { type: GraphQLString },
+        bookingPrice: { type: GraphQLString },
+        surgePrice: { type: GraphQLString },
+        preBookPeriod: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserCampOwner = auth.isUserCampOwner(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserCampOwner) {
+            return new Error('Not Privileged Enough');
+          }
+          const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
+          const tent = new TentModel({
+            capacity: args.capacity,
+            type: args.type,
+            bookingPrice: args.bookingPrice,
+            surgePrice: args.surgePrice,
+            preBookPeriod: args.preBookPeriod,
+            camp: ownedCamp._id,
+          });
+          return await tent.save();
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    updateTent: {
+      type: TentType,
+      args: {
+        capacity: { type: GraphQLString },
+        isBooked: { type: GraphQLBoolean },
+        type: { type: GraphQLString },
+        bookingPrice: { type: GraphQLString },
+        surgePrice: { type: GraphQLString },
+        preBookPeriod: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserCampOwner = auth.isUserCampOwner(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserCampOwner) {
+            return new Error('Not Privileged Enough');
+          }
+
+          const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
+          const tent = new TentModel({
+            capacity: args.capacity,
+            isBooked: args.isBooked,
+            type: args.type,
+            bookingPrice: args.bookingPrice,
+            surgePrice: args.surgePrice,
+            preBookPeriod: args.preBookPeriod,
+            camp: ownedCamp._id,
+          });
+          return await tent.save();
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    deleteTent: {
+      type: TentType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserCampOwner = auth.isUserCampOwner(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserCampOwner) {
+            return new Error('Not Privileged Enough');
+          }
+
+          const tent = await TentModel.findById(args.id, 'camp');
+          const associatedCamp = await CampModel.findById(tent.camp);
+          const newInventory = associatedCamp.inventory.filter(value => value !== args.id);
+          associatedCamp.inventory = newInventory;
+          await associatedCamp.save();
+          return await TentModel.findByIdAndRemove(args.id);
         } catch (err) {
           return err;
         }
