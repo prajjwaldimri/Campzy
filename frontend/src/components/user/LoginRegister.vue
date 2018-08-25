@@ -10,14 +10,17 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" color='green accent-4' v-validate="'required|email'" required
+                  v-text-field(label="Email" color='green accent-4'
+                  v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
                     :error-messages="errors.collect('email')")
-                  v-text-field(label="Current Password" color='green accent-4' v-model="password" clearable
+                  v-text-field(label="Current Password" color='green accent-4'
+                  v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
-                    v-btn(block color="green" @click="login" :loading='isLoggedin').white--text.mr-1 Login
+                    v-btn(block color="green" @click="login"
+                    :loading='isLoggedin').white--text.mr-1 Login
                     v-btn(block dark).white--text.ml-1 Forgot Password?
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Need an account?
@@ -28,13 +31,15 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Create an Account
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" color='green accent-4' v-validate="'required|email'" required
+                  v-text-field(label="Email" color='green accent-4'
+                  v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
                     :error-messages="errors.collect('email')")
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2").white--text.mt-3
+                  v-btn(block color="green" :loading='isSignedup'
+                  @click="loginState = 2").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
@@ -46,15 +51,18 @@
                     h1.font-weight-light Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                   v-flex(align-center).d-flex
-                    v-text-field(label="Phone Number" color='green accent-4' v-validate="'required|numeric'" required
+                    v-text-field(label="Phone Number" color='green accent-4'
+                    v-validate="'required|numeric'" required
                       v-model="phoneNumber" clearable data-vv-name="phoneNumber"
                       :error-messages="errors.collect('phoneNumber')")
                     v-btn(dark) Send OTP
                   v-flex(align-center).d-flex
-                    v-text-field(shrink label="One Time Password" color='green accent-4' v-model="otp" clearable
+                    v-text-field(shrink label="One Time Password" color='green accent-4'
+                     v-model="otp" clearable
                     type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
                       :error-messages="errors.collect('OTP')" )
-                    v-btn(color="green" :loading='isSignedup' @click="regUser").white--text.mt-3 Verify OTP
+                    v-btn(color="green" :loading='isSignedup' @click="regUser").white--text.mt-3
+                      | Verify OTP
 
             v-flex(md6).hidden-sm-and-down.right-image
 
@@ -73,6 +81,7 @@ export default {
   },
   data() {
     return {
+      // 3 states. Change this variable to switch between login/register/opt verification
       loginState: 0,
       isLoginValid: false,
       password: '',
