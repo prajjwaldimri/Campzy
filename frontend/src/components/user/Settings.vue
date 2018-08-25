@@ -100,9 +100,11 @@ export default {
             .then((data) => {
               this.user = data.updateUser;
               this.isProfileUpdating = false;
-              EventBus.$emit('success', 'Profile updated! Please Refresh');
+              EventBus.$emit('success', 'Profile updated! Refreshing....');
             })
-            .catch(() => { this.$router.push({ name: 'login' }); this.isProfileUpdating = false; });
+            .catch(() => { this.$router.push({ name: 'login' }); this.isProfileUpdating = false; }).finally(() => {
+              this.getCurrentUser();
+            });
         } else {
           this.isProfileUpdating = false;
         }
