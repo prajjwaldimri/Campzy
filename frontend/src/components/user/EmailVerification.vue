@@ -71,7 +71,6 @@ export default {
         EventBus.$emit('success', 'Sent Verification Email');
       }).catch((err) => {
         if (err) {
-          console.log(err);
           EventBus.$emit('error', 'Email Verification Failed');
         }
       });
