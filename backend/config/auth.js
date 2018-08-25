@@ -77,13 +77,14 @@ const sendUserToken = async (userId, email) => {
 
 const verifyUserToken = async (tokenValue) => {
   try {
-    const token = await TokenModel.findOne({ token: tokenValue });
-    const matchingUser = UserModel.findById(token.id);
+    const token = await TokenModel.findOne({ tokenValue });
+    // eslint-disable-next-line
+    const matchingUser = await UserModel.findById(token._userId);
     if (!matchingUser.isEmailVerified) {
       matchingUser.isEmailVerified = true;
       await matchingUser.save();
     }
-    return 'Verified';
+    return true;
   } catch (err) {
     return err;
   }

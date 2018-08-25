@@ -63,6 +63,13 @@ const TentType = new GraphQLObjectType({
   }),
 });
 
+const TokenType = new GraphQLObjectType({
+  name: 'Token',
+  fields: () => ({
+    tokenValue: { type: GraphQLString },
+  }),
+});
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -249,11 +256,31 @@ const Mutation = new GraphQLObjectType({
     },
     // Confirms the user's email
     confirmEmailToken: {
-      type: UserType,
+      type: TokenType,
+      args: {
+        tokenValue: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          await auth.verifyUserToken(args.tokenValue);
+          return 'Successfully Verified';
+        } catch (err) {
+          return err;
+        }
+      },
     },
     // Resends the email token
     resendEmailToken: {
       type: UserType,
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          await auth.sendUserToken(user.id, user.email);
+          return 'Sent Verification Email';
+        } catch (err) {
+          return err;
+        }
+      },
     },
     updateUser: {
       type: UserType,

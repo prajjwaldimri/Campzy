@@ -6,4 +6,16 @@ const registerUser = `mutation register($email: String!, $password: String!, $ph
         }
       }`;
 
-module.exports = { registerUser };
+const verifyEmailToken = `mutation confirmEmailToken($tokenValue: String!) {
+  confirmEmailToken(tokenValue: $tokenValue) {
+    tokenValue
+  }
+}`;
+
+const sendVerificationEmail = `mutation resendEmailToken {
+  resendEmailToken {
+    id
+  }
+}`;
+
+module.exports = { registerUser, verifyEmailToken, sendVerificationEmail };
