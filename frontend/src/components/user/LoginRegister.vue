@@ -121,6 +121,7 @@ export default {
         EventBus.$emit('success', 'Login Successfull');
         this.isLoggedin = false;
       }).catch((err) => {
+        console.log(err);
         if (err) {
           EventBus.$emit('error', 'Login Failed');
           this.isLoggedin = false;
