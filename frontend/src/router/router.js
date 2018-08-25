@@ -54,7 +54,7 @@ const router = new Router({
           component: CampInventory,
         },
         {
-          path: 'manageCamps',
+          path: 'campManagement',
           component: ManageCamps,
         },
         {

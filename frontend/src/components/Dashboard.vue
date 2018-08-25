@@ -19,35 +19,31 @@
               v-btn(icon @click.stop='mini=!mini')
                 v-icon chevron_left
         v-list.pt-5(dense)
-          v-list-tile.pt-3(@click='')
+          v-list-tile.pt-3(@click='userManagement')
             v-list-tile-action
               v-icon wc
-            v-list-tile-content.increase-letter-spacing-2 User Management
-          v-list-tile.pt-3(@click='')
+            v-list-tile-content.increase-letter-spacing-1 User Management
+          v-list-tile.pt-3(@click='campManagement')
             v-list-tile-action
               v-icon beach_access
-            v-list-tile-content.increase-letter-spacing-2 Camp Management
-          v-list-tile.pt-3(@click='')
+            v-list-tile-content.increase-letter-spacing-1 Camp Management
+          v-list-tile.pt-3(@click='campDetails')
             v-list-tile-action
-              v-icon room_service
-            v-list-tile-content.increase-letter-spacing-2 Camps
+              v-icon add
+            v-list-tile-content.increase-letter-spacing-1 Camp Details
+          v-list-tile.pt-3(@click='campInventory')
+            v-list-tile-action
+              v-icon add
+            v-list-tile-content.increase-letter-spacing-1 Inventory
           v-list-tile.pt-3(@click='')
             v-list-tile-action
               v-icon add
-            v-list-tile-content.increase-letter-spacing-2 Camp Details
-          v-list-tile.pt-3(@click='')
-            v-list-tile-action
-              v-icon add
-            v-list-tile-content.increase-letter-spacing-2 Inventory
-          v-list-tile.pt-3(@click='')
-            v-list-tile-action
-              v-icon add
-            v-list-tile-content.increase-letter-spacing-2 Pricing
+            v-list-tile-content.increase-letter-spacing-1 Pricing
           v-list-tile.pt-5
             v-list-tile-content.center-item
               v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
       router-view.router-display
-      v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute)
+      v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute shift )
         v-btn
           span User Management
           v-icon wc
@@ -64,13 +60,9 @@
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
-import navbar from './Navbar.vue';
 
 export default {
   name: 'Dashboard',
-  components: {
-    navbar,
-  },
   data() {
     return {
       drawer: true,
@@ -84,9 +76,11 @@ export default {
     this.getCurrentUser();
   },
   methods: {
-    goHomePage() {
-      this.$router.push('/');
-    },
+    goHomePage() { this.$router.push('/'); },
+    campDetails() { this.$router.push('/dashboard/campDetails'); },
+    userManagement() { this.$router.push('/dashboard/userManagement'); },
+    campInventory() { this.$router.push('/dashboard/campInventory'); },
+    campManagement() { this.$router.push('/dashboard/campManagement'); },
 
     signOut() {
       this.load = true;

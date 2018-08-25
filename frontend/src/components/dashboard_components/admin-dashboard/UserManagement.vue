@@ -6,12 +6,12 @@
           span.headline.orange--text Are you absolutely sure?
         v-card-text
           span.subheading This action cannot be undone. This will permanently delete all records of
-          span.title.font-weight-black  {{deleteCampName}}
+          span.title.font-weight-black  {{deleteUserName}}
           span.subheading  from the database. Please type in the camp name to confirm!
         v-card-actions(style="flex-direction: column").d-flex
-          v-text-field(label="Camp Name" v-model="deleteCampNameConfirmation")
+          v-text-field(label="User Name" v-model="deleteUserConfirmation")
           v-btn(block @click="").increase-letter-spacing-1.red--text I understand the
-            | consequences, delete {{deleteCampName}}
+            | consequences, delete {{deleteUserName}}
 
 
     v-layout(row)
@@ -34,7 +34,6 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getAllUsers } from '../../../queries/queries';
-import { EventBus } from '../../../event-bus';
 
 export default {
   data() {
@@ -53,11 +52,9 @@ export default {
       ],
       users: [],
       deleteDialog: false,
-      addCampDialog: false,
-      deleteCampId: null,
-      deleteCampName: '',
-      deleteCampNameConfirmation: null,
       isTableLoading: false,
+      deleteUserConfirmation: '',
+      deleteUserName: '',
     };
   },
 
@@ -71,10 +68,9 @@ export default {
     client.request(getAllUsers).then((data) => {
       this.users = data.allUsers;
       this.isTableLoading = false;
-      EventBus.$emit('success', 'Successfully Loaded');
     }).catch((err) => {
       this.isTableLoading = false;
-      if (err) { EventBus.$emit('error', 'Failed to load all users'); }
+      return err;
     });
   },
 };
