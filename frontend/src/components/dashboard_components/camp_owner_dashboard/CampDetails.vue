@@ -2,55 +2,153 @@
   v-container.camp-display(fluid)
     v-tabs.tabs-details(color='transparent' grow)
       v-tabs-slider(color="green")
-      v-tab(href='#details') Basic Details
-      v-tab Documents
-      v-tab(href='#bank') Bank Details
-      v-tab Camp Details
+      v-tab(href='#basicDetails') Basic Details
+      v-tab(href='#documents') Documents
+      v-tab(href='#bankDetails') Bank Details
+      v-tab(href='#campDetails') Camp Details
       v-tabs-items
-        v-tab-item(id='details')
+        v-tab-item(id='basicDetails')
           v-container.basic-details(fluid)
             v-card.details-card(width='95%' color='transparent')
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row)
-                    v-flex(xs2)
-                      h3 Camp Name:
-                    v-flex(xs8)
-                      v-text-field(solo label='Camp Name')
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
                   v-layout.layout(row)
-                    v-flex.item-align(xs2)
-                      h3  Owner Name:
-                    v-flex(xs8)
-                      v-text-field(solo label='Owner Name')
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
                   v-layout.layout(row)
-                    v-flex.item-align(xs2)
-                      h3 Phone Number:
-                    v-flex(xs8)
-                      v-text-field(solo label='Phone Number')
-
-              v-btn(flat) Cancle
-              v-btn(color='green') Save
-        v-tab-item(id='bank')
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+        v-tab-item(id='documents')
           v-container.basic-details(fluid)
             v-card.details-card(width='95%' color='transparent')
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row)
-                    v-flex(xs2)
-                      h3 Bank Name:
-                    v-flex(xs8)
-                      v-text-field(solo label='Bank Name')
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
                   v-layout.layout(row)
-                    v-flex.item-align(xs2)
-                      h3  Account Number:
-                    v-flex(xs8)
-                      v-text-field(solo label='Account Number')
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
                   v-layout.layout(row)
-                    v-flex.item-align(xs2)
-                      h3 IFSC code:
-                    v-flex(xs8)
-                      v-text-field(solo label='IFSC code')
-
-              v-btn(flat) Cancle
-              v-btn(color='green') Save
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+        v-tab-item(id='bankDetails')
+          v-container.basic-details(fluid)
+            v-card.details-card(width='95%' color='transparent')
+              v-form(ref='form' lazy-validation)
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+        v-tab-item(id='campDetails')
+          v-container.basic-details(fluid)
+            v-card.details-card(width='95%' color='transparent')
+              v-form(ref='form' lazy-validation)
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+                  v-layout.layout(row)
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Amenities
+                        v-text-field(solo label='Amenities')
+                    v-spacer
+                    v-flex(xs5)
+                      v-layout(column)
+                        h4 Services
+                        v-text-field(solo label='Services')
+    v-container.camp-display(fluid)
+            v-card.details-card(width='95%' color='transparent')
+              v-card-actions
+                v-spacer
+                v-btn(flat) Cancel
+                v-btn(color='green') Save
 </template>
 
 <script>

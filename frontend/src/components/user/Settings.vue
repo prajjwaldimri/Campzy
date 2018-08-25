@@ -60,6 +60,7 @@ export default {
     return {
       user: {},
       isProfileUpdating: false,
+      isEmailVerfied: false,
     };
   },
   mounted() {
@@ -109,6 +110,7 @@ export default {
             name,
             email,
             dateOfBirth
+            isEmailVerified
           }}`;
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -117,7 +119,10 @@ export default {
       });
 
       client.request(query)
-        .then((data) => { this.user = data.currentUser; })
+        .then((data) => {
+          this.user = data.currentUser;
+          console.log(this.user);
+        })
         .catch(() => this.$router.push({ name: 'login' }));
     },
   },
