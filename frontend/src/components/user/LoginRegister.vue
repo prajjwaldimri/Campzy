@@ -10,7 +10,6 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="hidden" style="display:none")
                   v-text-field(label="Email" color='green accent-4'
                   v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
