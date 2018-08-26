@@ -7,9 +7,9 @@
       v-btn(flat small @click='isEmailVerifying=true') &nbsp;Please click here to verify Email.
     .settings-page
       v-container(grid-list-lg)
-        v-layout(row)
+        v-layout(row wrap)
           v-flex(xs12 md6)
-            v-card().settings-card
+            v-card.settings-card
               v-card-title(primary-title)
                 h2.font-weight-light EDIT PROFILE
               v-form
@@ -35,7 +35,7 @@
                 v-btn(color="green" @click="updateProfile" :loading="isProfileUpdating").white--text
                   | Update Profile
           v-flex(xs12 md6)
-            v-card().settings-card
+            v-card.settings-card
               v-card-title(primary-title)
                 h2.font-weight-light BILLING ACCOUNTS
               .settings-flex
