@@ -1,6 +1,7 @@
 require('dotenv').config();
 const ApolloError = require('apollo-errors');
 const express = require('express');
+const compression = require('compression');
 const fs = require('fs');
 const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
@@ -27,7 +28,7 @@ require('./models/user');
 require('./config/passport');
 
 const app = express();
-
+app.use(compression());
 app.use(cors());
 
 // Connect to MLab Database

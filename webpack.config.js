@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
@@ -9,8 +10,20 @@ module.exports = {
   entry: { main: './frontend/src/index.js' },
   output: {
     path: path.resolve(__dirname, './frontend/dist'),
-    filename: 'main.bundle.js',
+    filename: '[name].[contenthash].js',
     publicPath: '/',
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
   module: {
     rules: [
@@ -56,5 +69,6 @@ module.exports = {
       filename: 'index.html',
       template: './frontend/src/index.html',
     }),
+    new webpack.HashedModuleIdsPlugin(),
   ],
 };

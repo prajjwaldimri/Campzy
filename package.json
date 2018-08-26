@@ -8,10 +8,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "preinstall": "yarn global add pm2",
     "build": "webpack --mode production",
     "dev": "sudo nodemon backend/app.js",
     "precommit": "lint-staged",
-    "start": "node backend/app.js",
+    "start": "pm2-runtime backend/app.js",
     "heroku-postbuild": "webpack --mode production"
   },
   "lint-staged": {
@@ -26,6 +27,7 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "body-parser-graphql": "^1.1.0",
+    "compression": "^1.7.3",
     "connect-history-api-fallback": "^1.5.0",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
@@ -45,6 +47,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pbkdf2": "^3.0.16",
+    "pm2": "^3.0.4",
     "rollbar": "^2.4.4",
     "twilio": "^3.19.2",
     "vee-validate": "^2.1.0-beta.8",
