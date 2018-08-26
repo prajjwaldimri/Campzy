@@ -14,23 +14,23 @@
                   v-layout.layout(row)
                     v-flex(xs5)
                       v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
+                        h4 Camp Name
+                        v-text-field(solo label='Camp Name')
                     v-spacer
                     v-flex(xs5)
                       v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
+                        h4 Email
+                        v-text-field(solo label='Email')
                   v-layout.layout(row)
                     v-flex(xs5)
                       v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
+                        h4 Phone Number
+                        v-text-field(solo label='Phone Number')
                     v-spacer
                     v-flex(xs5)
                       v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
+                        h4 Camp Url
+                        v-text-field(solo label='Camp Url')
                   v-layout.layout(row)
                     v-flex(xs5)
                       v-layout(column)

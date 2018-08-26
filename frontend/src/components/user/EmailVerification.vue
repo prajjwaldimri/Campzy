@@ -42,6 +42,7 @@ export default {
   methods: {
     closeDialog() {
       this.verificationDialog = false;
+      EventBus.$emmit('disableDialog', false);
     },
     verifyEmail() {
       this.token = this.token.trim();

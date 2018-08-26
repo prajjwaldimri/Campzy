@@ -1,8 +1,10 @@
 <template lang="pug">
   div
-    EmailVerification
+    EmailVerification(v-if='isEmailVerifying')
     navbar
-    v-alert.alert-dailog(:value='isEmailVerified' color='error' icon='warning' outline) Your Email is not verified!
+    v-alert.alert-dailog(:value='isEmailVerified' type='warning')
+      span Your Email is not verified!
+      v-btn(flat small @click='isEmailVerifying=true') &nbsp;Please click here to verify Email.
     .settings-page
       v-container(grid-list-lg)
         v-layout(row)
@@ -65,6 +67,7 @@ export default {
       user: {},
       isProfileUpdating: false,
       isEmailVerified: false,
+      isEmailVerifying: false,
     };
   },
   mounted() {
@@ -154,6 +157,6 @@ export default {
 
 .alert-dailog {
   position: relative;
-  top: 4.5rem;
+  top: 4.4rem;
 }
 </style>
