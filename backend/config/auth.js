@@ -60,10 +60,13 @@ const isUserAdmin = (user) => {
 
 const sendUserToken = async (userId, email) => {
   try {
-    const token = new TokenModel({
-      _userId: userId,
-      tokenValue: crypto.randomBytes(16).toString('hex'),
-    });
+    let token = await TokenModel.findOne({ userId });
+    if (!token) {
+      token = new TokenModel({
+        _userId: userId,
+        tokenValue: crypto.randomBytes(16).toString('hex'),
+      });
+    }
     await token.save();
     // TODO: Switch to main domain
     return await mailjet.post('send').request({
