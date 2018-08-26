@@ -41,7 +41,8 @@ const getCampDetail = `query camp($id: String!){
           name,
           phoneNumber,
           url,
-          email
+          email,
+          ownerId
         }
 
       }`;

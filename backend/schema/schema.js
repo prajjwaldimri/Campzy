@@ -119,7 +119,7 @@ const RootQuery = new GraphQLObjectType({
     currentUserCamp: {
       type: new GraphQLList(CampType),
       args: {
-        ownerId: { type: GraphQLID },
+        ownerId: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
         try {
@@ -506,10 +506,11 @@ const Mutation = new GraphQLObjectType({
           const user = await auth.getAuthenticatedUser(context.req);
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
+          const isUserCampOwner = await auth.isUserCampOwner(userData);
           if (userData === null) {
             throw new NotLoggedinError();
           }
-          if (!isUserAdmin) {
+          if (!isUserAdmin && !isUserCampOwner) {
             throw new PrivilegeError();
           }
 

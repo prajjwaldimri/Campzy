@@ -35,12 +35,13 @@
               v-card-actions
                 v-spacer
                 v-btn(flat) Cancel
-                v-btn(color='green') Save
+                v-btn(color='green' @click='saveCampDetails') Save
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getCamp, getCampDetail } from '../../../queries/queries';
+import { saveCampDetails } from '../../../queries/mutationQueries';
 
 export default {
   data() {
@@ -91,6 +92,28 @@ export default {
       });
       client.request(getCampDetail, variables).then((data) => {
         this.camp = data.camp;
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+
+    saveCampDetails() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        name: this.camp.name,
+        phoneNumber: this.camp.phoneNumber,
+        url: this.camp.url,
+        email: this.camp.email,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(saveCampDetails, variables).then((data) => {
+        console.log(data);
       }).catch((err) => {
         console.log(err);
       });
