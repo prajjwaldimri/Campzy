@@ -114,11 +114,14 @@ function generateRandomNumbers(n) {
 
 const sendUserOTP = async (phoneNumber) => {
   try {
-    const otp = new OTPModel({
-      phoneNumber: `+91${phoneNumber}`,
-      otpValue: `${generateRandomNumbers(6)}`,
-    });
-    await otp.save();
+    let otp = await OTPModel.findOne({ phoneNumber });
+    if (!otp) {
+      otp = new OTPModel({
+        phoneNumber: `+91${phoneNumber}`,
+        otpValue: `${generateRandomNumbers(6)}`,
+      });
+      await otp.save();
+    }
     return await client.messages.create({
       from: '+15172251199',
       body: `Your Campzy OTP is ${otp.otpValue}`,
