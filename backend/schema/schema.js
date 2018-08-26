@@ -8,6 +8,7 @@ const {
   BlackListedError,
   UnknownError,
   PrivilegeError,
+  WrongOTPTokenError,
   NotLoggedinError,
 } = require('./graphqlErrors');
 const UserModel = require('../models/user.js');
@@ -262,7 +263,7 @@ const Mutation = new GraphQLObjectType({
         try {
           const otpVerified = await auth.verifyUserOTP(args.otp, args.phoneNumber);
           if (!otpVerified) {
-            return new Error('Wrong OTP');
+            throw new WrongOTPTokenError();
           }
           const passwordHash = await bcrypt.hash(args.password, 10);
           const userDocument = new UserModel({

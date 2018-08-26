@@ -7,6 +7,8 @@ const mailjet = require('node-mailjet').connect(
 
 const client = require('twilio')('ACabc517de4bcf13d79c5c4268f6aa90f5', process.env.TWILIO_API_KEY);
 
+const { EmailSendError, WrongEmailTokenError, OTPSendError } = require('../schema/graphqlErrors');
+
 const TokenModel = require('../models/token');
 const OTPModel = require('../models/otp');
 const UserModel = require('../models/user');
@@ -74,7 +76,7 @@ const sendUserToken = async (userId, email) => {
       Recipients: [{ Email: email }],
     });
   } catch (err) {
-    return err;
+    throw new EmailSendError();
   }
 };
 
@@ -89,7 +91,7 @@ const verifyUserToken = async (tokenValue) => {
     }
     return true;
   } catch (err) {
-    return err;
+    throw new WrongEmailTokenError();
   }
 };
 
@@ -123,7 +125,7 @@ const sendUserOTP = async (phoneNumber) => {
       to: `+91${phoneNumber}`,
     });
   } catch (err) {
-    return err;
+    throw new OTPSendError();
   }
 };
 

@@ -21,6 +21,22 @@ const NotLoggedinError = ApolloError.createError('NotLoggedinError', {
   message: 'Your session has expired. Please login again.',
 });
 
+const EmailSendError = ApolloError.createError('EmailSendError', {
+  message: 'Unable to send email to your address.',
+});
+
+const WrongEmailTokenError = ApolloError.createError('WrongEmailTokenError', {
+  message: 'Wrong email verification code.',
+});
+
+const OTPSendError = ApolloError.createError('OTPSendError', {
+  message: 'Unable to send OTP to that number. Please try again!',
+});
+
+const WrongOTPTokenError = ApolloError.createError('WrongOTPTokenError', {
+  message: 'Provided OTP is wrong.',
+});
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message: 'An unknown error has occurred. We have logged the error and are working on it.',
 });
@@ -32,4 +48,8 @@ module.exports = {
   UnknownError,
   PrivilegeError,
   NotLoggedinError,
+  EmailSendError,
+  WrongEmailTokenError,
+  OTPSendError,
+  WrongOTPTokenError,
 };
