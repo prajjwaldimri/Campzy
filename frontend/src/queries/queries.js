@@ -14,5 +14,18 @@ const getAllUsers = `query {
     phoneNumber
   }
 }`;
+
+const getAllTentsQuery = `query getTent{
+    getTent{
+      id
+      type
+      capacity
+      bookingPrice
+      preBookPeriod
+      isBooked
+      surgePrice
+    }
+  }
+  `;
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers };
+export { sendUserCredentials, getAllUsers, getAllTentsQuery };

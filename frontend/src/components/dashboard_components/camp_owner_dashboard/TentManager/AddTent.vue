@@ -3,7 +3,7 @@
     v-card-title
       span.headline Add Tent
     v-card-text
-      v-text-field(v-model="tent.name" label="Tent Type" prepend-icon="subject" clearable
+      v-text-field(v-model="tent.type" label="Tent Type" prepend-icon="subject" clearable
       data-vv-name="tentType" v-validate="'min:4|required|alpha_spaces'"
       :error-messages="errors.collect('tentType')")
 
@@ -14,13 +14,16 @@
       v-text-field(v-model="tent.price" label="Booking Price" prepend-icon="money" clearable
        data-vv-name="bookingPrice" v-validate="'required|alpha_dash'"
       :error-messages="errors.collect('bookingPrice')")
+      v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
+       data-vv-name="surgePrice"
+      :error-messages="errors.collect('surgePrice')")
 
       v-text-field(v-model="tent.preBooking" label="Pre Booking Time" prepend-icon="payment"
       clearable  data-vv-name="preBooking" v-validate="'required'" type="number"
       :error-messages="errors.collect('preBooking')")
 
-      v-text-field(v-model="tent.totalTents" label="Toal Tents Available" prepend-icon="add_shopping_cart"
-      clearable  data-vv-name="totalTents" v-validate="'required'" type="number"
+      v-text-field(v-model="totalTents" label="Toal Tents Available" prepend-icon="add_shopping_cart"
+      clearable  data-vv-name="totalTents" v-validate="'required'"
       :error-messages="errors.collect('totalTents')")
 
     v-card-actions
@@ -34,6 +37,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../../event-bus';
+import { addTentQuery } from '../../../../queries/mutationQueries';
 
 export default {
   name: 'addTent',
@@ -43,11 +47,12 @@ export default {
   data() {
     return {
       tent: {},
+      totalTents: '',
     };
   },
   methods: {
     closeDialog() {
-      // EventBus.$emit('admin-close-add-camp-dialog');
+      EventBus.$emit('campowner-close-add-tent-dialog');
     },
     saveTent() {
       this.$validator.validateAll().then((isValid) => {
@@ -58,32 +63,29 @@ export default {
           if (!this.tent || !isValid) {
             return;
           }
-          this.isOwnerFieldLoading = true;
-          const addTentQuery = `{
-        }`;
           const variables = {
-            tentType: this.tent.tentType,
+            tentType: this.tent.type,
             capacity: this.tent.capacity,
-            price: this.tent.price,
-            preBooking: this.tent.preBooking,
-            totalTents: this.tent.totalTents,
+            bookingPrice: this.tent.price,
+            preBookTime: this.tent.preBooking,
+            surgePrice: this.tent.surgePrice,
           };
-          const client = new GraphQLClient('/graphql', {
-            headers: {
-              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-            },
-          });
-          client.request(addTentQuery, variables).then(() => {
-            this.camp = {};
-            this.isOwnerSelected = false;
-          }).catch((err) => {
-            EventBus.$emit('error', err);
-          }).finally(() => {
-            this.closeDialog();
-            this.isOwnerFieldLoading = false;
-          });
+          for (let i = 1; i <= this.totalTents; i += 1) {
+            const client = new GraphQLClient('/graphql', {
+              headers: {
+                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+              },
+            });
+
+            client.request(addTentQuery, variables).then(() => {
+              this.tent = {};
+            }).catch((err) => {
+              EventBus.$emit('error', err);
+            });
+          }
         }
       });
+      this.closeDialog();
     },
   },
 };

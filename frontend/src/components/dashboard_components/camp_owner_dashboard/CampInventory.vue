@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container.inventory-container
+  v-container.inventory-container(fluid)
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
@@ -12,22 +12,24 @@
             v-icon(right dark) add_box
           addTent
     v-layout(row)
-      v-data-table(:headers="headers" :items="camps" style="width: 100%" hide-actions
+      v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading").elevation-1
         template(slot="items" slot-scope="props")
           td {{props.item.id}}
-          td.font-weight-bold {{props.item.name}}
-          td {{props.item.owner.name}}
-          td {{props.item.phoneNumber}}
-          td {{props.item.location}}
-          td {{props.item.creationDate}}
-          td.align-center
-            v-icon(small @click="editCamp(props.item.id)").mr-2 edit
-            v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
+          td.font-weight-bold {{props.item.type}}
+          td {{props.item.capacity}} Persons
+          td {{props.item.bookingPrice}}
+          td {{props.item.surgePrice}}
+          td {{props.item.preBookPeriod}}
+          td {{props.item.bookedBy}}
+          td {{props.item.isBooked}}
 </template>
 
 <script>
+import { GraphQLClient } from 'graphql-request';
+import { getAllTentsQuery } from '../../../queries/queries';
 import AddTent from './TentManager/AddTent.vue';
+import { EventBus } from '../../../event-bus';
 
 export default {
   components: {
@@ -43,19 +45,47 @@ export default {
         },
         {
           text: 'Tent Type',
-          value: 'name',
+          value: 'type',
         },
-        { text: 'Tent Capacity', value: 'owner.name' },
-        { text: 'Booking Price', value: 'phoneNumber' },
-        { text: 'Surged Price', value: 'location' },
-        { text: 'Pre Book Time', value: 'owner.name' },
-        { text: 'Booked By', value: 'creationDate' },
-        { text: 'Is Booked', value: 'actions', sortable: false },
+        { text: 'Tent Capacity', value: 'capacity' },
+        { text: 'Booking Price', value: 'bookingPrice' },
+        { text: 'Surged Price', value: 'surgePrice' },
+        { text: 'Pre Book Time', value: 'perBookPeriod' },
+        { text: 'Booked By', value: 'bookedBy' },
+        { text: 'Is Booked', value: 'isBooked' },
       ],
-      camps: [],
+      tents: [],
       addTentDialog: false,
       isTableLoading: false,
     };
+  },
+  mounted() {
+    EventBus.$on('campowner-close-add-tent-dialog', () => {
+      this.addTentDialog = false;
+      this.getAllTents();
+    });
+    this.getAllTents();
+  },
+
+  methods: {
+    getAllTents() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      this.isTableLoading = true;
+      client.request(getAllTentsQuery).then((data) => {
+        this.tents = data.getTent;
+      }).catch(() => {
+        EventBus.$emit('error', 'Please Login again!');
+      }).finally(() => {
+        this.isTableLoading = false;
+      });
+    },
   },
 };
 </script>
