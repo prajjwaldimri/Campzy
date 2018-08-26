@@ -55,7 +55,7 @@ const TentType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     capacity: { type: GraphQLString },
-    type: { type: GraphQLBoolean },
+    type: { type: GraphQLString },
     isBooked: { type: GraphQLString },
     bookingPrice: { type: GraphQLString },
     surgePrice: { type: GraphQLString },
@@ -109,6 +109,27 @@ const RootQuery = new GraphQLObjectType({
             return new Error('Not Privileged Enough');
           }
           return await CampModel.find({});
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+
+    getTent: {
+      // Returns all camps
+      type: new GraphQLList(TentType),
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserCampOwner = await auth.isUserCampOwner(userData);
+          if (userData === null) {
+            return new Error('Not Logged In');
+          }
+          if (!isUserCampOwner) {
+            return new Error('Not Privileged Enough');
+          }
+          return await TentModel.find({});
         } catch (err) {
           return err;
         }

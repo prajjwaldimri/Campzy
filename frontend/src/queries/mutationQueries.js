@@ -18,4 +18,19 @@ const sendVerificationEmail = `mutation resendEmailToken {
   }
 }`;
 
-module.exports = { registerUser, verifyEmailToken, sendVerificationEmail };
+const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!, $surgePrice: String!) {
+  addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime , surgePrice: $surgePrice){
+    type,
+    capacity,
+    bookingPrice,
+    preBookPeriod,
+    surgePrice
+  }
+}`;
+
+module.exports = {
+  registerUser,
+  verifyEmailToken,
+  sendVerificationEmail,
+  addTentQuery,
+};
