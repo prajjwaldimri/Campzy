@@ -8,10 +8,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "preinstall": "yarn global add pm2",
     "build": "webpack --mode production",
     "dev": "sudo nodemon backend/app.js",
     "precommit": "lint-staged",
-    "start": "pm2 start backend/app.js",
+    "start": "pm2-runtime backend/app.js",
     "heroku-postbuild": "webpack --mode production"
   },
   "lint-staged": {
