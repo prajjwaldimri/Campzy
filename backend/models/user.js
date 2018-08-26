@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const validate = require('mongoose-validator');
+
 const jwt = require('jsonwebtoken');
 
 const { Schema } = mongoose;
@@ -11,6 +13,7 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     sparse: true,
+    validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
   },
   isEmailVerified: { type: Boolean, default: false },
   password: { type: String, required: true },
@@ -22,6 +25,13 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     sparse: true,
+    validate: [
+      validate({
+        validator: 'isMobilePhone',
+        message: 'Not a valid phone number',
+        arguments: ['any', true],
+      }),
+    ],
   },
   facebook: {
     oauthToken: String,
@@ -36,6 +46,7 @@ const UserSchema = new Schema({
     unique: true,
     sparse: true,
     ref: 'Camp',
+    validate: [validate({ validator: 'isMongoId', message: 'Not a valid camp id' })],
   },
 });
 
