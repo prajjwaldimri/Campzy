@@ -106,14 +106,14 @@ export default {
         otp: this.otp,
       };
       request('/graphql', registerUser, variables).then((data) => {
-        if (data != null) {
-          EventBus.$emit('success', 'Signup Successfull');
-        }
-        this.loginState = 0;
-        this.isSignedup = false;
+        const jwt = JSON.parse(data.register.jwt);
+        this.$cookie.set('sessionToken', jwt, { secure: true });
+        this.$router.push('settings');
+        EventBus.$emit('success', 'SignUp Successful');
+        this.isLoggedin = true;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err);
+          EventBus.$emit('error', err.message);
         }
         this.isSignedup = false;
       });
@@ -128,12 +128,11 @@ export default {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
         this.$router.push('settings');
-        EventBus.$emit('success', 'Login Successfull');
+        EventBus.$emit('success', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
-        console.log(err);
         if (err) {
-          EventBus.$emit('error', 'Login Failed');
+          EventBus.$emit('error', err.response.errors[0].message);
           this.isLoggedin = false;
         }
       });
