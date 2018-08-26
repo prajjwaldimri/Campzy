@@ -1,5 +1,5 @@
-const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
+const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp) {
             id
             name
             email
@@ -18,4 +18,15 @@ const sendVerificationEmail = `mutation resendEmailToken {
   }
 }`;
 
-module.exports = { registerUser, verifyEmailToken, sendVerificationEmail };
+const sendOTP = `mutation sendOTP($phoneNumber: String!) {
+  sendOTP(phoneNumber: $phoneNumber) {
+    otpValue
+  }
+}`;
+
+module.exports = {
+  registerUser,
+  verifyEmailToken,
+  sendVerificationEmail,
+  sendOTP,
+};

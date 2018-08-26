@@ -110,15 +110,15 @@ function generateRandomNumbers(n) {
   return `${number}`.substring(add);
 }
 
-const sendUserOTP = async (userId, phoneNumber) => {
+const sendUserOTP = async (phoneNumber) => {
   try {
     const otp = new OTPModel({
-      _userId: userId,
+      phoneNumber: `+91${phoneNumber}`,
       otpValue: `${generateRandomNumbers(6)}`,
     });
     await otp.save();
     return await client.messages.create({
-      from: '+15017122661',
+      from: '+15172251199',
       body: `Your Campzy OTP is ${otp.otpValue}`,
       to: `+91${phoneNumber}`,
     });
@@ -127,17 +127,18 @@ const sendUserOTP = async (userId, phoneNumber) => {
   }
 };
 
-const verifyUserOTP = async (otpValue) => {
+const verifyUserOTP = async (otpValue, phoneNumber) => {
   try {
     const otp = await OTPModel.findOne({ otpValue });
-    // eslint-disable-next-line
-    const matchingUser = await UserModel.findById(otp._userId);
-    if (matchingUser) {
+    if (!otp) {
+      return false;
+    }
+    if (`+91${phoneNumber}` === otp.phoneNumber) {
       return true;
     }
     return false;
   } catch (err) {
-    return err;
+    return false;
   }
 };
 

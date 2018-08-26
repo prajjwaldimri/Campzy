@@ -38,8 +38,8 @@
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" :loading='isSignedup'
-                  @click="loginState = 2").white--text.mt-3
+                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2"
+                  :disabled="email === '' || password === ''").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
@@ -54,15 +54,16 @@
                     v-text-field(label="Phone Number" color='green accent-4'
                     v-validate="'required|numeric'" required
                       v-model="phoneNumber" clearable data-vv-name="phoneNumber"
-                      :error-messages="errors.collect('phoneNumber')")
-                    v-btn(dark) Send OTP
+                      :error-messages="errors.collect('phoneNumber')" type="number")
+                    v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10") Send OTP
                   v-flex(align-center).d-flex
                     v-text-field(shrink label="One Time Password" color='green accent-4'
                      v-model="otp" clearable
                     type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
                       :error-messages="errors.collect('OTP')" )
-                    v-btn(color="green" :loading='isSignedup' @click="regUser").white--text.mt-3
-                      | Verify OTP
+                    v-btn(color="green" :loading='isSignedup' @click="regUser"
+                    :disabled="!isOTPSent").white--text.mt-3
+                      | Complete Registration
 
             v-flex(md6).hidden-sm-and-down.right-image
 
@@ -70,10 +71,11 @@
 
 <script>
 import { request } from 'graphql-request';
+import { throws } from 'assert';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials } from '../../queries/queries';
-import { registerUser } from '../../queries/mutationQueries';
+import { registerUser, sendOTP } from '../../queries/mutationQueries';
 
 export default {
   components: {
@@ -90,6 +92,7 @@ export default {
       otp: '',
       isLoggedin: false,
       isSignedup: false,
+      isOTPSent: false,
     };
   },
 
@@ -100,6 +103,7 @@ export default {
         email: this.email,
         password: this.password,
         phoneNumber: this.phoneNumber,
+        otp: this.otp,
       };
       request('/graphql', registerUser, variables).then((data) => {
         if (data != null) {
@@ -109,11 +113,8 @@ export default {
         this.isSignedup = false;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', 'Signup Failed');
+          EventBus.$emit('error', err);
         }
-        this.email = '';
-        this.password = '';
-        this.phone = '';
         this.isSignedup = false;
       });
     },
@@ -135,6 +136,20 @@ export default {
           EventBus.$emit('error', 'Login Failed');
           this.isLoggedin = false;
         }
+      });
+    },
+    sendOTP() {
+      const variables = {
+        phoneNumber: this.phoneNumber,
+      };
+      request('/graphql', sendOTP, variables).then(() => {
+        EventBus.$emit('info', 'OTP Sent!');
+        this.isOTPSent = true;
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('error', 'Cannot send OTP');
+        }
+        this.isOTPSent = false;
       });
     },
   },

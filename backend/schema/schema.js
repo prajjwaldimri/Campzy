@@ -71,6 +71,13 @@ const TokenType = new GraphQLObjectType({
   }),
 });
 
+const OTPType = new GraphQLObjectType({
+  name: 'OTP',
+  fields: () => ({
+    otpValue: { type: GraphQLString },
+  }),
+});
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -238,9 +245,14 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
         phoneNumber: { type: GraphQLString },
+        otp: { type: GraphQLString },
       },
       async resolve(parent, args) {
         try {
+          const otpVerified = await auth.verifyUserOTP(args.otp, args.phoneNumber);
+          if (!otpVerified) {
+            return new Error('Wrong OTP');
+          }
           const passwordHash = await bcrypt.hash(args.password, 10);
           const userDocument = new UserModel({
             email: args.email,
@@ -278,6 +290,20 @@ const Mutation = new GraphQLObjectType({
           const user = await auth.getAuthenticatedUser(context.req);
           await auth.sendUserToken(user.id, user.email);
           return 'Sent Verification Email';
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    sendOTP: {
+      type: OTPType,
+      args: {
+        phoneNumber: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          await auth.sendUserOTP(args.phoneNumber);
+          return 'Sent OTP';
         } catch (err) {
           return err;
         }

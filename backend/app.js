@@ -67,9 +67,8 @@ app.use(
 app.use(rollbar.errorHandler());
 
 // Last ditch error handler
-app.use((err, req, res) => {
-  rollbar.critical(err.stack);
-  res.redirect('back');
+app.use((err) => {
+  rollbar.critical(err);
 });
 
 if (process.env.ENVIRONMENT === 'development') {
