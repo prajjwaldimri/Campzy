@@ -11,7 +11,7 @@
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
                   v-text-field(label="Email" color='green accent-4'
-                  v-validate="'required|email'" required
+                  v-validate="'required|email'" required autofocus
                     v-model="email" clearable data-vv-name="email"
                     :error-messages="errors.collect('email')")
                   v-text-field(label="Current Password" color='green accent-4'
