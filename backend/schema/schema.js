@@ -2,6 +2,14 @@
 
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
+const {
+  UsernamePasswordError,
+  WrongPasswordError,
+  BlackListedError,
+  UnknownError,
+  PrivilegeError,
+  NotLoggedinError,
+} = require('./graphqlErrors');
 const UserModel = require('../models/user.js');
 const CampModel = require('../models/camp.js');
 const TentModel = require('../models/tent.js');
@@ -71,6 +79,13 @@ const TokenType = new GraphQLObjectType({
   }),
 });
 
+const OTPType = new GraphQLObjectType({
+  name: 'OTP',
+  fields: () => ({
+    otpValue: { type: GraphQLString },
+  }),
+});
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -83,14 +98,14 @@ const RootQuery = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           return await CampModel.findById(args.id);
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -103,14 +118,14 @@ const RootQuery = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           return await CampModel.find({});
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -143,11 +158,11 @@ const RootQuery = new GraphQLObjectType({
           const user = await auth.getAuthenticatedUser(context.req);
           const userData = await UserModel.findById(user.id);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           return userData;
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -161,14 +176,14 @@ const RootQuery = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           return await UserModel.findById(args.id);
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -183,14 +198,14 @@ const RootQuery = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           return await UserModel.find({ name: { $regex: args.searchTerm } });
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -203,14 +218,14 @@ const RootQuery = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           return await UserModel.find({});
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -226,22 +241,25 @@ const RootQuery = new GraphQLObjectType({
           const { password } = args;
 
           if (!email || !password) {
-            return new Error('Please fill both email and password');
+            throw new UsernamePasswordError();
           }
 
           const userDocument = await UserModel.findOne({ email });
+          if (!userDocument) {
+            throw new UsernamePasswordError();
+          }
           if (userDocument.isBlacklisted) {
-            return new Error('Your account has been disabled. Please contact Campzy support');
+            throw new BlackListedError();
           }
           const passwordsMatch = await bcrypt.compare(password, userDocument.password);
           if (!passwordsMatch) {
-            return new Error('Invalid Username or Password');
+            throw new UsernamePasswordError();
           }
           // Returns the jwt containing user's id, email and token
 
           return { jwt: JSON.stringify(userDocument.generateJWT()) };
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -259,9 +277,14 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
         phoneNumber: { type: GraphQLString },
+        otp: { type: GraphQLString },
       },
       async resolve(parent, args) {
         try {
+          const otpVerified = await auth.verifyUserOTP(args.otp, args.phoneNumber);
+          if (!otpVerified) {
+            return new Error('Wrong OTP');
+          }
           const passwordHash = await bcrypt.hash(args.password, 10);
           const userDocument = new UserModel({
             email: args.email,
@@ -270,9 +293,9 @@ const Mutation = new GraphQLObjectType({
           });
           const createdUser = await userDocument.save();
           await auth.sendUserToken(createdUser._id, args.email);
-          return 'Successfully created account';
+          return { jwt: JSON.stringify(createdUser.generateJWT()) };
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -287,7 +310,7 @@ const Mutation = new GraphQLObjectType({
           await auth.verifyUserToken(args.tokenValue);
           return 'Successfully Verified';
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -300,7 +323,21 @@ const Mutation = new GraphQLObjectType({
           await auth.sendUserToken(user.id, user.email);
           return 'Sent Verification Email';
         } catch (err) {
-          return err;
+          throw new UnknownError();
+        }
+      },
+    },
+    sendOTP: {
+      type: OTPType,
+      args: {
+        phoneNumber: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          await auth.sendUserOTP(args.phoneNumber);
+          return 'Sent OTP';
+        } catch (err) {
+          throw new UnknownError();
         }
       },
     },
@@ -334,9 +371,9 @@ const Mutation = new GraphQLObjectType({
             }
             return userData;
           }
-          return new Error('Wrong Password');
+          throw WrongPasswordError();
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -358,10 +395,10 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           const camp = new CampModel({
             name: args.name,
@@ -379,7 +416,7 @@ const Mutation = new GraphQLObjectType({
             type: 'CampOwner',
           });
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -401,10 +438,10 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
 
           // Remove the relation between old owner of that camp site and camp
@@ -430,7 +467,7 @@ const Mutation = new GraphQLObjectType({
             type: 'CampOwner',
           });
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -445,16 +482,16 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = auth.isUserAdmin(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserAdmin) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
 
           const deleted = await CampModel.findByIdAndRemove(args.id);
           return deleted;
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -474,10 +511,10 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserCampOwner = auth.isUserCampOwner(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserCampOwner) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
           const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
           const tent = new TentModel({
@@ -490,7 +527,7 @@ const Mutation = new GraphQLObjectType({
           });
           return await tent.save();
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -510,10 +547,10 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserCampOwner = auth.isUserCampOwner(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserCampOwner) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
 
           const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
@@ -528,7 +565,7 @@ const Mutation = new GraphQLObjectType({
           });
           return await tent.save();
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },
@@ -543,10 +580,10 @@ const Mutation = new GraphQLObjectType({
           const userData = await UserModel.findById(user.id);
           const isUserCampOwner = auth.isUserCampOwner(userData);
           if (userData === null) {
-            return new Error('Not Logged In');
+            throw new NotLoggedinError();
           }
           if (!isUserCampOwner) {
-            return new Error('Not Privileged Enough');
+            throw new PrivilegeError();
           }
 
           const tent = await TentModel.findById(args.id, 'camp');
@@ -556,7 +593,7 @@ const Mutation = new GraphQLObjectType({
           await associatedCamp.save();
           return await TentModel.findByIdAndRemove(args.id);
         } catch (err) {
-          return err;
+          throw new UnknownError();
         }
       },
     },

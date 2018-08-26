@@ -106,7 +106,10 @@ export default {
               this.isProfileUpdating = false;
               EventBus.$emit('success', 'Profile updated! Refreshing....');
             })
-            .catch(() => { this.$router.push({ name: 'login' }); this.isProfileUpdating = false; }).finally(() => {
+            .catch((err) => {
+              EventBus.$emit('error', err.response.errors[0].message);
+              this.isProfileUpdating = false;
+            }).finally(() => {
               this.getCurrentUser();
             });
         } else {
@@ -134,7 +137,10 @@ export default {
             this.isEmailVerified = true;
           }
         })
-        .catch(() => this.$router.push({ name: 'login' }));
+        .catch((err) => {
+          EventBus.$emit('error', err.response.errors[0].message);
+          this.$router.push({ name: 'login' });
+        });
     },
   },
 };

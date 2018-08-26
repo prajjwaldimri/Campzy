@@ -1,5 +1,5 @@
-const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber) {
+const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp) {
             id
             name
             email
@@ -27,10 +27,22 @@ const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $
     surgePrice
   }
 }`;
+const sendOTP = `mutation sendOTP($phoneNumber: String!) {
+  sendOTP(phoneNumber: $phoneNumber) {
+    otpValue
+  }
+}`;
 
 module.exports = {
   registerUser,
   verifyEmailToken,
   sendVerificationEmail,
   addTentQuery,
+};
+
+module.exports = {
+  registerUser,
+  verifyEmailToken,
+  sendVerificationEmail,
+  sendOTP,
 };

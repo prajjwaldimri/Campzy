@@ -1,4 +1,5 @@
 require('dotenv').config();
+const ApolloError = require('apollo-errors');
 const express = require('express');
 const fs = require('fs');
 const graphqlHTTP = require('express-graphql');
@@ -58,7 +59,7 @@ app.use(
   '/graphql',
   graphqlHTTP(request => ({
     schema,
-    graphiql: true,
+    formatError: ApolloError.formatError,
     validationRules: [depthLimit(10)],
     context: { req: request, passport },
   })),
@@ -67,9 +68,8 @@ app.use(
 app.use(rollbar.errorHandler());
 
 // Last ditch error handler
-app.use((err, req, res) => {
-  rollbar.critical(err.stack);
-  res.redirect('back');
+app.use((err) => {
+  rollbar.critical(err);
 });
 
 if (process.env.ENVIRONMENT === 'development') {

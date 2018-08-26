@@ -5,7 +5,10 @@ const mailjet = require('node-mailjet').connect(
   process.env.MAILJET_PRIVATE,
 );
 
+const client = require('twilio')('ACabc517de4bcf13d79c5c4268f6aa90f5', process.env.TWILIO_API_KEY);
+
 const TokenModel = require('../models/token');
+const OTPModel = require('../models/otp');
 const UserModel = require('../models/user');
 
 // Gets the JWT from HTTP Header
@@ -90,10 +93,61 @@ const verifyUserToken = async (tokenValue) => {
   }
 };
 
+function generateRandomNumbers(n) {
+  const add = 1;
+  let max = 12 - add;
+  // 12 is the min safe number Math.random() can generate without it starting to
+  // pad the end with zeros.
+
+  if (n > max) {
+    return generateRandomNumbers(max) + generateRandomNumbers(n - max);
+  }
+
+  max = 10 ** (n + add);
+  const min = max / 10; // Math.pow(10, n) basically
+  const number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return `${number}`.substring(add);
+}
+
+const sendUserOTP = async (phoneNumber) => {
+  try {
+    const otp = new OTPModel({
+      phoneNumber: `+91${phoneNumber}`,
+      otpValue: `${generateRandomNumbers(6)}`,
+    });
+    await otp.save();
+    return await client.messages.create({
+      from: '+15172251199',
+      body: `Your Campzy OTP is ${otp.otpValue}`,
+      to: `+91${phoneNumber}`,
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
+const verifyUserOTP = async (otpValue, phoneNumber) => {
+  try {
+    const otp = await OTPModel.findOne({ otpValue });
+    if (!otp) {
+      return false;
+    }
+    if (`+91${phoneNumber}` === otp.phoneNumber) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return false;
+  }
+};
+
 module.exports = {
   getAuthenticatedUser,
   isUserCampOwner,
   isUserAdmin,
   sendUserToken,
   verifyUserToken,
+  sendUserOTP,
+  verifyUserOTP,
 };
