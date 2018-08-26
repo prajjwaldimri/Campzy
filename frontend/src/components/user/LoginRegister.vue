@@ -113,7 +113,7 @@ export default {
         this.isLoggedin = true;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.message);
+          EventBus.$emit('error', err.response.errors[0].message);
         }
         this.isSignedup = false;
       });
