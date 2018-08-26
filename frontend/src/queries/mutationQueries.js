@@ -1,8 +1,6 @@
 const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!) {
           register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp) {
-            id
-            name
-            email
+            jwt
         }
       }`;
 
