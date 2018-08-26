@@ -34,9 +34,11 @@ export default {
       this.newPassword.trim();
       this.confirmNewPassword.trim();
       if (this.newPassword === '' || this.confirmNewPassword === '') {
+        EventBus.$emit('error', 'Passwords empty');
         return;
       }
       if (this.newPassword !== this.confirmNewPassword) {
+        EventBus.$emit('error', "Passwords don't match");
         return;
       }
       const variables = {

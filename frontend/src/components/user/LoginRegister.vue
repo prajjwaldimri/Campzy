@@ -151,6 +151,9 @@ export default {
       });
     },
     resetPassword() {
+      if (this.email.trim() === '') {
+        EventBus.$emit('error', 'Enter your email in the Email Field first!');
+      }
       const variables = {
         email: this.email,
       };
