@@ -15,13 +15,14 @@ const createdCamps = [];
 const createdTents = [];
 
 async function CreateUser() {
+  console.log(faker.phone.phoneNumber().replace(/-/g, ''));
   createdUsers.push(
     (await User.create({
       name: faker.name.findName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
       type: userTypes[Math.floor(Math.random() * userTypes.length)],
-      phoneNumber: faker.phone.phoneNumber(),
+      phoneNumber: faker.phone.phoneNumber().replace(/-/g, ''),
     }))._id,
   );
 }

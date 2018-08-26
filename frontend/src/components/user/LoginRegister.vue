@@ -10,14 +10,14 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" color='green accent-4'
-                  v-validate="'required|email'" required
-                    v-model="email" clearable data-vv-name="email"
-                    :error-messages="errors.collect('email')")
-                  v-text-field(label="Current Password" color='green accent-4'
-                  v-model="password" clearable
-                  type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
-                    :error-messages="errors.collect('currentPassword')")
+                    v-text-field(label="Email" color='green accent-4'
+                    v-validate="'required|email'" required
+                      v-model="email" clearable data-vv-name="email"
+                      :error-messages="errors.collect('email')")
+                    v-text-field(label="Current Password" color='green accent-4'
+                    v-model="password" clearable
+                    type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
+                      :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
                     v-btn(block color="green" @click="login"
                     :loading='isLoggedin').white--text.mr-1 Login
@@ -54,7 +54,7 @@
                     v-text-field(label="Phone Number" color='green accent-4'
                     v-validate="'required|numeric'" required
                       v-model="phoneNumber" clearable data-vv-name="phoneNumber"
-                      :error-messages="errors.collect('phoneNumber')" type="number")
+                      :error-messages="errors.collect('phoneNumber')" type="tel")
                     v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10") Send OTP
                   v-flex(align-center).d-flex
                     v-text-field(shrink label="One Time Password" color='green accent-4'
@@ -62,7 +62,7 @@
                     type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
                       :error-messages="errors.collect('OTP')" )
                     v-btn(color="green" :loading='isSignedup' @click="regUser"
-                    :disabled="!isOTPSent").white--text.mt-3
+                    :disabled="!isOTPSent" block).white--text.mt-3
                       | Complete Registration
 
             v-flex(md6).hidden-sm-and-down.right-image
@@ -151,6 +151,9 @@ export default {
       });
     },
     resetPassword() {
+      if (this.email.trim() === '') {
+        EventBus.$emit('error', 'Enter your email in the Email Field first!');
+      }
       const variables = {
         email: this.email,
       };
