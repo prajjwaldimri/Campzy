@@ -13,136 +13,23 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row)
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Camp Name
-                        v-text-field(solo label='Camp Name')
+                      v-text-field(solo label='Camp Name' v-model='camp.name')
                     v-spacer
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Email
-                        v-text-field(solo label='Email')
+                      v-text-field(solo label='Email' v-model='camp.email')
                   v-layout.layout(row)
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Phone Number
-                        v-text-field(solo label='Phone Number')
+                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
                     v-spacer
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Camp Url
-                        v-text-field(solo label='Camp Url')
+                      v-text-field(solo label='Camp Url' v-model='camp.url')
                   v-layout.layout(row)
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
+                      v-text-field(solo label='Amenities')
                     v-spacer
                     v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-        v-tab-item(id='documents')
-          v-container.basic-details(fluid)
-            v-card.details-card(width='95%' color='transparent')
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-        v-tab-item(id='bankDetails')
-          v-container.basic-details(fluid)
-            v-card.details-card(width='95%' color='transparent')
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-        v-tab-item(id='campDetails')
-          v-container.basic-details(fluid)
-            v-card.details-card(width='95%' color='transparent')
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Amenities
-                        v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-layout(column)
-                        h4 Services
-                        v-text-field(solo label='Services')
+                      v-text-field(solo label='Services')
+
     v-container.camp-display(fluid)
             v-card.details-card(width='95%' color='transparent')
               v-card-actions
@@ -152,11 +39,62 @@
 </template>
 
 <script>
+import { GraphQLClient } from 'graphql-request';
+import { getCamp, getCampDetail } from '../../../queries/queries';
+
 export default {
   data() {
     return {
       el: 0,
+      camp: {},
+      campName: '',
+      phoneNumber: '',
+      campUrl: '',
+      campEmail: '',
     };
+  },
+
+  mounted() {
+    this.getCampDetails();
+  },
+
+  methods: {
+    // Get the camp ID related to current user
+    getCampDetails() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(getCamp).then((data) => {
+        const [campId] = data.currentUserCamp.map(cid => cid.id);
+        this.getCamp(campId);
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    // Get camp details associated with camp ID
+    getCamp(campId) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        id: campId,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(getCampDetail, variables).then((data) => {
+        this.camp = data.camp;
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
   },
 };
 </script>

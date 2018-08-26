@@ -15,8 +15,8 @@ const getAllUsers = `query {
   }
 }`;
 
-const getAllTentsQuery = `query getTent{
-    getTent{
+const getAllTentsQuery = `query tent{
+    tent{
       id
       type
       capacity
@@ -27,5 +27,23 @@ const getAllTentsQuery = `query getTent{
     }
   }
   `;
+
+const getCamp = `query currentUserCamp{
+        currentUserCamp {
+          id
+        }
+
+      }`;
+
+const getCampDetail = `query camp($id: String!){
+        camp(id: $id) {
+          id,
+          name,
+          phoneNumber,
+          url,
+          email
+        }
+
+      }`;
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers, getAllTentsQuery };
+export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp, getCampDetail };

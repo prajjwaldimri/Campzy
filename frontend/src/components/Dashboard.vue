@@ -19,11 +19,11 @@
               v-btn(icon @click.stop='mini=!mini')
                 v-icon chevron_left
         v-list.pt-5(dense)
-          v-list-tile.pt-3(@click='userManagement')
+          v-list-tile.pt-3(@click='userManagement' v-show='isAdmin')
             v-list-tile-action
               v-icon wc
             v-list-tile-content.increase-letter-spacing-1 User Management
-          v-list-tile.pt-3(@click='campManagement')
+          v-list-tile.pt-3(@click='campManagement' v-show='isAdmin')
             v-list-tile-action
               v-icon beach_access
             v-list-tile-content.increase-letter-spacing-1 Camp Management
@@ -31,14 +31,10 @@
             v-list-tile-action
               v-icon add
             v-list-tile-content.increase-letter-spacing-1 Camp Details
-          v-list-tile.pt-3(@click='campInventory')
+          v-list-tile.pt-3(@click='campInventory' v-show='isCampOwner')
             v-list-tile-action
               v-icon add
             v-list-tile-content.increase-letter-spacing-1 Inventory
-          v-list-tile.pt-3(@click='')
-            v-list-tile-action
-              v-icon add
-            v-list-tile-content.increase-letter-spacing-1 Pricing
           v-list-tile.pt-5
             v-list-tile-content.center-item
               v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
@@ -70,6 +66,8 @@ export default {
       right: null,
       load: false,
       user: {},
+      isCampOwner: false,
+      isAdmin: false,
     };
   },
   mounted() {
@@ -95,6 +93,7 @@ export default {
       }
       const query = `{currentUser {
         name,
+        type,
         email
       }}`;
       const client = new GraphQLClient('/graphql', {
@@ -105,8 +104,15 @@ export default {
 
       client.request(query)
         .then((data) => {
+          console.log(data);
           this.user = data.currentUser;
           this.isLoggedIn = true;
+          if (this.user.type === 'CampOwner') {
+            this.isCampOwner = true;
+          }
+          if (this.user.type === 'Admin') {
+            this.isAdmin = true;
+          }
           if (this.user.name === null) {
             this.user.name = 'Unnamed User';
           }

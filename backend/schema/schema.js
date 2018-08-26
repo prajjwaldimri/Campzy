@@ -44,6 +44,7 @@ const CampType = new GraphQLObjectType({
         return UserModel.findById(parent.ownerId, 'name email');
       },
     },
+    ownerId: { type: GraphQLID },
   }),
 });
 
@@ -51,6 +52,7 @@ const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLID },
+    type: { type: GraphQLString },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
     phoneNumber: { type: GraphQLString },
@@ -93,19 +95,44 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     camp: {
       type: CampType,
-      args: { id: { type: GraphQLString } },
+      args: {
+        id: { type: GraphQLString },
+      },
       async resolve(parent, args, context) {
         try {
           const user = await auth.getAuthenticatedUser(context.req);
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
+          const isUserCampOwner = await auth.isUserCampOwner(userData);
           if (userData === null) {
             throw new NotLoggedinError();
           }
-          if (!isUserAdmin) {
+          if (!isUserAdmin && !isUserCampOwner) {
             throw new PrivilegeError();
           }
           return await CampModel.findById(args.id);
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    currentUserCamp: {
+      type: new GraphQLList(CampType),
+      args: {
+        ownerId: { type: GraphQLID },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const user = await auth.getAuthenticatedUser(context.req);
+          const userData = await UserModel.findById(user.id);
+          const isUserCampOwner = await auth.isUserCampOwner(userData);
+          if (userData === null) {
+            throw new NotLoggedinError();
+          }
+          if (!isUserCampOwner) {
+            throw new PrivilegeError();
+          }
+          return await CampModel.find(args.ownerId);
         } catch (err) {
           return err;
         }
@@ -132,7 +159,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
 
-    getTent: {
+    tent: {
       // Returns all camps
       type: new GraphQLList(TentType),
       async resolve(parent, args, context) {
