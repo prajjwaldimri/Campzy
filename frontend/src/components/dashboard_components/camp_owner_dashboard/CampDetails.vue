@@ -35,24 +35,21 @@
               v-card-actions
                 v-spacer
                 v-btn(flat) Cancel
-                v-btn(color='green' @click='saveCampDetails') Save
+                v-btn(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getCamp, getCampDetail } from '../../../queries/queries';
 import { saveCampDetails } from '../../../queries/mutationQueries';
+import { EventBus } from '../../../event-bus';
 
 export default {
   data() {
     return {
       el: 0,
       camp: {},
-      campName: '',
-      phoneNumber: '',
-      campUrl: '',
-      campEmail: '',
-      ownerId: '',
+      isDataUpdating: false,
     };
   },
 
@@ -73,9 +70,6 @@ export default {
       });
       client.request(getCamp).then((data) => {
         const [campId] = data.currentUserCamp.map(cid => cid.id);
-        [this.ownerId] = data.currentUserCamp.map(oid => oid.ownerId);
-        console.log(this.ownerId);
-        console.log(campId);
         this.getCamp(campId);
       }).catch((err) => {
         console.log(err);
@@ -100,27 +94,31 @@ export default {
         console.log(err);
       });
     },
-
+    // Save updated vlaues of camp
     saveCampDetails() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
       const variables = {
+        id: this.camp.id,
         name: this.camp.name,
         phoneNumber: this.camp.phoneNumber,
         url: this.camp.url,
         email: this.camp.email,
+        ownerId: this.camp.ownerId,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(saveCampDetails, variables).then((data) => {
-        console.log(data);
+      this.isDataUpdating = true;
+      client.request(saveCampDetails, variables).then(() => {
+        this.getCampDetails();
+        EventBus.$emit('success', 'Successfully Updated');
       }).catch((err) => {
         console.log(err);
-      });
+      }).finally(() => { this.isDataUpdating = false; });
     },
   },
 };
