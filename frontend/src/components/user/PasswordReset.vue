@@ -13,11 +13,15 @@ v-container
 
         v-card-actions
           v-spacer
-          v-btn(color="green" @click.native="verifyEmail").white--text Reset password
+          v-btn(color="green" @click.native="resetPassword").white--text Reset password
 
 </template>
 
 <script>
+import { request } from 'graphql-request';
+import { resetPasswordMutation } from '../../queries/mutationQueries';
+import { EventBus } from '../../event-bus';
+
 export default {
   data() {
     return {
@@ -27,11 +31,27 @@ export default {
   },
   methods: {
     resetPassword() {
+      this.newPassword.trim();
+      this.confirmNewPassword.trim();
+      if (this.newPassword === '' || this.confirmNewPassword === '') {
+        return;
+      }
+      if (this.newPassword !== this.confirmNewPassword) {
+        return;
+      }
       const variables = {
         newPassword: this.newPassword,
         confirmNewPassword: this.confirmNewPassword,
         resetToken: this.$route.params.token,
       };
+      request('/graphql', resetPasswordMutation, variables).then(() => {
+        EventBus.$emit('success', 'Password Reset Successful');
+        this.$router.push('/login');
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('error', err.response.errors[0].message);
+        }
+      });
     },
   },
 };

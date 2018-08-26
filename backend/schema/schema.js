@@ -366,8 +366,11 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         try {
-          const token = TokenModel.findOne({ tokenValue: args.resetToken });
-          const user = UserModel.findById(token._userId);
+          const token = await TokenModel.findOne({ tokenValue: args.resetToken });
+          if (!token) {
+            throw new WrongEmailTokenError();
+          }
+          const user = await UserModel.findById(token._userId);
           if (!user) {
             throw new WrongEmailTokenError();
           }
