@@ -35,7 +35,7 @@
             v-container(fluid grid-list-md)
               v-layout(row wrap)
                 v-flex(sm12 md3).image-wrapper
-                  img(src="https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%", width="100%")
+                  img(src="https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=200&w=200" height="100%", width="100%")
                 v-flex(sm12 md3).result-column
                   h1.font-weight-thin.grey--text.text--darken-3 Chopta Camp
                   h3.grey--text.mb-2 Chamoli, Uttarakhand
@@ -221,12 +221,12 @@ export default {
 
 .home {
   min-height: 100vh;
-  background: linear-gradient(
-      rgba(236, 236, 236, 0.9),
-      rgba(236, 236, 236, 0.9)
-    ),
-    url("https://images.pexels.com/photos/869258/pexels-photo-869258.jpeg?cs=srgb&dl=adventure-alpine-climb-869258.jpg&fm=jpg");
-  background-size: cover;
+  // background: linear-gradient(
+  //     rgba(236, 236, 236, 0.9),
+  //     rgba(236, 236, 236, 0.9)
+  //   ),
+  //   url("https://images.pexels.com/photos/869258/pexels-photo-869258.jpeg?cs=srgb&dl=adventure-alpine-climb-869258.jpg&fm=jpg");
+  // background-size: cover;
 }
 
 .home-flex {
