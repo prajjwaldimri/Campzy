@@ -71,7 +71,6 @@
 
 <script>
 import { request } from 'graphql-request';
-import { throws } from 'assert';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials } from '../../queries/queries';

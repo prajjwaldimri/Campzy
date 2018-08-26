@@ -4,6 +4,7 @@ import Home from '../components/Home.vue';
 import BookCampSite from '../components/user/BookCampSite.vue';
 import LoginRegister from '../components/user/LoginRegister.vue';
 import Settings from '../components/user/Settings.vue';
+import PasswordReset from '../components/user/PasswordReset.vue';
 import Dashboard from '../components/Dashboard.vue';
 import UserManagement from '../components/dashboard_components/admin-dashboard/UserManagement.vue';
 import Pricing from '../components/dashboard_components/camp_owner_dashboard/Pricing.vue';
@@ -30,6 +31,11 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: LoginRegister,
+    },
+    {
+      path: '/resetPassword/:token',
+      name: 'resetPassword',
+      component: PasswordReset,
     },
     {
       path: '/settings',
