@@ -66,8 +66,8 @@ const sendUserToken = async (userId, email) => {
         _userId: userId,
         tokenValue: crypto.randomBytes(16).toString('hex'),
       });
+      await token.save();
     }
-    await token.save();
     // TODO: Switch to main domain
     return await mailjet.post('send').request({
       FromEmail: 'support@campzy.in',
