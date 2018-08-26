@@ -16,6 +16,14 @@ const sendVerificationEmail = `mutation resendEmailToken {
   }
 }`;
 
+const sendResetPasswordToken = `query sendResetPasswordToken($email: String!) {
+  sendResetPasswordToken(email: $email) {
+    id
+  }
+}`;
+
+const resetPasswordMutation = '';
+
 const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!, $surgePrice: String!) {
   addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime , surgePrice: $surgePrice){
     type,
@@ -37,4 +45,6 @@ module.exports = {
   sendVerificationEmail,
   addTentQuery,
   sendOTP,
+  sendResetPasswordToken,
+  resetPasswordMutation,
 };

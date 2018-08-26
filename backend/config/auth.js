@@ -68,15 +68,51 @@ const sendUserToken = async (userId, email) => {
       });
       await token.save();
     }
-    // TODO: Switch to main domain
     return await mailjet.post('send').request({
       FromEmail: 'support@campzy.in',
-      From: 'Mailjet Pilot',
+      From: 'Campzy',
       Subject: 'Campzy Verification Email',
       'Html-part': `<html><body>Hi, Please enter this verification code into the prompt at Campzy. \n ${
         token.tokenValue
       }</body></html>`,
       Recipients: [{ Email: email }],
+    });
+  } catch (err) {
+    throw new EmailSendError();
+  }
+};
+
+const sendResetPasswordToken = async (userId, email) => {
+  try {
+    let token = await TokenModel.findOne({ _userId: userId });
+    if (!token) {
+      token = new TokenModel({
+        _userId: userId,
+        tokenValue: crypto.randomBytes(16).toString('hex'),
+      });
+      await token.save();
+    }
+    // TODO: Switch to main domain
+    return await mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: 'support@campzy.in',
+            Name: 'Campzy',
+          },
+          To: [
+            {
+              Email: email,
+            },
+          ],
+          TemplateID: 514379,
+          TemplateLanguage: true,
+          Subject: 'Password Reset Request at Campzy',
+          Variables: {
+            resetToken: token.tokenValue,
+          },
+        },
+      ],
     });
   } catch (err) {
     throw new EmailSendError();
@@ -158,4 +194,5 @@ module.exports = {
   verifyUserToken,
   sendUserOTP,
   verifyUserOTP,
+  sendResetPasswordToken,
 };

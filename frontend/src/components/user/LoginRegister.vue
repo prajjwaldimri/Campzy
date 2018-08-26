@@ -21,7 +21,7 @@
                   v-flex(justify-space-between).d-flex.mt-3
                     v-btn(block color="green" @click="login"
                     :loading='isLoggedin').white--text.mr-1 Login
-                    v-btn(block dark).white--text.ml-1 Forgot Password?
+                    v-btn(block dark @click="resetPassword").white--text.ml-1 Forgot Password?
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Need an account?
                     v-btn(flat @click="loginState = 1")
@@ -74,7 +74,7 @@ import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials } from '../../queries/queries';
-import { registerUser, sendOTP } from '../../queries/mutationQueries';
+import { registerUser, sendOTP, sendResetPasswordToken } from '../../queries/mutationQueries';
 
 export default {
   components: {
@@ -148,6 +148,18 @@ export default {
           EventBus.$emit('error', 'Cannot send OTP');
         }
         this.isOTPSent = false;
+      });
+    },
+    resetPassword() {
+      const variables = {
+        email: this.email,
+      };
+      request('/graphql', sendResetPasswordToken, variables).then(() => {
+        EventBus.$emit('info', 'Check your email for further instructions!');
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('error', 'Cannot send Verification');
+        }
       });
     },
   },

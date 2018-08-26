@@ -1,4 +1,4 @@
-/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id", "_userId"] }] */
 
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
@@ -9,10 +9,12 @@ const {
   PrivilegeError,
   WrongOTPTokenError,
   NotLoggedinError,
+  WrongEmailTokenError,
 } = require('./graphqlErrors');
 const UserModel = require('../models/user.js');
 const CampModel = require('../models/camp.js');
 const TentModel = require('../models/tent.js');
+const TokenModel = require('../models/token.js');
 const auth = require('../config/auth');
 
 const {
@@ -263,6 +265,20 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
+    sendResetPasswordToken: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          const user = await UserModel.findOne({ email: args.email });
+          return await auth.sendResetPasswordToken(user._id, args.email);
+        } catch (err) {
+          return err;
+        }
+      },
+    },
   },
 });
 
@@ -336,6 +352,29 @@ const Mutation = new GraphQLObjectType({
         try {
           await auth.sendUserOTP(args.phoneNumber);
           return 'Sent OTP';
+        } catch (err) {
+          return err;
+        }
+      },
+    },
+    resetPassword: {
+      type: UserType,
+      args: {
+        newPassword: { type: GraphQLString },
+        confirmNewPassword: { type: GraphQLString },
+        resetToken: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          const token = TokenModel.findOne({ tokenValue: args.resetToken });
+          const user = UserModel.findById(token._userId);
+          if (!user) {
+            throw new WrongEmailTokenError();
+          }
+          const passwordHash = await bcrypt.hash(args.newPassword, 10);
+          user.password = passwordHash;
+          await token.remove();
+          return await user.save();
         } catch (err) {
           return err;
         }
