@@ -56,7 +56,7 @@ export default {
         EventBus.$emit('success', 'Email Verified');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', 'Email Verification Failed');
+          EventBus.$emit('error', err.response.errors[0].message);
         }
       }).finally(() => {
         this.closeDialog();
@@ -72,7 +72,7 @@ export default {
         EventBus.$emit('success', 'Sent Verification Email');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', 'Email Verification Failed');
+          EventBus.$emit('error', err.response.errors[0].message);
         }
       });
     },

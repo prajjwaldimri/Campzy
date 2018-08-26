@@ -34,6 +34,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getAllUsers } from '../../../queries/queries';
+import EventBus from '../../../event-bus';
 
 export default {
   data() {
@@ -70,7 +71,7 @@ export default {
       this.isTableLoading = false;
     }).catch((err) => {
       this.isTableLoading = false;
-      return err;
+      EventBus.$emit('error', err.response.errors[0].message);
     });
   },
 };

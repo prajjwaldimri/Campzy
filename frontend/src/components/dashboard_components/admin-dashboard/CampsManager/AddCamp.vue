@@ -106,7 +106,7 @@ export default {
             this.camp = {};
             this.isOwnerSelected = false;
           }).catch((err) => {
-            EventBus.$emit('error', err);
+            EventBus.$emit('error', err.response.errors[0].message);
           }).finally(() => {
             this.closeDialog();
             this.isOwnerFieldLoading = false;
