@@ -94,7 +94,12 @@ export default {
       isOTPSent: false,
     };
   },
-
+  mounted() {
+    if (this.$cookie.get('sessionToken')) {
+      EventBus.$emit('success', 'Already logged in!');
+      this.$router.push({ name: 'settings' });
+    }
+  },
   methods: {
     regUser() {
       this.isSignedup = true;

@@ -1,16 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../components/Home.vue';
-import BookCampSite from '../components/user/BookCampSite.vue';
-import LoginRegister from '../components/user/LoginRegister.vue';
-import Settings from '../components/user/Settings.vue';
-import PasswordReset from '../components/user/PasswordReset.vue';
-import Dashboard from '../components/Dashboard.vue';
-import UserManagement from '../components/dashboard_components/admin-dashboard/UserManagement.vue';
-import Pricing from '../components/dashboard_components/camp_owner_dashboard/Pricing.vue';
-import CampDetails from '../components/dashboard_components/camp_owner_dashboard/CampDetails.vue';
-import CampInventory from '../components/dashboard_components/camp_owner_dashboard/CampInventory.vue';
-import ManageCamps from '../components/dashboard_components/admin-dashboard/CampsManager.vue';
+
+const BookCampSite = () => import('../components/user/BookCampSite.vue');
+const LoginRegister = () => import('../components/user/LoginRegister.vue');
+const Settings = () => import('../components/user/Settings.vue');
+const PasswordReset = () => import('../components/user/PasswordReset.vue');
+const Dashboard = () => import('../components/Dashboard.vue');
+const UserManagement = () => import('../components/dashboard_components/admin-dashboard/UserManagement.vue');
+const Pricing = () => import('../components/dashboard_components/camp_owner_dashboard/Pricing.vue');
+const CampDetails = () => import('../components/dashboard_components/camp_owner_dashboard/CampDetails.vue');
+const CampInventory = () => import('../components/dashboard_components/camp_owner_dashboard/CampInventory.vue');
+const ManageCamps = () => import('../components/dashboard_components/admin-dashboard/CampsManager.vue');
 
 Vue.use(Router);
 
