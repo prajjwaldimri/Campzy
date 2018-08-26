@@ -80,8 +80,8 @@ export default {
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.getTent;
-      }).catch(() => {
-        EventBus.$emit('error', 'Please Login again!');
+      }).catch((err) => {
+        EventBus.$emit('error', err.response.errors[0].message);
       }).finally(() => {
         this.isTableLoading = false;
       });

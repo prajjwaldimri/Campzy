@@ -123,7 +123,7 @@ export default {
       client.request(getCampsQuery).then((data) => {
         this.camps = data.allCamps;
       }).catch((err) => {
-        EventBus.$emit('error', err);
+        EventBus.$emit('error', err.response.errors[0].message);
       }).finally(() => { this.isTableLoading = false; });
     },
     editCamp(id) {
@@ -158,7 +158,7 @@ export default {
         client.request(deleteCampQuery, variables).then(() => {
           EventBus.$emit('success', 'Successfully Deleted');
         }).catch((err) => {
-          EventBus.$emit('error', err);
+          EventBus.$emit('error', err.response.errors[0].message);
         }).finally(() => {
           this.deleteDialog = false;
           this.getAllCamps();
