@@ -6,7 +6,6 @@ const {
   UsernamePasswordError,
   WrongPasswordError,
   BlackListedError,
-  UnknownError,
   PrivilegeError,
   WrongOTPTokenError,
   NotLoggedinError,
@@ -106,7 +105,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return await CampModel.findById(args.id);
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -126,7 +125,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return await CampModel.find({});
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -163,7 +162,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return userData;
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -184,7 +183,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return await UserModel.findById(args.id);
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -206,7 +205,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return await UserModel.find({ name: { $regex: args.searchTerm } });
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -226,7 +225,7 @@ const RootQuery = new GraphQLObjectType({
           }
           return await UserModel.find({});
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -260,7 +259,7 @@ const RootQuery = new GraphQLObjectType({
 
           return { jwt: JSON.stringify(userDocument.generateJWT()) };
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -296,7 +295,7 @@ const Mutation = new GraphQLObjectType({
           await auth.sendUserToken(createdUser._id, args.email);
           return { jwt: JSON.stringify(createdUser.generateJWT()) };
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -311,7 +310,7 @@ const Mutation = new GraphQLObjectType({
           await auth.verifyUserToken(args.tokenValue);
           return 'Successfully Verified';
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -324,7 +323,7 @@ const Mutation = new GraphQLObjectType({
           await auth.sendUserToken(user.id, user.email);
           return 'Sent Verification Email';
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -338,7 +337,7 @@ const Mutation = new GraphQLObjectType({
           await auth.sendUserOTP(args.phoneNumber);
           return 'Sent OTP';
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -374,7 +373,7 @@ const Mutation = new GraphQLObjectType({
           }
           throw WrongPasswordError();
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -417,7 +416,7 @@ const Mutation = new GraphQLObjectType({
             type: 'CampOwner',
           });
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -468,7 +467,7 @@ const Mutation = new GraphQLObjectType({
             type: 'CampOwner',
           });
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -492,7 +491,7 @@ const Mutation = new GraphQLObjectType({
           const deleted = await CampModel.findByIdAndRemove(args.id);
           return deleted;
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -528,7 +527,7 @@ const Mutation = new GraphQLObjectType({
           });
           return await tent.save();
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -566,7 +565,7 @@ const Mutation = new GraphQLObjectType({
           });
           return await tent.save();
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
@@ -594,7 +593,7 @@ const Mutation = new GraphQLObjectType({
           await associatedCamp.save();
           return await TentModel.findByIdAndRemove(args.id);
         } catch (err) {
-          throw new UnknownError();
+          return err;
         }
       },
     },
