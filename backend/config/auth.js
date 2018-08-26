@@ -60,7 +60,7 @@ const isUserAdmin = (user) => {
 
 const sendUserToken = async (userId, email) => {
   try {
-    let token = await TokenModel.findOne({ userId });
+    let token = await TokenModel.findOne({ _userId: userId });
     if (!token) {
       token = new TokenModel({
         _userId: userId,
