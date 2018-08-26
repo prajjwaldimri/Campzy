@@ -30,7 +30,8 @@ const getAllTentsQuery = `query tent{
 
 const getCamp = `query currentUserCamp{
         currentUserCamp {
-          id
+          id,
+          ownerId
         }
 
       }`;

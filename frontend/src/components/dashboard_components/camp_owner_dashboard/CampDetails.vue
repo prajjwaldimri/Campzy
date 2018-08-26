@@ -52,6 +52,7 @@ export default {
       phoneNumber: '',
       campUrl: '',
       campEmail: '',
+      ownerId: '',
     };
   },
 
@@ -72,6 +73,9 @@ export default {
       });
       client.request(getCamp).then((data) => {
         const [campId] = data.currentUserCamp.map(cid => cid.id);
+        [this.ownerId] = data.currentUserCamp.map(oid => oid.ownerId);
+        console.log(this.ownerId);
+        console.log(campId);
         this.getCamp(campId);
       }).catch((err) => {
         console.log(err);

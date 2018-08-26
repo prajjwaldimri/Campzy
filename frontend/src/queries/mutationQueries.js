@@ -45,7 +45,7 @@ const sendOTP = `mutation sendOTP($phoneNumber: String!) {
 
 const saveCampDetails = `mutation updateCamp($name: String, $phoneNumber: String,$email: String,$url: String){
   updateCamp(name: $name, phoneNumber: $phoneNumber, email: $email,url: $url){
-    id
+    name
   }
 }`;
 
