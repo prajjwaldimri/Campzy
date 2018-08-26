@@ -10,14 +10,14 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Login
                   v-form(ref="form" v-model="isLoginValid")
-                  v-text-field(label="Email" color='green accent-4'
-                  v-validate="'required|email'" required
-                    v-model="email" clearable data-vv-name="email"
-                    :error-messages="errors.collect('email')")
-                  v-text-field(label="Current Password" color='green accent-4'
-                  v-model="password" clearable
-                  type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
-                    :error-messages="errors.collect('currentPassword')")
+                    v-text-field(label="Email" color='green accent-4'
+                    v-validate="'required|email'" required
+                      v-model="email" clearable data-vv-name="email"
+                      :error-messages="errors.collect('email')")
+                    v-text-field(label="Current Password" color='green accent-4'
+                    v-model="password" clearable
+                    type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
+                      :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
                     v-btn(block color="green" @click="login"
                     :loading='isLoggedin').white--text.mr-1 Login
