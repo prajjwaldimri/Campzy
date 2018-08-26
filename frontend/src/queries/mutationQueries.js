@@ -36,11 +36,5 @@ module.exports = {
   verifyEmailToken,
   sendVerificationEmail,
   addTentQuery,
-};
-
-module.exports = {
-  registerUser,
-  verifyEmailToken,
-  sendVerificationEmail,
   sendOTP,
 };
