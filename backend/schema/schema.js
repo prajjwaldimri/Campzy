@@ -103,11 +103,10 @@ const RootQuery = new GraphQLObjectType({
           const user = await auth.getAuthenticatedUser(context.req);
           const userData = await UserModel.findById(user.id);
           const isUserAdmin = await auth.isUserAdmin(userData);
-          const isUserCampOwner = await auth.isUserCampOwner(userData);
           if (userData === null) {
             throw new NotLoggedinError();
           }
-          if (!isUserAdmin && !isUserCampOwner) {
+          if (!isUserAdmin) {
             throw new PrivilegeError();
           }
           return await CampModel.findById(args.id);
@@ -118,9 +117,6 @@ const RootQuery = new GraphQLObjectType({
     },
     currentUserCamp: {
       type: new GraphQLList(CampType),
-      args: {
-        ownerId: { type: GraphQLString },
-      },
       async resolve(parent, args, context) {
         try {
           const user = await auth.getAuthenticatedUser(context.req);
@@ -132,7 +128,7 @@ const RootQuery = new GraphQLObjectType({
           if (!isUserCampOwner) {
             throw new PrivilegeError();
           }
-          return await CampModel.find(args.ownerId);
+          return await CampModel.findById(userData.ownedCampId);
         } catch (err) {
           return err;
         }
