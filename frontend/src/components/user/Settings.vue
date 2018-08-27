@@ -139,6 +139,7 @@ export default {
         })
         .catch((err) => {
           EventBus.$emit('error', err.response.errors[0].message);
+          this.$cookie.delete('sessionToken');
           this.$router.push({ name: 'login' });
         });
     },
