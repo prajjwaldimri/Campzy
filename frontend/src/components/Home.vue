@@ -236,6 +236,7 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  max-height: 100vh;
 
   .search-flex {
     position: absolute;
