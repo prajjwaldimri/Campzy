@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container.inventory-container(fluid)
+  v-container.inventory-container
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
@@ -18,9 +18,9 @@
           td {{props.item.id}}
           td.font-weight-bold {{props.item.type}}
           td {{props.item.capacity}} Persons
-          td {{props.item.bookingPrice}}
-          td {{props.item.surgePrice}}
-          td {{props.item.preBookPeriod}}
+          td Rs. {{props.item.bookingPrice}}
+          td Rs. {{props.item.surgePrice}}
+          td {{props.item.preBookPeriod}} Days
           td {{props.item.bookedBy}}
           td {{props.item.isBooked}}
 </template>

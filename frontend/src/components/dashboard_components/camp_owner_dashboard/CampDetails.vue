@@ -13,7 +13,7 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row)
                     v-flex(xs5)
-                      v-text-field(solo label='Camp Name' v-model='camp.name')
+                      v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
                     v-spacer
                     v-flex(xs5)
                       v-text-field(solo label='Email' v-model='camp.email')
@@ -50,6 +50,7 @@ export default {
       el: 0,
       camp: {},
       isDataUpdating: false,
+      nameDisable: false,
     };
   },
 
@@ -70,6 +71,7 @@ export default {
       });
       client.request(getCamp).then((data) => {
         this.camp = data.currentUserCamp;
+        if (this.camp.name != null) { this.nameDisable = true; }
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });

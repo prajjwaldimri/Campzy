@@ -83,7 +83,7 @@ export default {
     signOut() {
       this.load = true;
       this.$cookie.delete('sessionToken');
-      this.$router.push('login');
+      this.$router.push('/login');
       this.signOutfail = true;
     },
 
