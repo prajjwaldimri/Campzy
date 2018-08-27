@@ -3,9 +3,7 @@
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
 const {
-  UsernamePasswordError,
   WrongPasswordError,
-  BlackListedError,
   PrivilegeError,
   WrongOTPTokenError,
   NotLoggedinError,
@@ -18,6 +16,9 @@ const TokenModel = require('../models/token.js');
 const auth = require('../config/auth');
 
 const UserQueries = require('./queries/UserQueries');
+const CampQueries = require('./queries/CampQueries');
+const TentQueries = require('./queries/TentQueries');
+const TokenQueries = require('./queries/TokenQueries');
 
 const {
   GraphQLObjectType,
@@ -36,180 +37,16 @@ const OTPType = require('./types/OTPType');
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    camp: {
-      type: CampType,
-      args: {
-        id: { type: GraphQLString },
-      },
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserAdmin = await auth.isUserAdmin(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserAdmin) {
-            throw new PrivilegeError();
-          }
-          return await CampModel.findById(args.id);
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    currentUserCamp: {
-      type: CampType,
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserCampOwner = await auth.isUserCampOwner(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserCampOwner) {
-            throw new PrivilegeError();
-          }
-          return await CampModel.findById(userData.ownedCampId);
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    allCamps: {
-      // Returns all camps
-      type: new GraphQLList(CampType),
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserAdmin = await auth.isUserAdmin(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserAdmin) {
-            throw new PrivilegeError();
-          }
-          return await CampModel.find({});
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-
-    tent: {
-      // Returns all camps
-      type: new GraphQLList(TentType),
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserCampOwner = await auth.isUserCampOwner(userData);
-          if (userData === null) {
-            return new Error('Not Logged In');
-          }
-          if (!isUserCampOwner) {
-            return new Error('Not Privileged Enough');
-          }
-          return await TentModel.find({ camp: userData.ownedCampId });
-        } catch (err) {
-          return err;
-        }
-      },
-    },
+    camp: CampQueries.getCamp,
+    currentUserCamp: CampQueries.getCurrentUserCamp,
+    allCamps: CampQueries.getAllCamps,
+    tent: TentQueries.getTent,
     currentUser: UserQueries.currentUser,
     user: UserQueries.getUser,
-    searchUser: {
-      type: new GraphQLList(UserType),
-      args: {
-        searchTerm: { type: GraphQLString },
-      },
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserAdmin = auth.isUserAdmin(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserAdmin) {
-            throw new PrivilegeError();
-          }
-          return await UserModel.find({ name: { $regex: args.searchTerm } });
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    allUsers: {
-      // Returns all users from DB
-      type: new GraphQLList(UserType),
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserAdmin = auth.isUserAdmin(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserAdmin) {
-            throw new PrivilegeError();
-          }
-          return await UserModel.find({});
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    loginUser: {
-      type: UserType,
-      args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
-      },
-      async resolve(parent, args) {
-        try {
-          const { email } = args;
-          const { password } = args;
-
-          if (!email || !password) {
-            throw new UsernamePasswordError();
-          }
-
-          const userDocument = await UserModel.findOne({ email });
-          if (!userDocument) {
-            throw new UsernamePasswordError();
-          }
-          if (userDocument.isBlacklisted) {
-            throw new BlackListedError();
-          }
-          const passwordsMatch = await bcrypt.compare(password, userDocument.password);
-          if (!passwordsMatch) {
-            throw new UsernamePasswordError();
-          }
-          // Returns the jwt containing user's id, email and token
-
-          return { jwt: JSON.stringify(userDocument.generateJWT()) };
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    sendResetPasswordToken: {
-      type: UserType,
-      args: {
-        email: { type: GraphQLString },
-      },
-      async resolve(parent, args) {
-        try {
-          const user = await UserModel.findOne({ email: args.email });
-          return await auth.sendResetPasswordToken(user._id, args.email);
-        } catch (err) {
-          return err;
-        }
-      },
-    },
+    searchUser: UserQueries.searchUser,
+    allUsers: UserQueries.getAllUsers,
+    loginUser: UserQueries.loginUser,
+    sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
   },
 });
 
