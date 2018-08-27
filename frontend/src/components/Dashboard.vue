@@ -104,7 +104,6 @@ export default {
 
       client.request(query)
         .then((data) => {
-          console.log(data);
           this.user = data.currentUser;
           this.isLoggedIn = true;
           if (this.user.type === 'CampOwner') {

@@ -73,6 +73,7 @@ const TentType = new GraphQLObjectType({
     surgePrice: { type: GraphQLString },
     preBookPeriod: { type: GraphQLString },
     bookedBy: { type: GraphQLID },
+    camp: { type: GraphQLString },
   }),
 });
 
@@ -169,7 +170,7 @@ const RootQuery = new GraphQLObjectType({
           if (!isUserCampOwner) {
             return new Error('Not Privileged Enough');
           }
-          return await TentModel.find({});
+          return await TentModel.find({ camp: userData.ownedCampId });
         } catch (err) {
           return err;
         }
