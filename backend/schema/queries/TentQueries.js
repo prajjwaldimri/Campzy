@@ -20,7 +20,7 @@ const getTent = {
       if (!isUserCampOwner) {
         return new Error('Not Privileged Enough');
       }
-      return await TentModel.find({});
+      return await TentModel.find({ camp: userData.ownedCampId });
     } catch (err) {
       return err;
     }

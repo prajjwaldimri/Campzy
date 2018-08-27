@@ -35,7 +35,7 @@
               v-card-actions
                 v-spacer
                 v-btn(flat) Cancel
-                v-btn(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
+                v-btn.text--white(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
 </template>
 
 <script>

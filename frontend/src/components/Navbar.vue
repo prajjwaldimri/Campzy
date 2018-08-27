@@ -78,10 +78,10 @@ export default {
     signOut() {
       this.$cookie.delete('sessionToken');
       if (this.$cookie.get('sessionToken') == null) {
-        EventBus.$emit('success', 'Logout Successful');
+        EventBus.$emit('show-success-notification-short', 'Logout Successful');
         this.$router.push('login');
       } else {
-        EventBus.$emit('error', 'Failed to Logout');
+        EventBus.$emit('show-error-notification-short', 'Failed to Logout');
       }
     },
   },
