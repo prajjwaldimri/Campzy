@@ -4,6 +4,7 @@
       v-flex(xs12)
         v-card
           v-layout(row)
+            v-flex(md6).hidden-sm-and-down.right-image
             v-flex(xs12 md6)
               transition(name="fade-transition" appear key="login" mode="out-in")
                 .login-content(v-if="loginState == 0")
@@ -65,7 +66,6 @@
                     :disabled="!isOTPSent" block).white--text.mt-3
                       | Complete Registration
 
-            v-flex(md6).hidden-sm-and-down.right-image
 
 </template>
 
