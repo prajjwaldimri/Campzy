@@ -40,7 +40,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getCamp, getCampDetail } from '../../../queries/queries';
+import { getCamp } from '../../../queries/queries';
 import { saveCampDetails } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -69,29 +69,9 @@ export default {
         },
       });
       client.request(getCamp).then((data) => {
-        const [campId] = data.currentUserCamp.map(cid => cid.id);
-        this.getCamp(campId);
+        this.camp = data.currentUserCamp;
       }).catch((err) => {
-        console.log(err);
-      });
-    },
-    // Get camp details associated with camp ID
-    getCamp(campId) {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
-      }
-      const variables = {
-        id: campId,
-      };
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-      client.request(getCampDetail, variables).then((data) => {
-        this.camp = data.camp;
-      }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
     // Save updated vlaues of camp
@@ -115,9 +95,9 @@ export default {
       this.isDataUpdating = true;
       client.request(saveCampDetails, variables).then(() => {
         this.getCampDetails();
-        EventBus.$emit('success', 'Successfully Updated');
+        EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
   },

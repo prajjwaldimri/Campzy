@@ -104,10 +104,10 @@ export default {
             .then((data) => {
               this.user = data.updateUser;
               this.isProfileUpdating = false;
-              EventBus.$emit('success', 'Profile updated! Refreshing....');
+              EventBus.$emit('show-success-notification-long', 'Profile updated! Refreshing....');
             })
             .catch((err) => {
-              EventBus.$emit('error', err.response.errors[0].message);
+              EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
               this.isProfileUpdating = false;
             }).finally(() => {
               this.getCurrentUser();
@@ -138,7 +138,7 @@ export default {
           }
         })
         .catch((err) => {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
           this.$cookie.delete('sessionToken');
           this.$router.push({ name: 'login' });
         });

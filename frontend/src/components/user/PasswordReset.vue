@@ -34,11 +34,11 @@ export default {
       this.newPassword.trim();
       this.confirmNewPassword.trim();
       if (this.newPassword === '' || this.confirmNewPassword === '') {
-        EventBus.$emit('error', 'Passwords empty');
+        EventBus.$emit('show-error-notification-long', 'Passwords empty');
         return;
       }
       if (this.newPassword !== this.confirmNewPassword) {
-        EventBus.$emit('error', "Passwords don't match");
+        EventBus.$emit('show-error-notification-long', "Passwords don't match");
         return;
       }
       const variables = {
@@ -47,11 +47,11 @@ export default {
         resetToken: this.$route.params.token,
       };
       request('/graphql', resetPasswordMutation, variables).then(() => {
-        EventBus.$emit('success', 'Password Reset Successful');
+        EventBus.$emit('show-success-notification-long', 'Password Reset Successful');
         this.$router.push('/login');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
         }
       });
     },

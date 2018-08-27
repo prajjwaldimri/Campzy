@@ -53,10 +53,10 @@ export default {
         tokenValue: this.token,
       };
       request('/graphql', verifyEmailToken, variables).then(() => {
-        EventBus.$emit('success', 'Email Verified');
+        EventBus.$emit('show-success-notification-long', 'Email Verified');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
         }
       }).finally(() => {
         this.closeDialog();
@@ -69,10 +69,10 @@ export default {
         },
       });
       client.request(sendVerificationEmail).then(() => {
-        EventBus.$emit('success', 'Sent Verification Email');
+        EventBus.$emit('show-success-notification-long', 'Sent Verification Email');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
         }
       });
     },

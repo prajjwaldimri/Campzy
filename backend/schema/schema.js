@@ -59,7 +59,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     currentUserCamp: {
-      type: new GraphQLList(CampType),
+      type: CampType,
       async resolve(parent, args, context) {
         try {
           const user = await auth.getAuthenticatedUser(context.req);

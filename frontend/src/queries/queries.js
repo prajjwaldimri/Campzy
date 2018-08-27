@@ -31,21 +31,15 @@ const getAllTentsQuery = `query tent{
 const getCamp = `query currentUserCamp{
         currentUserCamp {
           id,
-          ownerId
-        }
-
-      }`;
-
-const getCampDetail = `query camp($id: String!){
-        camp(id: $id) {
-          id,
           name,
+          email,
           phoneNumber,
           url,
-          email,
           ownerId
+         
         }
 
       }`;
+
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp, getCampDetail };
+export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp };
