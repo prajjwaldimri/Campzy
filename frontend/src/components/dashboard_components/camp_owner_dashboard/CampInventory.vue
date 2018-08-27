@@ -81,7 +81,7 @@ export default {
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.tent;
       }).catch((err) => {
-        EventBus.$emit('error', err.response.errors[0].message);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {
         this.isTableLoading = false;
       });

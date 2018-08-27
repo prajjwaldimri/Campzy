@@ -113,11 +113,11 @@ export default {
         const jwt = JSON.parse(data.register.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
         this.$router.push('settings');
-        EventBus.$emit('success', 'SignUp Successful');
+        EventBus.$emit('show-success-notification-short', 'SignUp Successful');
         this.isLoggedin = true;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
         this.isSignedup = false;
       });
@@ -132,11 +132,11 @@ export default {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
         this.$router.push('settings');
-        EventBus.$emit('success', 'Login Successful');
+        EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           this.isLoggedin = false;
         }
       });
@@ -146,27 +146,27 @@ export default {
         phoneNumber: this.phoneNumber,
       };
       request('/graphql', sendOTP, variables).then(() => {
-        EventBus.$emit('info', 'OTP Sent!');
+        EventBus.$emit('show-info-notification-short', 'OTP Sent!');
         this.isOTPSent = true;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', 'Cannot send OTP');
+          EventBus.$emit('show-error-notification-short', 'Cannot send OTP');
         }
         this.isOTPSent = false;
       });
     },
     resetPassword() {
       if (this.email.trim() === '') {
-        EventBus.$emit('error', 'Enter your email in the Email Field first!');
+        EventBus.$emit('show-error-notification-short', 'Enter your email in the Email Field first!');
       }
       const variables = {
         email: this.email,
       };
       request('/graphql', sendResetPasswordToken, variables).then(() => {
-        EventBus.$emit('info', 'Check your email for further instructions!');
+        EventBus.$emit('show-info-notification-short', 'Check your email for further instructions!');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('error', 'Cannot send Verification');
+          EventBus.$emit('show-error-notification-short', 'Cannot send Verification');
         }
       });
     },
