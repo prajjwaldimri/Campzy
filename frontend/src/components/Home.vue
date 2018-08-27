@@ -80,8 +80,6 @@
       .search-flex
         .campzy-logo
           img(src="/vectors/Campzy-logo.svg")
-
-
         v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
         @click:append="searchClick" autofocus color="green" solo single-line required ticks
         v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
@@ -249,6 +247,9 @@ export default {
 
     .campzy-logo {
       min-width: 50vw;
+      @media screen and (max-width: 960px) {
+        min-width: 90vw;
+      }
       text-align: center;
       user-select: none;
       padding: 1rem;
