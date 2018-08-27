@@ -57,6 +57,10 @@ module.exports = {
         exclude: /node_modules/,
         use: 'vue-loader',
       },
+      {
+        test: /\.styl$/,
+        loader: ['style-loader', 'css-loader', 'stylus-loader'],
+      },
     ],
   },
   plugins: [

@@ -3,7 +3,7 @@ import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
 import App from './App.vue';
 import router from './router/router';
-import 'vuetify/dist/vuetify.min.css';
+import './stylus/main.styl';
 
 const VueCookie = require('vue-cookie');
 

@@ -1,10 +1,8 @@
 @import "_colors.scss";
 
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300|Open+Sans:400,700");
+
 @font-face {
   font-family: "Product Sans";
-  src: url(/fonts/Product-Sans-Regular.ttf);
-}
-
-* {
-  font-family: "Product Sans", sans-serif;
+  src: url(/fonts/Product-Sans-Regular.svg);
 }
