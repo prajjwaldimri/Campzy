@@ -17,78 +17,21 @@ const TentModel = require('../models/tent.js');
 const TokenModel = require('../models/token.js');
 const auth = require('../config/auth');
 
+const UserQueries = require('./queries/UserQueries');
+
 const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLID,
   GraphQLList,
   GraphQLBoolean,
 } = graphql;
 
-const CampType = new GraphQLObjectType({
-  name: 'Camp',
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    tags: { type: new GraphQLList(GraphQLString) },
-    email: { type: GraphQLString },
-    isEmailVerified: { type: GraphQLBoolean },
-    isBlacklisted: { type: GraphQLBoolean },
-    location: { type: GraphQLString },
-    url: { type: GraphQLString },
-    owner: {
-      type: UserType, // eslint-disable-line
-      resolve(parent) {
-        return UserModel.findById(parent.ownerId, 'name email');
-      },
-    },
-    ownerId: { type: GraphQLID },
-  }),
-});
-
-const UserType = new GraphQLObjectType({
-  name: 'User',
-  fields: () => ({
-    id: { type: GraphQLID },
-    type: { type: GraphQLString },
-    name: { type: GraphQLString },
-    email: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    jwt: { type: GraphQLString },
-    dateOfBirth: { type: GraphQLString },
-    isEmailVerified: { type: GraphQLBoolean },
-  }),
-});
-
-const TentType = new GraphQLObjectType({
-  name: 'Tent',
-  fields: () => ({
-    id: { type: GraphQLID },
-    capacity: { type: GraphQLString },
-    type: { type: GraphQLString },
-    isBooked: { type: GraphQLString },
-    bookingPrice: { type: GraphQLString },
-    surgePrice: { type: GraphQLString },
-    preBookPeriod: { type: GraphQLString },
-    bookedBy: { type: GraphQLID },
-  }),
-});
-
-const TokenType = new GraphQLObjectType({
-  name: 'Token',
-  fields: () => ({
-    tokenValue: { type: GraphQLString },
-  }),
-});
-
-const OTPType = new GraphQLObjectType({
-  name: 'OTP',
-  fields: () => ({
-    otpValue: { type: GraphQLString },
-  }),
-});
+const CampType = require('./types/CampType');
+const UserType = require('./types/UserType');
+const TentType = require('./types/TentType');
+const TokenType = require('./types/TokenType');
+const OTPType = require('./types/OTPType');
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -175,43 +118,8 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
-    currentUser: {
-      type: UserType,
-      args: {},
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          return userData;
-        } catch (err) {
-          return err;
-        }
-      },
-    },
-    user: {
-      // Returns a specific user by id
-      type: UserType,
-      args: { id: { type: GraphQLString } },
-      async resolve(parent, args, context) {
-        try {
-          const user = await auth.getAuthenticatedUser(context.req);
-          const userData = await UserModel.findById(user.id);
-          const isUserAdmin = await auth.isUserAdmin(userData);
-          if (userData === null) {
-            throw new NotLoggedinError();
-          }
-          if (!isUserAdmin) {
-            throw new PrivilegeError();
-          }
-          return await UserModel.findById(args.id);
-        } catch (err) {
-          return err;
-        }
-      },
-    },
+    currentUser: UserQueries.currentUser,
+    user: UserQueries.getUser,
     searchUser: {
       type: new GraphQLList(UserType),
       args: {
