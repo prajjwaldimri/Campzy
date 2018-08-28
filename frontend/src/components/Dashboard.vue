@@ -30,19 +30,18 @@
                 v-list-tile-content.increase-letter-spacing-1 Camp Management
               v-list-tile.pt-3(@click='campDetails')
                 v-list-tile-action
-                  v-icon add
+                  v-icon details
                 v-list-tile-content.increase-letter-spacing-1 Camp Details
               v-list-tile.pt-3(@click='campInventory' v-show='isCampOwner')
                 v-list-tile-action
-                  v-icon add
+                  v-icon local_grocery_store
                 v-list-tile-content.increase-letter-spacing-1 Inventory
           v-container.side-container(fluid)
             v-list(dense)
               v-list-tile.pt-3(v-show='isCampOwner')
                 v-list-tile-action
-                  v-icon directions_walk
-                v-list-tile-content.increase-letter-spacing-1(color='red')
-                  v-btn(flat color='red' @click.stop='signOut') Sign Out
+                  v-icon exit_to_app
+                v-list-tile-content.increase-letter-spacing-1 Sign Out
               v-list-tile(v-show='isDrawerOpen')
                 v-list-tile-action
                   v-btn(icon @click.stop='mini=!mini; isDrawerOpen=false')

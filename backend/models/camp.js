@@ -43,12 +43,6 @@ const CampSchema = new Schema({
     ref: 'User',
   },
   inventory: [Schema.Types.ObjectId],
-  bankDetails: {
-    bankName: { type: String },
-    bankBranch: { type: String },
-    accountNumber: { type: String },
-    ifscCode: { type: String },
-  },
 });
 
 module.exports = mongoose.model('Camp', CampSchema);

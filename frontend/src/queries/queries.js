@@ -15,8 +15,8 @@ const getAllUsers = `query {
   }
 }`;
 
-const getAllTentsQuery = `query tent{
-    tent{
+const getAllTentsQuery = `query allTents{
+    allTents{
       id
       type
       capacity
