@@ -15,8 +15,8 @@ const getAllUsers = `query {
   }
 }`;
 
-const getAllTentsQuery = `query tent{
-    tent{
+const getAllTentsQuery = `query allTents{
+    allTents{
       id
       type
       capacity
@@ -35,7 +35,11 @@ const getCamp = `query currentUserCamp{
           email,
           phoneNumber,
           url,
-          ownerId
+          ownerId,
+          shortDescription,
+          longDescription,
+          amenities,
+          placesOfInterest,
          
         }
 

@@ -79,7 +79,7 @@ export default {
       });
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
-        this.tents = data.tent;
+        this.tents = data.allTents;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {
