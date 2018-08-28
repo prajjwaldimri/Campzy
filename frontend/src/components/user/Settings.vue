@@ -1,7 +1,6 @@
 <template lang="pug">
   div
     EmailVerification(v-if='isEmailVerifying')
-    navbar
     v-alert.alert-dailog(:value='isEmailVerified' type='warning')
       span Your Email is not verified!
       v-btn(flat small @click='isEmailVerifying=true') &nbsp;Please click here to verify Email.
@@ -50,7 +49,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import navbar from '../Navbar.vue';
+
 import EmailVerification from './EmailVerification.vue';
 import { EventBus } from '../../event-bus';
 
@@ -59,7 +58,6 @@ export default {
     validator: 'new',
   },
   components: {
-    navbar,
     EmailVerification,
   },
   data() {
