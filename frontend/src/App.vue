@@ -28,50 +28,50 @@ export default {
   },
   created() {
     EventBus.$on('show-success-notification-short', (message) => {
+      this.timeout = 2000;
       this.message = message;
       this.snackbarSuccess = true;
-      this.timeout = 3000;
     });
 
     EventBus.$on('show-success-notification-long', (message) => {
+      this.timeout = 5000;
       this.message = message;
       this.snackbarSuccess = true;
-      this.timeout = 5000;
     });
 
     EventBus.$on('show-error-notification-short', (message) => {
+      this.timeout = 2000;
       this.message = message;
       this.snackbarFail = true;
-      this.timeout = 3000;
     });
 
     EventBus.$on('show-error-notification-long', (message) => {
+      this.timeout = 5000;
       this.message = message;
       this.snackbarFail = true;
-      this.timeout = 5000;
     });
 
     EventBus.$on('show-info-notification-short', (message) => {
+      this.timeout = 2000;
       this.message = message;
       this.snackbarInfo = true;
-      this.timeout = 3000;
     });
 
     EventBus.$on('show-info-notification-long', (message) => {
+      this.timeout = 5000;
       this.message = message;
       this.snackbarInfo = true;
-      this.timeout = 5000;
     });
     EventBus.$on('show-warning-notification-short', (message) => {
+      this.timeout = 2000;
       this.message = message;
       this.snackbarWarning = true;
-      this.timeout = 3000;
     });
 
     EventBus.$on('show-warning-notification-long', (message) => {
+      this.timeout = 5000;
       this.message = message;
       this.snackbarWarning = true;
-      this.timeout = 5000;
     });
   },
 };

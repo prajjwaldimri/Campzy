@@ -1,48 +1,42 @@
 <template lang="pug">
   div
     navbar
-    .d-flex.full-height.hidden-sm-and-down
-      v-navigation-drawer(hide-overlay v-model="drawer" app clipped mini-variant
-      permanent stateless).side-nav.grey.darken-4
-        v-toolbar(flat).transparent.mt-3
-          v-list.pa-0
-            v-divider(inset)
-            v-list-tile(avatar)
-              v-list-tile-avatar(tile)
-                img(v-if="userProfileImage" :src="userProfileImage")
-        v-list.pt-4
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon event
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon receipt
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon credit_card
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon settings
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat color="red")
-                v-icon exit_to_app
+    v-tabs(dark icons-and-text grow centered style="width:100%").hidden-sm-and-down
+      v-tabs-slider(color="green")
+      v-tab(href="#tab-1")
+        | Recent Bookings
+        v-icon event
+      v-tab(href="#tab-2")
+        | Past Bookings
+        v-icon receipt
+      v-tab(href="#tab-3" @click="$router.push('billing')")
+        | Billings
+        v-icon credit_card
+      v-tab(href="#tab-4" @click="$router.push('settings')")
+        | Settings
+        v-icon settings
+
+    router-view
 
 
-      router-view
+    v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
+     fixed).hidden-md-and-up
+      v-btn(dark)
+        v-icon event
+      v-btn(dark)
+        v-icon receipt
+      v-btn(dark @click="$router.push('billing')")
+        v-icon credit_card
+      v-btn(dark @click="$router.push('settings')")
+        v-icon settings
+
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
 import navbar from '../Navbar.vue';
+
+import { EventBus } from '../../event-bus';
 
 export default {
   name: 'Profile',
@@ -51,13 +45,19 @@ export default {
       drawer: true,
       userProfileImage: '',
       userName: '',
+      bottomNav: 0,
     };
   },
   components: {
     navbar,
   },
   mounted() {
-    this.getProfileImage();
+    if (!this.$cookie.get('sessionToken')) {
+      this.$router.push({ name: 'login' });
+      EventBus.$emit('show-error-notification-short', 'Please Login First');
+    } else {
+      this.getProfileImage();
+    }
   },
   methods: {
     getProfileImage() {
@@ -79,6 +79,10 @@ export default {
           this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${this.userName}`;
         });
     },
+    logout() {
+      this.$cookie.delete('sessionToken');
+      this.$router.push('/login');
+    },
   },
 };
 </script>
@@ -88,6 +92,7 @@ export default {
   height: 100vh;
 }
 
-.side-nav {
+.v-tabs__slider {
+  height: 5px;
 }
 </style>

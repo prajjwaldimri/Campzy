@@ -97,7 +97,7 @@ export default {
   mounted() {
     if (this.$cookie.get('sessionToken')) {
       EventBus.$emit('success', 'Already logged in!');
-      this.$router.push({ name: 'settings' });
+      this.$router.push({ name: 'profile' });
     }
   },
   methods: {
