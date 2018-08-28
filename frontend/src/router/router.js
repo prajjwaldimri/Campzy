@@ -47,7 +47,7 @@ const router = new Router({
       children: [
         {
           name: 'settings',
-          path: 'settings',
+          path: '/',
           component: Settings,
         },
         {
