@@ -6,6 +6,7 @@ const BookCampSite = () => import('../components/user/BookCampSite.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
 const Settings = () => import('../components/user/Settings.vue');
+const Billing = () => import('../components/user/Billing.vue');
 const PasswordReset = () => import('../components/user/PasswordReset.vue');
 const Dashboard = () => import('../components/Dashboard.vue');
 const UserManagement = () => import('../components/dashboard_components/admin-dashboard/UserManagement.vue');
@@ -45,8 +46,14 @@ const router = new Router({
       component: Profile,
       children: [
         {
+          name: 'settings',
           path: 'settings',
           component: Settings,
+        },
+        {
+          name: 'billing',
+          path: 'billing',
+          component: Billing,
         },
       ],
     },

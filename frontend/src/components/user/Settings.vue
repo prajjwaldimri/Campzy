@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     EmailVerification(v-if='isEmailVerifying')
-    v-alert.alert-dailog(:value='isEmailVerified' type='warning')
+    v-alert.alert-dialog(:value='isEmailVerified' type='warning')
       span Your Email is not verified!
       v-btn(flat small @click='isEmailVerifying=true') &nbsp;Please click here to verify Email.
     .settings-page
@@ -9,8 +9,8 @@
         v-layout(row wrap)
           v-flex(xs12 md6)
             v-card.settings-card
-              v-card-title(primary-title)
-                h2.font-weight-light EDIT PROFILE
+              v-card-title(primary-title).pl-0
+                h2.headline.font-weight-bold EDIT PROFILE
               v-form
                 v-text-field(label="Name" required v-model="user.name" clearable
                 data-vv-name="Name" v-validate="'alpha_spaces|min:3|required'"
@@ -35,14 +35,14 @@
                   | Update Profile
           v-flex(xs12 md6)
             v-card.settings-card
-              v-card-title(primary-title)
-                h2.font-weight-light BILLING ACCOUNTS
+              v-card-title(primary-title).pl-0
+                h2.headline.font-weight-bold SOCIAL ACCOUNTS
               .settings-flex
-                img(src="https://www.phonepe.com/images/generic/PhonePe-Logo.svg" height="64" width="80").ml-2
+                img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Facebook.svg/1024px-Facebook.svg.png" height="36" width="100").ml-1
                 v-btn(flat) LINK ACCOUNT
               v-divider
               .settings-flex
-                img(src="/vectors/paytm.svg" height="64" width="80")
+                img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1000px-Google_2015_logo.svg.png" height="30" width="90").ml-2
                 v-btn(flat) LINK ACCOUNT
 
 </template>
@@ -155,10 +155,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 1rem 0;
   }
 }
 
-.alert-dailog {
+.alert-dialog {
   position: relative;
   top: 4.4rem;
 }

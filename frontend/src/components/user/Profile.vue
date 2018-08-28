@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     navbar
-    v-tabs(dark icons-and-text grow centered style="width:100%")
+    v-tabs(dark icons-and-text grow centered style="width:100%").hidden-sm-and-down
       v-tabs-slider(color="green")
       v-tab(href="#tab-1")
         | Recent Bookings
@@ -9,10 +9,10 @@
       v-tab(href="#tab-2")
         | Past Bookings
         v-icon receipt
-      v-tab(href="#tab-3")
+      v-tab(href="#tab-3" @click="$router.push('billing')")
         | Billings
         v-icon credit_card
-      v-tab(href="#tab-4" @click="$router.push('/profile/settings')")
+      v-tab(href="#tab-4" @click="$router.push('settings')")
         | Settings
         v-icon settings
 
@@ -25,9 +25,9 @@
         v-icon event
       v-btn(dark)
         v-icon receipt
-      v-btn(dark)
+      v-btn(dark @click="$router.push('billing')")
         v-icon credit_card
-      v-btn(dark @click="$router.push('/profile/settings')")
+      v-btn(dark @click="$router.push('settings')")
         v-icon settings
 
 </template>
