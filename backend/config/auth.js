@@ -13,7 +13,10 @@ const TokenModel = require('../models/token');
 const OTPModel = require('../models/otp');
 const UserModel = require('../models/user');
 
-// Gets the JWT from HTTP Header
+/**
+ * Gets the authentication JWT token from the HTTP header
+ * @param  {Object} req Express's request object
+ */
 const getTokenFromHeaders = (req) => {
   const {
     headers: { authorization },
