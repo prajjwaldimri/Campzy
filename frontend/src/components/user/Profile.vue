@@ -77,6 +77,10 @@ export default {
             this.userName = 'Unnamed User';
           }
           this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${this.userName}`;
+        }).catch((err) => {
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+          this.$cookie.delete('sessionToken');
+          this.$router.push({ name: 'login' });
         });
     },
     logout() {
