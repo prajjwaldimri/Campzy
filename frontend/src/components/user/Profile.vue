@@ -9,10 +9,10 @@
       v-tab(href="#tab-2")
         | Past Bookings
         v-icon receipt
-      v-tab(href="#tab-3" @click="$router.push('billing')")
+      v-tab(href="#tab-3" @click="$router.push('/profile/billing')")
         | Billings
         v-icon credit_card
-      v-tab(href="#tab-4" @click="$router.push('settings')")
+      v-tab(href="#tab-4" @click="$router.push('/profile/settings')")
         | Settings
         v-icon settings
 
@@ -25,9 +25,9 @@
         v-icon event
       v-btn(dark)
         v-icon receipt
-      v-btn(dark @click="$router.push('billing')")
+      v-btn(dark @click="$router.push('/profile/billing')")
         v-icon credit_card
-      v-btn(dark @click="$router.push('settings')")
+      v-btn(dark @click="$router.push('/profile/settings')")
         v-icon settings
 
 </template>

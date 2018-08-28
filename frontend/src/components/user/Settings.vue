@@ -1,9 +1,9 @@
 <template lang="pug">
   div
-    EmailVerification(v-if='isEmailVerifying')
-    v-alert.alert-dialog(:value='isEmailVerified' type='warning')
+    EmailVerification
+    v-alert.alert-dialog(:value='!isEmailVerified' type='warning')
       span Your Email is not verified!
-      v-btn(flat small @click='isEmailVerifying=true') &nbsp;Please click here to verify Email.
+      v-btn(flat small @click='openEmailVerificationDialog') &nbsp;Please click here to verify Email.
     .settings-page
       v-container(grid-list-lg)
         v-layout(row wrap)
@@ -74,8 +74,15 @@ export default {
     } else {
       this.getCurrentUser();
     }
+
+    EventBus.$on('email-verification-successful', () => {
+      this.isEmailVerified = true;
+    });
   },
   methods: {
+    openEmailVerificationDialog() {
+      EventBus.$emit('open-email-verification-dialog');
+    },
     updateProfile() {
       this.isProfileUpdating = true;
       this.$validator.validateAll().then((isValid) => {
@@ -132,7 +139,7 @@ export default {
         .then((data) => {
           this.user = data.currentUser;
           if (this.user.isEmailVerified === false) {
-            this.isEmailVerified = true;
+            this.isEmailVerified = false;
           }
         })
         .catch((err) => {
@@ -157,10 +164,5 @@ export default {
     align-items: center;
     padding: 1rem 0;
   }
-}
-
-.alert-dialog {
-  position: relative;
-  top: 4.4rem;
 }
 </style>

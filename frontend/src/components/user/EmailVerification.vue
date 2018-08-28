@@ -29,7 +29,7 @@ export default {
 
   data() {
     return {
-      verificationDialog: true,
+      verificationDialog: false,
       token: '',
     };
   },
@@ -42,7 +42,6 @@ export default {
   methods: {
     closeDialog() {
       this.verificationDialog = false;
-      EventBus.$emmit('disableDialog', false);
     },
     verifyEmail() {
       this.token = this.token.trim();
@@ -54,6 +53,7 @@ export default {
       };
       request('/graphql', verifyEmailToken, variables).then(() => {
         EventBus.$emit('show-success-notification-long', 'Email Verified');
+        EventBus.$emit('email-verification-successful');
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
