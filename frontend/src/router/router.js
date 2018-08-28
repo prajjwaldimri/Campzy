@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../components/Home.vue';
 
+const Home = () => import('../components/Home.vue');
+const Search = () => import('../components/Search.vue');
 const BookCampSite = () => import('../components/user/BookCampSite.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
@@ -24,6 +25,11 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/search/:searchTerm',
+      name: 'search',
+      component: Search,
     },
     {
       path: '/bookCamp',
