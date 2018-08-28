@@ -6,7 +6,7 @@
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick")
-      h3.title.grey--text.pt-1(style="max-width:70%") Try searching for Nature, Leh, Mountains.....
+      h3.title.grey--text(style="max-width:70%") Try searching for Nature, Leh, Mountains.....
 
 </template>
 
