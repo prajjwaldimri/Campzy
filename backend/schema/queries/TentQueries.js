@@ -7,7 +7,7 @@ const auth = require('../../config/auth');
 const { GraphQLList, GraphQLString } = graphql;
 
 const getTent = {
-  type: new GraphQLList(TentType),
+  type: TentType,
   args: {
     id: { type: GraphQLString },
   },
