@@ -39,19 +39,19 @@
             v-list-tile-content.center-item
               v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
       router-view.router-display
-      v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute shift )
-        v-btn
-          span User Management
-          v-icon wc
-        v-btn
-          span Camp Management
-          v-icon beach_access
-        v-btn
-          span Camps
-          v-icon room_service
-        v-btn
-          span Inventory
-          v-icon add
+      //- v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute shift  fixed)
+      //-   v-btn
+      //-     span User Management
+      //-     v-icon wc
+      //-   v-btn
+      //-     span Camp Management
+      //-     v-icon beach_access
+      //-   v-btn
+      //-     span Camps
+      //-     v-icon room_service
+      //-   v-btn
+      //-     span Inventory
+      //-     v-icon add
 
 </template>
 <script>

@@ -1,41 +1,79 @@
 <template lang="pug">
   v-container.camp-display(fluid)
-    v-tabs.tabs-details(color='transparent' grow)
-      v-tabs-slider(color="green")
-      v-tab(href='#basicDetails') Basic Details
-      v-tab(href='#documents') Documents
-      v-tab(href='#bankDetails') Bank Details
-      v-tab(href='#campDetails') Camp Details
-      v-tabs-items
-        v-tab-item(id='basicDetails')
-          v-container.basic-details(fluid)
-            v-card.details-card(width='95%' color='transparent')
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
-                    v-spacer
-                    v-flex(xs5)
-                      v-text-field(solo label='Email' v-model='camp.email')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
-                    v-spacer
-                    v-flex(xs5)
-                      v-text-field(solo label='Camp Url' v-model='camp.url')
-                  v-layout.layout(row)
-                    v-flex(xs5)
-                      v-text-field(solo label='Amenities')
-                    v-spacer
-                    v-flex(xs5)
-                      v-text-field(solo label='Services')
+    .page-title
+      h1 Camp Details
+    v-layout(row wrap)
+      v-flex(xs12 md5)
+        v-card.details-card( flat)
+          v-card-title.title(primary-title)
+            h2.font-weight-light Basic Details
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(column)
+                v-flex(xs12)
+                  span Name
+                  v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                v-flex(xs12)
+                  span Email
+                  v-text-field(solo label='Email' v-model='camp.email')
+                v-flex(xs12)
+                  span Phone
+                  v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                v-flex(xs12)
+                  span Camp Url
+                  v-text-field(solo label='Camp Url' v-model='camp.url')
+      v-flex(xs12 md7)
+        v-card.details-card(flat)
+          v-card-title.title(primary-title)
+            h2.font-weight-light Documnents
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(column)
+                v-flex(xs12)
+                  span Amenities
+                  v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                v-flex(xs12)
+                  v-text-field(solo label='Email' v-model='camp.email')
+                v-flex(xs12)
+                  v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                v-flex(xs12)
+                  v-text-field(solo label='Camp Url' v-model='camp.url')
+      v-flex(xs12 md6)
+        v-card.details-card(flat)
+          v-card-title.title(primary-title)
+            h2.font-weight-light Bank Details
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(column)
+                v-flex(xs12)
+                  span Amenities
+                  v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                v-flex(xs12)
+                  v-text-field(solo label='Email' v-model='camp.email')
+                v-flex(xs12)
+                  v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                v-flex(xs12)
+                  v-text-field(solo label='Camp Url' v-model='camp.url')
+      v-flex(xs12 md6)
+        v-card.details-card(flat)
+          v-card-title.title(primary-title)
+            h2.font-weight-light Camp Details
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(column)
+                v-flex(xs12)
+                  span Amenities
+                  v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                v-flex(xs12)
+                  v-text-field(solo label='Email' v-model='camp.email')
+                v-flex(xs12)
+                  v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                v-flex(xs12)
+                  v-text-field(solo label='Camp Url' v-model='camp.url')
 
-    v-container.camp-display(fluid)
-            v-card.details-card(width='95%' color='transparent')
-              v-card-actions
-                v-spacer
-                v-btn(flat) Cancel
-                v-btn.text--white(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
+
+      v-container.camp-display(fluid)
+          v-card.details-card(width='95%' color='transparent')
+            v-card-actions
+              v-spacer
+              v-btn(flat) Cancel
+              v-btn.text--white(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
 </template>
 
 <script>
@@ -109,17 +147,11 @@ export default {
 <style lang="scss" scoped>
 .camp-display {
   margin: 0px 0px 0px 0px;
-  padding: 0px;
-  display: flex;
   height: 100vh;
-  flex-direction: column;
-}
-.basic-details {
-  padding: 4rem 2rem 1rem 2rem;
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  .page-title {
+    margin-left: 1.6rem;
+  }
 }
 
 .tabs-details {
@@ -127,7 +159,7 @@ export default {
 }
 
 .details-card {
-  margin-top: 4rem;
+  margin: 0rem 0rem 0rem 2rem;
   padding: 2rem;
   box-shadow: none;
 }
@@ -137,5 +169,9 @@ export default {
 
 .item-align {
   align-items: center;
+}
+
+.title {
+  padding: 0px;
 }
 </style>
