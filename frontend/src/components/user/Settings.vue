@@ -147,8 +147,6 @@ export default {
 
 <style lang="scss" scoped>
 .settings-page {
-  padding: 4rem 0;
-
   .settings-card {
     padding: 2rem;
   }

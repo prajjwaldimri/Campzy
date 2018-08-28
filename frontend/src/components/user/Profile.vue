@@ -1,43 +1,22 @@
 <template lang="pug">
   div
     navbar
-    .d-flex.full-height
-      v-navigation-drawer(hide-overlay v-model="drawer" app clipped mini-variant
-      permanent stateless).side-nav.grey.darken-4.hidden-sm-and-down
-        v-toolbar(flat).transparent.mt-3
-          v-list.pa-0
-            v-divider(inset)
-            v-list-tile(avatar)
-              v-list-tile-avatar(tile)
-                img(v-if="userProfileImage" :src="userProfileImage")
-        v-list.pt-4
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon event
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon receipt
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat)
-                v-icon credit_card
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat @click="$router.push('/profile/settings')")
-                v-icon settings
-        v-list.pt-0.mt-0
-          v-list-tile
-            v-list-tile-action
-              v-btn(dark flat color="red" @click="logout")
-                v-icon exit_to_app
+    v-tabs(dark icons-and-text grow centered style="width:100%")
+      v-tabs-slider(color="green")
+      v-tab(href="#tab-1")
+        | Recent Bookings
+        v-icon event
+      v-tab(href="#tab-2")
+        | Past Bookings
+        v-icon receipt
+      v-tab(href="#tab-3")
+        | Billings
+        v-icon credit_card
+      v-tab(href="#tab-4" @click="$router.push('/profile/settings')")
+        | Settings
+        v-icon settings
 
-
-      router-view
+    router-view
 
 
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
@@ -48,7 +27,7 @@
         v-icon receipt
       v-btn(dark)
         v-icon credit_card
-      v-btn(dark)
+      v-btn(dark @click="$router.push('/profile/settings')")
         v-icon settings
 
 </template>
@@ -113,6 +92,7 @@ export default {
   height: 100vh;
 }
 
-.side-nav {
+.v-tabs__slider {
+  height: 5px;
 }
 </style>
