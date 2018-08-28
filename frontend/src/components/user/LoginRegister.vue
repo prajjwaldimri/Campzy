@@ -112,7 +112,7 @@ export default {
       request('/graphql', registerUser, variables).then((data) => {
         const jwt = JSON.parse(data.register.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('settings');
+        this.$router.push('profile');
         EventBus.$emit('show-success-notification-short', 'SignUp Successful');
         this.isLoggedin = true;
       }).catch((err) => {
@@ -131,7 +131,7 @@ export default {
       request('/graphql', sendUserCredentials, variables).then((data) => {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('settings');
+        this.$router.push('profile');
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
