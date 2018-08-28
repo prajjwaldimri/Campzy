@@ -242,12 +242,12 @@ export default {
     position: absolute;
 
     .v-input {
-      min-width: 50vw;
+      min-width: 40vw;
       user-select: none;
     }
 
     .campzy-logo {
-      min-width: 50vw;
+      min-width: 40vw;
       @media screen and (max-width: 960px) {
         min-width: 90vw;
       }
