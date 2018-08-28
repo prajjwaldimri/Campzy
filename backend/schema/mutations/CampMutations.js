@@ -5,7 +5,7 @@ const CampType = require('../types/CampType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLList } = graphql;
+const { GraphQLString, GraphQLList, GraphQLObjectType } = graphql;
 
 const addCamp = {
   type: CampType,
@@ -62,6 +62,7 @@ const updateCamp = {
     url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     ownerId: { type: GraphQLString },
+    bankDetails: { type: GraphQLObjectType },
   },
   async resolve(parent, args, context) {
     try {
@@ -92,6 +93,7 @@ const updateCamp = {
         url: args.url,
         tags: args.tags,
         ownerId: args.ownerId,
+        bankDetails: args.bankDetails,
       });
 
       return await UserModel.findByIdAndUpdate(args.ownerId, {

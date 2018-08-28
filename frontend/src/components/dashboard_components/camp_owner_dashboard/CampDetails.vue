@@ -15,22 +15,18 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
-                      span Name
-                      v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                      v-text-field( label='Camp Name' v-model='camp.name')
                     v-flex(xs12)
-                      span Email
-                      v-text-field(solo label='Email' v-model='camp.email')
+                      v-text-field(label='Email' v-model='camp.email')
                     v-flex(xs12)
-                      span Phone
-                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                      v-text-field(label='Phone Number' v-model='camp.phoneNumber')
                     v-flex(xs12)
-                      span Camp Url
-                      v-text-field(solo label='Camp Url' v-model='camp.url')
+                      v-text-field(label='Camp Url' v-model='camp.url')
         v-tab-item(id='documents')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.details-card(flat)
               v-card-title.title(primary-title)
-                h2.font-weight-light Documnents
+                h2.font-weight-light Documents
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
@@ -53,22 +49,18 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
-                      span Name
-                      v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
+                      v-text-field(label='Bank Name')
                     v-flex(xs12)
-                      span Email
-                      v-text-field(solo label='Email' v-model='camp.email')
+                      v-text-field(label='Branch' )
                     v-flex(xs12)
-                      span Phone
-                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
+                      v-text-field(label='Account Number')
                     v-flex(xs12)
-                      span Camp Url
-                      v-text-field(solo label='Camp Url' v-model='camp.url')
+                      v-text-field(label='IFSC Code')
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.details-card(flat)
               v-card-title.title(primary-title)
-                h2.font-weight-light CAMP DETAILS
+                h2.font-weight-light Camp Details
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)

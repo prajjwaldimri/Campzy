@@ -2,42 +2,57 @@
   div
     v-container.display(fluid)
       v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark v-model="drawer" hide-overlay)
-        v-list.pt-4
-          v-list-tile
-            v-list-tile-content.center-item
-              router-link.link-text(to='/')
-                h1.font-weight-light
-                  span Camp
-                  span.green--text zy
-        v-list.pt-3
-          v-list-tile(avatar)
-            v-list-tile-avatar
-              img(src="https://randomuser.me/api/portraits/men/85.jpg")
-            v-list-tile-content
-              v-list-tile-title.increase-letter-spacing-2 {{user.name}}
-            v-list-tile-action
-              v-btn(icon @click.stop='mini=!mini')
-                v-icon chevron_left
-        v-list.pt-5(dense)
-          v-list-tile.pt-3(@click='userManagement' v-show='isAdmin')
-            v-list-tile-action
-              v-icon wc
-            v-list-tile-content.increase-letter-spacing-1 User Management
-          v-list-tile.pt-3(@click='campManagement' v-show='isAdmin')
-            v-list-tile-action
-              v-icon beach_access
-            v-list-tile-content.increase-letter-spacing-1 Camp Management
-          v-list-tile.pt-3(@click='campDetails')
-            v-list-tile-action
-              v-icon add
-            v-list-tile-content.increase-letter-spacing-1 Camp Details
-          v-list-tile.pt-3(@click='campInventory' v-show='isCampOwner')
-            v-list-tile-action
-              v-icon add
-            v-list-tile-content.increase-letter-spacing-1 Inventory
-          v-list-tile.pt-5
-            v-list-tile-content.center-item
-              v-btn(flat color='green accent-4' large @click='signOut' :loading='load') Sign Out
+        .d-flex.content-justify
+          v-container.side-container(fluid)
+            v-list.pt-4
+              v-list-tile
+                v-list-tile-content.center-item
+                  router-link.link-text(to='/')
+                    h1.font-weight-light
+                      span Camp
+                      span.green--text zy
+          v-container.side-container(fluid)
+            v-list.pt-3
+              v-list-tile(avatar)
+                v-list-tile-avatar
+                  img(src="https://randomuser.me/api/portraits/men/85.jpg")
+                v-list-tile-content
+                  v-list-tile-title.increase-letter-spacing-2 {{user.name}}
+          v-container.side-container(fluid)
+            v-list.pt-5(dense)
+              v-list-tile.pt-3(@click='userManagement' v-show='isAdmin')
+                v-list-tile-action
+                  v-icon wc
+                v-list-tile-content.increase-letter-spacing-1 User Management
+              v-list-tile.pt-3(@click='campManagement' v-show='isAdmin')
+                v-list-tile-action
+                  v-icon beach_access
+                v-list-tile-content.increase-letter-spacing-1 Camp Management
+              v-list-tile.pt-3(@click='campDetails')
+                v-list-tile-action
+                  v-icon add
+                v-list-tile-content.increase-letter-spacing-1 Camp Details
+              v-list-tile.pt-3(@click='campInventory' v-show='isCampOwner')
+                v-list-tile-action
+                  v-icon add
+                v-list-tile-content.increase-letter-spacing-1 Inventory
+          v-container.side-container(fluid)
+            v-list(dense)
+              v-list-tile.pt-3(v-show='isCampOwner')
+                v-list-tile-action
+                  v-icon directions_walk
+                v-list-tile-content.increase-letter-spacing-1(color='red')
+                  v-btn(flat color='red' @click.stop='signOut') Sign Out
+              v-list-tile(v-show='isDrawerOpen')
+                v-list-tile-action
+                  v-btn(icon @click.stop='mini=!mini; isDrawerOpen=false')
+                    v-icon chevron_left
+                v-list-tile-content.increase-letter-spacing-1 Close Drawer
+              v-list-tile(v-show='!isDrawerOpen')
+                v-list-tile-action
+                  v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
+                    v-icon chevron_right
+
       router-view.router-display
       //- v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute shift  fixed)
       //-   v-btn
@@ -68,6 +83,7 @@ export default {
       user: {},
       isCampOwner: false,
       isAdmin: false,
+      isDrawerOpen: true,
     };
   },
   mounted() {
@@ -135,6 +151,7 @@ export default {
 }
 .side-drawer {
   border-right: 1px sloid;
+  box-shadow: none !important;
 }
 .center-item {
   align-items: center;
@@ -143,5 +160,14 @@ export default {
   font-size: 1.5rem;
   text-decoration: none;
   color: #fff;
+}
+.content-justify {
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
+}
+
+.side-container {
+  padding: 0;
 }
 </style>
