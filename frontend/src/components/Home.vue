@@ -1,11 +1,12 @@
 <template lang="pug">
   .home-flex
     .search-flex
-      .campzy-logo
+      .campzy-logo.pb-3
         img(src="/vectors/Campzy-logo.svg")
-      v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
+      v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
-      v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
+      v-model="searchInput" @keyup.enter="searchClick")
+      h3.title.grey--text.pt-1(style="max-width:70%") Try searching for Nature, Leh, Mountains.....
 
 </template>
 
@@ -68,6 +69,9 @@ export default {
 
   .search-flex {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .v-input {
       min-width: 40vw;
@@ -81,7 +85,6 @@ export default {
       }
       text-align: center;
       user-select: none;
-      padding: 1.2rem;
 
       img {
         height: 4rem;
