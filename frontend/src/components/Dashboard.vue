@@ -21,19 +21,19 @@
                   v-list-tile-title.increase-letter-spacing-2 {{user.name}}
           v-container.side-container(fluid)
             v-list.pt-5(dense)
-              v-list-tile.pt-3(@click='userManagement' v-show='isAdmin')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')" v-show='isAdmin')
                 v-list-tile-action
                   v-icon supervised_user_circle
                 v-list-tile-content.increase-letter-spacing-1 User Management
-              v-list-tile.pt-3(@click='campManagement' v-show='isAdmin')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campManagement')" v-show='isAdmin')
                 v-list-tile-action
                   v-icon explore
                 v-list-tile-content.increase-letter-spacing-1 Camp Management
-              v-list-tile.pt-3(@click='campDetails')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campDetails')")
                 v-list-tile-action
                   v-icon details
                 v-list-tile-content.increase-letter-spacing-1 Camp Details
-              v-list-tile.pt-3(@click='campInventory' v-show='isCampOwner')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')" v-show='isCampOwner')
                 v-list-tile-action
                   v-icon local_grocery_store
                 v-list-tile-content.increase-letter-spacing-1 Inventory
@@ -94,11 +94,6 @@ export default {
     this.getCurrentUser();
   },
   methods: {
-    goHomePage() { this.$router.push('/'); },
-    campDetails() { this.$router.push('/dashboard/campDetails'); },
-    userManagement() { this.$router.push('/dashboard/userManagement'); },
-    campInventory() { this.$router.push('/dashboard/campInventory'); },
-    campManagement() { this.$router.push('/dashboard/campManagement'); },
 
     signOut() {
       this.$cookie.delete('sessionToken');
