@@ -1,6 +1,6 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent dark)
-    v-toolbar-side-icon.pl-2
+    v-toolbar-side-icon.ml-0
       v-icon clear_all
     //- v-toolbar-title(@click="goToHome" style="cursor: pointer")
     //-   span Camp

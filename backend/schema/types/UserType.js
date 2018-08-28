@@ -15,6 +15,7 @@ const UserType = new GraphQLObjectType({
     jwt: { type: GraphQLString },
     dateOfBirth: { type: GraphQLString },
     isEmailVerified: { type: GraphQLBoolean },
+    profilePicture: { type: GraphQLString },
   }),
 });
 
