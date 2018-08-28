@@ -212,7 +212,7 @@ export default {
   }
 
   .right-image {
-    background-image: url(https://images.pexels.com/photos/1004119/pexels-photo-1004119.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+    background-image: url(https://cdn.dribbble.com/users/1096806/screenshots/4704153/attachments/1061131/summer_camp.jpg);
     background-size: cover;
     border-radius: 0 2px 2px 0;
   }

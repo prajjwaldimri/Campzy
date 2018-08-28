@@ -81,6 +81,7 @@ const updateUser = {
       const user = await auth.getAuthenticatedUser(context.req);
       let userData = await UserModel.findById(user.id, 'password');
       const isPasswordCorrect = await bcrypt.compare(args.currentPassword, userData.password);
+      console.log(isPasswordCorrect);
 
       if (isPasswordCorrect) {
         if (args.newPassword) {

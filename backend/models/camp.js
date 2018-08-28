@@ -32,6 +32,9 @@ const CampSchema = new Schema({
   amenities: { type: [String] },
   services: { type: [String] },
   placesOfInterest: { type: [String] },
+  temperature: { type: String },
+  altitude: { type: String },
+  hourDriveFromDelhi: { type: Date },
   coordinates: {
     type: String,
     validate: [validate({ validator: 'isLatLong', message: 'Not valid coordinates' })],

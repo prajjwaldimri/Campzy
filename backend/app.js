@@ -7,7 +7,6 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-const { bodyParserGraphQL } = require('body-parser-graphql');
 const depthLimit = require('graphql-depth-limit');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
@@ -38,8 +37,6 @@ mongoose.connect(
 mongoose.connection.once('open', () => {
   console.log('Database connected');
 });
-
-app.use(bodyParserGraphQL());
 
 // History mode fallback
 app.use(history({}));

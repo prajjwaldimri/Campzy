@@ -3,32 +3,32 @@
     navbar
     v-tabs(dark icons-and-text grow centered style="width:100%").hidden-sm-and-down
       v-tabs-slider(color="green")
-      v-tab(href="#tab-1")
-        | Recent Bookings
-        v-icon event
-      v-tab(href="#tab-2")
-        | Past Bookings
-        v-icon receipt
-      v-tab(href="#tab-3" @click="$router.push('/profile/billing')")
-        | Billings
-        v-icon credit_card
-      v-tab(href="#tab-4" @click="$router.push('/profile/settings')")
+      v-tab(href="#tab-1" @click="$router.push('/profile')")
         | Settings
         v-icon settings
+      v-tab(href="#tab-2")
+        | Recent Bookings
+        v-icon event
+      v-tab(href="#tab-3")
+        | Past Bookings
+        v-icon receipt
+      v-tab(href="#tab-4" @click="$router.push('/profile/billing')")
+        | Billings
+        v-icon credit_card
 
     router-view
 
 
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
      fixed).hidden-md-and-up
+      v-btn(dark @click="$router.push('/profile')")
+        v-icon settings
       v-btn(dark)
         v-icon event
       v-btn(dark)
         v-icon receipt
       v-btn(dark @click="$router.push('/profile/billing')")
         v-icon credit_card
-      v-btn(dark @click="$router.push('/profile/settings')")
-        v-icon settings
 
 </template>
 
