@@ -1,12 +1,11 @@
 <template lang="pug">
-  .home
-    .home-flex
-      .search-flex
-        .campzy-logo
-          img(src="/vectors/Campzy-logo.svg")
-        v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
-        @click:append="searchClick" autofocus color="green" solo single-line required ticks
-        v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
+  .home-flex
+    .search-flex
+      .campzy-logo
+        img(src="/vectors/Campzy-logo.svg")
+      v-text-field(label="Try searching for Nature, Leh, Mountains....." append-icon="search"
+      @click:append="searchClick" autofocus color="green" solo single-line required ticks
+      v-model="searchInput" @keyup.enter="searchClick" hint="Press Enter To Search!")
 
 </template>
 
@@ -82,10 +81,10 @@ export default {
       }
       text-align: center;
       user-select: none;
-      padding: 1rem;
+      padding: 1.2rem;
 
       img {
-        height: 3.5rem;
+        height: 4rem;
       }
     }
   }
