@@ -5,8 +5,8 @@
 
       v-flex(xs12 md6)
         v-card.settings-card
-          v-card-title(primary-title)
-            h2.font-weight-light BILLING ACCOUNTS
+          v-card-title(primary-title).pl-1
+            h2.headline.font-weight-bold BILLING ACCOUNTS
           .settings-flex
             img(src="https://www.phonepe.com/images/generic/PhonePe-Logo.svg" height="64" width="80").ml-2
             v-btn(flat) LINK ACCOUNT
