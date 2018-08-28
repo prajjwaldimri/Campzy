@@ -35,7 +35,11 @@ const getCamp = `query currentUserCamp{
           email,
           phoneNumber,
           url,
-          ownerId
+          ownerId,
+          shortDescription,
+          longDescription,
+          amenities,
+          placesOfInterest,
          
         }
 

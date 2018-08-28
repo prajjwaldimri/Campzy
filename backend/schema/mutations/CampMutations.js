@@ -62,6 +62,10 @@ const updateCamp = {
     url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     ownerId: { type: GraphQLString },
+    shortDescription: { type: GraphQLString },
+    longDescription: { type: GraphQLString },
+    amenities: { type: new GraphQLList(GraphQLString) },
+    placesOfInterest: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -87,11 +91,14 @@ const updateCamp = {
         name: args.name,
         phoneNumber: args.phoneNumber,
         email: args.email,
-        shortDescription: 'Unfilled Description',
+        shortDescription: args.shortDescription,
+        longDescription: args.longDescription,
         location: args.location,
         url: args.url,
         tags: args.tags,
         ownerId: args.ownerId,
+        amenities: args.amenities,
+        placesOfInterest: args.placesOfInterest,
       });
 
       return await UserModel.findByIdAndUpdate(args.ownerId, {

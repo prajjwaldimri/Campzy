@@ -23,7 +23,7 @@ export default {
       snackbarInfo: false,
       snackbarWarning: false,
       message: '',
-      timeout: null,
+      timeout: 0,
     };
   },
   created() {

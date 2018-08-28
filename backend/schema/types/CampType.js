@@ -25,6 +25,10 @@ const CampType = new GraphQLObjectType({
       },
     },
     ownerId: { type: GraphQLID },
+    shortDescription: { type: GraphQLString },
+    longDescription: { type: GraphQLString },
+    amenities: { type: new GraphQLList(GraphQLString) },
+    placesOfInterest: { type: new GraphQLList(GraphQLString) },
   }),
 });
 

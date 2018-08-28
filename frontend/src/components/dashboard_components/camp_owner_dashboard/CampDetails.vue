@@ -3,7 +3,6 @@
     v-tabs.tabs-detail(height='60%' dark grow)
       v-tabs-slider(color='green')
       v-tab(href='#basic') Basic Details
-      v-tab(href='#documents') Documnents
       v-tab(href='#bankdetails') Bank Details
       v-tab(href='#campdetail') Camp Details
       v-tabs-items
@@ -11,71 +10,52 @@
           v-flex(xs12 md6 style='max-width:100%')
             v-card.details-card(flat)
               v-card-title.title(primary-title)
-                h2.font-weight-light Basic Details
+                h2.font-weight-bold.healine BASIC DETAILS
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
                       v-text-field( label='Camp Name' v-model='camp.name')
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='Email' v-model='camp.email')
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='Phone Number' v-model='camp.phoneNumber')
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='Camp Url' v-model='camp.url')
-        v-tab-item(id='documents')
-          v-flex(xs12 md6 style='max-width:100%')
-            v-card.details-card(flat)
-              v-card-title.title(primary-title)
-                h2.font-weight-light Documents
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row wrap)
-                    v-flex(xs12)
-                      span Upload PAN
-                      input(type='file')
-                    v-flex(xs12)
-                      span Email
-                      v-text-field(solo label='Email' v-model='camp.email')
-                    v-flex(xs12)
-                      span Phone
-                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
-                    v-flex(xs12)
-                      span Camp Url
-                      v-text-field(solo label='Camp Url' v-model='camp.url')
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.details-card(flat)
               v-card-title.title(primary-title)
-                h2.font-weight-light Bank Details
+                h2.font-weight-bold.headline BANK DETAILS
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
                       v-text-field(label='Bank Name')
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='Branch' )
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='Account Number')
-                    v-flex(xs12)
+                    v-flex.flex-spacing(xs12)
                       v-text-field(label='IFSC Code')
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.details-card(flat)
               v-card-title.title(primary-title)
-                h2.font-weight-light Camp Details
+                h2.font-weight-bold.headline CAMP DETAILS
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
-                    v-flex(xs12)
-                      span Name
-                      v-text-field(solo label='Camp Name' v-model='camp.name' :disabled='nameDisable')
-                    v-flex(xs12)
-                      span Email
-                      v-text-field(solo label='Email' v-model='camp.email')
-                    v-flex(xs12)
-                      span Phone
-                      v-text-field(solo label='Phone Number' v-model='camp.phoneNumber')
-                    v-flex(xs12)
-                      span Camp Url
-                      v-text-field(solo label='Camp Url' v-model='camp.url')
-
+                    v-layout(row)
+                      v-flex(xs5)
+                        v-select(v-model='amenities' :items='amenitiesItems' attach chips
+                        label='Amenities' multiple)
+                      v-spacer
+                      v-flex(xs6)
+                        v-combobox(v-model='placesOfInterest' attach chips
+                        label='Places of Interest' multiple clearable)
+                    v-flex.flex-spacing(xs12)
+                      v-text-field(label='Short Description about Camp'
+                      v-model='camp.shortDescription')
+                    v-flex.flex-spacing(xs12)
+                      v-textarea(outline label='Camp Description' v-model='camp.longDescription')
 
     v-container.camp-display(fluid)
         v-card.details-card(width='95%' color='transparent')
@@ -98,6 +78,9 @@ export default {
       camp: {},
       isDataUpdating: false,
       nameDisable: false,
+      amenities: [],
+      amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
+      placesOfInterest: [],
     };
   },
 
@@ -117,8 +100,10 @@ export default {
         },
       });
       client.request(getCamp).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
-        if (this.camp.name != null) { this.nameDisable = true; }
+        this.amenities = this.camp.amenities;
+        this.placesOfInterest = this.camp.placesOfInterest;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
@@ -135,6 +120,10 @@ export default {
         url: this.camp.url,
         email: this.camp.email,
         ownerId: this.camp.ownerId,
+        amenities: this.amenities,
+        placesOfInterest: this.placesOfInterest,
+        shortDescription: this.camp.shortDescription,
+        longDescription: this.camp.longDescription,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -168,6 +157,7 @@ export default {
 
 .details-card {
   margin: 2rem 2rem 0rem 2rem;
+  min-height: 70vh !important;
   padding: 2rem;
   box-shadow: none;
 }
@@ -181,5 +171,12 @@ export default {
 
 .title {
   padding: 0px;
+}
+
+.v-tabs__slider {
+  height: 5px;
+}
+.flex-spacing {
+  margin-top: 2rem;
 }
 </style>
