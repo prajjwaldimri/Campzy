@@ -1,15 +1,18 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" app prominent dark)
-    v-toolbar-title(@click="goToHome" style="cursor: pointer")
-      span Camp
-      span.green--text zy
+    v-toolbar-side-icon.pl-2
+      v-icon clear_all
+    //- v-toolbar-title(@click="goToHome" style="cursor: pointer")
+    //-   span Camp
+    //-   span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click='goToHome') HOME
       v-btn(flat) CAMPS
       v-btn(flat v-show="!isLoggedIn") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
-        v-btn(flat slot="activator" v-show="isLoggedIn" @click="goToSettings") Hey, &nbsp; {{user.name}}
+        v-btn(flat slot="activator" v-show="isLoggedIn" @click="goToSettings")
+          | Hey, &nbsp; {{user.name}}
         v-card
           v-list
             v-list-tile(@click='goToSettings')

@@ -4,6 +4,7 @@ import Home from '../components/Home.vue';
 
 const BookCampSite = () => import('../components/user/BookCampSite.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
+const Profile = () => import('../components/user/Profile.vue');
 const Settings = () => import('../components/user/Settings.vue');
 const PasswordReset = () => import('../components/user/PasswordReset.vue');
 const Dashboard = () => import('../components/Dashboard.vue');
@@ -39,9 +40,15 @@ const router = new Router({
       component: PasswordReset,
     },
     {
-      path: '/settings',
-      name: 'settings',
-      component: Settings,
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      children: [
+        {
+          path: 'settings',
+          component: Settings,
+        },
+      ],
     },
     {
       path: '/dashboard',
