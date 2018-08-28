@@ -1,9 +1,9 @@
 <template lang="pug">
   .home
-    transition(name="slide-y-transition")
-      navbar(v-show="searchClicked")
-    transition(name="slide-y-transition")
-      v-container(fluid grid-list-md v-show="searchClicked").top-search
+    transition(name="slide-y-transition" appear)
+      navbar
+    transition(name="slide-y-transition" appear)
+      v-container(fluid grid-list-md ).top-search
         v-layout(row wrap justify-center)
           v-flex(md4 xs12)
             v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
@@ -35,15 +35,15 @@
             v-container(fluid grid-list-md)
               v-layout(row wrap)
                 v-flex(sm12 md3).image-wrapper
-                  img(src="https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=200&w=200" height="100%", width="100%")
+                  img(:src="result.imgSrc" height="100%", width="100%")
                 v-flex(sm12 md3).result-column
-                  h1.font-weight-thin.grey--text.text--darken-3 Chopta Camp
-                  h3.grey--text.mb-2 Chamoli, Uttarakhand
+                  h1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
+                  h3.grey--text.mb-2 {{result.location}}
 
-                  h3.title.mb-2 Starting @ ₹ 5000
+                  h3.title.mb-2 Starting @ ₹ {{result.starting}}
 
                   v-chip(label color="green" text-color="white").ma-0
-                    v-avatar(tile class="green darken-4") 4.5
+                    v-avatar(tile class="green darken-4") {{result.rating}}
                     span.caption.increase-letter-spacing-2 Excellent
 
                   //- v-btn(color="green") BOOK NOW!
@@ -77,3 +77,93 @@
 
 
 </template>
+
+<script>
+import navbar from './Navbar.vue';
+
+export default {
+  components: {
+    navbar,
+  },
+  data() {
+    return {
+      searchInput: '',
+      searchResults: [{
+        name: 'Chopta Camp', location: 'Chamoli, Uttarakhand', starting: '5000', rating: '4.6', imgSrc: 'https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=200&w=200',
+      }, {
+        name: 'Leh Camp', location: 'Jammu and Kashmir', starting: '8000', rating: '4.2', imgSrc: 'https://images.pexels.com/photos/965153/pexels-photo-965153.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+      }, {
+        name: 'Thar Camp', location: 'Rajasthan', starting: '15000', rating: '4.9', imgSrc: 'https://images.pexels.com/photos/803226/pexels-photo-803226.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+      }, {
+        name: 'Himanchal Camp', location: 'Himanchal Pradesh', starting: '3000', rating: '4.8', imgSrc: 'https://images.pexels.com/photos/6714/light-forest-trees-morning.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+      }],
+      searchComplete: false,
+      fromDate: null,
+      toDate: null,
+      tripDurationMenu: false,
+      minPrice: 5000,
+      maxPrice: 20000,
+      priceRange: [5000, 20000],
+      priceLabels: [],
+    };
+  },
+  mounted() {
+    for (let i = this.minPrice; i <= this.maxPrice; i += 500) {
+      this.priceLabels.push(i);
+    }
+    this.searchComplete = true;
+    this.searchInput = this.$route.params.searchterm;
+  },
+
+  methods: {
+    searchClick() {
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.feature-row {
+  display: flex;
+  align-items: center;
+}
+
+.increase-letter-spacing-2 {
+  letter-spacing: 2px;
+}
+
+.increase-letter-spacing-1 {
+  letter-spacing: 1px;
+}
+.search-results {
+  margin-bottom: 2rem;
+
+  .result-column {
+    @media screen and (max-width: 960px) {
+      align-items: center;
+    }
+    @media screen and (min-width: 961px) {
+      align-items: flex-start;
+    }
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    padding: 0;
+  }
+  .image-wrapper {
+    height: 13rem;
+    @media screen and (max-width: 960px) {
+      padding: 0 0 0 0 !important;
+    }
+    padding: 0 1rem 0 0 !important;
+  }
+}
+
+.home {
+  min-height: 100vh;
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+</style>

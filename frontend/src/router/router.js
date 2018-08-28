@@ -27,7 +27,7 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/search/:searchTerm',
+      path: '/search/:searchterm',
       name: 'search',
       component: Search,
     },
