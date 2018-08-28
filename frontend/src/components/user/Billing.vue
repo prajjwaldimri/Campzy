@@ -15,3 +15,15 @@
             img(src="/vectors/paytm.svg" height="64" width="80")
             v-btn(flat) LINK ACCOUNT
 </template>
+
+<style lang="scss" scoped>
+.settings-card {
+  padding: 2rem;
+}
+
+.settings-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
