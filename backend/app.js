@@ -25,7 +25,6 @@ const rollbar = new Rollbar({
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
-require('./config/passport');
 
 const app = express();
 app.use(compression());
