@@ -1,7 +1,8 @@
 <template lang="pug">
   div
     v-container.display(fluid)
-      v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark v-model="drawer" hide-overlay)
+      v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark
+      v-model="drawer" hide-overlay)
         .d-flex.content-justify
           v-container.side-container(fluid)
             v-list.pt-4
@@ -22,11 +23,11 @@
             v-list.pt-5(dense)
               v-list-tile.pt-3(@click='userManagement' v-show='isAdmin')
                 v-list-tile-action
-                  v-icon wc
+                  v-icon supervised_user_circle
                 v-list-tile-content.increase-letter-spacing-1 User Management
               v-list-tile.pt-3(@click='campManagement' v-show='isAdmin')
                 v-list-tile-action
-                  v-icon beach_access
+                  v-icon explore
                 v-list-tile-content.increase-letter-spacing-1 Camp Management
               v-list-tile.pt-3(@click='campDetails')
                 v-list-tile-action
@@ -38,7 +39,7 @@
                 v-list-tile-content.increase-letter-spacing-1 Inventory
           v-container.side-container(fluid)
             v-list(dense)
-              v-list-tile.pt-3(v-show='isCampOwner')
+              v-list-tile.pt-3(@click='signOut')
                 v-list-tile-action
                   v-icon exit_to_app
                 v-list-tile-content.increase-letter-spacing-1 Sign Out
@@ -51,21 +52,24 @@
                 v-list-tile-action
                   v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
                     v-icon chevron_right
-
       router-view.router-display
-      //- v-bottom-nav.theme--dark.hidden-md-and-up( :value="true" absolute shift  fixed)
-      //-   v-btn
-      //-     span User Management
-      //-     v-icon wc
-      //-   v-btn
-      //-     span Camp Management
-      //-     v-icon beach_access
-      //-   v-btn
-      //-     span Camps
-      //-     v-icon room_service
-      //-   v-btn
-      //-     span Inventory
-      //-     v-icon add
+      v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
+     fixed shift).hidden-md-and-up
+        v-btn(dark @click="$router.push('/dashboard/userManagement')" v-show='isAdmin')
+          span User Management
+          v-icon supervised_user_circle
+        v-btn(dark @click="$router.push('/dashboard/userManagement')" v-show='isCampOwner')
+          span Camp Details
+          v-icon details
+        v-btn(dark @click="$router.push('/dashboard/campManagement')" v-show='isAdmin')
+          span Camp Management
+          v-icon explore
+        v-btn(dark @click="$router.push('/dashboard/campManagement')" v-show='isCampOwner')
+          span Camp Inventory
+          v-icon add_shopping_cart
+        v-btn(dark @click='signOut')
+          span Sign Out
+          v-icon exit_to_app
 
 </template>
 <script>
@@ -83,6 +87,7 @@ export default {
       isCampOwner: false,
       isAdmin: false,
       isDrawerOpen: true,
+      bottomNav: 0,
     };
   },
   mounted() {
@@ -96,10 +101,8 @@ export default {
     campManagement() { this.$router.push('/dashboard/campManagement'); },
 
     signOut() {
-      this.load = true;
       this.$cookie.delete('sessionToken');
       this.$router.push('/login');
-      this.signOutfail = true;
     },
 
     getCurrentUser() {
