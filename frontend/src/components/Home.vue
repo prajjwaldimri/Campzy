@@ -1,12 +1,17 @@
 <template lang="pug">
   .home-flex
     .search-flex
-      .campzy-logo.pb-3
+      .campzy-logo.pb-4
         img(src="/vectors/Campzy-logo.svg")
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
-      v-model="searchInput" @keyup.enter="searchClick")
-      h3.title.grey--text(style="max-width:70%") Try searching for Nature, Leh, Mountains.....
+      v-model="searchInput" @keyup.enter="searchClick"
+      hint="You can search for Nature, Leh, Mountains.....").mb-0
+      //- h3.title.grey--text(style="max-width:70%").hidden-sm-and-down
+      //-   | You can search for Nature, Leh, Mountains.....
+      .d-flex(style="flex-wrap: wrap")
+        v-btn(outline large) Sign In / Sign Up
+        v-btn(large color="green").white--text Don't know what to search?
 
 </template>
 
@@ -76,6 +81,9 @@ export default {
     .v-input {
       min-width: 40vw;
       user-select: none;
+      @media screen and (max-width: 960px) {
+        min-width: 90vw;
+      }
     }
 
     .campzy-logo {
@@ -87,7 +95,7 @@ export default {
       user-select: none;
 
       img {
-        height: 4rem;
+        height: 4.2rem;
       }
     }
   }
