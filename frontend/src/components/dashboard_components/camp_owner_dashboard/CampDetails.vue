@@ -100,7 +100,6 @@ export default {
         },
       });
       client.request(getCamp).then((data) => {
-        console.log(data);
         this.camp = data.currentUserCamp;
         this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;

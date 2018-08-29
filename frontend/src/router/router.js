@@ -74,22 +74,27 @@ const router = new Router({
       component: Dashboard,
       children: [
         {
+          name: '',
           path: 'pricing',
           component: Pricing,
         },
         {
+          name: 'campDetails',
           path: 'campDetails',
           component: CampDetails,
         },
         {
+          name: 'campInventory',
           path: 'campInventory',
           component: CampInventory,
         },
         {
+          name: 'campManagement',
           path: 'campManagement',
           component: ManageCamps,
         },
         {
+          name: 'userManagement',
           path: 'userManagement',
           component: UserManagement,
         },
