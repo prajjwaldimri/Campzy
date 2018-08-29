@@ -6,7 +6,7 @@
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick"
-      hint="You can search for Nature, Leh, Mountains.....").mb-0
+      hint="You can search for Nature, Leh, Mountains, etc.").mb-0
       //- h3.title.grey--text(style="max-width:70%").hidden-sm-and-down
       //-   | You can search for Nature, Leh, Mountains.....
       .d-flex(style="flex-wrap: wrap")
