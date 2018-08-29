@@ -10,7 +10,7 @@
       //- h3.title.grey--text(style="max-width:70%").hidden-sm-and-down
       //-   | You can search for Nature, Leh, Mountains.....
       .d-flex(style="flex-wrap: wrap")
-        v-btn(outline large) Sign In / Sign Up
+        v-btn(outline large @click="$router.push('login')") Sign In / Sign Up
         v-btn(large color="green").white--text Don't know what to search?
 
 </template>
