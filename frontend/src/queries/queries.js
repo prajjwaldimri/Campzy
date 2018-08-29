@@ -40,6 +40,7 @@ const getCamp = `query currentUserCamp{
           longDescription,
           amenities,
           placesOfInterest,
+          tags,
          
         }
 
