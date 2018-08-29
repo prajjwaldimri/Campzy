@@ -41,8 +41,8 @@
             v-list(dense)
               v-list-tile.pt-3(@click='signOut')
                 v-list-tile-action
-                  v-icon exit_to_app
-                v-list-tile-content.increase-letter-spacing-1 Sign Out
+                  v-icon(color='red') exit_to_app
+                v-list-tile-content.increase-letter-spacing-1.red--text Sign Out
               v-list-tile(v-show='isDrawerOpen')
                 v-list-tile-action
                   v-btn(icon @click.stop='mini=!mini; isDrawerOpen=false')
@@ -69,11 +69,12 @@
           v-icon add_shopping_cart
         v-btn(dark @click='signOut')
           span Sign Out
-          v-icon exit_to_app
+          v-icon(style="color: red") exit_to_app
 
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
+import { EventBus } from '../event-bus';
 
 export default {
   name: 'Dashboard',
@@ -119,6 +120,10 @@ export default {
         .then((data) => {
           this.user = data.currentUser;
           this.isLoggedIn = true;
+          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner') {
+            this.$router.push('login');
+            EventBus.$emit('show-error-notification-short', 'You ara not Previledge for this action');
+          }
           if (this.user.type === 'CampOwner') {
             this.isCampOwner = true;
           }
@@ -162,6 +167,7 @@ export default {
   flex-direction: column;
   height: 100%;
   justify-content: space-around;
+  padding: 0;
 }
 
 .side-container {

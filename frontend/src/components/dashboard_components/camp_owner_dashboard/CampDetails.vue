@@ -8,7 +8,7 @@
       v-tabs-items
         v-tab-item(id='basic')
           v-flex(xs12 md6 style='max-width:100%')
-            v-card.details-card(flat)
+            v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.healine BASIC DETAILS
               v-form(ref='form' lazy-validation)
@@ -23,7 +23,7 @@
                       v-text-field(label='Camp Url' v-model='camp.url')
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
-            v-card.details-card(flat)
+            v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.headline BANK DETAILS
               v-form(ref='form' lazy-validation)
@@ -38,7 +38,7 @@
                       v-text-field(label='IFSC Code')
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
-            v-card.details-card(flat)
+            v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.headline CAMP DETAILS
               v-form(ref='form' lazy-validation)
@@ -46,11 +46,14 @@
                     v-layout(row)
                       v-flex(xs5)
                         v-select(v-model='amenities' :items='amenitiesItems' attach chips
-                        label='Amenities' multiple)
+                        label='Amenities' multiple clearable)
                       v-spacer
                       v-flex(xs6)
                         v-combobox(v-model='placesOfInterest' attach chips
                         label='Places of Interest' multiple clearable)
+                    v-flex(xs12)
+                        v-combobox(v-model='tags' attach chips
+                        label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
                       v-model='camp.shortDescription')
@@ -58,11 +61,11 @@
                       v-textarea(outline label='Camp Description' v-model='camp.longDescription')
 
     v-container.camp-display(fluid)
-        v-card.details-card(width='95%' color='transparent')
+        v-card.footer-card(width='95%' color='transparent')
           v-card-actions
             v-spacer
             v-btn(flat) Cancel
-            v-btn.text--white(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
+            v-btn.white--text(color='green' @click='saveCampDetails' :loading='isDataUpdating') Save
 </template>
 
 <script>
@@ -81,6 +84,7 @@ export default {
       amenities: [],
       amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
       placesOfInterest: [],
+      tags: [],
     };
   },
 
@@ -103,6 +107,7 @@ export default {
         this.camp = data.currentUserCamp;
         this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;
+        this.tags = this.camp.tags;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
@@ -123,6 +128,7 @@ export default {
         placesOfInterest: this.placesOfInterest,
         shortDescription: this.camp.shortDescription,
         longDescription: this.camp.longDescription,
+        tags: this.tags,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -154,14 +160,18 @@ export default {
   width: 100%;
 }
 
-.details-card {
+.body-card {
   margin: 2rem 2rem 0rem 2rem;
-  min-height: 70vh !important;
+  min-height: 76vh !important;
   padding: 2rem;
   box-shadow: none;
 }
+.footer-card {
+  margin: 2rem 2rem 0rem 2rem;
+  box-shadow: none;
+}
 .layout {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .item-align {
