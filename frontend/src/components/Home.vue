@@ -30,14 +30,14 @@ export default {
   mounted() {
     // Animate Home Elements
     anime({
-      targets: ['.campzy-logo', '.search-flex .v-input'],
+      targets: ['.campzy-logo', '.search-flex .v-input', '.search-flex .d-flex'],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
       duration: 500,
       elasticity: 1200,
       delay(target, index) {
-        return index * 100;
+        return index * 150;
       },
     });
   },
@@ -45,7 +45,7 @@ export default {
     searchClick() {
       if (this.searchInput === '') {
         anime({
-          targets: '.search-flex .v-input',
+          targets: ['.search-flex .v-input'],
           translateX: [{ value: -50, duration: 100 }, { value: 0, duration: 100 }],
           easing: 'easeInOutQuad',
           loop: 2,
