@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+const NotFoundPage = () => import('../components/404.vue');
 const Home = () => import('../components/Home.vue');
 const Search = () => import('../components/Search.vue');
 const BookCampSite = () => import('../components/user/BookCampSite.vue');
@@ -21,6 +22,10 @@ Vue.use(Router);
 const router = new Router({
   mode: 'history',
   routes: [
+    {
+      path: '*',
+      component: NotFoundPage,
+    },
     {
       path: '/',
       name: 'home',

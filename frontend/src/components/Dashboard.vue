@@ -33,7 +33,8 @@
                 v-list-tile-action
                   v-icon details
                 v-list-tile-content.increase-letter-spacing-1 Camp Details
-              v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')" v-show='isCampOwner')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')"
+              v-show='isCampOwner')
                 v-list-tile-action
                   v-icon local_grocery_store
                 v-list-tile-content.increase-letter-spacing-1 Inventory
