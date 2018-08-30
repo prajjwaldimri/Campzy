@@ -24,6 +24,7 @@ const CampSchema = new Schema({
     validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
   },
   images: [String],
+  heroImage: String,
   url: { type: String, unique: true },
   location: { type: String },
   isAvailable: { type: Boolean, required: true, default: false },
@@ -46,6 +47,8 @@ const CampSchema = new Schema({
     sparse: true,
     ref: 'User',
   },
+  rating: Number,
+  terrain: String,
   inventory: [Schema.Types.ObjectId],
 });
 
