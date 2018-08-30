@@ -1,7 +1,7 @@
 <template lang="pug">
   v-container.display(fluid)
     v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark
-    v-model="drawer" hide-overlay)
+    v-model="drawer" hide-overlay sticky)
       .d-flex.content-justify(style='position:fixed')
         v-container.side-container(fluid)
           v-list.pt-4
@@ -207,8 +207,7 @@ export default {
 .side-drawer {
   border-right: 1px sloid;
   box-shadow: none !important;
-  height: 100vh;
-  position: sticky;
+  height: 100%;
 }
 .center-item {
   align-items: center;

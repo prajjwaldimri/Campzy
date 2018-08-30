@@ -19,7 +19,8 @@
     v-layout(row)
       v-flex(sm5)
         v-text-field(solo type='search' label="Search" v-model='searchCampTerm'
-        append-icon='search' @keydown.enter.prevent='searchCamp(page)' clearable)
+        append-icon='search'
+        @click:append="searchCamp(page)" @keydown.enter.prevent='searchCamp(page)' clearable)
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
         v-dialog(v-model="addCampDialog" persistent max-width="500px")
@@ -31,7 +32,7 @@
     v-layout(row)
       v-data-table(:headers="headers" :items="camps" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading").elevation-1
-        template(slot="items" slot-scope="props")
+        template(slot="items" slot-scope="props" @click.stop='')
           td {{props.item.id}}
           td.font-weight-bold {{props.item.name}}
           td {{props.item.owner.name}}
@@ -41,6 +42,8 @@
           td.align-center
             v-icon(small @click="editCamp(props.item.id)") edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
+          td.align-center
+            v-icon(small @click="goToCampDetail(props.item.id)") remove_red_eye
     v-container.pagination-container(fluid)
       v-pagination(v-model='page' :length='pageLength'
         @input='getAllCamps(page)')
@@ -74,6 +77,7 @@ export default {
         { text: 'Camp Location', value: 'location' },
         { text: 'Creation Date', value: 'creationDate' },
         { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'View Camp', value: 'actions', sortable: false },
       ],
       camps: [],
       deleteDialog: false,

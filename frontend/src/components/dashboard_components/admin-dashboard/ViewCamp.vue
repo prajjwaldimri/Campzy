@@ -1,13 +1,58 @@
 <template lang="pug">
-  v-container.camp-display(fluid)
+  v-container.camps-container(grid-list-lg)
     h2.font-weight-bold.headline CAMP DETAILS
-    v-card
-      v-card-title(primary-title)
-        v-flex(xs12).justify-center
-      v-container(fluid)
-        v-layout(column)
-          v-flex(xs12)
-            h2 {{campDetail.name}}
+    v-layout(row wrap)
+      v-flex(xs12 md6)
+        v-card.card-body
+          v-card-title
+            h2.font-weight-normal BASIC DETAILS
+          v-container(fluid)
+            v-layout(column)
+              v-flex(xs12)
+                v-text-field( label='Camp Name' v-model='campDetail.name' readonly)
+              v-flex(xs12)
+                v-text-field( label='Camp Email' v-model='campDetail.email' readonly)
+              v-flex(xs12)
+                v-text-field( label='Phone Number' v-model='campDetail.phoneNumber' readonly)
+              v-flex(xs12)
+                v-text-field( label='Location' v-model='campDetail.location' readonly)
+              v-flex(xs12)
+                v-text-field( label='Camp Url' v-model='campDetail.url' readonly)
+      v-flex(xs12 md6)
+        v-card.card-body
+          v-card-title
+            h2.font-weight-normal BANK DETAILS
+          v-container(fluid)
+            v-layout(column)
+              v-flex(xs12)
+                v-text-field( label='Bank Name' v-model='campDetail.name' readonly)
+              v-flex(xs12)
+                v-text-field( label='Account Number' v-model='campDetail.email' readonly)
+              v-flex(xs12)
+                v-text-field( label='Bank IFSC Code' v-model='campDetail.phoneNumber' readonly)
+              v-flex(xs12)
+                v-text-field( label='Branch' v-model='campDetail.location' readonly)
+              v-flex(xs12)
+                v-text-field( label='GST Number' v-model='campDetail.url' readonly)
+    v-flex(xs12)
+      v-card.card-body
+        v-card-title
+          h2.font-weight-normal Camp Details
+        v-container(fluid)
+          v-layout(column)
+            v-flex(xs12)
+              v-combobox(v-model='campDetail.placesOfInterest' attach chips
+              label='Amenities' multiple readonly)
+            v-flex(xs12)
+              v-combobox(v-model='campDetail.placesOfInterest' attach chips
+              label='Places of Interest' multiple readonly)
+            v-flex(xs12)
+              v-combobox(v-model='campDetail.tags' attach chips
+              label='Tags' multiple readonly)
+            v-flex(xs12)
+              v-text-field( label='Short Description' v-model='campDetail.shortDescription' readonly)
+            v-flex(xs12)
+              v-textarea( label='Long Description' v-model='campDetail.longDescription' readonly)
 
 </template>
 <script>
@@ -48,11 +93,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.camp-display {
-  margin: 10px;
-  padding: 0px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.camps-container {
+  @media screen and (min-width: 960px) {
+    padding: 2rem;
+  }
+  height: 100%;
+}
+
+.card-body {
+  padding: 2rem;
 }
 </style>

@@ -19,7 +19,7 @@
     v-layout(row)
       v-flex(sm5)
         v-text-field(solo type='search' append-icon='search' label="Search"
-        v-model='userSearchTerm'
+        v-model='userSearchTerm' @click:append="searchUser(page)"
         @keydown.enter.prevent='searchUser(page)' clearable )
 
     v-layout(row)
