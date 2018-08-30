@@ -47,7 +47,6 @@ const UserSchema = new Schema({
     unique: true,
     sparse: true,
     ref: 'Camp',
-    validate: [validate({ validator: 'isMongoId', message: 'Not a valid camp id' })],
   },
 });
 

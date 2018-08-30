@@ -23,6 +23,7 @@ const CampSchema = new Schema({
     sparse: true,
     validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
   },
+  images: [String],
   url: { type: String, unique: true },
   location: { type: String },
   isAvailable: { type: Boolean, required: true, default: false },
@@ -36,8 +37,8 @@ const CampSchema = new Schema({
   altitude: { type: String },
   hourDriveFromDelhi: { type: Date },
   coordinates: {
-    type: String,
-    validate: [validate({ validator: 'isLatLong', message: 'Not valid coordinates' })],
+    latitude: { type: String },
+    longitude: { type: String },
   },
   ownerId: {
     type: Schema.Types.ObjectId,

@@ -1,5 +1,7 @@
 <template lang="pug">
-  .home-flex
+  .home-flex(style="justify-content: flex-start")
+    .d-flex(style="align-self: flex-end")
+      v-btn(large @click="$router.push('login')") My Account
     .search-flex
       .campzy-logo.pb-4
         img(src="/vectors/Campzy-logo.svg")
@@ -8,9 +10,9 @@
       v-model="searchInput" @keyup.enter="searchClick"
       hint="You can search for Nature, Leh, Mountains, etc.").mb-0
 
-      .d-flex(style="flex-wrap: wrap")
-        v-btn(outline large @click="$router.push('login')") Sign In / Sign Up
-        v-btn(large color="green").white--text Don't know what to search?
+      //- .d-flex(style="flex-wrap: wrap")
+      //-   v-btn(outline large @click="$router.push('login')") Sign In / Sign Up
+      //-   v-btn(large color="green").white--text Don't know what to search?
 
 </template>
 
