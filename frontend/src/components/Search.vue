@@ -4,9 +4,9 @@
       navbar
 
     v-container(fluid grid-list-md)
-      v-layout(row wrap)
+      v-layout(row wrap align-start)
         transition(name="slide-y-transition" appear)
-          v-flex(md3).hidden-sm-and-down
+          v-flex(md3 style="position:sticky; top: 0").hidden-sm-and-down
             v-container(fluid grid-list-md xs3).top-search
               v-layout(row wrap justify-center)
                 v-flex(md4 xs12)

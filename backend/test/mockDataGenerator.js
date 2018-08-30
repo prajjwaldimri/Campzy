@@ -86,7 +86,7 @@ mongoose.connection.once('open', async () => {
   await User.remove({});
   await Tent.remove({});
   await Camp.remove({});
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1000; i++) {
     await CreateUser();
   }
   process.exit(0);
