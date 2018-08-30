@@ -16,6 +16,7 @@ const UserSchema = new Schema({
     validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
   },
   isEmailVerified: { type: Boolean, default: false },
+  gdprConsent: { type: Boolean, default: false },
   password: { type: String, required: true },
   passwordResetToken: String,
   passwordResetExpires: Date,
