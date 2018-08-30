@@ -38,11 +38,9 @@
           td {{props.item.location}}
           td {{props.item.creationDate}}
           td.align-center
-            v-icon(small @click="editCamp(props.item.id)").mr-2 edit
+            v-icon(small @click="editCamp(props.item.id)") edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
-            v-icon(small @click="goToCampDetail(props.item.id)").ml-2 remove_red_eye
-    v-pagination(v-model='page' length='10' prev-icon="mdi-menu-left"
-      next-icon="mdi-menu-right")
+    v-pagination(v-model='page' :length='pageLength' :total-visible='4' )
 </template>
 
 <script>
@@ -80,7 +78,8 @@ export default {
       deleteCampName: '',
       deleteCampNameConfirmation: null,
       isTableLoading: false,
-      page: 0,
+      page: 1,
+      pageLength: 1,
     };
   },
   mounted() {
@@ -100,6 +99,10 @@ export default {
     this.getAllCamps();
   },
   methods: {
+    // getAllCampsLength() {
+
+    // },
+
     getAllCamps() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
