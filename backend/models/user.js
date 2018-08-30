@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  name: { type: String, text: true },
+  name: { type: String },
   email: {
     type: String,
     lowercase: true,
@@ -48,6 +48,10 @@ const UserSchema = new Schema({
     sparse: true,
     ref: 'Camp',
   },
+});
+
+UserSchema.index({
+  name: 'text',
 });
 
 // eslint-disable-next-line
