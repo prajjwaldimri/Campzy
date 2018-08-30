@@ -18,7 +18,7 @@
       h1.font-weight-light.pl-2.pb-3 Camps
     v-layout(row)
       v-flex(sm5)
-        v-text-field(solo label="Search" v-model='searchCampTerm'
+        v-text-field(solo type='search' label="Search" v-model='searchCampTerm'
         append-icon='search' @keydown.enter.prevent='searchCamp(page)' clearable)
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex

@@ -201,7 +201,7 @@ export default {
 }
 .router-display {
   width: 100%;
-  padding: 0px;
+  padding: 2rem;
   margin: 0px;
 }
 .side-drawer {

@@ -32,7 +32,7 @@
           td.align-center
             v-icon(small @click="") delete
     v-container.pagination-container(fluid)
-      v-pagination(v-model='page' :length='userPageLength'
+      v-pagination.hidden-xs(v-model='page' :length='userPageLength'
        @input='getAllUsers(page)')
 </template>
 
