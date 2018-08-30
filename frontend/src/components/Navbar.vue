@@ -1,7 +1,8 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" flat prominent dark)
-    v-toolbar-side-icon.ml-0
-      v-icon clear_all
+    v-toolbar-title.ml-0
+      span Camp
+      span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click='goToHome') HOME
