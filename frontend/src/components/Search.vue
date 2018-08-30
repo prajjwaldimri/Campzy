@@ -34,14 +34,14 @@
               v-flex(v-for="result in searchResults" :key="result.name").search-results
                 v-card(hover)
                   v-container(fluid grid-list-md)
-                    v-layout(row wrap)
-
-                      v-flex(sm12 md4).image-wrapper
+                    //- Desktop layout for search
+                    v-layout(row wrap).hidden-sm-and-down
+                      v-flex(md4).image-wrapper
                         v-img(:src="result.imgSrc" width="100%" height="15rem" cover)
                           v-layout(slot="placeholder" fill-height align-center justify-center)
                             v-progress-circular(indeterminate color="grey lighten-5")
 
-                      v-flex(sm12 md4).result-column.pl-3
+                      v-flex(md4).result-column.pl-3
                         div
                           h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
                           h3.grey--text.mt-2.pl-2 {{result.location}}
@@ -69,6 +69,32 @@
                         .row.feature-row
                           v-icon.mr-3.green--text verified_user
                           span.increase-letter-spacing-1 Campzy Quality Assurance
+
+
+                  //- Mobile layout for search cards
+                  v-layout(column).hidden-md-and-up
+                      v-flex.image-wrapper
+                        v-img(:src="result.imgSrc" contain)
+                          v-layout(slot="placeholder" fill-height align-center justify-center)
+                            v-progress-circular(indeterminate color="grey lighten-5")
+
+                      v-flex.result-column
+                        div
+                          h1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
+                          h3.grey--text {{result.location}}
+                        div.mt-3
+                          h3.title.mb-2.pl-2 Starting @ ₹ {{result.starting}}
+                          v-tooltip(right)
+                            v-rating(v-model="result.rating" color="green"
+                            background-color="green lighten-3" half-increments
+                            readonly slot="activator")
+                            span {{result.rating}}
+
+                  v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
+                    v-btn(flat)
+                      span Filter
+                      v-icon poll
+                    v-btn(flat) Filter
 
 
 </template>
@@ -157,7 +183,7 @@ export default {
   }
   .image-wrapper {
     @media screen and (max-width: 960px) {
-      padding: 0 0 0 0 !important;
+      padding: 0 4px 0 4px !important;
     }
     padding: 0 1rem 0 0 !important;
   }
