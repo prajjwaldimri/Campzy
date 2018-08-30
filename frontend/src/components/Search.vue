@@ -36,7 +36,7 @@
               v-layout(row wrap)
                 v-flex(sm12 md3).image-wrapper
                   img(:src="result.imgSrc" height="100%", width="100%")
-                v-flex(sm12 md3).result-column
+                v-flex(sm12 md3).result-column.pl-4
                   h1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
                   h3.grey--text.mb-2 {{result.location}}
 
@@ -65,15 +65,15 @@
                     v-icon.mr-3.green--text check_circle
                     span.increase-letter-spacing-1 Campzy Quality Assurance
 
-                v-flex(md3).pr-2.result-column.hidden-sm-and-down
-                  v-btn(small color="green" block).white--text Book Now!
-                    v-icon(right dark) shop_two
-                  v-btn(small dark block).white--text Learn More
-                  v-btn(small dark block).white--text Location on Map
+                //- v-flex(md3).pr-2.result-column.hidden-sm-and-down
+                //-   v-btn(small color="green" block).white--text Book Now!
+                //-     v-icon(right dark) shop_two
+                //-   v-btn(small dark block).white--text Learn More
+                //-   v-btn(small dark block).white--text Location on Map
 
-                v-flex(sm12).px-2.hidden-md-and-up.result-column
-                  v-btn(color="green").white--text Book Now!
-                    v-icon(right dark) shop_two
+                //- v-flex(sm12).px-2.hidden-md-and-up.result-column
+                //-   v-btn(color="green").white--text Book Now!
+                //-     v-icon(right dark) shop_two
 
 
 </template>
