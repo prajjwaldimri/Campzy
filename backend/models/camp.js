@@ -23,7 +23,7 @@ const CampSchema = new Schema({
     sparse: true,
     validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
   },
-  images: [String],
+  images: { type: [String] },
   url: { type: String, unique: true },
   location: { type: String },
   isAvailable: { type: Boolean, required: true, default: false },

@@ -29,6 +29,7 @@ const CampType = new GraphQLObjectType({
     longDescription: { type: GraphQLString },
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
+    images: { type: new GraphQLList(GraphQLString) },
   }),
 });
 

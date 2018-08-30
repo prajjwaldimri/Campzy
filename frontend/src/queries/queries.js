@@ -41,8 +41,7 @@ const getCamp = `query currentUserCamp{
           amenities,
           placesOfInterest,
           tags,
-          images,
-         
+          images
         }
 
       }`;

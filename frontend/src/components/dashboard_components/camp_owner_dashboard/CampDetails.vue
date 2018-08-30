@@ -61,10 +61,10 @@
                     v-flex.flex-spacing(xs12)
                       v-textarea(outline label='Camp Description' v-model='camp.longDescription')
         v-tab-item(id='images')
-          v-layout(row)
-            v-flex(xs5 md6 style='max-width:100%')
-              v-card(flat)
-                h1 he
+          v-flex(xs12 md6 style='max-width:100%')
+            v-card.body-card(flat)
+              v-carousel
+                v-carousel-item(v-for="(image,i) in camp.images" :key="i" :src="image")
 
 
     v-container.camp-display(fluid)
@@ -112,7 +112,6 @@ export default {
       });
       client.request(getCamp).then((data) => {
         this.camp = data.currentUserCamp;
-        console.log(this.camp.images);
         this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
