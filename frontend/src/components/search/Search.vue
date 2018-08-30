@@ -12,9 +12,9 @@
             v-container(fluid grid-list-md).top-search
               v-layout(column justify-center)
                 v-flex
-                  v-text-field(label="Try Nature, Leh, Mountains....." append-icon="search"
+                  v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
                   autofocus color="green" solo single-line required v-model="searchInput"
-                  @click:append="searchClick" @keyup.enter="searchClick")
+                  @click:append="search" @keyup.enter="search")
 
                 v-flex
                   v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
@@ -32,21 +32,22 @@
         v-flex(xs12 md9)
           v-container(grid-list-md v-show="searchComplete")
             v-layout(column)
-              v-flex(v-for="result in searchResults" :key="result.name").search-results
+              v-flex(v-for="result in searchResults" :key="result.id").search-results
                 v-card
                   v-container(fluid grid-list-md)
                     //- Desktop layout for search
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
                         v-hover
-                          v-img(:src="result.imgSrc" width="100%" height="15rem" cover
+                          v-img(:src="result.heroImage" width="100%" height="15rem" cover
                           slot-scope="{ hover }")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
                               v-progress-circular(indeterminate color="grey lighten-5")
                             v-expand-transition
                               .d-flex(v-if="hover" style="height: 100%"
                               class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
-                                v-btn(dark @click="openImageDialog(result.name, result.name)") View All Images
+                                v-btn(dark @click="openImageDialog(result.name, result.name)")
+                                  | View All Images
 
                       v-flex(md4).result-column.pl-3
                         div
@@ -109,9 +110,11 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
+import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { EventBus } from '../../event-bus';
+import { campSearchUser } from '../../queries/queries';
 
 export default {
   components: {
@@ -122,15 +125,7 @@ export default {
   data() {
     return {
       searchInput: '',
-      searchResults: [{
-        name: 'Chopta Camp', location: 'Chamoli, Uttarakhand', starting: '5000', rating: 4.6, imgSrc: 'https://images.pexels.com/photos/939723/pexels-photo-939723.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=200&w=200',
-      }, {
-        name: 'Leh Camp', location: 'Jammu and Kashmir', starting: '8000', rating: 4.2, imgSrc: 'https://images.pexels.com/photos/965153/pexels-photo-965153.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-      }, {
-        name: 'Thar Camp', location: 'Rajasthan', starting: '15000', rating: 5, imgSrc: 'https://images.pexels.com/photos/803226/pexels-photo-803226.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-      }, {
-        name: 'Himanchal Camp', location: 'Himanchal Pradesh', starting: '3000', rating: 3, imgSrc: 'https://images.pexels.com/photos/6714/light-forest-trees-morning.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      }],
+      searchResults: [],
       searchComplete: false,
       fromDate: null,
       toDate: null,
@@ -145,12 +140,26 @@ export default {
     for (let i = this.minPrice; i <= this.maxPrice; i += 500) {
       this.priceLabels.push(i);
     }
-    this.searchComplete = true;
     this.searchInput = this.$route.params.searchterm;
+    this.search();
   },
 
   methods: {
-    searchClick() {
+    search() {
+      if (this.searchInput.trim() === '') {
+        return;
+      }
+      const variables = {
+        searchTerm: this.searchInput,
+        page: 1,
+      };
+      request('/graphql', campSearchUser, variables).then((data) => {
+        this.searchResults = data.campSearchUser;
+      }).catch(() => {
+        this.searchResults = [];
+      }).finally(() => {
+        this.searchComplete = true;
+      });
     },
     openImageDialog(campId, campName) {
       EventBus.$emit('open-image-dialog', { campId, campName });

@@ -126,13 +126,20 @@ const searchParticularCamp = {
 
 // The front page search of Campzy
 const campSearchUser = {
-  type: CampType,
+  type: new GraphQLList(CampType),
   args: {
     searchTerm: { type: GraphQLString },
     page: { type: GraphQLInt },
   },
   async resolve(parent, args) {
-    console.log(args);
+    const results = await CampModel.find(
+      { $text: { $search: args.searchTerm } },
+      { score: { $meta: 'textScore' } },
+    )
+      .limit(10)
+      .skip((args.page - 1) * 10)
+      .sort({ score: { $meta: 'textScore' } });
+    return results;
   },
 };
 
