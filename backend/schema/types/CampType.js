@@ -9,6 +9,7 @@ const {
   GraphQLBoolean,
   GraphQLList,
   GraphQLInt,
+  GraphQLFloat,
 } = graphql;
 
 const CampType = new GraphQLObjectType({
@@ -35,8 +36,11 @@ const CampType = new GraphQLObjectType({
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
     images: { type: new GraphQLList(GraphQLString) },
+    heroImage: { type: GraphQLString },
     count: { type: GraphQLInt },
     page: { type: GraphQLInt },
+    rating: { type: GraphQLFloat },
+    altitude: { type: GraphQLString },
   }),
 });
 

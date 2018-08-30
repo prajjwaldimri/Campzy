@@ -101,6 +101,17 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   }
 }`;
 
+const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!) {
+  campSearchUser(searchTerm: $searchTerm, page: $page){
+    id,
+    name,
+    location,
+    url,
+    heroImage,
+    rating
+  }
+}`;
+
 // eslint-disable-next-line
 export {
   sendUserCredentials,
@@ -112,4 +123,5 @@ export {
   countAllUsers,
   userSearch,
   campSearch,
+  campSearchUser,
 };

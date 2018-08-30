@@ -62,9 +62,9 @@ CampSchema.index(
   },
   {
     weights: {
-      email: 5,
-      tags: 4,
-      location: 3,
+      name: 7,
+      location: 6,
+      tags: 3,
       terrain: 2,
       shortDescription: 1,
     },
