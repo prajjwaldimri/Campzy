@@ -3,7 +3,12 @@ const UserModel = require('../../models/user.js');
 const UserType = require('./UserType');
 
 const {
-  GraphQLObjectType, GraphQLString, GraphQLID, GraphQLBoolean, GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+  GraphQLBoolean,
+  GraphQLList,
+  GraphQLInt,
 } = graphql;
 
 const CampType = new GraphQLObjectType({
@@ -30,6 +35,8 @@ const CampType = new GraphQLObjectType({
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
     images: { type: new GraphQLList(GraphQLString) },
+    count: { type: GraphQLInt },
+    page: { type: GraphQLInt },
   }),
 });
 

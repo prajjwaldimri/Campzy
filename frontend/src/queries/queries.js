@@ -63,5 +63,20 @@ const getCampDetail = `query camp($id: String!){
 }
 `;
 
+// Count all camps present in model
+
+const countAllCamps = `query countCamps{
+  countCamps{
+      count,
+  }
+}`;
+
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp, getCampDetail };
+export {
+  sendUserCredentials,
+  getAllUsers,
+  getAllTentsQuery,
+  getCamp,
+  getCampDetail,
+  countAllCamps,
+};

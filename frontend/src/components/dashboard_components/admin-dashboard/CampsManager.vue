@@ -40,7 +40,9 @@
           td.align-center
             v-icon(small @click="editCamp(props.item.id)") edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
-    v-pagination(v-model='page' :length='pageLength' :total-visible='4' )
+    v-container.pagination-container(fluid)
+      v-pagination(v-model='page' :length='pageLength'
+      :total-visible='4'  @input='getAllCamps(page)')
 </template>
 
 <script>
@@ -48,6 +50,7 @@ import { GraphQLClient } from 'graphql-request';
 import AddCamp from './CampsManager/AddCamp.vue';
 import EditCamp from './CampsManager/EditCamp.vue';
 import { EventBus } from '../../../event-bus';
+import { countAllCamps } from '../../../queries/queries';
 
 export default {
   components: {
@@ -97,18 +100,28 @@ export default {
     });
 
     this.getAllCamps();
+    this.getAllCampsLength();
   },
   methods: {
-    // getAllCampsLength() {
+    getAllCampsLength() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(countAllCamps).then((data) => {
+        this.pageLength = Math.ceil((data.countCamps.count) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
 
-    // },
-
-    getAllCamps() {
+    getAllCamps(pageNumber) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-      const getCampsQuery = `query allCamps {
-          allCamps {
+      const getCampsQuery = `query allCamps($page: Int) {
+          allCamps (page: $page){
             id,
             tags,
             name,
@@ -121,13 +134,16 @@ export default {
             }
           }
         }`;
+      const variables = {
+        page: pageNumber,
+      };
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
       this.isTableLoading = true;
-      client.request(getCampsQuery).then((data) => {
+      client.request(getCampsQuery, variables).then((data) => {
         this.camps = data.allCamps;
       }).catch((err) => {
         EventBus.$emit('error', err.response.errors[0].message);
@@ -189,5 +205,11 @@ export default {
     padding: 5rem;
   }
   height: 100%;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
