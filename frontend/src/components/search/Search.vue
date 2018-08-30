@@ -4,6 +4,7 @@
       navbar
 
     v-container(fluid grid-list-md)
+      SearchImagesDialog
       v-layout(row wrap align-start)
         transition(name="slide-y-transition" appear)
           v-flex(md3).hidden-sm-and-down.filter-flex
@@ -32,14 +33,20 @@
           v-container(grid-list-md v-show="searchComplete")
             v-layout(column)
               v-flex(v-for="result in searchResults" :key="result.name").search-results
-                v-card(hover)
+                v-card
                   v-container(fluid grid-list-md)
                     //- Desktop layout for search
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
-                        v-img(:src="result.imgSrc" width="100%" height="15rem" cover)
-                          v-layout(slot="placeholder" fill-height align-center justify-center)
-                            v-progress-circular(indeterminate color="grey lighten-5")
+                        v-hover
+                          v-img(:src="result.imgSrc" width="100%" height="15rem" cover
+                          slot-scope="{ hover }")
+                            v-layout(slot="placeholder" fill-height align-center justify-center)
+                              v-progress-circular(indeterminate color="grey lighten-5")
+                            v-expand-transition
+                              .d-flex(v-if="hover" style="height: 100%"
+                              class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
+                                v-btn(dark @click="openImageDialog(result.name, result.name)") View All Images
 
                       v-flex(md4).result-column.pl-3
                         div
@@ -74,9 +81,10 @@
                   //- Mobile layout for search cards
                   v-layout(column).hidden-md-and-up
                       v-flex.image-wrapper
-                        v-img(:src="result.imgSrc" contain)
+                        v-img(:src="result.imgSrc" contain @click="openImageDialog(result.name, result.name)")
                           v-layout(slot="placeholder" fill-height align-center justify-center)
                             v-progress-circular(indeterminate color="grey lighten-5")
+
 
                       v-flex.result-column
                         div
@@ -101,12 +109,15 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading';
-import navbar from './Navbar.vue';
+import navbar from '../Navbar.vue';
+import SearchImagesDialog from './SearchImagesDialog.vue';
+import { EventBus } from '../../event-bus';
 
 export default {
   components: {
     navbar,
     InfiniteLoading,
+    SearchImagesDialog,
   },
   data() {
     return {
@@ -140,6 +151,9 @@ export default {
 
   methods: {
     searchClick() {
+    },
+    openImageDialog(campId, campName) {
+      EventBus.$emit('open-image-dialog', { campId, campName });
     },
   },
 };
@@ -192,5 +206,14 @@ export default {
 .home {
   min-height: 100vh;
   background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.9;
+  position: absolute;
+  width: 100%;
 }
 </style>

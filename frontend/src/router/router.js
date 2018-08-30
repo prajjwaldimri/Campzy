@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 const NotFoundPage = () => import('../components/404.vue');
 const Home = () => import('../components/Home.vue');
-const Search = () => import('../components/Search.vue');
+const Search = () => import('../components/search/Search.vue');
 const BookCampSite = () => import('../components/user/BookCampSite.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
