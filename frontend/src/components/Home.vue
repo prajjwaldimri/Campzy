@@ -10,9 +10,9 @@
       v-model="searchInput" @keyup.enter="searchClick"
       hint="You can search for Nature, Leh, Mountains, etc.").mb-0
     .d-flex.users-flex.py-2
-      h1.headline.grey--text.text--darken-2.mb-2
+      h1.headline.grey--text.text--darken-2.mb-2(style="text-align: center")
         | Currently operational in Uttarakhand and Himanchal Pradesh
-      span.title.grey--text.text--darken-1
+      span.title.grey--text.text--darken-1.hidden-sm-and-down
         ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
         |  users served
 
