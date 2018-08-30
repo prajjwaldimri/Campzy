@@ -52,4 +52,23 @@ const CampSchema = new Schema({
   inventory: [Schema.Types.ObjectId],
 });
 
+CampSchema.index(
+  {
+    name: 'text',
+    tags: 'text',
+    location: 'text',
+    shortDescription: 'text',
+    terrain: 'text',
+  },
+  {
+    weights: {
+      email: 5,
+      tags: 4,
+      location: 3,
+      terrain: 2,
+      shortDescription: 1,
+    },
+  },
+);
+
 module.exports = mongoose.model('Camp', CampSchema);
