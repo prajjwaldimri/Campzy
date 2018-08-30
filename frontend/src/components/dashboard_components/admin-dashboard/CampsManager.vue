@@ -40,6 +40,7 @@
           td.align-center
             v-icon(small @click="editCamp(props.item.id)").mr-2 edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
+            v-icon(small @click="goToCampDetail(props.item.id)").ml-2 remove_red_eye
 </template>
 
 <script>
@@ -167,6 +168,10 @@ export default {
         EventBus.$emit('error', 'Wrong Confirmation Name');
         this.deleteDialog = false;
       }
+    },
+
+    goToCampDetail(campId) {
+      this.$router.push(`/dashboard/viewCamp/${campId}`);
     },
   },
 };

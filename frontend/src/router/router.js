@@ -16,6 +16,7 @@ const Pricing = () => import('../components/dashboard_components/camp_owner_dash
 const CampDetails = () => import('../components/dashboard_components/camp_owner_dashboard/CampDetails.vue');
 const CampInventory = () => import('../components/dashboard_components/camp_owner_dashboard/CampInventory.vue');
 const ManageCamps = () => import('../components/dashboard_components/admin-dashboard/CampsManager.vue');
+const ViewCamp = () => import('../components/dashboard_components/admin-dashboard/ViewCamp.vue');
 
 Vue.use(Router);
 
@@ -97,6 +98,11 @@ const router = new Router({
           name: 'userManagement',
           path: 'userManagement',
           component: UserManagement,
+        },
+        {
+          name: 'viewCamp',
+          path: 'viewCamp/:id',
+          component: ViewCamp,
         },
       ],
     },

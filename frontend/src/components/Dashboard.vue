@@ -21,30 +21,30 @@
                   v-list-tile-title.increase-letter-spacing-2 {{user.name}}
           v-container.side-container(fluid)
             v-list.pt-5(dense)
-              v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')" v-show='isAdmin')
+              v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')"
+                v-show='isAdmin')
                 v-list-tile-action
                   v-icon supervised_user_circle
-                v-list-tile-content.increase-letter-spacing-1 User Management
-              v-list-tile.pt-3(@click="$router.push('/dashboard/campManagement')" v-show='isAdmin')
+                v-list-tile-content.increase-letter-spacing-1(id='v-step-0') User Management
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campManagement')"  v-show='isAdmin')
                 v-list-tile-action
-                  v-icon explore
-                v-list-tile-content.increase-letter-spacing-1 Camp Management
-              v-list-tile.pt-3(@click="$router.push('/dashboard/campDetails')")
+                  img(src="/vectors/tent.svg" height="24" width="24")
+                v-list-tile-content.increase-letter-spacing-1(id='v-step-1') Camp Management
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campDetails')" v-show='isCampOwner')
                 v-list-tile-action
-                  v-icon details
-                v-list-tile-content.increase-letter-spacing-1 Camp Details
-              v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')"
-              v-show='isCampOwner')
+                  img(src="/vectors/campfire.svg" height="24" width="24")
+                v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Camp Details
+              v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')" v-show='isCampOwner')
                 v-list-tile-action
                   v-icon local_grocery_store
-                v-list-tile-content.increase-letter-spacing-1 Inventory
+                v-list-tile-content.increase-letter-spacing-1(id='v-step-3') Inventory
           v-container.side-container(fluid)
             v-list(dense)
               v-list-tile.pt-3(@click='signOut')
                 v-list-tile-action
                   v-icon(color='red') exit_to_app
-                v-list-tile-content.increase-letter-spacing-1.red--text Sign Out
-              v-list-tile(v-show='isDrawerOpen')
+                v-list-tile-content.increase-letter-spacing-1.red--text(id='v-step-4') Sign Out
+              v-list-tile(v-show='isDrawerOpen' data-v-step="5")
                 v-list-tile-action
                   v-btn(icon @click.stop='mini=!mini; isDrawerOpen=false')
                     v-icon chevron_left
@@ -53,22 +53,28 @@
                 v-list-tile-action
                   v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
                     v-icon chevron_right
+          v-tour(name='adminTour' :steps='adminSteps')
+          //- v-tour(name='campOwnerTour' :steps='campOwnerSteps')
       router-view.router-display
       v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
      fixed shift).hidden-md-and-up
-        v-btn(dark @click="$router.push('/dashboard/userManagement')" v-show='isAdmin')
+        v-btn(dark @click="$router.push('/dashboard/userManagement')"
+        v-show='isAdmin' id='v-step-0')
           span User Management
           v-icon supervised_user_circle
-        v-btn(dark @click="$router.push('/dashboard/userManagement')" v-show='isCampOwner')
+        v-btn(dark @click="$router.push('/dashboard/userManagement')"
+        v-show='isCampOwner' id='v-step-1')
           span Camp Details
           v-icon details
-        v-btn(dark @click="$router.push('/dashboard/campManagement')" v-show='isAdmin')
+        v-btn(dark @click="$router.push('/dashboard/campManagement')"
+        v-show='isAdmin' id='v-step-2')
           span Camp Management
           v-icon explore
-        v-btn(dark @click="$router.push('/dashboard/campManagement')" v-show='isCampOwner')
+        v-btn(dark @click="$router.push('/dashboard/campManagement')"
+        v-show='isCampOwner' id='v-step-3')
           span Camp Inventory
           v-icon add_shopping_cart
-        v-btn(dark @click='signOut')
+        v-btn(dark @click='signOut' data-v-step='4')
           span Sign Out
           v-icon(style="color: red") exit_to_app
 
@@ -90,10 +96,55 @@ export default {
       isAdmin: false,
       isDrawerOpen: true,
       bottomNav: 0,
+      adminSteps: [
+        {
+          target: '#v-step-0',
+          content: 'Use this for User Management',
+        },
+        {
+          target: '#v-step-1',
+          content: 'Use this for Camp Management',
+        },
+        {
+          target: '#v-step-4',
+          content: 'Use this for Sign Out',
+        },
+        {
+          target: '[data-v-step="5"]',
+          content: 'Use this to close the Drawer',
+          params: {
+            placement: 'top',
+          },
+        },
+      ],
+      campOwnerSteps: [
+        {
+          target: '#v-step-2',
+          content: 'To see your owned camp details',
+        },
+        {
+          target: '#v-step-3',
+          content: 'To see your camp Inventory',
+        },
+        {
+          target: '#v-step-4',
+          content: 'Use this for Sign Out',
+        },
+        {
+          target: '[data-v-step="5"]',
+          content: 'Use this to close the Drawer',
+          params: {
+            placement: 'top',
+          },
+        },
+
+
+      ],
     };
   },
   mounted() {
     this.getCurrentUser();
+    this.$tours.adminTour.start();
   },
   methods: {
 
@@ -123,7 +174,7 @@ export default {
           this.isLoggedIn = true;
           if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner') {
             this.$router.push('login');
-            EventBus.$emit('show-error-notification-short', 'You ara not Previledge for this action');
+            EventBus.$emit('show-error-notification-short', 'Your account does not have the capability to perfomr this action');
           }
           if (this.user.type === 'CampOwner') {
             this.isCampOwner = true;
@@ -147,7 +198,7 @@ export default {
   margin: 0px 0px 0px 0px;
   padding: 0px;
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 .router-display {
   width: 100%;
@@ -155,6 +206,7 @@ export default {
 .side-drawer {
   border-right: 1px sloid;
   box-shadow: none !important;
+  min-height: 100vh;
 }
 .center-item {
   align-items: center;
