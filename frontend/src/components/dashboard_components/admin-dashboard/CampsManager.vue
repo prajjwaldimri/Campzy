@@ -42,7 +42,7 @@
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
     v-container.pagination-container(fluid)
       v-pagination(v-model='page' :length='pageLength'
-      :total-visible='4'  @input='getAllCamps(page)')
+        @input='getAllCamps(page)')
 </template>
 
 <script>
@@ -205,7 +205,7 @@ export default {
 <style lang="scss" scoped>
 .camps-container {
   @media screen and (min-width: 960px) {
-    padding: 5rem;
+    padding: 2rem;
   }
   height: 100%;
 }

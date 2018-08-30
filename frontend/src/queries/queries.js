@@ -7,8 +7,8 @@ const sendUserCredentials = `query loginUser($loginEmail: String!,$loginPassword
 
 // Get all users for admin
 
-const getAllUsers = `query {
-  allUsers{
+const getAllUsers = `query ($page: Int){
+  allUsers(page: $page){
     id
     name
     phoneNumber

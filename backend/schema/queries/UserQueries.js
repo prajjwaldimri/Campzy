@@ -10,7 +10,7 @@ const {
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 
-const { GraphQLString, GraphQLList } = graphql;
+const { GraphQLString, GraphQLList, GraphQLInt } = graphql;
 
 const currentUser = {
   type: UserType,
@@ -77,6 +77,9 @@ const searchUser = {
 const getAllUsers = {
   // Returns all users from DB
   type: new GraphQLList(UserType),
+  args: {
+    page: { type: GraphQLInt },
+  },
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
@@ -88,7 +91,9 @@ const getAllUsers = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await UserModel.find({});
+      return await UserModel.find({})
+        .limit(8)
+        .skip((args.page - 1) * 8);
     } catch (err) {
       return err;
     }
