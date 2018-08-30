@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 
 const {
-  GraphQLObjectType, GraphQLString, GraphQLID, GraphQLBoolean,
+  GraphQLObjectType, GraphQLString, GraphQLID, GraphQLBoolean, GraphQLInt,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -16,6 +16,8 @@ const UserType = new GraphQLObjectType({
     dateOfBirth: { type: GraphQLString },
     isEmailVerified: { type: GraphQLBoolean },
     profilePicture: { type: GraphQLString },
+    count: { type: GraphQLInt },
+    page: { type: GraphQLInt },
   }),
 });
 

@@ -71,6 +71,12 @@ const countAllCamps = `query countCamps{
   }
 }`;
 
+const countAllUsers = `query countUsers{
+  countUsers{
+      count,
+  }
+}`;
+
 // eslint-disable-next-line
 export {
   sendUserCredentials,
@@ -79,4 +85,5 @@ export {
   getCamp,
   getCampDetail,
   countAllCamps,
+  countAllUsers,
 };

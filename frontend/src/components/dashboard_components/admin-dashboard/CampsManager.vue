@@ -149,14 +149,17 @@ export default {
         EventBus.$emit('error', err.response.errors[0].message);
       }).finally(() => { this.isTableLoading = false; });
     },
+
     editCamp(id) {
       EventBus.$emit('admin-open-edit-camp', id);
     },
+
     showDeleteDialog(id, name) {
       this.deleteDialog = true;
       this.deleteCampName = name;
       this.deleteCampId = id;
     },
+
     deleteCamp() {
       if (this.deleteCampName === this.deleteCampNameConfirmation) {
         if (!this.$cookie.get('sessionToken')) {

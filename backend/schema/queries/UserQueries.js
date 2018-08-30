@@ -130,10 +130,33 @@ const loginUser = {
   },
 };
 
+const countTotalUsers = {
+  // Return total camps length
+  type: UserType,
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserAdmin = await auth.isUserAdmin(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserAdmin) {
+        throw new PrivilegeError();
+      }
+      const count = await UserModel.estimatedDocumentCount({});
+      return { count };
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   currentUser,
   getUser,
   searchUser,
   getAllUsers,
   loginUser,
+  countTotalUsers,
 };

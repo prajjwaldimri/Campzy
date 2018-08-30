@@ -12,6 +12,7 @@ faker.locale = 'en_IND';
 // Add 100 users, camps and their tents
 const userTypes = ['Camper', 'CampOwner', 'Admin'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
+const terrainTypes = ['Jungle', 'Snow', 'Mountain', 'Dessert'];
 
 async function CreateCamp(userId, phoneNumber) {
   let camp;
@@ -29,10 +30,13 @@ async function CreateCamp(userId, phoneNumber) {
       'coordinates.longitude': faker.address.longitude(),
       ownerId: userId,
       images: new Array(10).fill(null).map(e => (e = faker.image.nature())),
+      heroImage: faker.image.nature(),
+      rating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
       amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
       altitude: faker.random.number({ min: 100, max: 2000 }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
       placesOfInterest: new Array(4).fill(null).map(e => (e = faker.hacker.noun())),
+      terrain: faker.random.arrayElement(terrainTypes),
     });
     for (let i = 0; i < 3; i++) {
       let tent = await Tent.create({
@@ -82,7 +86,7 @@ mongoose.connection.once('open', async () => {
   await User.remove({});
   await Tent.remove({});
   await Camp.remove({});
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1000; i++) {
     await CreateUser();
   }
   process.exit(0);
