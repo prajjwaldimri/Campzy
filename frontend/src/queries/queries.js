@@ -46,5 +46,22 @@ const getCamp = `query currentUserCamp{
 
       }`;
 
+const getCampDetail = `query camp($id: String!){
+  camp(id: $id){
+      name,
+      email,
+      phoneNumber,
+      url,
+      location,
+      shortDescription,
+      longDescription,
+      placesOfInterest,
+      tags,
+      amenities,
+
+  }
+}
+`;
+
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp };
+export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp, getCampDetail };
