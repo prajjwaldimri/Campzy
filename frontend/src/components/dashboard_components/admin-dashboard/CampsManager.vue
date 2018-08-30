@@ -18,10 +18,8 @@
       h1.font-weight-light.pl-2.pb-3 Camps
     v-layout(row)
       v-flex(sm5)
-        v-text-field(solo label="Search" append-icon="search" v-model='searchCampTerm')
-      v-flex(sm5)
-        v-btn(flat icon @click='searchCamp(page)')
-          v-icon search
+        v-text-field(solo label="Search" v-model='searchCampTerm'
+        append-icon='search' @keydown.enter.prevent='searchCamp(page)' clearable)
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
         v-dialog(v-model="addCampDialog" persistent max-width="500px")
@@ -213,13 +211,19 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-
+      this.isTableLoading = true;
       client.request(campSearch, variables).then((data) => {
-        this.camps = data.searchCamp;
-        this.pageLength = Math.ceil((data.searchCamp.length) / 8);
+        if (data.searchCamp.length === 0) {
+          this.getAllCamps();
+          this.getAllCampsLength();
+          EventBus.$emit('show-error-notification-short', 'No camp(s) found by this name!');
+        } else {
+          this.camps = data.searchCamp;
+          this.pageLength = Math.ceil((data.searchCamp.length) / 8);
+        }
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      });
+      }).finally(() => { this.isTableLoading = false; });
     },
   },
 };

@@ -77,7 +77,7 @@ const countAllUsers = `query countUsers{
   }
 }`;
 
-const userSearch = `query searchUniqueUser($searchTerm: String!, $page: Int!){
+const userSearch = `query searchUniqueUser($searchTerm: String, $page: Int!){
   searchUniqueUser(searchTerm : $searchTerm, page: $page){
       id,
       name,
@@ -85,7 +85,7 @@ const userSearch = `query searchUniqueUser($searchTerm: String!, $page: Int!){
   }
 }`;
 
-const campSearch = `query searchCamp($searchTerm: String!, $page: Int!){
+const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   searchCamp(searchTerm : $searchTerm, page: $page){
       id,
       tags,
