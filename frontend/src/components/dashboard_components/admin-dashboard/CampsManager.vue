@@ -41,6 +41,8 @@
             v-icon(small @click="editCamp(props.item.id)").mr-2 edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
             v-icon(small @click="goToCampDetail(props.item.id)").ml-2 remove_red_eye
+    v-pagination(v-model='page' length='10' prev-icon="mdi-menu-left"
+      next-icon="mdi-menu-right")
 </template>
 
 <script>
@@ -78,6 +80,7 @@ export default {
       deleteCampName: '',
       deleteCampNameConfirmation: null,
       isTableLoading: false,
+      page: 0,
     };
   },
   mounted() {

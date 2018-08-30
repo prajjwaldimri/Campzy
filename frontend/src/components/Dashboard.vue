@@ -144,7 +144,7 @@ export default {
   },
   mounted() {
     this.getCurrentUser();
-    this.$tours.adminTour.start();
+    // this.$tours.adminTour.start();
   },
   methods: {
 
@@ -202,6 +202,8 @@ export default {
 }
 .router-display {
   width: 100%;
+  padding: 0px;
+  margin: 0px;
 }
 .side-drawer {
   border-right: 1px sloid;
