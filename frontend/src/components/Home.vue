@@ -10,13 +10,12 @@
       v-model="searchInput" @keyup.enter="searchClick"
       hint="You can search for Nature, Leh, Mountains, etc.").mb-0
     .d-flex.users-flex.py-2
-      span.title.grey--text
+      h1.headline.grey--text.text--darken-2.mb-2
+        | Currently operational in Uttarakhand and Himanchal Pradesh
+      span.title.grey--text.text--darken-1
         ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
         |  users served
 
-      //- .d-flex(style="flex-wrap: wrap")
-      //-   v-btn(outline large @click="$router.push('login')") Sign In / Sign Up
-      //-   v-btn(large color="green").white--text Don't know what to search?
 
 </template>
 
@@ -34,17 +33,13 @@ export default {
     return {
       searchInput: '',
       searchClicked: false,
-      value: 120000,
     };
   },
   mounted() {
     // Animate Home Elements
-    const that = this;
-    setInterval(() => {
-      that.value += 1;
-    }, 3000);
+
     anime({
-      targets: ['.campzy-logo', '.search-flex .v-input', '.search-flex .account-flex'],
+      targets: ['.campzy-logo', '.search-flex .v-input', '.home-flex .account-flex', '.home-flex .users-flex'],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
@@ -114,6 +109,11 @@ export default {
 
   .account-flex {
     align-self: flex-end;
+  }
+
+  .users-flex {
+    flex-direction: column;
+    align-items: center;
   }
 
   .green-text {
