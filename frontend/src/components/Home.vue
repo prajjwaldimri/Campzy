@@ -1,7 +1,7 @@
 <template lang="pug">
-  .home-flex(style="justify-content: flex-start")
-    .d-flex(style="align-self: flex-end")
-      v-btn(large @click="$router.push('login')") My Account
+  .home-flex
+    .d-flex.account-flex
+      v-btn(flat large @click="$router.push('login')") My Account
     .search-flex
       .campzy-logo.pb-4
         img(src="/vectors/Campzy-logo.svg")
@@ -9,6 +9,10 @@
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick"
       hint="You can search for Nature, Leh, Mountains, etc.").mb-0
+    .d-flex.users-flex.py-2
+      span.title.grey--text
+        ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
+        |  users served
 
       //- .d-flex(style="flex-wrap: wrap")
       //-   v-btn(outline large @click="$router.push('login')") Sign In / Sign Up
@@ -19,19 +23,28 @@
 <script>
 
 import anime from 'animejs';
+import ICountUp from 'vue-countup-v2';
 
 export default {
   name: 'Home',
+  components: {
+    ICountUp,
+  },
   data() {
     return {
       searchInput: '',
       searchClicked: false,
+      value: 120000,
     };
   },
   mounted() {
     // Animate Home Elements
+    const that = this;
+    setInterval(() => {
+      that.value += 1;
+    }, 3000);
     anime({
-      targets: ['.campzy-logo', '.search-flex .v-input', '.search-flex .d-flex'],
+      targets: ['.campzy-logo', '.search-flex .v-input', '.search-flex .account-flex'],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
@@ -64,17 +77,15 @@ export default {
 
 <style lang="scss">
 .home-flex {
-  top: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
   max-height: 100vh;
 
   .search-flex {
-    position: absolute;
+    margin-top: auto;
+    margin-bottom: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -99,6 +110,10 @@ export default {
         height: 4.2rem;
       }
     }
+  }
+
+  .account-flex {
+    align-self: flex-end;
   }
 
   .green-text {
