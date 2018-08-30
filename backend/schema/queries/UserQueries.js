@@ -74,6 +74,32 @@ const searchUser = {
   },
 };
 
+const searchParticularUser = {
+  type: new GraphQLList(UserType),
+  args: {
+    searchTerm: { type: GraphQLString },
+    page: { type: GraphQLInt },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserAdmin = auth.isUserAdmin(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserAdmin) {
+        throw new PrivilegeError();
+      }
+      return await UserModel.find({ $text: { $search: args.searchTerm } })
+        .limit(8)
+        .skip((args.page - 1) * 8);
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 const getAllUsers = {
   // Returns all users from DB
   type: new GraphQLList(UserType),
@@ -164,4 +190,5 @@ module.exports = {
   getAllUsers,
   loginUser,
   countTotalUsers,
+  searchParticularUser,
 };

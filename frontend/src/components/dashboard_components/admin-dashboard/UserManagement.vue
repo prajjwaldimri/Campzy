@@ -18,7 +18,10 @@
       h1.font-weight-light.pl-2.pb-3 All Users
     v-layout(row)
       v-flex(sm5)
-        v-text-field(solo label="Search" append-icon="search")
+        v-text-field(solo type='search' label="Search"  v-model='userSearchTerm' )
+      v-flex(sm5)
+        v-btn(flat icon @click='searchUser(page)')
+          v-icon search
 
     v-layout(row)
       v-data-table(:headers="headers" :items="users" style="width: 100%" hide-actions
@@ -36,7 +39,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getAllUsers, countAllUsers } from '../../../queries/queries';
+import { getAllUsers, countAllUsers, userSearch } from '../../../queries/queries';
 import EventBus from '../../../event-bus';
 
 export default {
@@ -61,6 +64,7 @@ export default {
       deleteUserName: '',
       page: 1,
       userPageLength: 1,
+      userSearchTerm: null,
     };
   },
 
@@ -98,6 +102,25 @@ export default {
         this.isTableLoading = false;
       }).catch((err) => {
         this.isTableLoading = false;
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    searchUser(pageNumber) {
+      const variables = {
+        searchTerm: this.userSearchTerm,
+        page: pageNumber,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(userSearch, variables).then((data) => {
+        this.users = data.searchUniqueUser;
+        this.userPageLength = Math.ceil((data.searchUniqueUser.length) / 8);
+      }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },

@@ -77,6 +77,30 @@ const countAllUsers = `query countUsers{
   }
 }`;
 
+const userSearch = `query searchUniqueUser($searchTerm: String!, $page: Int!){
+  searchUniqueUser(searchTerm : $searchTerm, page: $page){
+      id,
+      name,
+      phoneNumber
+  }
+}`;
+
+const campSearch = `query searchCamp($searchTerm: String!, $page: Int!){
+  searchCamp(searchTerm : $searchTerm, page: $page){
+      id,
+      tags,
+      name,
+      phoneNumber,
+      email,
+      location,
+      url,
+      owner {
+        name
+      }
+
+  }
+}`;
+
 // eslint-disable-next-line
 export {
   sendUserCredentials,
@@ -86,4 +110,6 @@ export {
   getCampDetail,
   countAllCamps,
   countAllUsers,
+  userSearch,
+  campSearch,
 };

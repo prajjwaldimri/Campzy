@@ -18,7 +18,10 @@
       h1.font-weight-light.pl-2.pb-3 Camps
     v-layout(row)
       v-flex(sm5)
-        v-text-field(solo label="Search" append-icon="search")
+        v-text-field(solo label="Search" append-icon="search" v-model='searchCampTerm')
+      v-flex(sm5)
+        v-btn(flat icon @click='searchCamp(page)')
+          v-icon search
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
         v-dialog(v-model="addCampDialog" persistent max-width="500px")
@@ -50,7 +53,7 @@ import { GraphQLClient } from 'graphql-request';
 import AddCamp from './CampsManager/AddCamp.vue';
 import EditCamp from './CampsManager/EditCamp.vue';
 import { EventBus } from '../../../event-bus';
-import { countAllCamps } from '../../../queries/queries';
+import { countAllCamps, campSearch } from '../../../queries/queries';
 
 export default {
   components: {
@@ -83,6 +86,7 @@ export default {
       isTableLoading: false,
       page: 1,
       pageLength: 1,
+      searchCampTerm: '',
     };
   },
   mounted() {
@@ -197,6 +201,25 @@ export default {
 
     goToCampDetail(campId) {
       this.$router.push(`/dashboard/viewCamp/${campId}`);
+    },
+
+    searchCamp(pageNumber) {
+      const variables = {
+        searchTerm: this.searchCampTerm,
+        page: pageNumber,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(campSearch, variables).then((data) => {
+        this.camps = data.searchCamp;
+        this.pageLength = Math.ceil((data.searchCamp.length) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
     },
   },
 };
