@@ -29,11 +29,14 @@
           td {{props.item.phoneNumber}}
           td.align-center
             v-icon(small @click="") delete
+    v-container.pagination-container(fluid)
+      v-pagination(v-model='page' :length='userPageLength'
+       @input='getAllUsers(page)')
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getAllUsers } from '../../../queries/queries';
+import { getAllUsers, countAllUsers } from '../../../queries/queries';
 import EventBus from '../../../event-bus';
 
 export default {
@@ -56,23 +59,48 @@ export default {
       isTableLoading: false,
       deleteUserConfirmation: '',
       deleteUserName: '',
+      page: 1,
+      userPageLength: 1,
     };
   },
 
+
   mounted() {
-    const client = new GraphQLClient('/graphql', {
-      headers: {
-        Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-      },
-    });
-    this.isTableLoading = true;
-    client.request(getAllUsers).then((data) => {
-      this.users = data.allUsers;
-      this.isTableLoading = false;
-    }).catch((err) => {
-      this.isTableLoading = false;
-      EventBus.$emit('error', err.response.errors[0].message);
-    });
+    this.getAllUsers();
+    this.getAllUsersLength();
+  },
+  methods: {
+    getAllUsersLength() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(countAllUsers).then((data) => {
+        this.userPageLength = Math.ceil((data.countUsers.count) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    getAllUsers(pageNumber) {
+      const variables = {
+        page: pageNumber,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      this.isTableLoading = true;
+      client.request(getAllUsers, variables).then((data) => {
+        this.users = data.allUsers;
+        this.isTableLoading = false;
+      }).catch((err) => {
+        this.isTableLoading = false;
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
   },
 };
 </script>
@@ -81,8 +109,13 @@ export default {
 <style lang="scss" scoped>
 .camps-container {
   @media screen and (min-width: 960px) {
-    padding: 5rem;
+    padding: 2rem;
   }
   height: 100%;
+}
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

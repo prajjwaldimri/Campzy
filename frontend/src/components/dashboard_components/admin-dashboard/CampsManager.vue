@@ -38,9 +38,11 @@
           td {{props.item.location}}
           td {{props.item.creationDate}}
           td.align-center
-            v-icon(small @click="editCamp(props.item.id)").mr-2 edit
+            v-icon(small @click="editCamp(props.item.id)") edit
             v-icon(small @click="showDeleteDialog(props.item.id, props.item.name)") delete
-            v-icon(small @click="goToCampDetail(props.item.id)").ml-2 remove_red_eye
+    v-container.pagination-container(fluid)
+      v-pagination(v-model='page' :length='pageLength'
+        @input='getAllCamps(page)')
 </template>
 
 <script>
@@ -48,6 +50,7 @@ import { GraphQLClient } from 'graphql-request';
 import AddCamp from './CampsManager/AddCamp.vue';
 import EditCamp from './CampsManager/EditCamp.vue';
 import { EventBus } from '../../../event-bus';
+import { countAllCamps } from '../../../queries/queries';
 
 export default {
   components: {
@@ -78,6 +81,8 @@ export default {
       deleteCampName: '',
       deleteCampNameConfirmation: null,
       isTableLoading: false,
+      page: 1,
+      pageLength: 1,
     };
   },
   mounted() {
@@ -95,14 +100,28 @@ export default {
     });
 
     this.getAllCamps();
+    this.getAllCampsLength();
   },
   methods: {
-    getAllCamps() {
+    getAllCampsLength() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(countAllCamps).then((data) => {
+        this.pageLength = Math.ceil((data.countCamps.count) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    getAllCamps(pageNumber) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-      const getCampsQuery = `query allCamps {
-          allCamps {
+      const getCampsQuery = `query allCamps($page: Int) {
+          allCamps (page: $page){
             id,
             tags,
             name,
@@ -115,26 +134,32 @@ export default {
             }
           }
         }`;
+      const variables = {
+        page: pageNumber,
+      };
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
       this.isTableLoading = true;
-      client.request(getCampsQuery).then((data) => {
+      client.request(getCampsQuery, variables).then((data) => {
         this.camps = data.allCamps;
       }).catch((err) => {
         EventBus.$emit('error', err.response.errors[0].message);
       }).finally(() => { this.isTableLoading = false; });
     },
+
     editCamp(id) {
       EventBus.$emit('admin-open-edit-camp', id);
     },
+
     showDeleteDialog(id, name) {
       this.deleteDialog = true;
       this.deleteCampName = name;
       this.deleteCampId = id;
     },
+
     deleteCamp() {
       if (this.deleteCampName === this.deleteCampNameConfirmation) {
         if (!this.$cookie.get('sessionToken')) {
@@ -180,8 +205,14 @@ export default {
 <style lang="scss" scoped>
 .camps-container {
   @media screen and (min-width: 960px) {
-    padding: 5rem;
+    padding: 2rem;
   }
   height: 100%;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

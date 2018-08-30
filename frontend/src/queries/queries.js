@@ -7,8 +7,8 @@ const sendUserCredentials = `query loginUser($loginEmail: String!,$loginPassword
 
 // Get all users for admin
 
-const getAllUsers = `query {
-  allUsers{
+const getAllUsers = `query ($page: Int){
+  allUsers(page: $page){
     id
     name
     phoneNumber
@@ -41,7 +41,7 @@ const getCamp = `query currentUserCamp{
           amenities,
           placesOfInterest,
           tags,
-         
+          images
         }
 
       }`;
@@ -63,5 +63,27 @@ const getCampDetail = `query camp($id: String!){
 }
 `;
 
+// Count all camps present in model
+
+const countAllCamps = `query countCamps{
+  countCamps{
+      count,
+  }
+}`;
+
+const countAllUsers = `query countUsers{
+  countUsers{
+      count,
+  }
+}`;
+
 // eslint-disable-next-line
-export { sendUserCredentials, getAllUsers, getAllTentsQuery, getCamp, getCampDetail };
+export {
+  sendUserCredentials,
+  getAllUsers,
+  getAllTentsQuery,
+  getCamp,
+  getCampDetail,
+  countAllCamps,
+  countAllUsers,
+};

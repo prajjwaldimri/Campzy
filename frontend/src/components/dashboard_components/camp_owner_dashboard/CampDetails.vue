@@ -5,6 +5,7 @@
       v-tab(href='#basic') Basic Details
       v-tab(href='#bankdetails') Bank Details
       v-tab(href='#campdetail') Camp Details
+      v-tab(href='#images') Camp Images
       v-tabs-items
         v-tab-item(id='basic')
           v-flex(xs12 md6 style='max-width:100%')
@@ -59,6 +60,12 @@
                       v-model='camp.shortDescription')
                     v-flex.flex-spacing(xs12)
                       v-textarea(outline label='Camp Description' v-model='camp.longDescription')
+        v-tab-item(id='images')
+          v-flex(xs12 md6 style='max-width:100%')
+            v-card.body-card(flat)
+              v-carousel
+                v-carousel-item(v-for="(image,i) in camp.images" :key="i" :src="image")
+
 
     v-container.camp-display(fluid)
         v-card.footer-card(width='95%' color='transparent')
