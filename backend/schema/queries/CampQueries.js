@@ -124,10 +124,23 @@ const searchParticularCamp = {
   },
 };
 
+// The front page search of Campzy
+const campSearchUser = {
+  type: CampType,
+  args: {
+    searchTerm: { type: GraphQLString },
+    page: { type: GraphQLInt },
+  },
+  async resolve(parent, args) {
+    console.log(args);
+  },
+};
+
 module.exports = {
   getCamp,
   getCurrentUserCamp,
   getAllCamps,
   countTotalCamps,
   searchParticularCamp,
+  campSearchUser,
 };
