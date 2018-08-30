@@ -80,11 +80,13 @@
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
 import navbar from './Navbar.vue';
 
 export default {
   components: {
     navbar,
+    InfiniteLoading,
   },
   data() {
     return {
