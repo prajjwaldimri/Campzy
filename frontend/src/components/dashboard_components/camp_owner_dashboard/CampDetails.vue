@@ -4,6 +4,7 @@
       v-tabs-slider(color='green')
       v-tab(href='#basic') Basic Details
       v-tab(href='#bankdetails') Bank Details
+      v-tab(href='#documents') Documents
       v-tab(href='#campdetail') Camp Details
       v-tab(href='#images') Camp Images
       v-tabs-items
@@ -30,13 +31,34 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
-                      v-text-field(label='Bank Name')
+                      v-text-field(label='Bank Name' )
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Branch' )
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Account Number')
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='IFSC Code')
+        v-tab-item(id='documents')
+          v-flex(xs12 md6 style='max-width:100%')
+            v-card.body-card(flat)
+              v-card-title.title(primary-title)
+                h2.font-weight-bold.headline Documents
+              v-form(ref='form' lazy-validation)
+                  v-layout.layout(row wrap)
+                    v-flex(xs12)
+                      v-layout(column)
+                        span PAN DETAILS
+                        input(type='file' name='pan_card'
+                        @change='showFile' accept='application/pdf' )
+                    v-flex(xs12)
+                      v-layout(column)
+                        span GST DETAILS
+                        input(type='file' name='gst_number'
+                        @change='showFile' accept='application/pdf' )
+                    v-flex(xs12)
+                      v-layout(column)
+                        span TIN NUMBER
+                        input(type='file' name='tin' @change='showFile' accept='application/pdf' )
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
@@ -92,6 +114,9 @@ export default {
       amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
       placesOfInterest: [],
       tags: [],
+      panNumber: null,
+      tinNumber: null,
+      gstNumber: null,
     };
   },
 
@@ -100,6 +125,9 @@ export default {
   },
 
   methods: {
+    showFile(event) {
+      console.log(event.target.files);
+    },
     // Get the camp ID related to current user
     getCampDetails() {
       if (!this.$cookie.get('sessionToken')) {
@@ -111,6 +139,7 @@ export default {
         },
       });
       client.request(getCamp).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
         this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;

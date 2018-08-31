@@ -24,6 +24,9 @@
   "dependencies": {
     "animejs": "^2.2.0",
     "apollo-errors": "^1.9.0",
+    "apollo-upload-client": "^8.1.0",
+    "apollo-upload-server": "^7.0.0",
+    "aws-sdk": "^2.306.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "body-parser-graphql": "^1.1.0",
@@ -36,7 +39,7 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "express-session": "^1.15.6",
-    "graphql": "^0.13.2",
+    "graphql": "^14.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.9.2",

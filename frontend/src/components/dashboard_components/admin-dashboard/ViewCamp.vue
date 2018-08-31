@@ -41,7 +41,7 @@
         v-container(fluid)
           v-layout(column)
             v-flex(xs12)
-              v-combobox(v-model='campDetail.placesOfInterest' attach chips
+              v-combobox(v-model='campDetail.amenities' attach chips
               label='Amenities' multiple readonly)
             v-flex(xs12)
               v-combobox(v-model='campDetail.placesOfInterest' attach chips
@@ -50,14 +50,15 @@
               v-combobox(v-model='campDetail.tags' attach chips
               label='Tags' multiple readonly)
             v-flex(xs12)
-              v-text-field( label='Short Description' v-model='campDetail.shortDescription' readonly)
+              v-text-field( label='Short Description'
+              v-model='campDetail.shortDescription' readonly)
             v-flex(xs12)
               v-textarea( label='Long Description' v-model='campDetail.longDescription' readonly)
 
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
-// import { EventBus } from '../../../event-bus';
+import { EventBus } from '../../../event-bus';
 import { getCampDetail } from '../../../queries/queries';
 
 export default {
@@ -86,7 +87,7 @@ export default {
       client.request(getCampDetail, variables).then((data) => {
         this.campDetail = data.camp;
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
   },

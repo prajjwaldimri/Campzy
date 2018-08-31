@@ -2,7 +2,7 @@
   v-container.display(fluid)
     v-navigation-drawer.side-drawer.hidden-sm-and-down(:mini-variant.sync="mini" dark
     v-model="drawer" hide-overlay sticky)
-      .d-flex.content-justify(style='position:fixed')
+      .d-flex.content-justify(style='position:sticky;top:0;')
         v-container.side-container(fluid)
           v-list.pt-4
             v-list-tile
@@ -219,7 +219,6 @@ export default {
 }
 .content-justify {
   flex-direction: column;
-  height: 100%;
   justify-content: space-around;
   padding: 0;
 }
