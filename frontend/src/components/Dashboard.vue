@@ -20,6 +20,10 @@
                 v-list-tile-title.increase-letter-spacing-2 {{user.name}}
         v-container.side-container(fluid)
           v-list.pt-5(dense)
+            v-list-tile.pt-3(@click="$router.push('/dashboard/')" v-show='isCampOwner')
+              v-list-tile-action
+                v-icon data_usage
+              v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
             v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')"
               v-show='isAdmin')
               v-list-tile-action
@@ -57,11 +61,15 @@
     router-view.router-display
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
     fixed shift).hidden-md-and-up
+      v-btn(dark @click="$router.push('/dashboard/')"
+       id='v-step-0')
+        span Statistics
+        v-icon data_usage
       v-btn(dark @click="$router.push('/dashboard/userManagement')"
       v-show='isAdmin' id='v-step-0')
         span User Management
         v-icon supervised_user_circle
-      v-btn(dark @click="$router.push('/dashboard/userManagement')"
+      v-btn(dark @click="$router.push('/dashboard/campDetails')"
       v-show='isCampOwner' id='v-step-1')
         span Camp Details
         v-icon details
@@ -69,13 +77,13 @@
       v-show='isAdmin' id='v-step-2')
         span Camp Management
         v-icon explore
-      v-btn(dark @click="$router.push('/dashboard/campManagement')"
+      v-btn(dark @click="$router.push('/dashboard/campInventory')"
       v-show='isCampOwner' id='v-step-3')
         span Camp Inventory
         v-icon add_shopping_cart
-      v-btn(dark @click='signOut' data-v-step='4')
+      v-btn(dark @click="signOut")
         span Sign Out
-        v-icon(style="color: red") exit_to_app
+        v-icon exit_to_app
 
 </template>
 <script>
