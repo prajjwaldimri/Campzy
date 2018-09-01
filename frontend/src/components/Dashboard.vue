@@ -7,7 +7,7 @@
           v-list.pt-4
             v-list-tile
               v-list-tile-content.center-item
-                v-layout(row style="width:100%;margin-left:6.5rem;")
+                v-layout(row style="width:100%;margin-left:3.5rem;")
                   router-link.link-text(to='/')
                     h1.font-weight-light
                       span Camp
