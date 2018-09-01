@@ -23,7 +23,7 @@
                 v-list-tile-title.increase-letter-spacing-2 {{user.name}}
         v-container.side-container(fluid)
           v-list.pt-5(dense)
-            v-list-tile.pt-3(@click="$router.push('/dashboard/')" v-show='isCampOwner')
+            v-list-tile.pt-3(@click="$router.push('/dashboard/')")
               v-list-tile-action
                 v-icon data_usage
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
