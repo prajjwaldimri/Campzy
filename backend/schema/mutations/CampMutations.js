@@ -66,7 +66,6 @@ const updateCamp = {
     longDescription: { type: GraphQLString },
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    filename: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
     try {

@@ -12,7 +12,7 @@ const Billing = () => import('../components/user/Billing.vue');
 const PasswordReset = () => import('../components/user/PasswordReset.vue');
 const Dashboard = () => import('../components/Dashboard.vue');
 const UserManagement = () => import('../components/dashboard_components/admin-dashboard/UserManagement.vue');
-const Pricing = () => import('../components/dashboard_components/camp_owner_dashboard/Pricing.vue');
+const Statistics = () => import('../components/dashboard_components/camp_owner_dashboard/Statistics.vue');
 const CampDetails = () => import('../components/dashboard_components/camp_owner_dashboard/CampDetails.vue');
 const CampInventory = () => import('../components/dashboard_components/camp_owner_dashboard/CampInventory.vue');
 const ManageCamps = () => import('../components/dashboard_components/admin-dashboard/CampsManager.vue');
@@ -75,9 +75,9 @@ const router = new Router({
       component: Dashboard,
       children: [
         {
-          name: '',
-          path: 'pricing',
-          component: Pricing,
+          name: 'statistics',
+          path: '/',
+          component: Statistics,
         },
         {
           name: 'campDetails',

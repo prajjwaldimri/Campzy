@@ -99,7 +99,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getCamp } from '../../../queries/queries';
+import { getCurrentUserCamp } from '../../../queries/queries';
 import { saveCampDetails } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -109,7 +109,6 @@ export default {
       el: 0,
       camp: {},
       isDataUpdating: false,
-      nameDisable: false,
       amenities: [],
       amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
       placesOfInterest: [],
@@ -138,14 +137,14 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(getCamp).then((data) => {
-        console.log(data);
+      client.request(getCurrentUserCamp).then((data) => {
         this.camp = data.currentUserCamp;
         this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
       }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        console.log(err);
+        // EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
     // Save updated vlaues of camp
