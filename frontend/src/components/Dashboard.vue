@@ -7,10 +7,13 @@
           v-list.pt-4
             v-list-tile
               v-list-tile-content.center-item
-                router-link.link-text(to='/')
-                  h1.font-weight-light
-                    span Camp
-                    span.green--text zy
+                v-layout(row style="width:100%;margin-left:6.5rem;")
+                  router-link.link-text(to='/')
+                    h1.font-weight-light
+                      span Camp
+                      span.green--text zy
+                  v-btn.help-btn(flat icon small @click='startTour')
+                    v-icon help
         v-container.side-container(fluid)
           v-list.pt-3
             v-list-tile(avatar)
@@ -25,7 +28,7 @@
                 v-icon data_usage
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
             v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')"
-              v-show='isAdmin')
+               v-show='isAdmin')
               v-list-tile-action
                 v-icon supervised_user_circle
               v-list-tile-content.increase-letter-spacing-1(id='v-step-0') User Management
@@ -41,6 +44,7 @@
               v-list-tile-action
                 v-icon local_grocery_store
               v-list-tile-content.increase-letter-spacing-1(id='v-step-3') Inventory
+          v-tour(name='adminTour' :steps='adminSteps')
         v-container.side-container(fluid)
           v-list(dense)
             v-list-tile.pt-3(@click='signOut')
@@ -56,8 +60,7 @@
               v-list-tile-action
                 v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
                   v-icon chevron_right
-        v-tour(name='adminTour' :steps='adminSteps')
-        //- v-tour(name='campOwnerTour' :steps='campOwnerSteps')
+          v-tour(name='adminTour' :steps='adminSteps')
     router-view.router-display
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
     fixed shift).hidden-md-and-up
@@ -119,9 +122,6 @@ export default {
         {
           target: '[data-v-step="5"]',
           content: 'Use this to close the Drawer',
-          params: {
-            placement: 'top',
-          },
         },
       ],
       campOwnerSteps: [
@@ -151,10 +151,12 @@ export default {
   },
   mounted() {
     this.getCurrentUser();
-    // this.$tours.adminTour.start();
   },
   methods: {
-
+    startTour() {
+      // eslint-disable-next-line
+      this.$tours['adminTour'].start();
+    },
     signOut() {
       this.$cookie.delete('sessionToken');
       this.$router.push('/login');
@@ -233,5 +235,8 @@ export default {
 
 .side-container {
   padding: 0;
+}
+.help-btn {
+  margin: 0.8rem 0rem 0rem 3rem;
 }
 </style>
