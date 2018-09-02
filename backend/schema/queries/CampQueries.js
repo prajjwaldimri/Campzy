@@ -44,9 +44,8 @@ const getCurrentUserCamp = {
         throw new PrivilegeError();
       }
       const det = await CampModel.findById(userData.ownedCampId);
+      det.ownerId = 'Abcd';
       console.log(det);
-      const owner = det.ownerId;
-      console.log(owner);
       return det;
     } catch (err) {
       return err;
