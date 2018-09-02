@@ -42,7 +42,7 @@ const CampSchema = new Schema({
     longitude: { type: String },
   },
   ownerId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     unique: true,
   },
   rating: Number,

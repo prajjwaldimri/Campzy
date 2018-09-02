@@ -143,8 +143,7 @@ export default {
         this.tags = this.camp.tags;
         this.amenities = this.camp.amenities;
       }).catch((err) => {
-        console.log(err);
-        // EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
     // Save updated vlaues of camp
