@@ -30,7 +30,7 @@ const CampType = new GraphQLObjectType({
         return UserModel.findById(parent.ownerId, 'name email');
       },
     },
-    ownerId: { type: GraphQLID },
+    ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
     amenities: { type: new GraphQLList(GraphQLString) },

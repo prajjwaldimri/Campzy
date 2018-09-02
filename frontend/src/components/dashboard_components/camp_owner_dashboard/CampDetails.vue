@@ -68,8 +68,8 @@
                   v-layout.layout(row wrap)
                     v-layout(row)
                       v-flex(xs5)
-                        v-select(v-model='amenities' :items='amenitiesItems' attach chips
-                        label='Amenities' multiple clearable)
+                        v-select(:items="amenitiesItems" v-model="amenities"
+                        multiple chips label="Amenities"  clearable)
                       v-spacer
                       v-flex(xs6)
                         v-combobox(v-model='placesOfInterest' attach chips
@@ -99,7 +99,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getCurrentUserCamp } from '../../../queries/queries';
+import { getCurrentUserCampDetails } from '../../../queries/queries';
 import { saveCampDetails } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -137,11 +137,11 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(getCurrentUserCamp).then((data) => {
+      client.request(getCurrentUserCampDetails).then((data) => {
         this.camp = data.currentUserCamp;
-        this.amenities = this.camp.amenities;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
+        this.amenities = this.camp.amenities;
       }).catch((err) => {
         console.log(err);
         // EventBus.$emit('show-error-notification-short', err.response.errors[0].message);

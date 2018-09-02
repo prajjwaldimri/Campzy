@@ -43,7 +43,11 @@ const getCurrentUserCamp = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      return await CampModel.findById(userData.ownedCampId);
+      const det = await CampModel.findById(userData.ownedCampId);
+      console.log(det);
+      const owner = det.ownerId;
+      console.log(owner);
+      return det;
     } catch (err) {
       return err;
     }

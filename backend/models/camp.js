@@ -44,8 +44,6 @@ const CampSchema = new Schema({
   ownerId: {
     type: Schema.Types.ObjectId,
     unique: true,
-    sparse: true,
-    ref: 'User',
   },
   rating: Number,
   terrain: String,

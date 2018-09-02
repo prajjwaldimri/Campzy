@@ -28,7 +28,7 @@ const getAllTentsQuery = `query allTents{
   }
   `;
 
-const getCurrentUserCamp = `query currentUserCamp{
+const getCurrentUserCampDetails = `query currentUserCamp{
         currentUserCamp {
           id,
           ownerId,
@@ -117,7 +117,7 @@ export {
   sendUserCredentials,
   getAllUsers,
   getAllTentsQuery,
-  getCurrentUserCamp,
+  getCurrentUserCampDetails,
   getCampDetail,
   countAllCamps,
   countAllUsers,
