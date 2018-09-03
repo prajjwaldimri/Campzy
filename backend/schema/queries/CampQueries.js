@@ -144,10 +144,10 @@ const campSearchUser = {
         path: 'inventory',
         match: {
           isBooked: { $eq: false },
-          bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
+          bookingPriceAdult: { $gte: args.minPrice, $lte: args.maxPrice },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
-        select: 'bookingPrice',
+        select: 'bookingPriceAdult bookingPriceChildren',
       })
       .limit(10)
       .skip((args.page - 1) * 10)
@@ -159,7 +159,6 @@ const campSearchUser = {
         delete results[i];
       }
     }
-    // console.log(results);
     return results;
   },
 };

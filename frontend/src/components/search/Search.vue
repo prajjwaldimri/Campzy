@@ -206,15 +206,7 @@ export default {
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
-        for (let i = 0; i < this.searchResults.length; i += 1) {
-          let minPrice = 99999;
-          this.searchResults[i].inventory.forEach((tent) => {
-            if (tent.bookingPrice < minPrice) {
-              minPrice = tent.bookingPrice;
-            }
-          });
-          this.searchResults[i].minPrice = minPrice;
-        }
+        this.calculatePrice();
       }).catch(() => {
         this.searchResults = [];
       }).finally(() => {
@@ -224,6 +216,21 @@ export default {
     openImageDialog(campId, campName) {
       EventBus.$emit('open-image-dialog', { campId, campName });
     },
+    calculatePrice() {
+      for (let i = 0; i < this.searchResults.length; i += 1) {
+        let minPriceAdult = 99999;
+        let minPriceChildren = 99999;
+        this.searchResults[i].inventory.forEach((tent) => {
+          if (tent.bookingPriceAdult < minPriceAdult) {
+            minPriceAdult = tent.bookingPriceAdult;
+          }
+          if (tent.bookingPriceChildren < minPriceChildren) {
+            minPriceChildren = tent.bookingPriceChildren;
+          }
+        });
+        this.searchResults[i].minPrice = (minPriceAdult * this.adultCount) + (minPriceChildren * this.childrenCount);
+      }
+    },
   },
   watch: {
     fromDate() {
@@ -231,6 +238,12 @@ export default {
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+    },
+    adultCount() {
+      this.calculatePrice();
+    },
+    childrenCount() {
+      this.calculatePrice();
     },
   },
 };
