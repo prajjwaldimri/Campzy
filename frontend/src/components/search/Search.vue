@@ -27,7 +27,7 @@
 
                   v-flex
                     v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
-                      hint="Price Range" persistent-hint color="green")
+                      hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
 
                   v-flex
                     v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
@@ -90,7 +90,8 @@
                           h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
                           h3.grey--text.mt-2.pl-2 {{result.location}}
                         div
-                          h3.title.mb-2.pl-2 Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
+                          h3.title.mb-2.pl-2
+                            | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                           v-tooltip(right)
                             v-rating(v-model="result.rating" color="green"
                             background-color="green lighten-3" half-increments
