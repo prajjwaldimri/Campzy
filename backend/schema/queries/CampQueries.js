@@ -135,7 +135,6 @@ const campSearchUser = {
     page: { type: GraphQLInt },
   },
   async resolve(parent, args) {
-    console.log(args);
     const results = await CampModel.find(
       { $text: { $search: args.searchTerm } },
       { score: { $meta: 'textScore' } },
@@ -145,10 +144,10 @@ const campSearchUser = {
         path: 'inventory',
         match: {
           isBooked: { $eq: false },
-          // bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
+          bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
-        select: 'bookingPrice, preBookPeriod',
+        select: 'bookingPrice',
       })
       .limit(10)
       .skip((args.page - 1) * 10)

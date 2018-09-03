@@ -90,7 +90,7 @@
                           h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
                           h3.grey--text.mt-2.pl-2 {{result.location}}
                         div
-                          h3.title.mb-2.pl-2 Starting @ ₹ {{result.starting}}
+                          h3.title.mb-2.pl-2 Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                           v-tooltip(right)
                             v-rating(v-model="result.rating" color="green"
                             background-color="green lighten-3" half-increments
@@ -206,9 +206,17 @@ export default {
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
-      }).catch((err) => {
+        for (let i = 0; i < this.searchResults.length; i += 1) {
+          let minPrice = 99999;
+          this.searchResults[i].inventory.forEach((tent) => {
+            if (tent.bookingPrice < minPrice) {
+              minPrice = tent.bookingPrice;
+            }
+          });
+          this.searchResults[i].minPrice = minPrice;
+        }
+      }).catch(() => {
         this.searchResults = [];
-        console.log(err);
       }).finally(() => {
         this.searchComplete = true;
       });

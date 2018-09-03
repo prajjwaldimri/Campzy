@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 const UserModel = require('../../models/user.js');
 const UserType = require('./UserType');
+const TentType = require('./TentType');
 
 const {
   GraphQLObjectType,
@@ -41,6 +42,7 @@ const CampType = new GraphQLObjectType({
     page: { type: GraphQLInt },
     rating: { type: GraphQLFloat },
     altitude: { type: GraphQLString },
+    inventory: { type: GraphQLList(TentType) },
   }),
 });
 
