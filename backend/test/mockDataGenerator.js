@@ -42,8 +42,10 @@ async function CreateCamp(userId, phoneNumber) {
       let tent = await Tent.create({
         capacity: faker.random.number({ min: 1, max: 4 }),
         type: faker.random.arrayElement(campTypes),
-        bookingPrice: faker.random.number({ min: 1000, max: 80000 }),
-        surgePrice: faker.random.number({ min: 1000, max: 80000 }),
+        bookingPriceAdult: faker.random.number({ min: 1000, max: 80000 }),
+        bookingPriceChildren: faker.random.number({ min: 1000, max: 80000 }),
+        surgePriceAdult: faker.random.number({ min: 1000, max: 80000 }),
+        surgePriceChildren: faker.random.number({ min: 1000, max: 80000 }),
         preBookPeriod: faker.random.number({ min: 2, max: 15 }),
         camp: camp._id,
       });
