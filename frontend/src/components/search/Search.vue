@@ -117,7 +117,7 @@
 
 
                     //- Mobile layout for search cards
-                    v-layout(column).hidden-md-and-up
+                    v-layout(column).hidden-md-and-up.pt-2
                       v-flex.image-wrapper
                         v-img(:src="result.heroImage" contain
                         @click="openImageDialog(result.name, result.name)")
@@ -136,10 +136,62 @@
                             v-rating(v-model="result.rating" color="green" small
                             background-color="green lighten-3" half-increments readonly)
 
+                  v-dialog(v-model="filterDialog" fullscreen)
+                    v-card
+                      v-card-title(primary-title)
+                        h3.headline.mb-0 Filters
+                      v-container(fluid grid-list-md).top-search
+                        v-layout(column justify-center)
+                          v-flex
+                            v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
+                            color="green" single-line required v-model="searchInput"
+                            @click:append="search" @keyup.enter="search")
+
+                          v-flex
+                            v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
+                            :close-on-content-click="false" lazy style="width: 100%")
+                              v-select(hint="Trip duration" readonly block
+                              :label="dateLabel"
+                              slot="activator" color="primary" single-line persistent-hint)
+                              v-date-picker(v-model="fromDate" no-title scrollable)
+                              v-date-picker(v-model="toDate" no-title scrollable)
+
+                          v-flex
+                            v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
+                              hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
+
+                          v-flex
+                            v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
+                            multiple hint="Tent types")
+
+                          v-flex
+                            v-layout(row)
+                              v-flex(sm6)
+                                v-combobox(hint="Adults (age > 10)" persistent-hint
+                                v-model="adultCount" :items="adultNumbers")
+                              v-flex(sm6)
+                                v-combobox(hint="Children (age > 5)" persistent-hint
+                                v-model="childrenCount" :items="childrenNumbers")
+
+                          v-flex
+                            v-select(v-model="amenitiesSelected" :items="amenities" attach
+                            chips persistent-hint
+                            multiple hint="Amenities")
+                              template(slot="selection" slot-scope="{item, index}")
+                                v-chip(v-if="index <= 2")
+                                  span {{item}}
+                                v-chip(v-if="index === 3").grey--text.caption
+                                  | (+ {{amenitiesSelected.length - 3}} others)
+                    v-btn(fixed dark fab bottom right color="primary"
+                    @click.native="search")
+                      v-icon done_all
+
+
                   v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
-                    v-btn(flat)
+                    v-btn(flat @click.native="filterDialog=true")
                       span Filter
                       v-icon filter_list
+
                     v-btn(flat)
                       span Sort
                       v-icon poll
@@ -180,6 +232,7 @@ export default {
       childrenCount: 1,
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
+      filterDialog: false,
     };
   },
   mounted() {
@@ -196,6 +249,7 @@ export default {
 
   methods: {
     search() {
+      this.filterDialog = false;
       if (this.searchInput.trim() === '') {
         return;
       }
