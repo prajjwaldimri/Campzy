@@ -101,8 +101,8 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   }
 }`;
 
-const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!) {
-  campSearchUser(searchTerm: $searchTerm, page: $page){
+const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!) {
+  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice){
     id,
     name,
     location,

@@ -129,16 +129,38 @@ const campSearchUser = {
   type: new GraphQLList(CampType),
   args: {
     searchTerm: { type: GraphQLString },
+    bookingStartDate: { type: GraphQLInt },
+    minPrice: { type: GraphQLInt },
+    maxPrice: { type: GraphQLInt },
     page: { type: GraphQLInt },
   },
   async resolve(parent, args) {
+    console.log(args);
     const results = await CampModel.find(
       { $text: { $search: args.searchTerm } },
       { score: { $meta: 'textScore' } },
     )
+      .and({ isAvailable: { $eq: false } }) // TODO: Change this to true
+      .populate({
+        path: 'inventory',
+        match: {
+          isBooked: { $eq: false },
+          // bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
+          preBookPeriod: { $gte: args.bookingStartDate },
+        },
+        select: 'bookingPrice, preBookPeriod',
+      })
       .limit(10)
       .skip((args.page - 1) * 10)
       .sort({ score: { $meta: 'textScore' } });
+
+    // Delete camps with no inventory
+    for (let i = 0; i < results.length; i += 1) {
+      if (results[i].inventory.length === 0) {
+        delete results[i];
+      }
+    }
+    // console.log(results);
     return results;
   },
 };

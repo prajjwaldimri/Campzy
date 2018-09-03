@@ -7,30 +7,66 @@
       SearchImagesDialog
       v-layout(row wrap align-start)
         transition(name="slide-y-transition" appear)
-          v-flex(md3).hidden-sm-and-down.filter-flex
+          v-flex(md3 style="max-height: 90vh;").hidden-sm-and-down.filter-flex
+            v-card(style="max-height: 90vh; border-top: 4px green solid")
+              v-container(fluid grid-list-md).top-search
+                v-layout(column justify-center)
+                  v-flex
+                    v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
+                    color="green" single-line required v-model="searchInput"
+                    @click:append="search" @keyup.enter="search")
 
-            v-container(fluid grid-list-md).top-search
-              v-layout(column justify-center)
-                v-flex
-                  v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
-                  autofocus color="green" solo single-line required v-model="searchInput"
-                  @click:append="search" @keyup.enter="search")
+                  v-flex
+                    v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
+                    :close-on-content-click="false" lazy style="width: 100%")
+                      v-select(hint="Trip duration" readonly block
+                      :label="dateLabel"
+                      slot="activator" color="primary" single-line persistent-hint)
+                      v-date-picker(v-model="fromDate" no-title scrollable)
+                      v-date-picker(v-model="toDate" no-title scrollable)
 
-                v-flex
-                  v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
-                  :close-on-content-click="false" lazy)
-                    v-select(hint="Select your trip duration" readonly label="21 August - 25 August"
-                    slot="activator" color="primary" solo single-line persistent-hint)
-                    v-date-picker(v-model="fromDate" no-title scrollable)
-                    v-date-picker(v-model="toDate" no-title scrollable)
+                  v-flex
+                    v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
+                      hint="Price Range" persistent-hint color="green")
 
-                v-flex
-                  v-range-slider(v-model="priceRange" :max="20000" :min="5000" :step="500"
-                    hint="Price Range" persistent-hint height="3.5rem" color="green")
+                  v-flex
+                    v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
+                    multiple hint="Tent types")
+
+                  v-flex
+                    v-layout(row)
+                      v-flex(sm6)
+                        v-combobox(hint="Adults (age > 10)" persistent-hint
+                        v-model="adultCount" :items="adultNumbers")
+                      v-flex(sm6)
+                        v-combobox(hint="Children (age > 5)" persistent-hint
+                        v-model="childrenCount" :items="childrenNumbers")
+
+                  v-flex
+                    v-select(v-model="amenitiesSelected" :items="amenities" attach
+                    chips persistent-hint
+                    multiple hint="Amenities")
+                      template(slot="selection" slot-scope="{item, index}")
+                        v-chip(v-if="index <= 2")
+                          span {{item}}
+                        v-chip(v-if="index === 3").grey--text.caption
+                          | (+ {{amenitiesSelected.length - 3}} others)
+
+              v-card-actions
+                v-btn(color="green" block @click="search").white--text Apply Filters
+                  v-icon(right) filter_list
+
+
+        //- Sort Button
+        v-fab-transition(appear)
+          v-tooltip(top)
+            v-btn(color="red" dark fab fixed bottom right slot="activator").elevation-19
+              v-icon sort
+            span Sort By
 
 
         v-flex(xs12 md9)
-          v-container(grid-list-md v-show="searchComplete")
+          v-container(grid-list-xs v-show="searchComplete")
             v-layout(column)
               v-flex(v-for="result in searchResults" :key="result.id").search-results
                 v-card
@@ -82,7 +118,8 @@
                   //- Mobile layout for search cards
                   v-layout(column).hidden-md-and-up
                       v-flex.image-wrapper
-                        v-img(:src="result.imgSrc" contain @click="openImageDialog(result.name, result.name)")
+                        v-img(:src="result.imgSrc" contain
+                        @click="openImageDialog(result.name, result.name)")
                           v-layout(slot="placeholder" fill-height align-center justify-center)
                             v-progress-circular(indeterminate color="grey lighten-5")
 
@@ -130,10 +167,17 @@ export default {
       fromDate: null,
       toDate: null,
       tripDurationMenu: false,
-      minPrice: 5000,
-      maxPrice: 20000,
-      priceRange: [5000, 20000],
+      priceRange: [1000, 20000],
       priceLabels: [],
+      tentType: ['Dome', 'Swiss'],
+      tentTypes: ['Dome', 'Swiss'],
+      amenitiesSelected: [],
+      amenities: ['Amenity-1', 'Amenity-2', 'Amenity-3', 'Amenity-4', 'Amenity-5', 'Amenity-6'],
+      adultCount: 2,
+      adultNumbers: [1, 2, 3, 4, 5],
+      childrenCount: 1,
+      childrenNumbers: [0, 1, 2, 3, 4],
+      dateLabel: 'Choose a date',
     };
   },
   mounted() {
@@ -141,6 +185,10 @@ export default {
       this.priceLabels.push(i);
     }
     this.searchInput = this.$route.params.searchterm;
+
+    // Set the default date label
+    this.fromDate = this.$moment().format('YYYY-MM-DD');
+    this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
     this.search();
   },
 
@@ -151,18 +199,30 @@ export default {
       }
       const variables = {
         searchTerm: this.searchInput,
+        minPrice: this.priceRange[0],
+        maxPrice: this.priceRange[1],
+        bookingStartDate: this.$moment().diff(this.fromDate, 'days'),
         page: 1,
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
-      }).catch(() => {
+      }).catch((err) => {
         this.searchResults = [];
+        console.log(err);
       }).finally(() => {
         this.searchComplete = true;
       });
     },
     openImageDialog(campId, campName) {
       EventBus.$emit('open-image-dialog', { campId, campName });
+    },
+  },
+  watch: {
+    fromDate() {
+      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+    },
+    toDate() {
+      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
     },
   },
 };

@@ -15,7 +15,7 @@ const TentSchema = new Schema({
     type: String,
     validate: [validate({ validator: 'isCurrency', message: 'Not a valid amount' })],
   },
-  preBookPeriod: String,
+  preBookPeriod: Number,
   camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
   bookedBy: { type: Schema.Types.ObjectId, unique: true, sparse: true },
 });

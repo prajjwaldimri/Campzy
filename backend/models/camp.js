@@ -47,7 +47,7 @@ const CampSchema = new Schema({
   },
   rating: Number,
   terrain: String,
-  inventory: [Schema.Types.ObjectId],
+  inventory: [{ type: Schema.Types.ObjectId, ref: 'Tent' }],
 });
 
 CampSchema.index(

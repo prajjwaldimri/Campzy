@@ -10,6 +10,8 @@ require('vue-tour/dist/vue-tour.css');
 
 const VueCookie = require('vue-cookie');
 
+Vue.use(require('vue-moment'));
+
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
 // Tell Vue to use the plugin
