@@ -3,7 +3,7 @@
     transition(name="slide-y-transition" appear)
       navbar
 
-    v-container(fluid grid-list-md)
+    v-container(fluid).top-container
       SearchImagesDialog
       v-layout(row wrap align-start)
         transition(name="slide-y-transition" appear)
@@ -60,17 +60,17 @@
         //- Sort Button
         v-fab-transition(appear)
           v-tooltip(top)
-            v-btn(color="red" dark fab fixed bottom right slot="activator").elevation-19
+            v-btn(color="red" dark fab fixed bottom right slot="activator").elevation-19.hidden-sm-and-down
               v-icon sort
             span Sort By
 
 
         v-flex(xs12 md9)
-          v-container(grid-list-xs v-show="searchComplete")
+          v-container(v-show="searchComplete")
             v-layout(column)
               v-flex(v-for="result in searchResults" :key="result.id").search-results
                 v-card
-                  v-container(fluid grid-list-md)
+                  v-container(fluid grid-list-xs)
                     //- Desktop layout for search
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
@@ -116,32 +116,33 @@
                           span.increase-letter-spacing-1 Campzy Quality Assurance
 
 
-                  //- Mobile layout for search cards
-                  v-layout(column).hidden-md-and-up
+                    //- Mobile layout for search cards
+                    v-layout(column).hidden-md-and-up
                       v-flex.image-wrapper
-                        v-img(:src="result.imgSrc" contain
+                        v-img(:src="result.heroImage" contain
                         @click="openImageDialog(result.name, result.name)")
                           v-layout(slot="placeholder" fill-height align-center justify-center)
                             v-progress-circular(indeterminate color="grey lighten-5")
 
-
                       v-flex.result-column
-                        div
+                        div.py-2.text-xs-center
                           h1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
                           h3.grey--text {{result.location}}
-                        div.mt-3
-                          h3.title.mb-2.pl-2 Starting @ ₹ {{result.starting}}
-                          v-tooltip(right)
-                            v-rating(v-model="result.rating" color="green"
-                            background-color="green lighten-3" half-increments
-                            readonly slot="activator")
-                            span {{result.rating}}
+                        div.mt-3.text-xs-center
+                          h3.title.mb-2.pl-2
+                            | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
+                          .d-flex(style="align-items: center").mt-1
+                            h3.mr-2 4.5
+                            v-rating(v-model="result.rating" color="green" small
+                            background-color="green lighten-3" half-increments readonly)
 
                   v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
                     v-btn(flat)
                       span Filter
+                      v-icon filter_list
+                    v-btn(flat)
+                      span Sort
                       v-icon poll
-                    v-btn(flat) Filter
 
 
 </template>
@@ -251,6 +252,12 @@ export default {
 </script>
 
 <style lang="scss">
+.top-container {
+  @media screen and (max-width: 960px) {
+    padding: 0;
+  }
+}
+
 .feature-row {
   display: flex;
   align-items: center;
@@ -270,6 +277,9 @@ export default {
 }
 .search-results {
   margin-bottom: 2rem;
+  @media screen and (max-width: 960px) {
+    margin-bottom: 1rem;
+  }
 
   .result-column {
     @media screen and (max-width: 960px) {
