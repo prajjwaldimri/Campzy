@@ -59,10 +59,15 @@
 
         //- Sort Button
         v-fab-transition(appear)
-          v-tooltip(top)
-            v-btn(color="red" dark fab fixed bottom right slot="activator").elevation-19.hidden-sm-and-down
+          v-menu(top offset-y transition="slide-y-reverse-transition")
+            v-btn(color="red" dark fab fixed bottom right
+            slot="activator").elevation-19.hidden-sm-and-down
               v-icon sort
-            span Sort By
+            v-list
+              v-list-tile(@click="sort('price')")
+                v-list-tile-title Price (Low to High)
+              v-list-tile(@click="sort('priceReverse')")
+                v-list-tile-title Price (High to Low)
 
 
         v-flex(xs12 md9 style="margin-bottom: 2rem")
@@ -148,7 +153,8 @@
                             @click:append="search" @keyup.enter="search")
 
                           v-flex
-                            v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
+                            v-menu(v-model="tripDurationMenu" offset-y
+                            ransition="slide-y-transition"
                             :close-on-content-click="false" lazy style="width: 100%")
                               v-select(hint="Trip duration" readonly block
                               :label="dateLabel"
@@ -157,11 +163,14 @@
                               v-date-picker(v-model="toDate" no-title scrollable)
 
                           v-flex
-                            v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
-                              hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
+                            v-range-slider(v-model="priceRange" :max="80000" :min="1000"
+                             :step="500"
+                              hint="Price Range" persistent-hint color="green"
+                              thumb-label :thumb-size="48")
 
                           v-flex
-                            v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
+                            v-select(v-model="tentType" :items="tentTypes" attach
+                             chips persistent-hint
                             multiple hint="Tent types")
 
                           v-flex
@@ -187,12 +196,21 @@
                       v-icon done_all
 
 
+                  v-dialog(v-model="sortDialog").hidden-sm-and-down
+                    v-card
+                      v-list
+                        v-list-tile(@click="sort('price')")
+                          v-list-tile-title Price (Low to High)
+                        v-list-tile(@click="sort('priceReverse')")
+                          v-list-tile-title Price (High to Low)
+
+
                   v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
                     v-btn(flat @click.native="filterDialog=true")
                       span Filter
                       v-icon filter_list
 
-                    v-btn(flat)
+                    v-btn(flat @click.native="sortDialog=true")
                       span Sort
                       v-icon poll
 
@@ -233,6 +251,7 @@ export default {
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       filterDialog: false,
+      sortDialog: false,
     };
   },
   mounted() {
@@ -284,7 +303,22 @@ export default {
             minPriceChildren = tent.bookingPriceChildren;
           }
         });
-        this.searchResults[i].minPrice = (minPriceAdult * this.adultCount) + (minPriceChildren * this.childrenCount);
+        this.searchResults[i].minPrice = (minPriceAdult * this.adultCount)
+        + (minPriceChildren * this.childrenCount);
+      }
+    },
+    sort(option) {
+      this.sortDialog = false;
+      switch (option) {
+        case 'price':
+          this.searchResults.sort((a, b) => a.minPrice > b.minPrice);
+          break;
+        case 'priceReverse':
+          this.searchResults.sort((a, b) => a.minPrice < b.minPrice);
+          break;
+
+        default:
+          break;
       }
     },
   },
