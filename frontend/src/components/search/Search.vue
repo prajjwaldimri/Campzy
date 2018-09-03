@@ -65,8 +65,8 @@
             span Sort By
 
 
-        v-flex(xs12 md9)
-          v-container(v-show="searchComplete")
+        v-flex(xs12 md9 style="margin-bottom: 2rem")
+          v-container(v-show="searchComplete" style="padding-top:0")
             v-layout(column)
               v-flex(v-for="result in searchResults" :key="result.id").search-results
                 v-card
