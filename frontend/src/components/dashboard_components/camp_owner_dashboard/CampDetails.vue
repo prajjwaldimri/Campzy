@@ -138,7 +138,7 @@ export default {
       const formData = new FormData();
       for (let i = 0; i < this.files.length; i += 1) {
         const file = this.files[i];
-        formData.append(`files[${i}]`, file);
+        formData.append('document', file);
       }
       console.log(formData);
 
