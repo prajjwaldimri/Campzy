@@ -1,7 +1,6 @@
 <template lang="pug">
   .home
-    transition(name="slide-y-transition" appear)
-      navbar
+    navbar
 
     v-container(fluid).top-container
       SearchImagesDialog
@@ -56,8 +55,7 @@
                 v-icon(right) filter_list
 
 
-      //- Sort Button
-      v-fab-transition(appear)
+        //- Sort Button
         v-menu(top offset-y transition="slide-y-reverse-transition")
           v-btn(color="red" dark fab fixed bottom right
           slot="activator").elevation-19.hidden-sm-and-down
@@ -69,55 +67,55 @@
               v-list-tile-title Price (High to Low)
 
 
-      v-flex(xs12 md9 style="margin-bottom: 2rem")
-        v-container(v-show="searchComplete" style="padding-top:0")
-          v-layout(column)
-            v-flex(v-for="result in searchResults" :key="result.id").search-results
-              v-card
-                v-container(fluid grid-list-xs)
-                  //- Desktop layout for search
-                  v-layout(row wrap).hidden-sm-and-down
-                    v-flex(md4).image-wrapper
-                      v-hover
-                        v-img(:src="result.heroImage" width="100%" height="15rem" cover
-                        slot-scope="{ hover }")
-                          v-layout(slot="placeholder" fill-height align-center justify-center)
-                            v-progress-circular(indeterminate color="grey lighten-5")
-                          v-expand-transition
-                            .d-flex(v-if="hover" style="height: 100%"
-                            class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
-                              v-btn(dark @click="openImageDialog(result.name, result.name)")
-                                | View All Images
+        v-flex(xs12 md9 style="margin-bottom: 2rem")
+          v-container(v-show="searchComplete" style="padding-top:0")
+            v-layout(column)
+              v-flex(v-for="result in searchResults" :key="result.id").search-results
+                v-card
+                  v-container(fluid grid-list-xs)
+                    //- Desktop layout for search
+                    v-layout(row wrap).hidden-sm-and-down
+                      v-flex(md4).image-wrapper
+                        v-hover
+                          v-img(:src="result.heroImage" width="100%" height="15rem" cover
+                          slot-scope="{ hover }")
+                            v-layout(slot="placeholder" fill-height align-center justify-center)
+                              v-progress-circular(indeterminate color="grey lighten-5")
+                            v-expand-transition
+                              .d-flex(v-if="hover" style="height: 100%"
+                              class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
+                                v-btn(dark @click="openImageDialog(result.name, result.name)")
+                                  | View All Images
 
-                    v-flex(md4).result-column.pl-3
-                      div
-                        h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
-                        h3.grey--text.mt-2.pl-2 {{result.location}}
-                      div
-                        h3.title.mb-2.pl-2
-                          | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
-                        v-tooltip(right)
-                          v-rating(v-model="result.rating" color="green"
-                          background-color="green lighten-3" half-increments
-                          readonly slot="activator")
-                          span {{result.rating}}
+                      v-flex(md4).result-column.pl-3
+                        div
+                          h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
+                          h3.grey--text.mt-2.pl-2 {{result.location}}
+                        div
+                          h3.title.mb-2.pl-2
+                            | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
+                          v-tooltip(right)
+                            v-rating(v-model="result.rating" color="green"
+                            background-color="green lighten-3" half-increments
+                            readonly slot="activator")
+                            span {{result.rating}}
 
-                    v-flex(md4).result-column.hidden-sm-and-down
-                      .row.feature-row
-                        v-icon.mr-3 ac_unit
-                        span.increase-letter-spacing-1 29 C (Snowing)
-                      .row.feature-row
-                        v-icon.mr-3 nature
-                        span.increase-letter-spacing-1 Jungle Terrain
-                      .row.feature-row
-                        v-icon.mr-3 wifi_off
-                        span.increase-letter-spacing-1 No Internet
-                      .row.feature-row
-                        v-icon.mr-3 accessible
-                        span.increase-letter-spacing-1 Wheel Chair Accessible
-                      .row.feature-row
-                        v-icon.mr-3.green--text verified_user
-                        span.increase-letter-spacing-1 Campzy Quality Assurance
+                      v-flex(md4).result-column.hidden-sm-and-down
+                        .row.feature-row
+                          v-icon.mr-3 ac_unit
+                          span.increase-letter-spacing-1 29 C (Snowing)
+                        .row.feature-row
+                          v-icon.mr-3 nature
+                          span.increase-letter-spacing-1 Jungle Terrain
+                        .row.feature-row
+                          v-icon.mr-3 wifi_off
+                          span.increase-letter-spacing-1 No Internet
+                        .row.feature-row
+                          v-icon.mr-3 accessible
+                          span.increase-letter-spacing-1 Wheel Chair Accessible
+                        .row.feature-row
+                          v-icon.mr-3.green--text verified_user
+                          span.increase-letter-spacing-1 Campzy Quality Assurance
 
 
                   //- Mobile layout for search cards
