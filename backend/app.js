@@ -14,6 +14,17 @@ const path = require('path');
 const history = require('connect-history-api-fallback');
 const https = require('https');
 const Rollbar = require('rollbar');
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const bodyParser = require('body-parser');
+// const axios = require('axios');
+// const VueAxios = require('vue-axios');
+aws.config.update({
+  secretAccessKey: process.env.aws_secret_access_key,
+  accessKeyId: process.env.aws_access_key_id,
+  region: 'us-east-1',
+});
 
 const rollbar = new Rollbar({
   accessToken: process.env.ROLLBAR_KEY,
@@ -28,6 +39,28 @@ require('./models/user');
 const app = express();
 app.use(compression());
 app.use(cors());
+
+// Upload file to AWS
+const aws3 = new aws.S3();
+app.use(bodyParser.json());
+const upload = multer({
+  storage: multerS3({
+    s3: aws3,
+    bucket: 'campzy-documents',
+    metadata(req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key(req, file, cb) {
+      console.log(file);
+      cb(null, file.fieldname + Date.now().toString());
+    },
+  }),
+});
+
+app.post('/uploadCampOwnerDocuments', upload.array(), (req, res) => {
+  console.log(req.body);
+  res.json('Success');
+});
 
 // Connect to MLab Database
 mongoose.connect(

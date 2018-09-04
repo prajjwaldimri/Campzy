@@ -112,7 +112,6 @@ export default {
               EventBus.$emit('show-success-notification-long', 'Profile updated! Refreshing....');
             })
             .catch((err) => {
-              console.log(err);
               EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
               this.isProfileUpdating = false;
             }).finally(() => {

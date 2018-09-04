@@ -43,22 +43,24 @@
             v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.headline Documents
-              v-form(ref='form' lazy-validation)
+              v-form(ref='form' enctype='multipart/form-data' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)
                       v-layout(column)
                         span PAN DETAILS
-                        input(type='file' name='pan_card'
-                        @change='showFile' accept='application/pdf' )
+                        input(type='file' name='pan_card' ref='panCard'
+                        v-on:change="showFile" multiple accept='application/pdf' )
+                    //- v-flex(xs12)
+                    //-   v-layout(column)
+                    //-     span GST DETAILS
+                    //-     input(type='file' name='gst_number'
+                    //-     @change='showFile' accept='application/pdf' )
+                    //- v-flex(xs12)
+                    //-   v-layout(column)
+                    //-     span TIN NUMBER
+                    //-     input(type='file' name='tin' @change='showFile' accept='application/pdf' )
                     v-flex(xs12)
-                      v-layout(column)
-                        span GST DETAILS
-                        input(type='file' name='gst_number'
-                        @change='showFile' accept='application/pdf' )
-                    v-flex(xs12)
-                      v-layout(column)
-                        span TIN NUMBER
-                        input(type='file' name='tin' @change='showFile' accept='application/pdf' )
+                      v-btn( @click='uploadDocuments' color='green') Upload
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
@@ -99,6 +101,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
+import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
 import { saveCampDetails } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
@@ -109,13 +112,14 @@ export default {
       el: 0,
       camp: {},
       isDataUpdating: false,
-      amenities: [],
       amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
+      amenities: [],
       placesOfInterest: [],
       tags: [],
       panNumber: null,
       tinNumber: null,
       gstNumber: null,
+      files: [],
     };
   },
 
@@ -124,9 +128,33 @@ export default {
   },
 
   methods: {
-    showFile(event) {
-      console.log(event.target.files);
+    showFile() {
+      const updateFile = this.$refs.panCard.files;
+      for (let i = 0; i < updateFile.length; i += 1) {
+        this.files.push(updateFile[i]);
+      }
     },
+    uploadDocuments() {
+      const formData = new FormData();
+      for (let i = 0; i < this.files.length; i += 1) {
+        const file = this.files[i];
+        formData.append(`files[${i}]`, file);
+      }
+      console.log(formData);
+
+
+      axios.post('/uploadCampOwnerDocuments', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+
     // Get the camp ID related to current user
     getCampDetails() {
       if (!this.$cookie.get('sessionToken')) {

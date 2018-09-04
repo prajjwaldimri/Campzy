@@ -28,7 +28,7 @@
                 v-icon data_usage
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
             v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')"
-               v-show='isAdmin')
+              v-show='isAdmin')
               v-list-tile-action
                 v-icon supervised_user_circle
               v-list-tile-content.increase-letter-spacing-1(id='v-step-0') User Management
@@ -65,7 +65,7 @@
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
     fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
-       id='v-step-0')
+      id='v-step-0')
         span Statistics
         v-icon data_usage
       v-btn(dark @click="$router.push('/dashboard/userManagement')"

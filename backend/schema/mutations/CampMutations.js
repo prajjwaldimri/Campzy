@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+// const aws = require('aws-sdk');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const CampType = require('../types/CampType');
@@ -136,4 +137,40 @@ const deleteCamp = {
   },
 };
 
-module.exports = { addCamp, updateCamp, deleteCamp };
+// const uploadDocuments = {
+//   type: CampType,
+//   args: {
+//     signedRequest: { type: String },
+//   },
+//   async resolve(parent, args, context) {
+//     try {
+//       const user = await auth.getAuthenticatedUser(context.req);
+//       const userData = await UserModel.findById(user.id);
+//       const isUserCampOwner = auth.isUserCampOwner(userData);
+//       if (userData === null) {
+//         throw new NotLoggedinError();
+//       }
+//       if (!isUserCampOwner) {
+//         throw new PrivilegeError();
+//       }
+//       const { filename, filetype } = args.image;
+//       const s3 = new aws.S3();
+
+//       const s3Params = {
+//         Bucket: '',
+//         Key: filename,
+//         ContentType: filetype,
+//       };
+//       const signedRequest = await s3.getSignedUrl('putObject', s3Params);
+//       return signedRequest;
+//     } catch (err) {
+//       return err;
+//     }
+//   },
+// };
+
+module.exports = {
+  addCamp,
+  updateCamp,
+  deleteCamp,
+};
