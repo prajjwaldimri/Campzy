@@ -22,7 +22,7 @@
                       v-select(hint="Trip duration" readonly block
                       :label="dateLabel"
                       slot="activator" color="primary" single-line persistent-hint)
-                      v-date-picker(v-model="fromDate" no-title scrollable)
+                      v-date-picker(v-model="fromDate" no-title scrollable max="2018-09")
                       v-date-picker(v-model="toDate" no-title scrollable)
 
                   v-flex
@@ -44,7 +44,7 @@
 
                   v-flex
                     v-select(v-model="amenitiesSelected" :items="amenities" attach
-                    chips persistent-hint
+                    chips persistent-hint menu-props="{auto, 'offset-y'}" hide-details
                     multiple hint="Amenities")
                       template(slot="selection" slot-scope="{item, index}")
                         v-chip(v-if="index <= 2")
@@ -141,8 +141,8 @@
                             v-rating(v-model="result.rating" color="green" small
                             background-color="green lighten-3" half-increments readonly)
 
-                  v-dialog(v-model="filterDialog" fullscreen)
-                    v-card
+                  v-dialog(v-model="filterDialog" fullscreen).hidden-md-and-up
+                    v-card.hidden-md-and-up
                       v-card-title(primary-title)
                         h3.headline.mb-0 Filters
                       v-container(fluid grid-list-md).top-search
@@ -159,8 +159,8 @@
                               v-select(hint="Trip duration" readonly block
                               :label="dateLabel"
                               slot="activator" color="primary" single-line persistent-hint)
-                              v-date-picker(v-model="fromDate" no-title scrollable)
-                              v-date-picker(v-model="toDate" no-title scrollable)
+                              v-date-picker(v-model="fromDate" no-title scrollable).hidden-md-and-up
+                              v-date-picker(v-model="toDate" no-title scrollable).hidden-md-and-up
 
                           v-flex
                             v-range-slider(v-model="priceRange" :max="80000" :min="1000"
