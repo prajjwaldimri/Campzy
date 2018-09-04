@@ -39,28 +39,58 @@
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='IFSC Code')
         v-tab-item(id='documents')
-          v-flex(xs12 md6 style='max-width:100%')
-            v-card.body-card(flat)
-              v-card-title.title(primary-title)
-                h2.font-weight-bold.headline Documents
-              v-form(ref='form' enctype='multipart/form-data' lazy-validation)
-                  v-layout.layout(row wrap)
-                    v-flex(xs12)
-                      v-layout(column)
-                        span PAN DETAILS
-                        input(type='file' name='pan_card' ref='panCard'
-                        v-on:change="showFile" multiple accept='application/pdf' )
-                    //- v-flex(xs12)
-                    //-   v-layout(column)
-                    //-     span GST DETAILS
-                    //-     input(type='file' name='gst_number'
-                    //-     @change='showFile' accept='application/pdf' )
-                    //- v-flex(xs12)
-                    //-   v-layout(column)
-                    //-     span TIN NUMBER
-                    //-     input(type='file' name='tin' @change='showFile' accept='application/pdf' )
-                    v-flex(xs12)
-                      v-btn( @click='uploadDocuments' color='green') Upload
+          v-layout(row wrap)
+            v-flex(xs12 md6)
+              v-card.body-card(flat)
+                v-card-title.title(primary-title)
+                  h2.font-weight-bold.headline Camp Documents
+                v-form(ref='form' enctype='multipart/form-data' lazy-validation)
+                    v-layout.layout(row wrap)
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span PAN DETAILS
+                          input.mt-2(type='file' name='pan_card' ref='panCard'
+                          v-on:change="showFile" accept='application/pdf'
+                           required)
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span GST DETAILS
+                          input.mt-2(type='file' name='gst_number'
+                          v-on:change="showFile" accept='application/pdf' required)
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span TIN NUMBER
+                          input.mt-2(type='file' name='tin' v-on:change="showFile"
+                           accept='application/pdf' required )
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span * Only pdf files
+                      v-flex.mt-4(xs12)
+                        v-btn.white--text(@click='uploadDocuments' color='green'
+                        :loading='uploadingDocuments') Upload Documents
+
+            v-flex(xs12 md6)
+              v-card.body-card(flat)
+                v-card-title.title(primary-title)
+                  h2.font-weight-bold.headline Upload Camp Photos
+                v-form(ref='form' enctype='multipart/form-data' lazy-validation)
+                    v-layout.layout(row wrap)
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span Main Image for Camp
+                          input.mt-2(type='file' name='hero_image' ref='panCard'
+                          v-on:change="showFile"  accept='image/png, image/jpeg' disabled )
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span Other camp photos
+                          input.mt-2(type='file' name='other_photos'
+                          @change='showFile' accept='image/png, image/jpeg'  multiple disabled  )
+                      v-flex.mt-3(xs12)
+                        v-layout(column)
+                          span * Only png/jpeg files
+                      v-flex.mt-4(xs12)
+                        v-btn.white--text( @click='uploadDocuments' color='green') Upload Images
+
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
@@ -120,6 +150,8 @@ export default {
       tinNumber: null,
       gstNumber: null,
       files: [],
+      storeDocuments: [],
+      uploadingDocuments: false,
     };
   },
 
@@ -128,31 +160,37 @@ export default {
   },
 
   methods: {
-    showFile() {
-      const updateFile = this.$refs.panCard.files;
-      for (let i = 0; i < updateFile.length; i += 1) {
-        this.files.push(updateFile[i]);
-      }
+
+    showFile(event) {
+      this.storeDocuments.push(event.target.files[0]);
     },
+
+    // Uploads CampOwner Documents
     uploadDocuments() {
-      const formData = new FormData();
-      for (let i = 0; i < this.files.length; i += 1) {
-        const file = this.files[i];
-        formData.append('document', file);
+      if (this.storeDocuments.length < 3) {
+        EventBus.$emit('show-error-notification-short', 'Please select all files!');
+      } else {
+        this.uploadingDocuments = true;
+        const updateFile = this.storeDocuments;
+        for (let i = 0; i < updateFile.length; i += 1) {
+          this.files.push(updateFile[i]);
+        }
+        const formData = new FormData();
+        for (let i = 0; i < this.files.length; i += 1) {
+          const file = this.files[i];
+          formData.append('document', file);
+        }
+        axios.post('/uploadCampOwnerDocuments', formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }).then(() => {
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+        }).catch((err) => {
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+        }).finally(() => { this.uploadingDocuments = false; });
       }
-      console.log(formData);
-
-
-      axios.post('/uploadCampOwnerDocuments', formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }).then((res) => {
-        console.log(res);
-      }).catch((err) => {
-        console.log(err);
-      });
     },
 
     // Get the camp ID related to current user
