@@ -159,8 +159,10 @@
                               v-select(hint="Trip duration" readonly block
                               :label="dateLabel"
                               slot="activator" color="primary" single-line persistent-hint)
-                              v-date-picker(v-model="fromDate" no-title scrollable).hidden-md-and-up
-                              v-date-picker(v-model="toDate" no-title scrollable).hidden-md-and-up
+                              v-date-picker(v-model="fromDate" no-title scrollable
+                              full-width).hidden-md-and-up
+                              v-date-picker(v-model="toDate" no-title scrollable
+                              full-width).hidden-md-and-up
 
                           v-flex
                             v-range-slider(v-model="priceRange" :max="80000" :min="1000"
