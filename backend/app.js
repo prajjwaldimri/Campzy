@@ -42,11 +42,15 @@ app.use(cors());
 
 // Upload file to AWS
 const aws3 = new aws.S3();
+
 app.use(bodyParser.json());
+
 const upload = multer({
   storage: multerS3({
     s3: aws3,
     bucket: 'campzy-documents',
+    acl: 'public-read',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
@@ -57,7 +61,7 @@ const upload = multer({
   }),
 });
 
-app.post('/uploadCampOwnerDocuments', upload.array(), (req, res) => {
+app.post('/uploadCampOwnerDocuments', upload.array('document', 5), (req, res) => {
   console.log(req.body);
   res.json('Success');
 });
