@@ -63,8 +63,25 @@ const getCampDetail = `query camp($id: String!){
 }
 `;
 
-// Count all camps present in model
+// Gets camp details available in public
+const getCampByUrl = `query campUser($url: String!){
+  campUser(url: $url){
+    name,
+    location,
+    shortDescription,
+    longDescription,
+    placesOfIntereset,
+    tags,
+    amenities,
+    images,
+    isAvailable,
+    coordinates,
+    terrain,
+    rating,
+  }
+}`;
 
+// Count all camps present in model
 const countAllCamps = `query countCamps{
   countCamps{
       count,
@@ -128,4 +145,5 @@ export {
   userSearch,
   campSearch,
   campSearchUser,
+  getCampByUrl,
 };
