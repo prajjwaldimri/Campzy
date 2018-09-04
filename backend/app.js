@@ -42,7 +42,9 @@ app.use(cors());
 
 // Upload file to AWS
 const aws3 = new aws.S3();
+
 app.use(bodyParser.json());
+
 const upload = multer({
   storage: multerS3({
     s3: aws3,
