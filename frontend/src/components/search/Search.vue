@@ -71,7 +71,7 @@
           v-container(v-show="searchComplete" style="padding-top:0")
             v-layout(column)
               v-flex(v-for="result in searchResults" :key="result.id").search-results
-                v-card
+                v-card(:to="'/camp/' + result.url")
                   v-container(fluid grid-list-xs)
                     //- Desktop layout for search
                     v-layout(row wrap).hidden-sm-and-down
@@ -84,7 +84,7 @@
                             v-expand-transition
                               .d-flex(v-if="hover" style="height: 100%"
                               class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
-                                v-btn(dark @click="openImageDialog(result.name, result.name)")
+                                v-btn(dark @click.prevent="openImageDialog(result.name, result.name)")
                                   | View All Images
 
                       v-flex(md4).result-column.pl-3
