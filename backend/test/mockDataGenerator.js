@@ -29,8 +29,8 @@ async function CreateCamp(userId, phoneNumber) {
       'coordinates.latitude': faker.address.latitude(),
       'coordinates.longitude': faker.address.longitude(),
       ownerId: userId,
-      images: new Array(10).fill(null).map(e => (e = faker.image.nature())),
-      heroImage: faker.image.nature(),
+      images: new Array(10).fill(null).map(e => (e = 'https://loremflickr.com/1280/768/nature')),
+      heroImage: 'https://loremflickr.com/320/240/nature',
       rating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
       amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
       altitude: faker.random.number({ min: 100, max: 2000 }),
@@ -42,8 +42,10 @@ async function CreateCamp(userId, phoneNumber) {
       let tent = await Tent.create({
         capacity: faker.random.number({ min: 1, max: 4 }),
         type: faker.random.arrayElement(campTypes),
-        bookingPrice: faker.random.number({ min: 1000, max: 80000 }),
-        surgePrice: faker.random.number({ min: 1000, max: 80000 }),
+        bookingPriceAdult: faker.random.number({ min: 1000, max: 80000 }),
+        bookingPriceChildren: faker.random.number({ min: 1000, max: 80000 }),
+        surgePriceAdult: faker.random.number({ min: 1000, max: 80000 }),
+        surgePriceChildren: faker.random.number({ min: 1000, max: 80000 }),
         preBookPeriod: faker.random.number({ min: 2, max: 15 }),
         camp: camp._id,
       });
