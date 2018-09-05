@@ -1,6 +1,6 @@
 <template lang="pug">
   .camp-view
-    navbar
+    navbar(color="transparent" :app="true")
 
     v-responsive(height="90vh")
       v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
@@ -15,7 +15,7 @@
                 span.title.pl-1.green--text.font-weight-bold 4.8
                 span.subheading.pl-2 (16,035 ratings)
 
-    v-responsive(height="50vh")
+    v-responsive(height="40vh")
       v-card(color="grey darken-4" flat height="100%" tile
       style="align-items: center; display: flex").hidden-sm-and-down
         tiny-slider(:mouse-drag="true" :loop="true" items="4" gutter="20"
@@ -29,16 +29,57 @@
       .hidden-md-and-up
         tiny-slider(:mouse-drag="true" :loop="true" items="1"
         :nav="false" :controls="false" :lazyload="true"
-        :autoplay="true" :autoplay-button-output="false").hidden-md-and-up
+        :autoplay="true" :autoplay-button-output="false")
           v-responsive(height="40vh" v-for="image in images" :key="image")
             v-card
               v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
 
-    v-layout(row wrap)
-      v-flex(sm8).py-4
-        h1 Test
-      v-flex(sm4).py-4
-        h3.headline Opinions
+    v-layout(row wrap style="min-height: 90vh").py-4
+      v-flex(sm12 md6).pa-4
+        h1.headline.font-weight-bold.pb-3 About Riverside Camp
+        v-divider
+        p.pt-3.subheading(style="text-align: justify") Challenges and opportunities, incubator, progress game-changer collaborative cities systems thinking unprecedented challenge synergy. Systems thinking resilient rubric LGBTQ+ emerging thought leader academic impact investing problem-solvers. Thought partnership cultivate white paper, white paper philanthropy granular.
+          br
+          br
+          | Outcomes effective altruism white paper, empathetic; then design thinking impact big data. Philanthropy, black lives matter bandwidth youth ideate. Parse when segmentation, collaborate circular.
+
+        v-layout(row).px-1.py-4
+          v-flex(sm2).text-xs-center
+            v-icon wb_cloudy
+            h4.grey--text 29&#176;C (Current)
+          v-flex(sm2).text-xs-center
+            v-icon(color="green") loyalty
+            h4.grey--text Campzy Guarantee
+          v-flex(sm2).text-xs-center
+            v-icon(color="brown") pets
+            h4.grey--text Pets Allowed
+          v-flex(sm2).text-xs-center
+            v-icon rowing
+            h4.grey--text Adventure Sports
+          v-flex(sm2).text-xs-center
+            v-icon(color="red") trending_up
+            h4.grey--text Trending
+          v-flex(sm2).text-xs-center
+            v-icon(color="blue") wifi
+            h4.grey--text Internet Available
+
+      v-divider(inset vertical).px-3
+
+      v-flex(sm12 md5).pa-4
+        h3.headline.font-weight-bold.pb-3 Opinions
+        v-divider
+        v-card(v-for="comment in comments").ma-4.pa-4
+          v-layout(row wrap)
+            v-flex(md2 sm3)
+              v-avatar(color="red")
+                span.white--text.headline K
+            v-flex(md7 sm7)
+              span.subheading Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            v-flex(md3 sm12)
+              v-layout(column)
+                span.subtitle.grey--text.text--darken-2.ml-1 3 Days ago
+                v-rating(small dense v-model="4.5").mt-1
+
 
     //- Bottom Bar
     .bottom-nav
@@ -88,6 +129,7 @@ export default {
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      comments: [1, 2, 3, 4, 5],
     };
   },
   mounted() {
