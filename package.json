@@ -66,6 +66,7 @@
     "vue-moment": "^4.0.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
+    "vue-tiny-slider": "^0.1.27",
     "vue-tour": "^1.0.1",
     "vuetify": "^1.1.14",
     "webpack": "^4.16.5",

@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .camp-view
     navbar
 
     v-responsive(height="90vh")
@@ -15,6 +15,24 @@
                 span.title.pl-1.green--text.font-weight-bold 4.8
                 span.subheading.pl-2 (16,035 ratings)
 
+    v-responsive(height="50vh")
+      v-card(color="grey darken-4" flat height="100%" tile
+      style="align-items: center; display: flex").hidden-sm-and-down
+        tiny-slider(:mouse-drag="true" :loop="true" items="4" gutter="20"
+        :arrowKeys="true" :edgePadding="40" :nav="false" :controls="false" :lazyload="true"
+        :autoplay="true" :autoplay-button-output="false")
+          v-responsive(height="30vh" v-for="image in images")
+            v-card
+              v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+          //- For Mobile
+      v-card(color="grey darken-4" flat height="100%" tile style="align-items: center")
+      .hidden-md-and-up
+        tiny-slider(:mouse-drag="true" :loop="true" items="1"
+        :nav="false" :controls="false" :lazyload="true"
+        :autoplay="true" :autoplay-button-output="false").hidden-md-and-up
+          v-responsive(height="40vh" v-for="image in images" :key="image")
+            v-card
+              v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
 
     //- Bottom Bar
     .bottom-nav
@@ -44,11 +62,13 @@
 </template>
 
 <script>
+import VueTinySlider from 'vue-tiny-slider';
 import Navbar from '../Navbar.vue';
 
 export default {
   components: {
     navbar: Navbar,
+    'tiny-slider': VueTinySlider,
   },
   data() {
     return {
@@ -60,6 +80,7 @@ export default {
       childrenCount: '1 Child',
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
+      images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     };
   },
   mounted() {
@@ -85,8 +106,23 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
+@import "/styles/tiny-slider.css";
+
+.camp-view {
+  padding-bottom: 5rem;
+  @media screen and (max-width: 960px) {
+    padding-bottom: 8rem;
+  }
+}
+
+#tns1-ow {
+  @media screen and (min-width: 960px) {
+    flex: 1 1 auto !important;
+  }
+}
+
 .bottom-nav {
   position: fixed;
   width: 100%;

@@ -7921,6 +7921,10 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
+vue-tiny-slider@^0.1.27:
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/vue-tiny-slider/-/vue-tiny-slider-0.1.27.tgz#f7053c38273fc002303d5992513fd369b7085e89"
+
 vue-tour@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vue-tour/-/vue-tour-1.0.1.tgz#70062f265db8391fc25f44da8ffcf80dd72169e6"

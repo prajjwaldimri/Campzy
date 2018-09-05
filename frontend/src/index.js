@@ -20,6 +20,7 @@ Vue.use(VeeValidate);
 // Tell Vue to use the plugin
 Vue.use(VueCookie);
 Vue.use(VueTour);
+
 Vue.config.productionTip = false;
 
 // Vue i18n Configuration
