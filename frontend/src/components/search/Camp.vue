@@ -15,7 +15,7 @@
                 span.title.pl-1.green--text.font-weight-bold 4.8
                 span.subheading.pl-2 (16,035 ratings)
 
-    v-responsive(height="50vh")
+    v-responsive(height="40vh")
       v-card(color="grey darken-4" flat height="100%" tile
       style="align-items: center; display: flex").hidden-sm-and-down
         tiny-slider(:mouse-drag="true" :loop="true" items="4" gutter="20"
@@ -69,13 +69,13 @@
         h3.headline.font-weight-bold.pb-3 Opinions
         v-divider
         v-card(v-for="comment in comments").ma-4.pa-4
-          v-layout(row)
-            v-flex(sm2)
+          v-layout(row wrap)
+            v-flex(md2 sm3)
               v-avatar(color="red")
                 span.white--text.headline K
-            v-flex(sm7)
+            v-flex(md7 sm7)
               span.subheading Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            v-flex(sm3)
+            v-flex(md3 sm12)
               v-layout(column)
                 span.subtitle.grey--text.text--darken-2.ml-1 3 Days ago
                 v-rating(small dense v-model="4.5").mt-1
