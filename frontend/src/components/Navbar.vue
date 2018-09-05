@@ -1,5 +1,6 @@
 <template lang="pug">
-  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" flat prominent color="transparent" dark app)
+  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" flat prominent :color="color"
+  dark :app="app")
     v-toolbar-title.ml-0
       span Camp
       span.green--text zy
@@ -43,6 +44,10 @@ export default {
     dropdown: false,
     user: {},
   }),
+  props: {
+    color: String,
+    app: Boolean,
+  },
   mounted() {
     if (!this.$cookie.get('sessionToken')) {
       this.isLoggedIn = false;

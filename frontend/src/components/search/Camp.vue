@@ -1,6 +1,6 @@
 <template lang="pug">
   .camp-view
-    navbar
+    navbar(color="transparent" app="true")
 
     v-responsive(height="90vh")
       v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
@@ -29,16 +29,17 @@
       .hidden-md-and-up
         tiny-slider(:mouse-drag="true" :loop="true" items="1"
         :nav="false" :controls="false" :lazyload="true"
-        :autoplay="true" :autoplay-button-output="false").hidden-md-and-up
+        :autoplay="true" :autoplay-button-output="false")
           v-responsive(height="40vh" v-for="image in images" :key="image")
             v-card
               v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
 
-    v-layout(row wrap)
-      v-flex(sm8).py-4
-        h1 Test
-      v-flex(sm4).py-4
-        h3.headline Opinions
+    v-layout(row wrap style="min-height: 90vh").pa-3
+      v-flex(sm12 md6).py-4
+        h1.headline.font-weight-bold About Riverside Camp
+      v-divider(inset vertical)
+      v-flex(sm12 md4 offset-md1).py-4
+        h3.headline.font-weight-bold Opinions
 
     //- Bottom Bar
     .bottom-nav
