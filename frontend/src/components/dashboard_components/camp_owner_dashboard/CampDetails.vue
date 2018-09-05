@@ -158,9 +158,15 @@ export default {
   mounted() {
     this.getCampDetails();
     // this.deleteFile();
+    this.getDocuments();
   },
 
   methods: {
+    getDocuments() {
+      axios.get('/getDocuments').then((res) => {
+        console.log(res);
+      }).catch((err) => { console.log(err); });
+    },
     deleteFile() {
       axios.delete('/deleteDocuments', {
         data: { document: 'document1536082579486' },

@@ -66,17 +66,34 @@ app.post('/uploadCampOwnerDocuments', upload.array('document', 5), (req, res) =>
 
 // Delete file from s3
 app.delete('/deleteDocuments', (req, res) => {
-  const documentDel = req.body.document;
+  if (!req.body.document) {
+    res.send('Cannot send Empty Key');
+  } else {
+    const documentDel = req.body.document;
+    const params = {
+      Bucket: 'campzy-documents',
+      Key: `${documentDel}`,
+    };
+    aws3.deleteObject(params, (err, data) => {
+      if (err) {
+        return err;
+      }
+      res.send('Success');
+      return data;
+    });
+  }
+});
+
+// Get CampOwner Documents
+app.get('/getDocuments', (req, res) => {
   const params = {
     Bucket: 'campzy-documents',
-    Key: `${documentDel}`,
+    MaxKeys: 10,
   };
-  aws3.deleteObject(params, (err, data) => {
+  aws3.listObjectsV2(params, (err, data) => {
     if (err) {
-      return err;
-    }
-    res.json('Success');
-    return data;
+      console.log(err);
+    } else res.json(data);
   });
 });
 
