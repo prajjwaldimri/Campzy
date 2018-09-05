@@ -68,6 +68,18 @@
       v-flex(sm12 md5).pa-4
         h3.headline.font-weight-bold.pb-3 Opinions
         v-divider
+        v-card(v-for="comment in comments").ma-4.pa-4
+          v-layout(row)
+            v-flex(sm2)
+              v-avatar(color="red")
+                span.white--text.headline K
+            v-flex(sm7)
+              span.subheading Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            v-flex(sm3)
+              v-layout(column)
+                span.subtitle.grey--text.text--darken-2.ml-1 3 Days ago
+                v-rating(small dense v-model="4.5").mt-1
+
 
     //- Bottom Bar
     .bottom-nav
@@ -117,6 +129,7 @@ export default {
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      comments: [1, 2, 3, 4, 5],
     };
   },
   mounted() {
