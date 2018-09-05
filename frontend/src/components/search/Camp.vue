@@ -9,7 +9,7 @@
             .d-flex.align-self-center
               h1.display-4.camp-name.hidden-sm-and-down Riverside Camp
               h1.display-3.camp-name.hidden-md-and-up Riverside Camp
-            .d-flex.align-self-start.pb-2.px-5
+            .d-flex.align-self-start.pb-4.px-5
               span
                 v-icon(dark color="green") star
                 span.title.pl-1.green--text.font-weight-bold 4.8
@@ -34,18 +34,24 @@
             v-card
               v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
 
+    v-layout(row wrap)
+      v-flex(sm8).py-4
+        h1 Test
+      v-flex(sm4).py-4
+        h3.headline Opinions
+
     //- Bottom Bar
     .bottom-nav
       v-card
         v-layout(row wrap)
           v-flex.divider-border(sm4)
             .d-flex
-              v-flex(sm6).pa-2
-                v-combobox(label="Adults (age > 10)" hide-details solo flat
-                v-model="adultCount" :items="adultNumbers" dense)
-              v-flex(sm6).pa-2
-                v-combobox(label="Children (age > 5)" hide-details solo flat
-                v-model="childrenCount" :items="childrenNumbers" dense)
+              v-flex(sm4 offset-sm1).pa-2
+                v-combobox(label="Adults (age > 10)" hide-details solo flat suffix="Adults"
+                v-model="adultCount" :items="adultNumbers" dense type="number")
+              v-flex(sm4 offset-sm1).pa-2
+                v-combobox(label="Children (age > 5)" hide-details solo flat suffix="Children"
+                v-model="childrenCount" :items="childrenNumbers" dense type="number")
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy style="width: 100%")
@@ -55,7 +61,8 @@
               v-date-picker(v-model="fromDate" no-title scrollable max="2018-09")
               v-date-picker(v-model="toDate" no-title scrollable)
           v-flex(sm2 style="align-items: center").d-flex
-            span(style="text-align: center").pa-2.headline.font-weight-bold @ {{ $n(15000, 'currency', 'en-IN') }}
+            span(style="text-align: center").pa-2.headline.font-weight-bold
+              | @ {{ $n(15000, 'currency', 'en-IN') }}
           v-flex(sm2)
             v-btn(color="green" block).btn-huge.pa-2.white--text Book Your Camp
 
@@ -75,9 +82,9 @@ export default {
       tripDurationMenu: false,
       fromDate: null,
       toDate: null,
-      adultCount: '2 Adults',
+      adultCount: 2,
       adultNumbers: [1, 2, 3, 4, 5],
-      childrenCount: '1 Child',
+      childrenCount: 1,
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
