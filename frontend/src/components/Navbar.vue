@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" flat prominent dark)
+  v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" flat prominent color="transparent" dark app)
     v-toolbar-title.ml-0
       span Camp
       span.green--text zy

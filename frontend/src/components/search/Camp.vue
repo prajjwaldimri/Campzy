@@ -2,6 +2,21 @@
   div
     navbar
 
+    v-responsive(height="90vh")
+      v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
+        v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
+          .d-flex.image-flex
+            .d-flex.align-self-center
+              h1.display-4.camp-name.hidden-sm-and-down Riverside Camp
+              h1.display-3.camp-name.hidden-md-and-up Riverside Camp
+            .d-flex.align-self-start.pb-2.px-5
+              span
+                v-icon(dark color="green") star
+                span.title.pl-1.green--text.font-weight-bold 4.8
+                span.subheading.pl-2 (16,035 ratings)
+
+
+    //- Bottom Bar
     .bottom-nav
       v-card
         v-layout(row wrap)
@@ -38,7 +53,7 @@ export default {
   data() {
     return {
       tripDurationMenu: false,
-      fromDate: 'null',
+      fromDate: null,
       toDate: null,
       adultCount: '2 Adults',
       adultNumbers: [1, 2, 3, 4, 5],
@@ -47,10 +62,31 @@ export default {
       dateLabel: 'Choose a date',
     };
   },
+  mounted() {
+    // Set the default date label
+    this.fromDate = this.$moment().format('YYYY-MM-DD');
+    this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
+  },
+
+  watch: {
+    fromDate() {
+      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+    },
+    toDate() {
+      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+    },
+    adultCount() {
+      this.calculatePrice();
+    },
+    childrenCount() {
+      this.calculatePrice();
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+@import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
 .bottom-nav {
   position: fixed;
   width: 100%;
@@ -70,5 +106,21 @@ export default {
 
 .divider-border {
   border-right: 2px solid rgba(246, 246, 246, 1);
+}
+
+.image-flex {
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+  justify-content: center;
+  & > * {
+    flex-grow: 0 !important;
+    margin-top: auto;
+  }
+}
+
+.camp-name {
+  font-family: "Permanent Marker", cursive !important;
+  text-shadow: 0px 0px 20px black;
 }
 </style>
