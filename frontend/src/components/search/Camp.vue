@@ -9,41 +9,38 @@
         v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
           .d-flex.image-flex
             .d-flex.align-self-center
-              h1.display-4.camp-name.hidden-sm-and-down Riverside Camp
-              h1.display-3.camp-name.hidden-md-and-up Riverside Camp
+              h1.display-4.camp-name.hidden-sm-and-down {{camp.name}}
+              h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
             .d-flex.align-self-start.pb-4.px-5
               span
                 v-icon(dark color="green") star
-                span.title.pl-1.green--text.font-weight-bold 4.8
+                span.title.pl-1.green--text.font-weight-bold {{camp.rating}}
                 span.subheading.pl-2 (16,035 ratings)
 
     v-responsive(height="40vh")
       v-card(color="grey darken-4" flat height="100%" tile
       style="align-items: center; display: flex").hidden-sm-and-down
-        tiny-slider(:mouse-drag="true" :loop="true" items="4" gutter="20"
-        :arrowKeys="true" :edgePadding="40" :nav="false" :controls="false" :lazyload="true"
-        :autoplay="true" :autoplay-button-output="false")
-          v-responsive(height="30vh" v-for="image in images")
+        tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
+        :arrowKeys="true" :nav="false" :controls="false" :lazyload="false"
+        :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
+          v-responsive(height="30vh" v-for="image in camp.images")
             v-card
-              v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+              v-img(:src="image")
           //- For Mobile
       v-card(color="grey darken-4" flat height="100%" tile style="align-items: center")
       .hidden-md-and-up
         tiny-slider(:mouse-drag="true" :loop="true" items="1"
         :nav="false" :controls="false" :lazyload="true"
         :autoplay="true" :autoplay-button-output="false")
-          v-responsive(height="40vh" v-for="image in images" :key="image")
+          v-responsive(height="40vh" v-for="image in camp.images" :key="image")
             v-card
-              v-img(src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+              v-img(:src="image")
 
     v-layout(row wrap style="min-height: 90vh").py-4
       v-flex(sm12 md6).pa-4
-        h1.display-1.pb-3 About Riverside Camp
+        h1.display-1.pb-3 About {{camp.name}}
         v-divider
-        p.pt-4.subheading(style="text-align: justify") Challenges and opportunities, incubator, progress game-changer collaborative cities systems thinking unprecedented challenge synergy. Systems thinking resilient rubric LGBTQ+ emerging thought leader academic impact investing problem-solvers. Thought partnership cultivate white paper, white paper philanthropy granular.
-          br
-          br
-          | Outcomes effective altruism white paper, empathetic; then design thinking impact big data. Philanthropy, black lives matter bandwidth youth ideate. Parse when segmentation, collaborate circular.
+        p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
 
         h1.headline.mt-5.px-1.font-weight-bold Amenities
         v-layout(row).px-1.mt-4
@@ -91,17 +88,12 @@
 
         h1.headline.mt-5.px-1.font-weight-bold Places of Interest
         v-list(two-line).mt-4
-          v-list-tile
+          v-list-tile(v-for="place in camp.placesOfInterest")
             v-list-tile-content
-              v-list-tile-title Airport
+              v-list-tile-title place
             v-list-tile-avatar
               img(src="https://images.pexels.com/users/avatars/121938/eberhard-grossgasteiger-438.jpeg?w=200&h=200&fit=crop&crop=faces")
           v-divider
-          v-list-tile
-            v-list-tile-content
-              v-list-tile-title Waterfall
-            v-list-tile-avatar
-              img(src="https://images.pexels.com/users/avatars/121938/eberhard-grossgasteiger-438.jpeg?w=200&h=200&fit=crop&crop=faces")
 
       v-divider(inset vertical).mx-3
 
@@ -192,7 +184,8 @@ export default {
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
-      }).catch((err) => {
+        console.log(this.camp);
+      }).catch(() => {
         this.$router.push('404');
       });
     },
@@ -267,6 +260,7 @@ export default {
 .camp-name {
   font-family: "Permanent Marker", cursive !important;
   text-shadow: 0px 0px 20px black;
+  text-align: center;
 }
 
 .iframe-container {
