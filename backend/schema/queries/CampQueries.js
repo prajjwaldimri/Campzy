@@ -171,7 +171,10 @@ const getCampUser = {
   },
   async resolve(parent, args) {
     try {
-      return await CampModel.findOne({ url: `${args.url}` });
+      return await CampModel.findOne({ url: `${args.url}` }).populate({
+        path: 'inventory',
+        select: 'bookingPriceAdult bookingPriceChildren',
+      });
     } catch (err) {
       return err;
     }

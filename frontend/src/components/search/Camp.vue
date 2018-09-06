@@ -135,7 +135,7 @@
               v-date-picker(v-model="toDate" no-title scrollable)
           v-flex(sm2 style="align-items: center").d-flex
             span(style="text-align: center").pa-2.headline.font-weight-bold
-              | @ {{ $n(15000, 'currency', 'en-IN') }}
+              | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
             v-btn(color="green" block).btn-huge.pa-2.white--text Book Your Camp
 
@@ -158,6 +158,7 @@ export default {
   data() {
     return {
       camp: {},
+      price: 0,
       tripDurationMenu: false,
       fromDate: null,
       toDate: null,
@@ -186,9 +187,13 @@ export default {
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
+        this.calculatePrice();
       }).catch(() => {
         this.$router.push('404');
       });
+    },
+    calculatePrice() {
+      this.price = (this.camp.inventory[0].bookingPriceAdult * this.adultCount) + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
     },
   },
 
