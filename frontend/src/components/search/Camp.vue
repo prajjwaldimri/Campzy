@@ -25,7 +25,7 @@
         :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
           v-responsive(height="30vh" v-for="image in camp.images")
             v-card
-              v-img(:src="image")
+              v-img(:src="image" @click="openImageDialog")
       //- For Mobile
     v-responsive(height="30vh").hidden-md-and-up
       v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
@@ -34,7 +34,7 @@
         :autoplay="true" :autoplay-button-output="false")
           v-responsive(height="40vh" v-for="image in camp.images")
             v-card
-              v-img(:src="image")
+              v-img(:src="image" @click="openImageDialog")
 
     v-layout(row wrap style="min-height: 90vh").py-4
       v-flex(sm12 md6).pa-4
@@ -147,6 +147,7 @@ import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { getCampByUrl } from '../../queries/queries';
+import { EventBus } from '../../event-bus';
 
 export default {
   components: {
@@ -178,7 +179,6 @@ export default {
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
   },
-
   methods: {
     getCamp() {
       const variables = {
@@ -192,8 +192,15 @@ export default {
         this.$router.push('404');
       });
     },
+    openImageDialog() {
+      EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });
+    },
     calculatePrice() {
-      this.price = (this.camp.inventory[0].bookingPriceAdult * this.adultCount) + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
+      if (!this.camp.inventory) {
+        return;
+      }
+      this.price = (this.camp.inventory[0].bookingPriceAdult * this.adultCount)
+      + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
     },
   },
 
