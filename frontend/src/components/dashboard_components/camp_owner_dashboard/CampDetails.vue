@@ -89,7 +89,8 @@
                         v-layout(column)
                           span * Only png/jpeg files
                       v-flex.mt-4(xs12)
-                        v-btn.white--text( @click='uploadImages' color='green') Upload Images
+                        v-btn.white--text( @click='uploadImages' color='green'
+                        :loading='uploadingImages') Upload Images
 
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
@@ -155,6 +156,7 @@ export default {
       uploadingDocuments: false,
       getOwnerDocuments: [],
       getImages: [],
+      uploadingImages: false,
     };
   },
 
@@ -182,6 +184,7 @@ export default {
     },
 
     uploadImages() {
+      this.uploadingImages = true;
       const updateImages = this.storeImages;
       for (let i = 0; i < updateImages.length; i += 1) {
         this.files.push(updateImages[i]);
@@ -201,6 +204,7 @@ export default {
           this.getImages.push(item.key);
         });
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+        this.uploadingImages = false;
         // this.saveCampDetails();
       }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');

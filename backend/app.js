@@ -18,8 +18,7 @@ const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const bodyParser = require('body-parser');
-// const axios = require('axios');
-// const VueAxios = require('vue-axios');
+
 aws.config.update({
   secretAccessKey: process.env.aws_secret_access_key,
   accessKeyId: process.env.aws_access_key_id,
@@ -59,7 +58,8 @@ const uploadDocument = multer({
     },
   }),
 });
-const uploadImages = multer({
+
+const uploadHighResImages = multer({
   storage: multerS3({
     s3: aws3,
     bucket: 'campzy-images',
@@ -69,19 +69,16 @@ const uploadImages = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key(req, file, cb) {
-      const date = Date.now().toString();
-      cb(null, `high-res/Campxy_${file.originalname}${date}`);
+      cb(null, `high-res/Campy_${file.originalname}${Date.now().toString()}`);
     },
   }),
 });
 
 app.post('/uploadCampOwnerDocuments', uploadDocument.array('document', 5), (req, res) => {
-  console.log(req);
   res.json(req.files);
 });
 
-app.post('/uploadImages', uploadImages.array('images', 10), (req, res) => {
-  console.log(req);
+app.post('/uploadImages', uploadHighResImages.array('images', 10), (req, res) => {
   res.json(req.files);
 });
 
@@ -103,19 +100,6 @@ app.delete('/deleteDocuments', (req, res) => {
       return data;
     });
   }
-});
-
-// Get CampOwner Documents
-app.get('/getDocuments', (req, res) => {
-  const params = {
-    Bucket: 'campzy-documents',
-    MaxKeys: 10,
-  };
-  aws3.listObjectsV2(params, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else res.json(data);
-  });
 });
 
 // Connect to MLab Database
