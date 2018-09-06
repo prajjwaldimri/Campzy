@@ -131,8 +131,8 @@
               v-select(label="Trip duration" readonly block
               :label="dateLabel"  hide-details solo flat
               slot="activator" color="primary")
-              v-date-picker(v-model="fromDate" no-title scrollable)
-              v-date-picker(v-model="toDate" no-title scrollable)
+              v-date-picker(v-model="fromDate" no-title scrollable full-width)
+              v-date-picker(v-model="toDate" no-title scrollable full-width)
           v-flex(sm2 style="align-items: center").d-flex
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
