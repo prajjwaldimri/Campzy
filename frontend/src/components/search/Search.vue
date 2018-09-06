@@ -330,9 +330,11 @@ export default {
     },
     adultCount() {
       this.calculatePrice();
+      sessionStorage.setItem('adultCount', this.adultCount);
     },
     childrenCount() {
       this.calculatePrice();
+      sessionStorage.setItem('childrenCount', this.childrenCount);
     },
   },
 };

@@ -17,22 +17,22 @@
                 span.title.pl-1.green--text.font-weight-bold {{camp.rating}}
                 span.subheading.pl-2 (16,035 ratings)
 
-    v-responsive(height="40vh")
+    v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
-      style="align-items: center; display: flex").hidden-sm-and-down
+      style="align-items: center; display: flex")
         tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
-        :arrowKeys="true" :nav="false" :controls="false" :lazyload="false"
+        :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
         :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
           v-responsive(height="30vh" v-for="image in camp.images")
             v-card
               v-img(:src="image")
-          //- For Mobile
-      v-card(color="grey darken-4" flat height="100%" tile style="align-items: center")
-      .hidden-md-and-up
+      //- For Mobile
+    v-responsive(height="30vh").hidden-md-and-up
+      v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
         tiny-slider(:mouse-drag="true" :loop="true" items="1"
-        :nav="false" :controls="false" :lazyload="true"
+        :nav="false" :controls="false" :lazyload="true" v-if="camp.images"
         :autoplay="true" :autoplay-button-output="false")
-          v-responsive(height="40vh" v-for="image in camp.images" :key="image")
+          v-responsive(height="40vh" v-for="image in camp.images")
             v-card
               v-img(:src="image")
 
@@ -175,6 +175,8 @@ export default {
     this.fromDate = this.$moment().format('YYYY-MM-DD');
     this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
     this.getCamp();
+    this.adultCount = parseInt(sessionStorage.getItem('adultCount'), 10) || 2;
+    this.childrenCount = parseInt(sessionStorage.getItem('childrenCount'), 10) || 1;
   },
 
   methods: {
@@ -184,7 +186,6 @@ export default {
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
-        console.log(this.camp);
       }).catch(() => {
         this.$router.push('404');
       });
@@ -197,12 +198,6 @@ export default {
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
-    },
-    adultCount() {
-      this.calculatePrice();
-    },
-    childrenCount() {
-      this.calculatePrice();
     },
   },
 };
