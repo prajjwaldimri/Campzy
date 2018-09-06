@@ -6,10 +6,15 @@
       v-flex(sm5)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
+      v-flex(sm2 offset-sm4 align-content-start justify-center).d-flex
         v-dialog(v-model="addTentDialog" persistent max-width="500px")
           v-btn(color="green" slot="activator").white--text Add Tent
             v-icon(right dark) add_box
+          addTent
+      v-flex(sm2 align-content-start justify-center).d-flex
+        v-dialog(v-model="addTentDialog" persistent max-width="500px")
+          v-btn(color="red" slot="activator").white--text Close Bookings
+            v-icon(right dark) remove_circle
           addTent
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions

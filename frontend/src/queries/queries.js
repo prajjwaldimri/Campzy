@@ -20,10 +20,12 @@ const getAllTentsQuery = `query allTents{
       id
       type
       capacity
-      bookingPrice
+      bookingPriceAdult
+      bookingPriceChildren
       preBookPeriod
       isBooked
-      surgePrice
+      surgePriceAdult
+      surgePriceChildren
     }
   }
   `;
