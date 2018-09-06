@@ -6,6 +6,7 @@ const TokenType = new GraphQLObjectType({
   name: 'Token',
   fields: () => ({
     tokenValue: { type: GraphQLString },
+    id: { type: GraphQLString },
   }),
 });
 
