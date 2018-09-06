@@ -22,7 +22,8 @@
       clearable  data-vv-name="preBooking" v-validate="'required'" type="number"
       :error-messages="errors.collect('preBooking')")
 
-      v-text-field(v-model="totalTents" label="Toal Tents Available" prepend-icon="add_shopping_cart"
+      v-text-field(v-model="totalTents" label="Toal Tents Available"
+      prepend-icon="add_shopping_cart"
       clearable  data-vv-name="totalTents" v-validate="'required'"
       :error-messages="errors.collect('totalTents')")
 

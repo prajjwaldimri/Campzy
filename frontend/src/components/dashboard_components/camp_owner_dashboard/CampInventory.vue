@@ -12,10 +12,10 @@
             v-icon(right dark) add_box
           addTent
       v-flex(sm3 align-content-start justify-center).d-flex
-        v-dialog(v-model="addTentDialog" persistent max-width="500px")
+        v-dialog(v-model="closeBookingDialog" persistent max-width="500px")
           v-btn(color="red" slot="activator").white--text Close Bookings
             v-icon(right dark) remove_circle
-          addTent
+          closebookings
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading").elevation-1
@@ -33,12 +33,14 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getAllTentsQuery } from '../../../queries/queries';
+import CloseBooking from './TentManager/CloseBooking.vue';
 import AddTent from './TentManager/AddTent.vue';
 import { EventBus } from '../../../event-bus';
 
 export default {
   components: {
     addTent: AddTent,
+    closebookings: CloseBooking,
   },
 
   data() {
@@ -62,6 +64,7 @@ export default {
       tents: [],
       addTentDialog: false,
       isTableLoading: false,
+      closeBookingDialog: false,
     };
   },
   mounted() {

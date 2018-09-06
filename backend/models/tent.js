@@ -13,6 +13,7 @@ const TentSchema = new Schema({
   preBookPeriod: Number,
   camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
   bookedBy: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+  isAvailable: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Tent', TentSchema);
