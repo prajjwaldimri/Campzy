@@ -18,6 +18,7 @@ const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const bodyParser = require('body-parser');
+const sharp = require('sharp');
 
 aws.config.update({
   secretAccessKey: process.env.aws_secret_access_key,
@@ -43,6 +44,7 @@ app.use(cors());
 const aws3 = new aws.S3();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const uploadDocument = multer({
   storage: multerS3({
@@ -59,27 +61,63 @@ const uploadDocument = multer({
   }),
 });
 
-const uploadHighResImages = multer({
-  storage: multerS3({
-    s3: aws3,
-    bucket: 'campzy-images',
-    acl: 'public-read',
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    metadata(req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key(req, file, cb) {
-      cb(null, `high-res/Campy_${file.originalname}${Date.now().toString()}`);
-    },
-  }),
-});
-
 app.post('/uploadCampOwnerDocuments', uploadDocument.array('document', 5), (req, res) => {
   res.json(req.files);
 });
 
-app.post('/uploadImages', uploadHighResImages.array('images', 10), (req, res) => {
-  res.json(req.files);
+// Image uploads
+
+const imageStorage = multer.memoryStorage({
+  destination(req, file, callback) {
+    callback(null, '');
+  },
+});
+
+app.post('/uploadImages', multer({ storage: imageStorage }).array('images', 10), (req, res) => {
+  req.files.forEach((file) => {
+    const fileName = `${Date.now()}__${file.originalname}`;
+    aws3.putObject(
+      {
+        Bucket: 'campzy-images',
+        Key: `high-res/${fileName}`,
+        Body: file.buffer,
+        ACL: 'public-read',
+      },
+      () => {
+        sharp(file.buffer)
+          .resize(300, null)
+          .png({ progressive: true, compressionLevel: 5 })
+          .toBuffer((err, buffer) => {
+            aws3.putObject(
+              {
+                Bucket: 'campzy-images',
+                Key: `low-res/${fileName}`,
+                Body: buffer,
+                ACL: 'public-read',
+              },
+              () => {
+                sharp(file.buffer)
+                  .resize(40, 40)
+                  .png({ progressive: true, compressionLevel: 9 })
+                  .toBuffer((err2, buffer2) => {
+                    aws3.putObject(
+                      {
+                        Bucket: 'campzy-images',
+                        Key: `thumbnails/${fileName}`,
+                        Body: buffer2,
+                        ACL: 'public-read',
+                      },
+                      () => {
+                        res.json({ success: 'true' });
+                      },
+                    );
+                  });
+              },
+            );
+          });
+      },
+    );
+  });
 });
 
 // Delete file from s3
