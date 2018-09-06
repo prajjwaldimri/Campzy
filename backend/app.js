@@ -74,50 +74,55 @@ const imageStorage = multer.memoryStorage({
 });
 
 app.post('/uploadImages', multer({ storage: imageStorage }).array('images', 10), (req, res) => {
-  req.files.forEach((file) => {
-    const fileName = `${Date.now()}__${file.originalname}`;
-    aws3.putObject(
-      {
-        Bucket: 'campzy-images',
-        Key: `high-res/${fileName}`,
-        Body: file.buffer,
-        ACL: 'public-read',
-      },
-      () => {
-        sharp(file.buffer)
-          .resize(300, null)
-          .png({ progressive: true, compressionLevel: 5 })
-          .toBuffer((err, buffer) => {
-            aws3.putObject(
-              {
-                Bucket: 'campzy-images',
-                Key: `low-res/${fileName}`,
-                Body: buffer,
-                ACL: 'public-read',
-              },
-              () => {
-                sharp(file.buffer)
-                  .resize(40, 40)
-                  .png({ progressive: true, compressionLevel: 9 })
-                  .toBuffer((err2, buffer2) => {
-                    aws3.putObject(
-                      {
-                        Bucket: 'campzy-images',
-                        Key: `thumbnails/${fileName}`,
-                        Body: buffer2,
-                        ACL: 'public-read',
-                      },
-                      () => {
-                        res.json({ success: 'true' });
-                      },
-                    );
-                  });
-              },
-            );
-          });
-      },
-    );
-  });
+  if (req.files.length !== 0) {
+    req.files.forEach((file) => {
+      const fileName = `${Date.now()}__${file.originalname}`;
+      aws3.putObject(
+        {
+          Bucket: 'campzy-images',
+          Key: `high-res/${fileName}`,
+          Body: file.buffer,
+          ACL: 'public-read',
+        },
+        () => {
+          sharp(file.buffer)
+            .resize(300, null)
+            .png({ progressive: true, compressionLevel: 5 })
+            .toBuffer((err, buffer) => {
+              aws3.putObject(
+                {
+                  Bucket: 'campzy-images',
+                  Key: `low-res/${fileName}`,
+                  Body: buffer,
+                  ACL: 'public-read',
+                },
+                () => {
+                  sharp(file.buffer)
+                    .resize(40, 40)
+                    .png({ progressive: true, compressionLevel: 9 })
+                    .toBuffer((err2, buffer2) => {
+                      aws3.putObject(
+                        {
+                          Bucket: 'campzy-images',
+                          Key: `thumbnails/${fileName}`,
+                          Body: buffer2,
+                          ACL: 'public-read',
+                        },
+                        () => {
+                          res.json({ success: 'true' });
+                        },
+                      );
+                    });
+                },
+              );
+            });
+        },
+      );
+    });
+    res.json(req.files);
+  } else {
+    res.json('Error');
+  }
 });
 
 // Delete file from s3

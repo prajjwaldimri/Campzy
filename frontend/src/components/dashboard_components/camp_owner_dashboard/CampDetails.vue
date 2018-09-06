@@ -171,7 +171,6 @@ export default {
 
     storeImage(event) {
       this.storeImages = event.target.files;
-      console.log(this.storeImages);
     },
     deleteFile() {
       axios.delete('/deleteDocuments', {
@@ -204,11 +203,10 @@ export default {
           this.getImages.push(item.key);
         });
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-        this.uploadingImages = false;
         // this.saveCampDetails();
       }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-      });
+      }).finally(() => { this.uploadingImages = false; });
     },
 
 

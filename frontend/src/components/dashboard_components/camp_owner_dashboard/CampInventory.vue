@@ -11,7 +11,7 @@
           v-btn(color="green" slot="activator").white--text Add Tent
             v-icon(right dark) add_box
           addTent
-      v-flex(sm2 align-content-start justify-center).d-flex
+      v-flex(sm3 align-content-start justify-center).d-flex
         v-dialog(v-model="addTentDialog" persistent max-width="500px")
           v-btn(color="red" slot="activator").white--text Close Bookings
             v-icon(right dark) remove_circle
