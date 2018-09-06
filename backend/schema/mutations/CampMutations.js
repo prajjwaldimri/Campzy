@@ -67,6 +67,7 @@ const updateCamp = {
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
     campDocuments: { type: new GraphQLList(GraphQLString) },
+    images: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -101,6 +102,7 @@ const updateCamp = {
         amenities: args.amenities,
         placesOfInterest: args.placesOfInterest,
         campDocuments: args.campDocuments,
+        images: args.images,
       });
 
       return await UserModel.findByIdAndUpdate(args.ownerId, {

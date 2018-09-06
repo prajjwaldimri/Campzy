@@ -119,7 +119,8 @@
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
               v-carousel
-                v-carousel-item(v-for="(image,i) in camp.images" :key="i" :src="image")
+                v-carousel-item(v-for="(image,i) in camp.images" :key="i"
+                :src=`'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/1536254024601__'+image`)
 
 
     v-container.camp-display(fluid)
@@ -200,7 +201,7 @@ export default {
           },
         }).then((res) => {
         res.data.forEach((item) => {
-          this.getImages.push(item.key);
+          this.getImages.push(item.originalname);
         });
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
         // this.saveCampDetails();
@@ -279,6 +280,7 @@ export default {
         longDescription: this.camp.longDescription,
         tags: this.tags,
         campDocuments: this.getOwnerDocuments,
+        images: this.getImages,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
