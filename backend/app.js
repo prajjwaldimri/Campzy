@@ -45,7 +45,7 @@ const aws3 = new aws.S3();
 
 app.use(bodyParser.json());
 
-const upload = multer({
+const uploadDocument = multer({
   storage: multerS3({
     s3: aws3,
     bucket: 'campzy-documents',
@@ -59,8 +59,28 @@ const upload = multer({
     },
   }),
 });
+const uploadImages = multer({
+  storage: multerS3({
+    s3: aws3,
+    bucket: 'campzy-images',
+    acl: 'public-read',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata(req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key(req, file, cb) {
+      const date = Date.now().toString();
+      cb(null, `high-res/Campxy_${file.originalname}${date}`);
+    },
+  }),
+});
 
-app.post('/uploadCampOwnerDocuments', upload.array('document', 5), (req, res) => {
+app.post('/uploadCampOwnerDocuments', uploadDocument.array('document', 5), (req, res) => {
+  console.log(req);
+  res.json(req.files);
+});
+
+app.post('/uploadImages', uploadImages.array('images', 10), (req, res) => {
   console.log(req);
   res.json(req.files);
 });

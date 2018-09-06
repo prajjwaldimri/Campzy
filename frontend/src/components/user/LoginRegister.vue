@@ -135,6 +135,7 @@ export default {
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
+        console.log(err);
         if (err) {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           this.isLoggedin = false;

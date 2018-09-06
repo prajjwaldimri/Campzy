@@ -79,17 +79,17 @@
                         v-layout(column)
                           span Main Image for Camp
                           input.mt-2(type='file' name='hero_image' ref='panCard'
-                          v-on:change="showFile"  accept='image/png, image/jpeg' disabled )
+                          v-on:change="storeImage"  accept='image/png, image/jpeg' disabled )
                       v-flex.mt-3(xs12)
                         v-layout(column)
                           span Other camp photos
                           input.mt-2(type='file' name='other_photos'
-                          @change='showFile' accept='image/png, image/jpeg'  multiple disabled  )
+                          @change='storeImage' accept='image/png, image/jpeg'  multiple)
                       v-flex.mt-3(xs12)
                         v-layout(column)
                           span * Only png/jpeg files
                       v-flex.mt-4(xs12)
-                        v-btn.white--text( @click='uploadDocuments' color='green') Upload Images
+                        v-btn.white--text( @click='uploadImages' color='green') Upload Images
 
         v-tab-item(id='campdetail')
           v-flex(xs12 md6 style='max-width:100%')
@@ -151,22 +151,25 @@ export default {
       gstNumber: null,
       files: [],
       storeDocuments: [],
+      storeImages: [],
       uploadingDocuments: false,
       getOwnerDocuments: [],
+      getImages: [],
     };
   },
 
   mounted() {
     this.getCampDetails();
-    // this.deleteFile();
-    // this.getDocuments();
   },
 
   methods: {
-    getDocuments() {
-      axios.get('/getDocuments').then((res) => {
-        console.log(res);
-      }).catch((err) => { console.log(err); });
+    showFile(event) {
+      this.storeDocuments.push(event.target.files[0]);
+    },
+
+    storeImage(event) {
+      this.storeImages = event.target.files;
+      console.log(this.storeImages);
     },
     deleteFile() {
       axios.delete('/deleteDocuments', {
@@ -178,9 +181,32 @@ export default {
       });
     },
 
-    showFile(event) {
-      this.storeDocuments.push(event.target.files[0]);
+    uploadImages() {
+      const updateImages = this.storeImages;
+      for (let i = 0; i < updateImages.length; i += 1) {
+        this.files.push(updateImages[i]);
+      }
+      const formData = new FormData();
+      for (let i = 0; i < this.files.length; i += 1) {
+        const file = this.files[i];
+        formData.append('images', file);
+      }
+      axios.post('/uploadImages', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then((res) => {
+        res.data.forEach((item) => {
+          this.getImages.push(item.key);
+        });
+        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+        // this.saveCampDetails();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+      });
     },
+
 
     // Uploads CampOwner Documents
     uploadDocuments() {
@@ -204,10 +230,7 @@ export default {
             },
           }).then((res) => {
           res.data.forEach((item) => {
-            const documents = {};
-            documents.name = item.originalname;
-            documents.path = item.location;
-            this.getOwnerDocuments.push(documents);
+            this.getOwnerDocuments.push(item.key);
           });
           EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
           this.saveCampDetails();

@@ -53,8 +53,8 @@ const CampType = new GraphQLObjectType({
     page: { type: GraphQLInt },
     rating: { type: GraphQLFloat },
     altitude: { type: GraphQLString },
-    inventory: { type: GraphQLList(TentType) },
-    campDocuments: { type: new GraphQLList(GraphQLString) },
+    inventory: { type: new GraphQLList(TentType) },
+    CampDocuments: { type: new GraphQLList(GraphQLString) },
   }),
 });
 
