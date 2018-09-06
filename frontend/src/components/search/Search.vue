@@ -324,15 +324,19 @@ export default {
   watch: {
     fromDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      sessionStorage.setItem('fromDate', this.fromDate);
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      sessionStorage.setItem('toDate', this.toDate);
     },
     adultCount() {
       this.calculatePrice();
+      sessionStorage.setItem('adultCount', this.adultCount);
     },
     childrenCount() {
       this.calculatePrice();
+      sessionStorage.setItem('childrenCount', this.childrenCount);
     },
   },
 };

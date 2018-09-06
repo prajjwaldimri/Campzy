@@ -70,12 +70,19 @@ const getCampByUrl = `query campUser($url: String!){
     location,
     shortDescription,
     longDescription,
-    placesOfIntereset,
+    placesOfInterest,
     tags,
     amenities,
     images,
     isAvailable,
-    coordinates,
+    inventory {
+      bookingPriceAdult,
+      bookingPriceChildren
+    }
+    coordinates {
+      latitude,
+      longitude
+    },
     terrain,
     rating,
   }

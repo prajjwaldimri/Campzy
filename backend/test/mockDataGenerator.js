@@ -22,7 +22,7 @@ async function CreateCamp(userId, phoneNumber) {
       name: faker.company.companyName(),
       phoneNumber: phoneNumber,
       email: faker.internet.email(),
-      url: faker.random.word(),
+      url: faker.random.uuid(),
       shortDescription: faker.lorem.sentence(),
       longDescription: faker.lorem.paragraph(),
       location: faker.fake('{{address.city}}, {{address.state}}'),
