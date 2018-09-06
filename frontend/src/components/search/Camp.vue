@@ -84,7 +84,7 @@
 
         h1.headline.mt-5.px-1.font-weight-bold Location
         .iframe-container.mt-4
-          iframe(src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&q=Space+Needle,Seattle+WA" allowfullscreen)
+          iframe(v-if="camp" :src="mapUri" allowfullscreen)
 
         h1.headline.mt-5.px-1.font-weight-bold Places of Interest
         v-list(two-line).mt-4
@@ -146,7 +146,6 @@ import VueTinySlider from 'vue-tiny-slider';
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
-import { EventBus } from '../../event-bus';
 import { getCampByUrl } from '../../queries/queries';
 
 export default {
@@ -169,6 +168,7 @@ export default {
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       comments: [1, 2, 3, 4],
+      mapUri: '',
     };
   },
   mounted() {
@@ -188,6 +188,7 @@ export default {
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
         this.calculatePrice();
+        this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
       }).catch(() => {
         this.$router.push('404');
       });
