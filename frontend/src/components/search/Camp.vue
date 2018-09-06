@@ -1,6 +1,8 @@
 <template lang="pug">
   .camp-view
-    navbar(color="transparent" :app="true")
+    navbar(color="transparent" :app="true" :absolute="true")
+
+    SearchImagesDialog
 
     v-responsive(height="90vh")
       v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
@@ -36,14 +38,15 @@
 
     v-layout(row wrap style="min-height: 90vh").py-4
       v-flex(sm12 md6).pa-4
-        h1.headline.font-weight-bold.pb-3 About Riverside Camp
+        h1.display-1.pb-3 About Riverside Camp
         v-divider
         p.pt-4.subheading(style="text-align: justify") Challenges and opportunities, incubator, progress game-changer collaborative cities systems thinking unprecedented challenge synergy. Systems thinking resilient rubric LGBTQ+ emerging thought leader academic impact investing problem-solvers. Thought partnership cultivate white paper, white paper philanthropy granular.
           br
           br
           | Outcomes effective altruism white paper, empathetic; then design thinking impact big data. Philanthropy, black lives matter bandwidth youth ideate. Parse when segmentation, collaborate circular.
 
-        v-layout(row).px-1.py-4
+        h1.headline.mt-5.px-1.font-weight-bold Amenities
+        v-layout(row).px-1.mt-4
           v-flex(sm2).text-xs-center
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
@@ -62,7 +65,7 @@
           v-flex(sm2).text-xs-center
             v-icon(color="blue") wifi
             h4.grey--text Internet Available
-        v-layout(row).px-1.py-2
+        v-layout(row).px-1.mt-4
           v-flex(sm2).text-xs-center
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
@@ -82,11 +85,28 @@
             v-icon(color="blue") wifi
             h4.grey--text Internet Available
 
+        h1.headline.mt-5.px-1.font-weight-bold Location
+        .iframe-container.mt-4
+          iframe(src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&q=Space+Needle,Seattle+WA" allowfullscreen)
+
+        h1.headline.mt-5.px-1.font-weight-bold Places of Interest
+        v-list(two-line).mt-4
+          v-list-tile
+            v-list-tile-content
+              v-list-tile-title Airport
+            v-list-tile-avatar
+              img(src="https://images.pexels.com/users/avatars/121938/eberhard-grossgasteiger-438.jpeg?w=200&h=200&fit=crop&crop=faces")
+          v-divider
+          v-list-tile
+            v-list-tile-content
+              v-list-tile-title Waterfall
+            v-list-tile-avatar
+              img(src="https://images.pexels.com/users/avatars/121938/eberhard-grossgasteiger-438.jpeg?w=200&h=200&fit=crop&crop=faces")
 
       v-divider(inset vertical).mx-3
 
       v-flex(sm12 md5).py-4.pl-4
-        h3.headline.font-weight-bold.pb-3 Opinions
+        h3.display-1.pb-3 Recent Opinions
         v-divider
         v-card(v-for="comment in comments").ma-4.pa-4
           v-layout(row wrap)
@@ -131,15 +151,21 @@
 
 <script>
 import VueTinySlider from 'vue-tiny-slider';
-import Navbar from '../Navbar.vue';
+import { request } from 'graphql-request';
+import navbar from '../Navbar.vue';
+import SearchImagesDialog from './SearchImagesDialog.vue';
+import { EventBus } from '../../event-bus';
+import { getCampByUrl } from '../../queries/queries';
 
 export default {
   components: {
-    navbar: Navbar,
+    navbar,
     'tiny-slider': VueTinySlider,
+    SearchImagesDialog,
   },
   data() {
     return {
+      camp: {},
       tripDurationMenu: false,
       fromDate: null,
       toDate: null,
@@ -149,13 +175,27 @@ export default {
       childrenNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      comments: [1, 2, 3, 4, 5],
+      comments: [1, 2, 3, 4],
     };
   },
   mounted() {
     // Set the default date label
     this.fromDate = this.$moment().format('YYYY-MM-DD');
     this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
+    this.getCamp();
+  },
+
+  methods: {
+    getCamp() {
+      const variables = {
+        url: this.$route.params.campUrl,
+      };
+      request('/graphql', getCampByUrl, variables).then((data) => {
+        this.camp = data.campUser;
+      }).catch((err) => {
+        this.$router.push('404');
+      });
+    },
   },
 
   watch: {
@@ -227,5 +267,20 @@ export default {
 .camp-name {
   font-family: "Permanent Marker", cursive !important;
   text-shadow: 0px 0px 20px black;
+}
+
+.iframe-container {
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+
+  iframe {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }
 </style>

@@ -13,6 +13,14 @@ const {
   GraphQLFloat,
 } = graphql;
 
+const CoordinateType = new GraphQLObjectType({
+  name: 'Coordinate',
+  fields: () => ({
+    latitude: { type: GraphQLString },
+    longitude: { type: GraphQLString },
+  }),
+});
+
 const CampType = new GraphQLObjectType({
   name: 'Camp',
   fields: () => ({
@@ -21,6 +29,7 @@ const CampType = new GraphQLObjectType({
     phoneNumber: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     email: { type: GraphQLString },
+    isAvailable: { type: GraphQLBoolean },
     isEmailVerified: { type: GraphQLBoolean },
     isBlacklisted: { type: GraphQLBoolean },
     location: { type: GraphQLString },
@@ -31,6 +40,8 @@ const CampType = new GraphQLObjectType({
         return UserModel.findById(parent.ownerId, 'name email');
       },
     },
+    coordinates: { type: CoordinateType },
+    terrain: { type: GraphQLString },
     ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
