@@ -131,7 +131,7 @@
               v-select(label="Trip duration" readonly block
               :label="dateLabel"  hide-details solo flat
               slot="activator" color="primary")
-              v-date-picker(v-model="fromDate" no-title scrollable max="2018-09")
+              v-date-picker(v-model="fromDate" no-title scrollable)
               v-date-picker(v-model="toDate" no-title scrollable)
           v-flex(sm2 style="align-items: center").d-flex
             span(style="text-align: center").pa-2.headline.font-weight-bold
@@ -172,12 +172,11 @@ export default {
     };
   },
   mounted() {
-    // Set the default date label
-    this.fromDate = this.$moment().format('YYYY-MM-DD');
-    this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
     this.getCamp();
     this.adultCount = parseInt(sessionStorage.getItem('adultCount'), 10) || 2;
     this.childrenCount = parseInt(sessionStorage.getItem('childrenCount'), 10) || 1;
+    this.fromDate = sessionStorage.getItem('fromDate');
+    this.toDate = sessionStorage.getItem('toDate');
   },
 
   methods: {
@@ -201,9 +200,19 @@ export default {
   watch: {
     fromDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      sessionStorage.setItem('fromDate', this.fromDate);
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      sessionStorage.setItem('toDate', this.toDate);
+    },
+    adultCount() {
+      this.calculatePrice();
+      sessionStorage.setItem('adultCount', this.adultCount);
+    },
+    childrenCount() {
+      this.calculatePrice();
+      sessionStorage.setItem('childrenCount', this.childrenCount);
     },
   },
 };
