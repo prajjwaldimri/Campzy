@@ -55,15 +55,46 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key(req, file, cb) {
-      console.log(file);
       cb(null, file.fieldname + Date.now().toString());
     },
   }),
 });
 
 app.post('/uploadCampOwnerDocuments', upload.array('document', 5), (req, res) => {
-  console.log(req.body);
   res.json('Success');
+});
+
+// Delete file from s3
+app.delete('/deleteDocuments', (req, res) => {
+  if (!req.body.document) {
+    res.send('Cannot send Empty Key');
+  } else {
+    const documentDel = req.body.document;
+    const params = {
+      Bucket: 'campzy-documents',
+      Key: `${documentDel}`,
+    };
+    aws3.deleteObject(params, (err, data) => {
+      if (err) {
+        return err;
+      }
+      res.send('Success');
+      return data;
+    });
+  }
+});
+
+// Get CampOwner Documents
+app.get('/getDocuments', (req, res) => {
+  const params = {
+    Bucket: 'campzy-documents',
+    MaxKeys: 10,
+  };
+  aws3.listObjectsV2(params, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else res.json(data);
+  });
 });
 
 // Connect to MLab Database
