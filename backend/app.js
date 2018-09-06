@@ -61,7 +61,8 @@ const upload = multer({
 });
 
 app.post('/uploadCampOwnerDocuments', upload.array('document', 5), (req, res) => {
-  res.json('Success');
+  console.log(req);
+  res.json(req.files);
 });
 
 // Delete file from s3

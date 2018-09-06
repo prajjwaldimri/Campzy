@@ -152,13 +152,14 @@ export default {
       files: [],
       storeDocuments: [],
       uploadingDocuments: false,
+      getOwnerDocuments: [],
     };
   },
 
   mounted() {
     this.getCampDetails();
     // this.deleteFile();
-    this.getDocuments();
+    // this.getDocuments();
   },
 
   methods: {
@@ -183,7 +184,7 @@ export default {
 
     // Uploads CampOwner Documents
     uploadDocuments() {
-      if (this.storeDocuments.length < 3) {
+      if (this.storeDocuments.length < 0) {
         EventBus.$emit('show-error-notification-short', 'Please select all files!');
       } else {
         this.uploadingDocuments = true;
@@ -201,10 +202,17 @@ export default {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
-          }).then(() => {
+          }).then((res) => {
+          res.data.forEach((item) => {
+            const documents = {};
+            documents.name = item.originalname;
+            documents.path = item.location;
+            this.getOwnerDocuments.push(documents);
+          });
           EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-        }).catch((err) => {
-          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+          this.saveCampDetails();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
         }).finally(() => { this.uploadingDocuments = false; });
       }
     },
@@ -245,6 +253,7 @@ export default {
         shortDescription: this.camp.shortDescription,
         longDescription: this.camp.longDescription,
         tags: this.tags,
+        campDocuments: this.getOwnerDocuments,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -256,6 +265,7 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
