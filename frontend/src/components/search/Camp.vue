@@ -38,7 +38,7 @@
       v-flex(sm12 md6).pa-4
         h1.headline.font-weight-bold.pb-3 About Riverside Camp
         v-divider
-        p.pt-3.subheading(style="text-align: justify") Challenges and opportunities, incubator, progress game-changer collaborative cities systems thinking unprecedented challenge synergy. Systems thinking resilient rubric LGBTQ+ emerging thought leader academic impact investing problem-solvers. Thought partnership cultivate white paper, white paper philanthropy granular.
+        p.pt-4.subheading(style="text-align: justify") Challenges and opportunities, incubator, progress game-changer collaborative cities systems thinking unprecedented challenge synergy. Systems thinking resilient rubric LGBTQ+ emerging thought leader academic impact investing problem-solvers. Thought partnership cultivate white paper, white paper philanthropy granular.
           br
           br
           | Outcomes effective altruism white paper, empathetic; then design thinking impact big data. Philanthropy, black lives matter bandwidth youth ideate. Parse when segmentation, collaborate circular.
@@ -62,10 +62,30 @@
           v-flex(sm2).text-xs-center
             v-icon(color="blue") wifi
             h4.grey--text Internet Available
+        v-layout(row).px-1.py-2
+          v-flex(sm2).text-xs-center
+            v-icon wb_cloudy
+            h4.grey--text 29&#176;C (Current)
+          v-flex(sm2).text-xs-center
+            v-icon(color="green") loyalty
+            h4.grey--text Campzy Guarantee
+          v-flex(sm2).text-xs-center
+            v-icon(color="brown") pets
+            h4.grey--text Pets Allowed
+          v-flex(sm2).text-xs-center
+            v-icon rowing
+            h4.grey--text Adventure Sports
+          v-flex(sm2).text-xs-center
+            v-icon(color="red") trending_up
+            h4.grey--text Trending
+          v-flex(sm2).text-xs-center
+            v-icon(color="blue") wifi
+            h4.grey--text Internet Available
 
-      v-divider(inset vertical).px-3
 
-      v-flex(sm12 md5).pa-4
+      v-divider(inset vertical).mx-3
+
+      v-flex(sm12 md5).py-4.pl-4
         h3.headline.font-weight-bold.pb-3 Opinions
         v-divider
         v-card(v-for="comment in comments").ma-4.pa-4
