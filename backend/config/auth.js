@@ -61,6 +61,16 @@ const isUserAdmin = (user) => {
   return false;
 };
 
+const isUserBlogger = (user) => {
+  if (!user) {
+    return false;
+  }
+  if (user.type === 'Blogger') {
+    return true;
+  }
+  return false;
+};
+
 const sendUserToken = async (userId, email) => {
   try {
     let token = await TokenModel.findOne({ _userId: userId });
@@ -193,6 +203,7 @@ module.exports = {
   getAuthenticatedUser,
   isUserCampOwner,
   isUserAdmin,
+  isUserBlogger,
   sendUserToken,
   verifyUserToken,
   sendUserOTP,
