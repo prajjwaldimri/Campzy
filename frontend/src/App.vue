@@ -27,6 +27,16 @@ export default {
     };
   },
   created() {
+    // N-Progress
+    /* global NProgress */
+    EventBus.$on('show-progress-bar', () => {
+      NProgress.start();
+    });
+    EventBus.$on('hide-progress-bar', () => {
+      NProgress.done();
+    });
+
+
     EventBus.$on('show-success-notification-short', (message) => {
       this.timeout = 2000;
       this.message = message;

@@ -181,6 +181,7 @@ export default {
   },
   methods: {
     getCamp() {
+      EventBus.$emit('show-progress-bar');
       const variables = {
         url: this.$route.params.campUrl,
       };
@@ -190,6 +191,8 @@ export default {
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
       }).catch(() => {
         this.$router.push('404');
+      }).finally(() => {
+        EventBus.$emit('hide-progress-bar');
       });
     },
     openImageDialog() {

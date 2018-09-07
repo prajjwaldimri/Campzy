@@ -267,6 +267,7 @@ export default {
 
   methods: {
     search() {
+      EventBus.$emit('show-progress-bar');
       this.filterDialog = false;
       if (this.searchInput.trim() === '') {
         return;
@@ -285,6 +286,7 @@ export default {
         this.searchResults = [];
       }).finally(() => {
         this.searchComplete = true;
+        EventBus.$emit('hide-progress-bar');
       });
     },
     openImageDialog(campId, campName) {
