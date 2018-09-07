@@ -1,3 +1,4 @@
+/* global NProgress */
 import Vue from 'vue';
 import Router from 'vue-router';
 
@@ -113,6 +114,17 @@ const router = new Router({
       ],
     },
   ],
+});
+
+router.beforeResolve((to, from, next) => {
+  if (to.name) {
+    NProgress.start();
+  }
+  next();
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;
