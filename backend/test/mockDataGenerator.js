@@ -83,13 +83,19 @@ mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true },
 );
+
+function handleRejection(p) {
+  return p.catch(err => ({ error: err }));
+}
 mongoose.connection.once('open', async () => {
   // Remove all data
   await User.remove({});
   await Tent.remove({});
   await Camp.remove({});
-  for (let i = 0; i < 1000; i++) {
-    await CreateUser();
+  for (let i = 0; i < 10000; i++) {
+    await Promise.all(
+      [CreateUser(), CreateUser(), CreateUser(), CreateUser()].map(handleRejection),
+    );
   }
   process.exit(0);
 });
