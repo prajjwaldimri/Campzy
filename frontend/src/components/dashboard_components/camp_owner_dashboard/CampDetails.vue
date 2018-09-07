@@ -328,7 +328,6 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
