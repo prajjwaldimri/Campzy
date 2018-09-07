@@ -31,7 +31,6 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getAllTentsQuery } from '../../../queries/queries';
-import CloseBooking from './TentManager/CloseBooking.vue';
 import AddTent from './TentManager/AddTent.vue';
 import { EventBus } from '../../../event-bus';
 import { closeTentBooking } from '../../../queries/mutationQueries';
@@ -39,7 +38,6 @@ import { closeTentBooking } from '../../../queries/mutationQueries';
 export default {
   components: {
     addTent: AddTent,
-    closebookings: CloseBooking,
   },
 
   data() {
