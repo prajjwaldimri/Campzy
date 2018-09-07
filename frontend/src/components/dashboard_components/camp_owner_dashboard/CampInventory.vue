@@ -6,21 +6,16 @@
       v-flex(sm5)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(sm2 offset-sm4 align-content-start justify-center).d-flex
+      v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
         v-dialog(v-model="addTentDialog" persistent max-width="500px")
           v-btn(color="green" slot="activator").white--text Add Tent
             v-icon(right dark) add_box
           addTent
-      v-flex(sm3 align-content-start justify-center).d-flex
-        v-dialog(v-model="closeBookingDialog" persistent max-width="500px")
-          v-btn(color="red" slot="activator").white--text Close Bookings
-            v-icon(right dark) remove_circle
-          closebookings
+
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading").elevation-1
         template(slot="items" slot-scope="props")
-          td {{props.item.id}}
           td.font-weight-bold {{props.item.type}}
           td {{props.item.capacity}} Persons
           td Rs. {{props.item.bookingPrice}}
@@ -28,6 +23,9 @@
           td {{props.item.preBookPeriod}} Days
           td {{props.item.bookedBy}}
           td {{props.item.isBooked}}
+          td.align-center
+            v-switch(v-model='props.item.isAvailable' color='green'
+            @change='openTentBooking(props.item.isAvailable,props.item.id)')
 </template>
 
 <script>
@@ -36,6 +34,7 @@ import { getAllTentsQuery } from '../../../queries/queries';
 import CloseBooking from './TentManager/CloseBooking.vue';
 import AddTent from './TentManager/AddTent.vue';
 import { EventBus } from '../../../event-bus';
+import { closeTentBooking } from '../../../queries/mutationQueries';
 
 export default {
   components: {
@@ -47,10 +46,6 @@ export default {
     return {
       headers: [
         {
-          text: 'Tent Id',
-          value: 'id',
-        },
-        {
           text: 'Tent Type',
           value: 'type',
         },
@@ -60,11 +55,13 @@ export default {
         { text: 'Pre Book Time', value: 'perBookPeriod' },
         { text: 'Booked By', value: 'bookedBy' },
         { text: 'Is Booked', value: 'isBooked' },
+        { text: 'Open Booking', value: 'actions', sortable: false },
       ],
       tents: [],
       addTentDialog: false,
       isTableLoading: false,
       closeBookingDialog: false,
+      closeBooking: true,
     };
   },
   mounted() {
@@ -76,6 +73,30 @@ export default {
   },
 
   methods: {
+    openTentBooking(isCloseBooking, tentId) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: tentId,
+        isAvailable: isCloseBooking,
+      };
+      client.request(closeTentBooking, variables).then((data) => {
+        if (data.closeTentBooking.isAvailable === false) {
+          EventBus.$emit('show-error-notification-short', 'Booking Closed for this Tent');
+        } else {
+          EventBus.$emit('show-success-notification-short', 'Booking Open for this Tent');
+        }
+        this.getAllTents();
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
     getAllTents() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');

@@ -41,7 +41,6 @@ export default {
         data.allTents.forEach((tents) => {
           this.totalTents.push(tents.type);
         });
-        console.log(this.totalTents);
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {

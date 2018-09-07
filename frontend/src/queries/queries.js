@@ -26,6 +26,7 @@ const getAllTentsQuery = `query allTents{
       isBooked
       surgePriceAdult
       surgePriceChildren
+      isAvailable
     }
   }
   `;

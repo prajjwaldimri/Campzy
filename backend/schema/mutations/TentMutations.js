@@ -113,4 +113,42 @@ const deleteTent = {
   },
 };
 
-module.exports = { addTent, updateTent, deleteTent };
+const closeBookings = {
+  type: TentType,
+  args: {
+    id: { type: GraphQLString },
+    isAvailable: { type: GraphQLBoolean },
+  },
+  async resolve(parent, args, context) {
+    try {
+      console.log(args);
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      const closeBooking = await TentModel.findByIdAndUpdate(
+        args.id,
+        {
+          isAvailable: args.isAvailable,
+        },
+        { new: true },
+      );
+      return closeBooking;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+module.exports = {
+  addTent,
+  updateTent,
+  deleteTent,
+  closeBookings,
+};

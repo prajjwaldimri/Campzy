@@ -49,6 +49,14 @@ const saveCampDetails = `mutation updateCamp($id: String!,$name: String, $phoneN
   }
 }`;
 
+const closeTentBooking = `mutation closeTentBooking($id: String!, $isAvailable: Boolean!){
+    closeTentBooking(id: $id, isAvailable: $isAvailable){
+      id
+      isAvailable
+
+  }
+}`;
+
 module.exports = {
   registerUser,
   verifyEmailToken,
@@ -58,4 +66,5 @@ module.exports = {
   sendResetPasswordToken,
   resetPasswordMutation,
   saveCampDetails,
+  closeTentBooking,
 };

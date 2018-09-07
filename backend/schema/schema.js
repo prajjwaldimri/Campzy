@@ -55,6 +55,7 @@ const Mutation = new GraphQLObjectType({
     addTent: TentMutations.addTent,
     updateTent: TentMutations.updateTent,
     deleteTent: TentMutations.deleteTent,
+    closeTentBooking: TentMutations.closeBookings,
   },
 });
 
