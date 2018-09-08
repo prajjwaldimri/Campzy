@@ -181,8 +181,8 @@ export default {
         .then((data) => {
           this.user = data.currentUser;
           this.isLoggedIn = true;
-          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner') {
-            this.$router.push('login');
+          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.this.user.type !== 'Blogger') {
+            this.$router.push('/login');
             EventBus.$emit('show-error-notification-short', 'Your account does not have the capability to perfomr this action');
           }
           if (this.user.type === 'CampOwner') {
