@@ -20,7 +20,7 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click.native="createBlogger").white--text Save
+      v-btn(color="green" @click.native="createBlogger" :loading='addingBlogger').white--text Save
 
 </template>
 
@@ -41,6 +41,7 @@ export default {
       selectedBlogger: {},
       isBloggerFieldLoading: false,
       isBloggerSelected: false,
+      addingBlogger: false,
     };
   },
 
@@ -55,6 +56,7 @@ export default {
           if (!this.$cookie.get('sessionToken')) {
             this.$router.push('/');
           }
+          this.addingBlogger = true;
           const client = new GraphQLClient('/graphql', {
             headers: {
               Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -63,12 +65,12 @@ export default {
           const variables = {
             bloggerId: this.selectedBlogger,
           };
-          client.request(addBloggerQuery, variables).then((data) => {
-            console.log(data);
+          client.request(addBloggerQuery, variables).then(() => {
+            EventBus.$emit('admin-close-add-blogger-dialog');
+            EventBus.$emit('show-success-notification-short', 'Successfully Added');
           }).catch((err) => {
-            console.log(err);
-            // EventBus.$emit('error', err.response.errors[0].message);
-          });
+            EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+          }).finally(() => { this.addingBlogger = false; });
         }
       });
     },
@@ -106,7 +108,6 @@ export default {
       });
       client.request(searchQuery, variables).then((data) => {
         this.searchedUsers = data.searchUser;
-        console.log(this.selectedBlogger);
       }).catch(() => {
         this.searchedUsers = [];
       }).finally(() => { this.isBloggerFieldLoading = false; });
