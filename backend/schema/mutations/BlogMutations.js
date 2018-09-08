@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const BlogModel = require('../../models/blogs.js');
+const BlogModel = require('../../models/blog.js');
 const UserModel = require('../../models/user.js');
 const BlogType = require('../types/BlogTypes');
 // const UserType = require('../types/UserType');

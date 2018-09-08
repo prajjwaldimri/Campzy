@@ -9,11 +9,11 @@ const BlogSchema = new Schema({
     required: true,
     unique: true,
   },
+  description: { type: String, required: true },
   content: { type: String, required: true },
-  heroImage: { type: String, unique: true, required: true },
+  heroImage: { type: String, required: true },
   authorId: {
-    type: String,
-    unique: true,
+    type: Schema.Types.ObjectId,
   },
 });
 
