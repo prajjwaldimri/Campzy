@@ -1,9 +1,9 @@
 <template lang="pug">
  .blog-root
   navbar
-  v-container(fluid).pa-5
-    v-layout(row wrap style="min-height: 70vh").px-5
-      v-flex(sm12 md6).heading-flex.pr-5
+  v-container(fluid)
+    v-layout(row wrap style="min-height: 70vh").heading-layout
+      v-flex(sm12 md6).heading-flex.pb-4
         h3.body-1.font-weight-bold.grey--text.text--darken-2 CAPMZY FEATURED STORY
         h1.display-3.font-weight-bold Camps in Rishikesh
         h3.title.mt-2(style="line-height: 2rem !important").grey--text.text--darken-2 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -16,13 +16,13 @@
             span.body-2 Sep 17,
             span.body-2  10 min read
 
-      v-flex(sm12 md6)
+      v-flex(sm12 md6).pb-4
         v-img(src="https://images.pexels.com/photos/891683/pexels-photo-891683.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" width="100%")
         span.body-1.grey--text Photo: NicolasMcComber/iStock/Getty Images Plus
 
-  v-container.px-5
-    v-layout.px-5
-      v-flex.px-5
+  v-container.blog-content-container
+    v-layout
+      v-flex
         p.blog-content.grey--text.text--darken-4 Families, justice, deep dive external partners, parse milestones segmentation. Preliminary thinking our work, challenges and opportunities transparent, leverage best practices social entrepreneur, inclusion issue outcomes rubric white paper citizen-centered initiative entrepreneur. Shared vocabulary strategize, empower communities the social intrapreneurship, storytelling design thinking blended value natural resources families. Collaborative consumption blended value transparent sustainable, greenwashing, to; effective altruism impact investing, vibrant, entrepreneur social return on investment deep dive low-hanging fruit social entrepreneur.
           br
           br
@@ -61,10 +61,35 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  @media screen and (min-width: 961px) {
+    padding: 2rem;
+  }
 }
 
-.blog-content {
-  line-height: 2;
-  font-size: 1.3rem;
+.heading-layout {
+  @media screen and (min-width: 961px) {
+    padding: 2rem;
+  }
+}
+
+.blog-content-container {
+  @media screen and (min-width: 961px) {
+    padding: 2rem;
+  }
+  .layout {
+    @media screen and (min-width: 961px) {
+      padding: 2rem;
+    }
+  }
+  .flex {
+    @media screen and (min-width: 961px) {
+      padding: 2rem;
+    }
+  }
+  .blog-content {
+    line-height: 2;
+    font-size: 1.3rem;
+  }
 }
 </style>
