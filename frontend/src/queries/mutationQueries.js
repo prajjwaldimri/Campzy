@@ -65,6 +65,12 @@ const campBooking = `mutation campAvailability($id: String!, $isAvailable: Boole
   }
 }`;
 
+const addBloggerQuery = `mutation addBlogger($bloggerId: String!){
+  addBlogger(id: $bloggerId){
+    id,
+}
+}`;
+
 module.exports = {
   registerUser,
   verifyEmailToken,
@@ -76,4 +82,5 @@ module.exports = {
   saveCampDetails,
   closeTentBooking,
   campBooking,
+  addBloggerQuery,
 };

@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const BlogModel = require('../../models/blogs.js');
 const UserModel = require('../../models/user.js');
 const BlogType = require('../types/BlogTypes');
+// const UserType = require('../types/UserType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
@@ -10,9 +11,8 @@ const { GraphQLString } = graphql;
 const addBlogger = {
   type: BlogType,
   args: {
-    authorId: { type: GraphQLString },
+    id: { type: GraphQLString },
   },
-
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
@@ -24,7 +24,7 @@ const addBlogger = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await UserModel.findByIdAndUpdate(args.authorId, {
+      return await UserModel.findByIdAndUpdate(args.id, {
         type: 'Blogger',
       });
     } catch (err) {

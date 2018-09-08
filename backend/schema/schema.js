@@ -12,6 +12,7 @@ const CampMutations = require('./mutations/CampMutations');
 const TentMutations = require('./mutations/TentMutations');
 const TokenMutations = require('./mutations/TokenMutations');
 const OTPMutations = require('./mutations/OTPMutations');
+const BlogMutations = require('./mutations/BlogMutations');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
@@ -57,6 +58,8 @@ const Mutation = new GraphQLObjectType({
     deleteTent: TentMutations.deleteTent,
     closeTentBooking: TentMutations.closeBookings,
     campAvailability: CampMutations.campBookingStatus,
+    addBlogger: BlogMutations.addBlogger,
+    addBlog: BlogMutations.addBlog,
   },
 });
 

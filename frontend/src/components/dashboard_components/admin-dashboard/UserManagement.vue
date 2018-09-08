@@ -21,6 +21,11 @@
         v-text-field(solo type='search' append-icon='search' label="Search"
         v-model='userSearchTerm' @click:append="searchUser(page)"
         @keydown.enter.prevent='searchUser(page)' clearable )
+      v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
+      v-dialog(v-model="addBloggerDialog" persistent max-width="500px")
+        v-btn(color="green" slot="activator").white--text Add a Blogger
+          v-icon(right dark) add_box
+        addBlogger
 
     v-layout(row)
       v-data-table(:headers="headers" :items="users" style="width: 100%" hide-actions
@@ -40,8 +45,12 @@
 import { GraphQLClient } from 'graphql-request';
 import { getAllUsers, countAllUsers, userSearch } from '../../../queries/queries';
 import { EventBus } from '../../../event-bus';
+import AddBlogger from './UserManager/AddBlogger.vue';
 
 export default {
+  components: {
+    addBlogger: AddBlogger,
+  },
   data() {
     return {
       headers: [
@@ -64,11 +73,16 @@ export default {
       page: 1,
       userPageLength: 1,
       userSearchTerm: '',
+      addBloggerDialog: false,
     };
   },
 
 
   mounted() {
+    EventBus.$on('admin-close-add-blogger-dialog', () => {
+      this.addBloggerDialog = false;
+      this.getAllUsers();
+    });
     this.getAllUsers();
     this.getAllUsersLength();
   },
