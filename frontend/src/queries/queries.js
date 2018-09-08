@@ -143,6 +143,15 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
     }
   }
 }`;
+const getCurrentUserBlogs = `query currentUserBlogs{
+  currentUserBlogs{
+    id
+    title
+    content
+    url
+    heroImage
+  }
+}`;
 
 // eslint-disable-next-line
 export {
@@ -157,4 +166,5 @@ export {
   campSearch,
   campSearchUser,
   getCampByUrl,
+  getCurrentUserBlogs,
 };

@@ -6,6 +6,7 @@ const UserQueries = require('./queries/UserQueries');
 const CampQueries = require('./queries/CampQueries');
 const TentQueries = require('./queries/TentQueries');
 const TokenQueries = require('./queries/TokenQueries');
+const BlogQueries = require('./queries/BlogQueries');
 
 const UserMutations = require('./mutations/UserMutations');
 const CampMutations = require('./mutations/CampMutations');
@@ -36,6 +37,7 @@ const RootQuery = new GraphQLObjectType({
     sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,
+    currentUserBlogs: BlogQueries.getCurrentUserBlog,
   },
 });
 

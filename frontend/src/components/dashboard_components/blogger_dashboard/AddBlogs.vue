@@ -16,7 +16,7 @@
                 v-flex(xs4)
                   span Choose Hero Image
                   input.mt-2(type='file' name='hero_image' ref='panCard'
-                    accept='image/png, image/jpeg' disabled )
+                    accept='image/png, image/jpeg' @change='storeHeroImage')
               v-flex(xs12).mt-1
                 v-textarea(label='Content' v-model='blogContent' height='55vh'
                 data-vv-name="blogContent" v-validate="'min:4|required'"
@@ -24,12 +24,13 @@
       v-card-actions
         v-spacer
         v-btn(flat) Clear
-        v-btn(color='green' dark @click='saveBlog') save
+        v-btn(color='green' dark @click='saveHeroImage') save
 
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
+import axios from 'axios';
 import { EventBus } from '../../../event-bus';
 import { addBlogQuery } from '../../../queries/mutationQueries';
 
@@ -43,16 +44,43 @@ export default {
       blogTitle: '',
       blogContent: '',
       blogUrl: '',
-      heroImage: 'heroImage',
+      heroImage: '',
+      storeHeroImages: [],
+      files: [],
     };
   },
 
   methods: {
-    saveBlog() {
-      console.log(this.blogTitle);
-      console.log(this.blogContent);
-      this.blogUrl = `${Date.now()}+${this.blogTitle.split(' ').join('+')}`;
+    storeHeroImage(event) {
+      this.storeHeroImages = event.target.files;
+      console.log(this.storeHeroImages);
+    },
+    saveHeroImage() {
+      const updateImages = this.storeHeroImages;
+      for (let i = 0; i < updateImages.length; i += 1) {
+        this.files.push(updateImages[i]);
+      }
+      const formData = new FormData();
+      for (let i = 0; i < this.files.length; i += 1) {
+        const file = this.files[i];
+        formData.append('images', file);
+      }
+      axios.post('/uploadImages', formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then((res) => {
+        this.heroImage = res.data[0].originalname;
+        this.saveBlog(this.heroImage);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+      });
+    },
 
+    saveBlog(imageHero) {
+      const date = new Date();
+      this.blogUrl = date.getFullYear() + date.getMonth() + date.getDate() + this.blogTitle.split(' ').join('+');
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
@@ -60,7 +88,7 @@ export default {
         title: this.blogTitle,
         content: this.blogContent,
         url: this.blogUrl,
-        heroImage: this.heroImage,
+        heroImage: imageHero,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -74,6 +102,8 @@ export default {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
+
+
   },
 };
 </script>
