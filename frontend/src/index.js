@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import '@babel/polyfill';
 import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
 import VueTour from 'vue-tour';
