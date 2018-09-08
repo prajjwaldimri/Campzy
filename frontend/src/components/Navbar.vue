@@ -1,7 +1,6 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" :absolute="absolute" flat
-   prominent :color="color"
-  dark :app="app")
+  prominent :color="color" :dark="dark" :app="app")
     v-toolbar-title.ml-0
       span Camp
       span.green--text zy
@@ -49,6 +48,7 @@ export default {
     color: String,
     app: Boolean,
     absolute: Boolean,
+    dark: Boolean,
   },
   mounted() {
     if (!this.$cookie.get('sessionToken')) {

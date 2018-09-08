@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    navbar
+    navbar(:dark="true")
     v-tabs(dark icons-and-text grow centered style="width:100%").hidden-sm-and-down
       v-tabs-slider(color="green")
       v-tab(href="#tab-1" @click="$router.push('/profile')")
