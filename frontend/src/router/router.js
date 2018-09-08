@@ -19,6 +19,9 @@ const CampDetails = () => import('../components/dashboard_components/camp_owner_
 const CampInventory = () => import('../components/dashboard_components/camp_owner_dashboard/CampInventory.vue');
 const ManageCamps = () => import('../components/dashboard_components/admin-dashboard/CampsManager.vue');
 const ViewCamp = () => import('../components/dashboard_components/admin-dashboard/ViewCamp.vue');
+const AllBlogs = () => import('../components/dashboard_components/blogger_dashboard/AllBlogs.vue');
+const AddBlog = () => import('../components/dashboard_components/blogger_dashboard/AddBlogs.vue');
+const ShowBlog = () => import('../components/dashboard_components/blogger_dashboard/Showblog.vue');
 
 Vue.use(Router);
 
@@ -110,6 +113,21 @@ const router = new Router({
           name: 'viewCamp',
           path: 'viewCamp/:id',
           component: ViewCamp,
+        },
+        {
+          name: 'addBlog',
+          path: 'addBlog',
+          component: AddBlog,
+        },
+        {
+          name: 'allBlogs',
+          path: 'allBlogs',
+          component: AllBlogs,
+        },
+        {
+          name: 'showBlog',
+          path: 'showBlog/:id',
+          component: ShowBlog,
         },
       ],
     },
