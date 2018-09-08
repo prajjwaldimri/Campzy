@@ -2,7 +2,7 @@
  .blog-root
   navbar
   v-container(fluid).pa-5
-    v-layout(row wrap style="height: 70vh").px-5
+    v-layout(row wrap style="min-height: 70vh").px-5
       v-flex(sm12 md6).heading-flex.pr-5
         h3.body-1.font-weight-bold.grey--text.text--darken-2 CAPMZY FEATURED STORY
         h1.display-3.font-weight-bold Camps in Rishikesh
