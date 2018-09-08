@@ -38,6 +38,7 @@ const addBlog = {
     title: { type: GraphQLString },
     url: { type: GraphQLString },
     content: { type: GraphQLString },
+    heroImage: { type: GraphQLString },
     authorId: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
@@ -55,10 +56,11 @@ const addBlog = {
         title: args.title,
         url: args.url,
         content: args.content,
-        authorId: args.authorId,
+        heroImage: args.heroImage,
+        authorId: user.id,
       });
       const createBlog = await blog.save();
-      return await UserModel.findByIdAndUpdate(args.authorId, {
+      return await UserModel.findByIdAndUpdate(user.id, {
         authoredBlogId: createBlog.id,
       });
     } catch (err) {

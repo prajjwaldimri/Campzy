@@ -9,12 +9,15 @@ const BlogSchema = new Schema({
     required: true,
     unique: true,
   },
-  description: { type: String, required: true },
   content: { type: String, required: true },
   heroImage: { type: String, required: true },
   authorId: {
     type: Schema.Types.ObjectId,
   },
+});
+
+BlogSchema.index({
+  name: 'text',
 });
 
 module.exports = mongoose.model('Blog', BlogSchema);
