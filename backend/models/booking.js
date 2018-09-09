@@ -1,0 +1,19 @@
+const mongoose = require('mongoose');
+const nanoid = require('nanoid');
+
+const { Schema } = mongoose;
+
+const BookingSchema = new Schema(
+  {
+    code: { type: String, unique: true, default: nanoid },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    tent: { type: Schema.Types.ObjectId, ref: 'Tent' },
+    startDate: { type: Date },
+    endDate: { type: Date },
+    adultCount: { type: Number },
+    childrenCount: { type: Number },
+  },
+  { timestamps: true },
+);
+
+module.exports = mongoose.model('Booking', BookingSchema);
