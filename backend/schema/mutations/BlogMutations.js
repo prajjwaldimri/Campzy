@@ -64,9 +64,11 @@ const addBlog = {
         authorId: user.id,
       });
       const createBlog = await blog.save();
-      return await UserModel.findByIdAndUpdate(user.id, {
-        authoredBlogId: createBlog.id,
-      });
+      return await UserModel.findByIdAndUpdate(
+        user.id,
+        { $push: { authoredBlogId: createBlog.id } },
+        { new: true },
+      );
     } catch (err) {
       return err;
     }
