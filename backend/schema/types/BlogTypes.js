@@ -12,6 +12,7 @@ const BlogType = new GraphQLObjectType({
     content: { type: GraphQLString },
     url: { type: GraphQLString },
     heroImage: { type: GraphQLString },
+    heroImageCaption: { type: GraphQLString },
     authorId: { type: UserType },
   }),
 });
