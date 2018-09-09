@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const UserType = require('./UserType');
 
 const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
 
@@ -11,7 +12,7 @@ const BlogType = new GraphQLObjectType({
     content: { type: GraphQLString },
     url: { type: GraphQLString },
     heroImage: { type: GraphQLString },
-    authorId: { type: GraphQLString },
+    authorId: { type: UserType },
   }),
 });
 

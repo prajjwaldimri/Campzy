@@ -14,6 +14,7 @@ const BlogSchema = new Schema({
   heroImage: { type: String, required: true },
   authorId: {
     type: String,
+    ref: 'User',
   },
 });
 

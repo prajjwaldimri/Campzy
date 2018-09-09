@@ -57,7 +57,7 @@ const getBlog = {
   },
   async resolve(parent, args) {
     try {
-      const blog = await BlogModel.findOne({ url: args.url });
+      const blog = await BlogModel.findOne({ url: args.url }).populate('authorId', 'name');
       if (blog) {
         blog.content = markdown.toHTML(blog.content);
       }
