@@ -18,6 +18,10 @@
                   input.mt-2(type='file' name='hero_image' ref='panCard'
                     accept='image/png, image/jpeg' @change='storeHeroImage')
               v-flex(xs12).mt-1
+                  v-text-field( label='Description' v-model='blogDescription'
+                  data-vv-name="blogDescription" v-validate="'min:4|required'"
+                  :error-messages="errors.collect('blogDescription')")
+              v-flex(xs12).mt-1
                 v-textarea(label='Content' v-model='blogContent' height='55vh'
                 data-vv-name="blogContent" v-validate="'min:4|required'"
                 :error-messages="errors.collect('blogContent')" outline)
@@ -47,6 +51,7 @@ export default {
       heroImage: '',
       storeHeroImages: [],
       files: [],
+      blogDescription: '',
     };
   },
 
@@ -73,7 +78,7 @@ export default {
         }).then((res) => {
         this.heroImage = res.data[0].originalname;
         this.saveBlog(this.heroImage);
-      }).catch((err) => {
+      }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
       });
     },
@@ -89,6 +94,7 @@ export default {
         content: this.blogContent,
         url: this.blogUrl,
         heroImage: imageHero,
+        description: this.blogDescription,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {

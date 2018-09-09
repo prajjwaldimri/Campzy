@@ -40,6 +40,7 @@ const addBlog = {
     content: { type: GraphQLString },
     heroImage: { type: GraphQLString },
     authorId: { type: GraphQLString },
+    description: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
     try {
@@ -57,6 +58,7 @@ const addBlog = {
         url: args.url,
         content: args.content,
         heroImage: args.heroImage,
+        description: args.description,
         authorId: user.id,
       });
       const createBlog = await blog.save();

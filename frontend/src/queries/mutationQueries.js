@@ -70,8 +70,8 @@ const addBloggerQuery = `mutation addBlogger($bloggerId: String!){
     id,
 }
 }`;
-const addBlogQuery = `mutation addBlog($title: String!, $content: String!,$url:String!, $heroImage:String!){
-  addBlog(title:$title, content: $content, url: $url, heroImage:$heroImage){
+const addBlogQuery = `mutation addBlog($title: String!, $content: String!,$url:String!, $heroImage:String!, $description:String!){
+  addBlog(title:$title, content: $content, url: $url, heroImage:$heroImage, description: $description){
     id
   }
 }`;
