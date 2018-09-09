@@ -12,12 +12,12 @@
           v-avatar(size="48")
             img(src="https://cdn-images-1.medium.com/fit/c/78/78/0*oQdsjTMu_jj0OP8U")
           div.ml-3
-            h2.subheading {{blog.authorId.name}}
+            h2.subheading(v-if="blog.authorId") {{blog.authorId.name}}
             span.body-2 Sep 17,
             span.body-2  10 min read
 
       v-flex(sm12 md6).pb-4
-        v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage" height="100%" width="100%")
+        v-img(v-if="blog.heroImage" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage" height="100%" width="100%")
         span.body-1.grey--text {{blog.heroImageCaption}}
 
   v-container.blog-content-container
