@@ -159,6 +159,7 @@ const getBlogQuery = `query getBlog($url: String!){
     description,
     content,
     heroImage,
+    heroImageCaption,
     authorId {
       name
     }

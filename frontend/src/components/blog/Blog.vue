@@ -17,7 +17,7 @@
             span.body-2  10 min read
 
       v-flex(sm12 md6).pb-4
-        v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" height="100%" width="100%")
+        v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage" height="100%" width="100%")
         span.body-1.grey--text {{blog.heroImageCaption}}
 
   v-container.blog-content-container
