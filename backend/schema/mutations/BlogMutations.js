@@ -65,7 +65,7 @@ const addBlog = {
       });
       const createBlog = await blog.save();
       return await UserModel.findByIdAndUpdate(user.id, {
-        authoredBlogId: createBlog.id,
+        authoredBlogId: [createBlog.id],
       });
     } catch (err) {
       return err;
@@ -102,7 +102,6 @@ const updateBlog = {
         heroImage: args.heroImage,
         description: args.description,
         heroImageCaption: args.heroImageCaption,
-        updated_at: Date.now,
       });
     } catch (err) {
       return err;
