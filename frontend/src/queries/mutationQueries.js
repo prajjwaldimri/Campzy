@@ -76,6 +76,11 @@ const addBlogQuery = `mutation addBlog($title: String!, $content: String!,$url:S
   }
 }`;
 
+const updateBlogQuery = `mutation updateBlog($title:String, $content: String, $description:String,$heroImageCaption:String,$url:String){
+  updateBlog(title:$title,content: $content,description: $description, url:$url, heroImageCaption: $heroImageCaption){
+  id
+}}`;
+
 module.exports = {
   registerUser,
   verifyEmailToken,
@@ -89,4 +94,5 @@ module.exports = {
   campBooking,
   addBloggerQuery,
   addBlogQuery,
+  updateBlogQuery,
 };

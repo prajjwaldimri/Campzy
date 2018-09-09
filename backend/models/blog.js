@@ -15,7 +15,7 @@ const BlogSchema = new Schema(
     heroImage: { type: String, required: true },
     heroImageCaption: { type: String, required: true },
     authorId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'User',
     },
   },

@@ -39,6 +39,7 @@ const RootQuery = new GraphQLObjectType({
     searchUniqueUser: UserQueries.searchParticularUser,
     currentUserBlogs: BlogQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,
+    getUpdateBlog: BlogQueries.getUpdateBlog,
   },
 });
 

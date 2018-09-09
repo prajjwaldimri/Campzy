@@ -16,7 +16,7 @@
                 v-flex(xs12)
                   v-layout(column)
                     span Choose Hero Image
-                    input.mt-2(type='file' name='hero_image' ref='panCard'
+                    input.mt-2(type='file' name='hero_image'
                       accept='image/png, image/jpeg' @change='storeHeroImage')
             v-flex(xs12)
               v-layout(row wrap).mt-2

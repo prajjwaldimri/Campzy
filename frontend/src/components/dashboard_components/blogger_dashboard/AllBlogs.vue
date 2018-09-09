@@ -31,7 +31,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
-import { getCurrentUserBlogs } from '../../../queries/queries';
+import { getCurrentUserBlogsQuery } from '../../../queries/queries';
 
 export default {
   name: 'addBlog',
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      blogs: [],
+      blogs: {},
     };
   },
   mounted() {
@@ -57,9 +57,9 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(getCurrentUserBlogs).then((data) => {
-        this.blogs = data.currentUserBlogs;
-        console.log(this.blogs);
+      client.request(getCurrentUserBlogsQuery).then((data) => {
+        console.log(data);
+        // this.blogs = data.currentUserBlogs;
       }).catch((err) => {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);

@@ -43,7 +43,30 @@ const getCurrentUserBlog = {
       if (!isUserBlogger) {
         throw new PrivilegeError();
       }
-      return await BlogModel.findById(userData.authoredBlogId);
+      return await BlogModel.find({ authorId: user.id });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const getUpdateBlog = {
+  type: BlogType,
+  args: {
+    id: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserBlogger = await auth.isUserBlogger(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserBlogger) {
+        throw new PrivilegeError();
+      }
+      return await BlogModel.findById(args.id);
     } catch (err) {
       return err;
     }
@@ -68,4 +91,6 @@ const getBlog = {
   },
 };
 
-module.exports = { getCurrentUserBlog, getAllBlogs, getBlog };
+module.exports = {
+  getCurrentUserBlog, getAllBlogs, getBlog, getUpdateBlog,
+};
