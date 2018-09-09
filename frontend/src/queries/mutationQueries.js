@@ -70,6 +70,11 @@ const addBloggerQuery = `mutation addBlogger($bloggerId: String!){
     id,
 }
 }`;
+const addBlogQuery = `mutation addBlog($title: String!, $content: String!,$url:String!, $heroImage:String!){
+  addBlog(title:$title, content: $content, url: $url, heroImage:$heroImage){
+    id
+  }
+}`;
 
 module.exports = {
   registerUser,
@@ -83,4 +88,5 @@ module.exports = {
   closeTentBooking,
   campBooking,
   addBloggerQuery,
+  addBlogQuery,
 };

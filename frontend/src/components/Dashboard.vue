@@ -40,6 +40,14 @@
               v-list-tile-action
                 img(src="/vectors/campfire.svg" height="24" width="24")
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Camp Details
+            v-list-tile.pt-3(@click="$router.push('/dashboard/addBlog')" )
+              v-list-tile-action
+                img(src="/vectors/campfire.svg" height="24" width="24")
+              v-list-tile-content.increase-letter-spacing-1(id='v-step-2') New Blog
+            v-list-tile.pt-3(@click="$router.push('/dashboard/allBlogs')")
+              v-list-tile-action
+                img(src="/vectors/campfire.svg" height="24" width="24")
+              v-list-tile-content.increase-letter-spacing-1(id='v-step-2') My Blogs
             v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')" v-show='isCampOwner')
               v-list-tile-action
                 v-icon local_grocery_store
@@ -181,8 +189,8 @@ export default {
         .then((data) => {
           this.user = data.currentUser;
           this.isLoggedIn = true;
-          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner') {
-            this.$router.push('login');
+          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.this.user.type !== 'Blogger') {
+            this.$router.push('/login');
             EventBus.$emit('show-error-notification-short', 'Your account does not have the capability to perfomr this action');
           }
           if (this.user.type === 'CampOwner') {

@@ -48,6 +48,14 @@ const UserSchema = new Schema({
     sparse: true,
     ref: 'Camp',
   },
+  authoredBlogId: [
+    {
+      type: Schema.Types.ObjectId,
+      unique: true,
+      sparse: true,
+      ref: 'Blog',
+    },
+  ],
 });
 
 UserSchema.index({
