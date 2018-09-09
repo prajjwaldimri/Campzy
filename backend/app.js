@@ -109,7 +109,7 @@ app.post('/uploadImages', multer({ storage: imageStorage }).array('images', 10),
                           ACL: 'public-read',
                         },
                         () => {
-                          res.json({ success: 'true' });
+                          res.json(fileName);
                         },
                       );
                     });
@@ -119,7 +119,7 @@ app.post('/uploadImages', multer({ storage: imageStorage }).array('images', 10),
         },
       );
     });
-    res.json(req.files);
+    // res.json(req.files);
   } else {
     res.json('Error');
   }
