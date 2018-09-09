@@ -1,11 +1,11 @@
-// const graphql = require('graphql');
+const graphql = require('graphql');
 const BlogModel = require('../../models/blog.js');
 const UserModel = require('../../models/user.js');
 const BlogType = require('../types/BlogTypes');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-// const { GraphQLString, GraphQLList, GraphQLInt } = graphql;
+const { GraphQLString } = graphql;
 
 const getAllBlogs = {
   type: BlogType,
@@ -49,4 +49,12 @@ const getCurrentUserBlog = {
   },
 };
 
-module.exports = { getCurrentUserBlog, getAllBlogs };
+const getBlog = {
+  type: BlogType,
+  args: {
+    url: { type: GraphQLString },
+  },
+  // async resolve(parent, args) {},
+};
+
+module.exports = { getCurrentUserBlog, getAllBlogs, getBlog };

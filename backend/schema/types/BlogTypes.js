@@ -7,6 +7,7 @@ const BlogType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
+    description: { type: GraphQLString },
     content: { type: GraphQLString },
     url: { type: GraphQLString },
     heroImage: { type: GraphQLString },
