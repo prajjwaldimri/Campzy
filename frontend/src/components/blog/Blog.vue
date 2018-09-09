@@ -12,24 +12,26 @@
           v-avatar(size="48")
             img(src="https://cdn-images-1.medium.com/fit/c/78/78/0*oQdsjTMu_jj0OP8U")
           div.ml-3
-            h2.subheading {{blog.authorId.name}}
+            h2.subheading(v-if="blog.authorId") {{blog.authorId.name}}
             span.body-2 Sep 17,
-            span.body-2  10 min read
+            v-icon(small).ml-2.mr-1 access_time
+            span.body-2 {{ readTime | duration('humanize', true)}}
 
       v-flex(sm12 md6).pb-4
-        v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" height="100%" width="100%")
+        v-img(v-if="blog.heroImage" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage" height="100%" width="100%")
         span.body-1.grey--text {{blog.heroImageCaption}}
 
   v-container.blog-content-container
     v-layout
       v-flex
-        p.blog-content.grey--text.text--darken-4(v-html="blog.content")
+        p.blog-content.grey--text.text--darken-4(v-html="blog.content" ref="blogContent")
 
 
 </template>
 
 <script>
 import { request } from 'graphql-request';
+import { setTimeout } from 'timers';
 import navbar from '../Navbar.vue';
 import { getBlogQuery } from '../../queries/queries';
 
@@ -40,6 +42,7 @@ export default {
   data() {
     return {
       blog: {},
+      readTime: {},
     };
   },
   mounted() {
@@ -50,7 +53,21 @@ export default {
       this.blog = data.getBlog;
     }).catch(() => {
       this.blog = '';
+    }).finally(() => {
+      setTimeout(() => {
+        // Have to give timeout to let vue have time to calculate the DOM properly.
+        // Without timeout you will get null in the function below.
+        this.calculateReadTime();
+      }, 50);
     });
+  },
+  methods: {
+    calculateReadTime() {
+      const content = this.$refs.blogContent.textContent;
+      const wordCount = content.split(' ').length;
+      // Average Adult ReadTime: 250 WPM
+      this.readTime = wordCount / 250;
+    },
   },
 };
 </script>
