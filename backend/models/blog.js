@@ -13,6 +13,8 @@ const BlogSchema = new Schema({
   content: { type: String, required: true },
   heroImage: { type: String, required: true },
   heroImageCaption: { type: String, required: true },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
   authorId: {
     type: String,
     ref: 'User',

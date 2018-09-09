@@ -21,7 +21,7 @@ const ManageCamps = () => import('../components/dashboard_components/admin-dashb
 const ViewCamp = () => import('../components/dashboard_components/admin-dashboard/ViewCamp.vue');
 const AllBlogs = () => import('../components/dashboard_components/blogger_dashboard/AllBlogs.vue');
 const AddBlog = () => import('../components/dashboard_components/blogger_dashboard/AddBlogs.vue');
-const ShowBlog = () => import('../components/dashboard_components/blogger_dashboard/ShowBlog.vue');
+const EditBlog = () => import('../components/dashboard_components/blogger_dashboard/EditBlog.vue');
 
 Vue.use(Router);
 
@@ -123,9 +123,9 @@ const router = new Router({
           component: AllBlogs,
         },
         {
-          name: 'showBlog',
-          path: 'showBlog/:id',
-          component: ShowBlog,
+          name: 'editBlog',
+          path: 'editBlog/:id',
+          component: EditBlog,
         },
       ],
     },

@@ -72,4 +72,41 @@ const addBlog = {
     }
   },
 };
-module.exports = { addBlog, addBlogger };
+
+const updateBlog = {
+  type: BlogType,
+  args: {
+    id: { type: GraphQLString },
+    title: { type: GraphQLString },
+    url: { type: GraphQLString },
+    content: { type: GraphQLString },
+    heroImage: { type: GraphQLString },
+    description: { type: GraphQLString },
+    heroImageCaption: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserBlogger = auth.isUserBlogger(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserBlogger) {
+        throw new PrivilegeError();
+      }
+      return await BlogModel.findByIdAndUpdate(args.id, {
+        title: args.title,
+        url: args.url,
+        content: args.content,
+        heroImage: args.heroImage,
+        description: args.description,
+        heroImageCaption: args.heroImageCaption,
+        updated_at: Date.now,
+      });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+module.exports = { addBlog, addBlogger, updateBlog };

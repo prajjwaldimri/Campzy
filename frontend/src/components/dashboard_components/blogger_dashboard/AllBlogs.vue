@@ -18,7 +18,7 @@
                   input.mt-2(type='file' name='hero_image' ref='panCard'
                     accept='image/png, image/jpeg' disabled )
               v-flex(xs12).mt-1
-                v-textarea(label='Content' v-model='blogContent' height='55vh'
+                v-textarea(label='Content' v-model='blogContent'
                 data-vv-name="blogContent" v-validate="'min:4|required'"
                 :error-messages="errors.collect('blogContent')" outline readonly)
       v-card-actions

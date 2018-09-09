@@ -63,6 +63,7 @@ const Mutation = new GraphQLObjectType({
     campAvailability: CampMutations.campBookingStatus,
     addBlogger: BlogMutations.addBlogger,
     addBlog: BlogMutations.addBlog,
+    updateBlog: BlogMutations.updateBlog,
   },
 });
 
