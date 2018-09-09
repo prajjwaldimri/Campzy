@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { markdown } = require('markdown');
 const BlogModel = require('../../models/blog.js');
 const UserModel = require('../../models/user.js');
 const BlogType = require('../types/BlogTypes');
@@ -54,7 +55,17 @@ const getBlog = {
   args: {
     url: { type: GraphQLString },
   },
-  // async resolve(parent, args) {},
+  async resolve(parent, args) {
+    try {
+      const blog = await BlogModel.findOne({ url: args.url });
+      if (blog) {
+        blog.content = markdown.toHTML(blog.content);
+      }
+      return blog;
+    } catch (err) {
+      return err;
+    }
+  },
 };
 
 module.exports = { getCurrentUserBlog, getAllBlogs, getBlog };

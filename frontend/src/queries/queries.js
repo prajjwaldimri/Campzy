@@ -145,11 +145,20 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
 }`;
 const getCurrentUserBlogs = `query currentUserBlogs{
   currentUserBlogs{
-    id
-    title
-    content
-    url
-    heroImage
+    id,
+    title,
+    content,
+    url,
+    heroImage,
+  }
+}`;
+
+const getBlogQuery = `query getBlog($url: String!){
+  getBlog(url: $url){
+    title,
+    description,
+    content,
+    heroImage,
   }
 }`;
 
@@ -167,4 +176,5 @@ export {
   campSearchUser,
   getCampByUrl,
   getCurrentUserBlogs,
+  getBlogQuery,
 };

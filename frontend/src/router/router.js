@@ -48,7 +48,7 @@ const router = new Router({
       component: Camp,
     },
     {
-      path: '/blog/:blog-url',
+      path: '/blog/:blogUrl',
       name: 'blog',
       component: Blog,
     },
@@ -64,7 +64,6 @@ const router = new Router({
     },
     {
       path: '/profile',
-      name: 'profile',
       component: Profile,
       children: [
         {
@@ -81,7 +80,6 @@ const router = new Router({
     },
     {
       path: '/dashboard',
-      name: 'dashboard',
       component: Dashboard,
       children: [
         {

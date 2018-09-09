@@ -44,14 +44,29 @@
 </template>
 
 <script>
+import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
+import { getBlogQuery } from '../../queries/queries';
 
 export default {
   components: {
     navbar,
   },
   data() {
-    return {};
+    return {
+      blog: {},
+    };
+  },
+  mounted() {
+    const variables = {
+      url: this.$route.params.blogUrl,
+    };
+    request('/graphql', getBlogQuery, variables).then((data) => {
+      this.blog = data.getBlog;
+    }).catch((err) => {
+      console.log(err);
+      this.blog = '';
+    });
   },
 };
 </script>
