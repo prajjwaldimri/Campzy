@@ -1,24 +1,24 @@
 <template lang="pug">
   v-container(fluid)
-    v-card
+    v-card(v-for='(index, blog) in blogs' :key='blog')
       v-card-title.title(primary-title)
-        h2.font-weight-bold.headline Write Blog
+        h2.font-weight-bold.headline {{blog.title}}
       v-card-text
         v-flex(xs12)
           v-form(ref='form' lazy-validation)
             v-layout(row wrap)
               v-layout(row)
                 v-flex(xs7)
-                  v-text-field( label='Title' v-model='blogTitle'
+                  v-text-field( label='Blog Description' v-model='blog.description'
                   data-vv-name="blogTitle" v-validate="'min:4|required'"
                   :error-messages="errors.collect('blogTitle')" readonly)
                 v-spacer
-                v-flex(xs4)
-                  span Choose Hero Image
-                  input.mt-2(type='file' name='hero_image' ref='panCard'
-                    accept='image/png, image/jpeg' disabled )
+                //- v-flex(xs4)
+                //-   span Choose Hero Image
+                //-   input.mt-2(type='file' name='hero_image'
+                //-     accept='image/png, image/jpeg' disabled )
               v-flex(xs12).mt-1
-                v-textarea(label='Content' v-model='blogContent'
+                v-textarea(label='Content' v-model='blog.content'
                 data-vv-name="blogContent" v-validate="'min:4|required'"
                 :error-messages="errors.collect('blogContent')" outline readonly)
       v-card-actions
@@ -40,10 +40,7 @@ export default {
   },
   data() {
     return {
-      blogTitle: '',
-      blogContent: '',
-      blogUrl: '',
-      heroImage: '',
+      blogs: [],
     };
   },
   mounted() {
@@ -61,7 +58,8 @@ export default {
         },
       });
       client.request(getCurrentUserBlogs).then((data) => {
-        console.log(data);
+        this.blogs = data.currentUserBlogs;
+        console.log(this.blogs);
       }).catch((err) => {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);

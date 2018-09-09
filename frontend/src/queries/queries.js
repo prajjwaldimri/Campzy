@@ -150,6 +150,7 @@ const getCurrentUserBlogs = `query currentUserBlogs{
     content,
     url,
     heroImage,
+    description
   }
 }`;
 

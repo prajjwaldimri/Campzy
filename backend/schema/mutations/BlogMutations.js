@@ -65,7 +65,7 @@ const addBlog = {
       });
       const createBlog = await blog.save();
       return await UserModel.findByIdAndUpdate(user.id, {
-        authoredBlogId: [createBlog.id],
+        authoredBlogId: createBlog.id,
       });
     } catch (err) {
       return err;
