@@ -12,6 +12,7 @@ const BlogSchema = new Schema({
   },
   content: { type: String, required: true },
   heroImage: { type: String, required: true },
+  heroImageCaption: { type: String, required: true },
   authorId: {
     type: String,
     ref: 'User',
