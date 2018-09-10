@@ -12,7 +12,9 @@ const TentSchema = new Schema({
   surgePriceChildren: Number,
   preBookPeriod: Number,
   camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
-  bookedBy: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+  bookedBy: {
+    type: Schema.Types.ObjectId, unique: true, sparse: true, ref: 'User',
+  },
   isAvailable: { type: Boolean, default: false },
 });
 
