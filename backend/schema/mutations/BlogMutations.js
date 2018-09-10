@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const BlogModel = require('../../models/blog.js');
 const UserModel = require('../../models/user.js');
-const BlogType = require('../types/BlogTypes');
+const BlogType = require('../types/BlogType');
 // const UserType = require('../types/UserType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
