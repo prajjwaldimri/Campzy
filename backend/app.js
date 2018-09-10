@@ -126,22 +126,36 @@ app.post('/uploadImages', multer({ storage: imageStorage }).array('images', 10),
 });
 
 // Delete file from s3
-app.delete('/deleteDocuments', (req, res) => {
-  if (!req.body.document) {
+app.delete('/deleteImages', (req, res) => {
+  if (!req.body) {
     res.send('Cannot send Empty Key');
   } else {
-    const documentDel = req.body.document;
-    const params = {
-      Bucket: 'campzy-documents',
-      Key: `${documentDel}`,
-    };
-    aws3.deleteObject(params, (err, data) => {
-      if (err) {
-        return err;
-      }
-      res.send('Success');
-      return data;
-    });
+    const documentDelete = req.body.blogImage;
+    aws3.deleteObject(
+      {
+        Bucket: 'campzy-images',
+        Key: `high-res/${documentDelete}`,
+      },
+      () => {
+        aws3.deleteObject(
+          {
+            Bucket: 'campzy-images',
+            Key: `low-res/${documentDelete}`,
+          },
+          () => {
+            aws3.deleteObject(
+              {
+                Bucket: 'campzy-images',
+                Key: `thumbnails/${documentDelete}`,
+              },
+              () => {
+                res.json('Success');
+              },
+            );
+          },
+        );
+      },
+    );
   }
 });
 

@@ -65,6 +65,7 @@ const Mutation = new GraphQLObjectType({
     addBlogger: BlogMutations.addBlogger,
     addBlog: BlogMutations.addBlog,
     updateBlog: BlogMutations.updateBlog,
+    deleteBlog: BlogMutations.deleteBlog,
   },
 });
 

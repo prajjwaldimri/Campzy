@@ -22,15 +22,17 @@
                 aspect-ratio="1.4" contain)
       v-card-actions
         v-spacer
-        v-btn(color='red' dark) Delete
+        v-btn(color='red' dark @click='deleteBlog(blog.id,blog.heroImage)' :loading='isBlogDeleted') Delete
         v-btn(color='green' dark @click="$router.push('/dashboard/editBlog/' + blog.id)") Edit
 
 </template>
 
 <script>
+import axios from 'axios';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
 import { getCurrentUserBlogsQuery } from '../../../queries/queries';
+import { deleteUserBlog } from '../../../queries/mutationQueries';
 
 export default {
   name: 'addBlog',
@@ -40,6 +42,7 @@ export default {
   data() {
     return {
       blogs: {},
+      isBlogDeleted: false,
     };
   },
   mounted() {
@@ -60,6 +63,35 @@ export default {
         this.blogs = data.currentUserBlogs.blogs;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    deleteBlog(blogId, blogImage) {
+      this.isBlogDeleted = true;
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      this.deleteAwsImage(blogImage);
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: blogId,
+      };
+      client.request(deleteUserBlog, variables).then(() => {
+        this.getAllBlogs();
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      }).finally(() => { this.isBlogDeleted = false; });
+    },
+
+    deleteAwsImage(blogImage) {
+      axios.delete('/deleteImages', { data: { blogImage } }).then(() => {
+        EventBus.$emit('show-success-notification-short', 'Successfully Deleted');
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to delete');
       });
     },
   },

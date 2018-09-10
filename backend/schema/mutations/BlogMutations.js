@@ -88,7 +88,6 @@ const updateBlog = {
   },
   async resolve(parent, args, context) {
     try {
-      console.log(args.id);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserBlogger = auth.isUserBlogger(userData);
@@ -115,4 +114,32 @@ const updateBlog = {
     }
   },
 };
-module.exports = { addBlog, addBlogger, updateBlog };
+
+const deleteBlog = {
+  type: BlogType,
+  args: {
+    id: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserBlogger = auth.isUserBlogger(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserBlogger) {
+        throw new PrivilegeError();
+      }
+      return await BlogModel.findByIdAndRemove(args.id);
+    } catch (err) {
+      return err;
+    }
+  },
+};
+module.exports = {
+  addBlog,
+  addBlogger,
+  updateBlog,
+  deleteBlog,
+};

@@ -81,6 +81,12 @@ const updateBlogQuery = `mutation updateBlog($id: String!,$title:String!, $conte
   id
 }}`;
 
+const deleteUserBlog = `mutation deleteBlog($id: String!){
+  deleteBlog(id:$id){
+    id
+  }
+}`;
+
 module.exports = {
   registerUser,
   verifyEmailToken,
@@ -95,4 +101,5 @@ module.exports = {
   addBloggerQuery,
   addBlogQuery,
   updateBlogQuery,
+  deleteUserBlog,
 };
