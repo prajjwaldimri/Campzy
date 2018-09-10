@@ -22,7 +22,8 @@
                 aspect-ratio="1.4" contain)
       v-card-actions
         v-spacer
-        v-btn(color='red' dark @click='deleteBlog(blog.id,blog.heroImage)' :loading='isBlogDeleted') Delete
+        v-btn(color='red' dark @click='deleteBlog(blog.id,blog.heroImage)'
+        :loading='isBlogDeleted') Delete
         v-btn(color='green' dark @click="$router.push('/dashboard/editBlog/' + blog.id)") Edit
 
 </template>

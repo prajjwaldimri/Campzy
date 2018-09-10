@@ -23,7 +23,7 @@
                 v-list-tile-title.increase-letter-spacing-2 {{user.name}}
         v-container.side-container(fluid)
           v-list.pt-5(dense)
-            v-list-tile.pt-3(@click="$router.push('/dashboard/')")
+            v-list-tile.pt-3(@click="$router.push('/dashboard/')" v-show='isAdmin && isCampOwner')
               v-list-tile-action
                 v-icon data_usage
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
@@ -40,13 +40,13 @@
               v-list-tile-action
                 img(src="/vectors/campfire.svg" height="24" width="24")
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Camp Details
-            v-list-tile.pt-3(@click="$router.push('/dashboard/addBlog')" )
+            v-list-tile.pt-3(@click="$router.push('/dashboard/addBlog')" v-show='isBlogger')
               v-list-tile-action
-                img(src="/vectors/campfire.svg" height="24" width="24")
+                v-icon note_add
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') New Blog
-            v-list-tile.pt-3(@click="$router.push('/dashboard/allBlogs')")
+            v-list-tile.pt-3(@click="$router.push('/dashboard/allBlogs')" v-show='isBlogger')
               v-list-tile-action
-                img(src="/vectors/campfire.svg" height="24" width="24")
+                v-icon folder_open
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') My Blogs
             v-list-tile.pt-3(@click="$router.push('/dashboard/campInventory')" v-show='isCampOwner')
               v-list-tile-action
@@ -73,9 +73,17 @@
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
     fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
-      id='v-step-0')
+      id='v-step-0' v-show='isAdmin && isCampOwner')
         span Statistics
         v-icon data_usage
+      v-btn(dark @click="$router.push('/dashboard/addBlog')"
+       v-show='isBlogger')
+        span Add Blog
+        v-icon note_add
+      v-btn(dark @click="$router.push('/dashboard/allBlogs')"
+       v-show='isBlogger')
+        span All Blogs
+        v-icon folder_open
       v-btn(dark @click="$router.push('/dashboard/userManagement')"
       v-show='isAdmin' id='v-step-0')
         span User Management
@@ -112,6 +120,7 @@ export default {
       user: {},
       isCampOwner: false,
       isAdmin: false,
+      isBlogger: false,
       isDrawerOpen: true,
       bottomNav: 0,
       adminSteps: [
@@ -189,7 +198,7 @@ export default {
         .then((data) => {
           this.user = data.currentUser;
           this.isLoggedIn = true;
-          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.this.user.type !== 'Blogger') {
+          if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.user.type !== 'Blogger') {
             this.$router.push('/login');
             EventBus.$emit('show-error-notification-short', 'Your account does not have the capability to perfomr this action');
           }
@@ -198,6 +207,9 @@ export default {
           }
           if (this.user.type === 'Admin') {
             this.isAdmin = true;
+          }
+          if (this.user.type === 'Blogger') {
+            this.isBlogger = true;
           }
           if (this.user.name === null) {
             this.user.name = 'Unnamed User';
