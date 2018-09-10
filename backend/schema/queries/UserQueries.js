@@ -198,8 +198,6 @@ const getCurrentUserBlog = {
         throw new PrivilegeError();
       }
       const blogDetails = await BlogModel.find({ authorId: user.id });
-      const blog = { blogs: blogDetails };
-      console.log(blog);
       return { blogs: blogDetails };
     } catch (err) {
       return err;

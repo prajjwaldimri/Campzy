@@ -82,8 +82,10 @@ export default {
         },
       });
       client.request(getBlogById, variables).then((data) => {
+        console.log(data);
         this.blog = data;
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },

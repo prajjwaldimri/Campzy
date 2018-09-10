@@ -146,8 +146,13 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
 const getCurrentUserBlogsQuery = `query currentUserBlogs{
   currentUserBlogs {
     blogs {
+      id
       title
       content
+      description
+      url
+      heroImageCaption,
+      heroImage
     }
   }
 }`;
@@ -166,12 +171,12 @@ const getBlogQuery = `query getBlog($url: String!){
 }`;
 
 const getBlogById = `query getUpdateBlog($id: String!){
-  getUpdateBlog(id: $id{
+  getUpdateBlog(id: $id){
     title,
     content,
     description,
     url,
-    heroImageDescription
+    heroImageCaption
 }}`;
 
 // eslint-disable-next-line
