@@ -88,6 +88,7 @@ const updateBlog = {
   },
   async resolve(parent, args, context) {
     try {
+      console.log(args.id);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserBlogger = auth.isUserBlogger(userData);
@@ -97,14 +98,18 @@ const updateBlog = {
       if (!isUserBlogger) {
         throw new PrivilegeError();
       }
-      return await BlogModel.findByIdAndUpdate(args.id, {
-        title: args.title,
-        url: args.url,
-        content: args.content,
-        heroImage: args.heroImage,
-        description: args.description,
-        heroImageCaption: args.heroImageCaption,
-      });
+      return await BlogModel.findByIdAndUpdate(
+        args.id,
+        {
+          title: args.title,
+          url: args.url,
+          content: args.content,
+          heroImage: args.heroImage,
+          description: args.description,
+          heroImageCaption: args.heroImageCaption,
+        },
+        { new: true },
+      );
     } catch (err) {
       return err;
     }

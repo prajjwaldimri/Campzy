@@ -176,7 +176,8 @@ const getBlogById = `query getUpdateBlog($id: String!){
     content,
     description,
     url,
-    heroImageCaption
+    heroImageCaption,
+    heroImage
 }}`;
 
 // eslint-disable-next-line

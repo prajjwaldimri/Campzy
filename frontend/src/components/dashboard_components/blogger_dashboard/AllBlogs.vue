@@ -19,7 +19,7 @@
                   :error-messages="errors.collect('blogContent')" outline readonly)
               v-flex.ml-2(xs4)
                 v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage"
-                aspect-ratio="2" contain)
+                aspect-ratio="1.4" contain)
       v-card-actions
         v-spacer
         v-btn(color='red' dark) Delete

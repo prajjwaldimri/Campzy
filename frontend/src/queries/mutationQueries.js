@@ -76,8 +76,8 @@ const addBlogQuery = `mutation addBlog($title: String!, $content: String!,$url:S
   }
 }`;
 
-const updateBlogQuery = `mutation updateBlog($title:String, $content: String, $description:String,$heroImageCaption:String,$url:String){
-  updateBlog(title:$title,content: $content,description: $description, url:$url, heroImageCaption: $heroImageCaption){
+const updateBlogQuery = `mutation updateBlog($id: String!,$title:String!, $content: String!, $description:String!,$heroImageCaption:String!,$url:String!, $heroImage: String!){
+  updateBlog(id: $id, title:$title, content: $content, description: $description, url:$url, heroImageCaption: $heroImageCaption, heroImage: $heroImage){
   id
 }}`;
 

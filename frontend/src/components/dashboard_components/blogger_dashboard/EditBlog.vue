@@ -28,7 +28,7 @@
                 v-spacer
                 v-flex(xs4)
                   v-text-field( label='Image Caption' name='hero_image_caption'
-                  v-model='blog.imageCaption' data-vv-name="imageCaption"
+                  v-model='blog.heroImageCaption' data-vv-name="imageCaption"
                   v-validate="'min:4|required'" hint='Add a caption to image'
                   :error-messages="errors.collect('imageCaption')")
             v-flex(xs12).mt-2
@@ -38,7 +38,7 @@
         v-card-actions
           v-spacer
           v-btn(flat) Clear
-          v-btn(color='green' dark @click='saveHeroImage'
+          v-btn(color='green' dark @click='saveBlog'
           :loading='isBlogAdded') save
 
 </template>
@@ -83,7 +83,7 @@ export default {
       });
       client.request(getBlogById, variables).then((data) => {
         console.log(data);
-        this.blog = data;
+        this.blog = data.getUpdateBlog;
       }).catch((err) => {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
@@ -93,7 +93,6 @@ export default {
       this.storeHeroImages = event.target.files;
     },
     saveHeroImage() {
-      this.isBlogAdded = true;
       const updateImages = this.storeHeroImages;
       for (let i = 0; i < updateImages.length; i += 1) {
         this.files.push(updateImages[i]);
@@ -116,20 +115,19 @@ export default {
       });
     },
 
-    saveBlog(imageHero) {
-      const date = new Date();
-      this.blogUrl = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${this.blogTitle.split(' ').join('-')}`;
+    saveBlog() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
+      this.isBlogAdded = true;
       const variables = {
         id: this.$route.params.id,
+        url: this.blog.url,
         title: this.blog.title,
         content: this.blog.content,
-        url: this.blog.url,
-        heroImage: imageHero,
         description: this.blog.description,
-        heroImageCaption: this.blog.imageCaption,
+        heroImage: this.blog.heroImage,
+        heroImageCaption: this.blog.heroImageCaption,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
