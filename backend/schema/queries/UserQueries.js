@@ -9,6 +9,7 @@ const {
   NotLoggedinError,
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
+const BlogModel = require('../../models/blog.js');
 
 const { GraphQLString, GraphQLList, GraphQLInt } = graphql;
 
@@ -182,6 +183,29 @@ const countTotalUsers = {
     }
   },
 };
+const getCurrentUserBlog = {
+  type: UserType,
+  args: {},
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserBlogger = await auth.isUserBlogger(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserBlogger) {
+        throw new PrivilegeError();
+      }
+      const blogDetails = await BlogModel.find({ authorId: user.id });
+      const blog = { blogs: blogDetails };
+      console.log(blog);
+      return { blogs: blogDetails };
+    } catch (err) {
+      return err;
+    }
+  },
+};
 
 module.exports = {
   currentUser,
@@ -191,4 +215,5 @@ module.exports = {
   loginUser,
   countTotalUsers,
   searchParticularUser,
+  getCurrentUserBlog,
 };
