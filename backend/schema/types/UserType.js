@@ -1,5 +1,4 @@
 const graphql = require('graphql');
-const BlogType = require('./BlogType');
 
 const {
   GraphQLObjectType,
@@ -9,6 +8,20 @@ const {
   GraphQLInt,
   GraphQLList,
 } = graphql;
+
+// A blog type for User
+const LocalBlogType = new GraphQLObjectType({
+  name: 'LocalBlog',
+  fields: () => ({
+    id: { type: GraphQLID },
+    title: { type: GraphQLString },
+    description: { type: GraphQLString },
+    content: { type: GraphQLString },
+    url: { type: GraphQLString },
+    heroImage: { type: GraphQLString },
+    heroImageCaption: { type: GraphQLString },
+  }),
+});
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -24,7 +37,9 @@ const UserType = new GraphQLObjectType({
     profilePicture: { type: GraphQLString },
     count: { type: GraphQLInt },
     page: { type: GraphQLInt },
-    blogs: { type: new GraphQLList(BlogType) },
+    blogs: {
+      type: new GraphQLList(LocalBlogType),
+    },
   }),
 });
 
