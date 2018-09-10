@@ -144,13 +144,11 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
   }
 }`;
 const getCurrentUserBlogsQuery = `query currentUserBlogs{
-  currentUserBlogs{
-    id,
-    title,
-    content,
-    url,
-    heroImage,
-    description
+  currentUserBlogs {
+    blogs {
+      title
+      content
+    }
   }
 }`;
 

@@ -1,7 +1,13 @@
 const graphql = require('graphql');
+const BlogTypes = require('./BlogTypes');
 
 const {
-  GraphQLObjectType, GraphQLString, GraphQLID, GraphQLBoolean, GraphQLInt,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLList,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -18,6 +24,7 @@ const UserType = new GraphQLObjectType({
     profilePicture: { type: GraphQLString },
     count: { type: GraphQLInt },
     page: { type: GraphQLInt },
+    blogs: { type: new GraphQLList(BlogTypes) },
   }),
 });
 

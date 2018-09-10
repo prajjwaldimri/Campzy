@@ -3,6 +3,7 @@ const { markdown } = require('markdown');
 const BlogModel = require('../../models/blog.js');
 const UserModel = require('../../models/user.js');
 const BlogType = require('../types/BlogTypes');
+const UserType = require('../types/UserType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
@@ -30,7 +31,7 @@ const getAllBlogs = {
 };
 
 const getCurrentUserBlog = {
-  type: BlogType,
+  type: UserType,
   args: {},
   async resolve(parent, args, context) {
     try {
@@ -43,7 +44,10 @@ const getCurrentUserBlog = {
       if (!isUserBlogger) {
         throw new PrivilegeError();
       }
-      return await BlogModel.find({ authorId: user.id });
+      const blogDetails = await BlogModel.find({ authorId: user.id });
+      const blog = { blogs: blogDetails };
+      console.log(blog);
+      return { blogs: blogDetails };
     } catch (err) {
       return err;
     }
@@ -92,5 +96,8 @@ const getBlog = {
 };
 
 module.exports = {
-  getCurrentUserBlog, getAllBlogs, getBlog, getUpdateBlog,
+  getCurrentUserBlog,
+  getAllBlogs,
+  getBlog,
+  getUpdateBlog,
 };
