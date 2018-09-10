@@ -41,6 +41,7 @@
     "express-session": "^1.15.6",
     "graphql": "^14.0.0",
     "graphql-depth-limit": "^1.1.0",
+    "graphql-iso-date": "^3.5.0",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.9.2",
     "imagemin": "^6.0.0",
