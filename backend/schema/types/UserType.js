@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const BlogType = require('./BlogTypes');
+const BlogType = require('./BlogType');
 
 const {
   GraphQLObjectType,

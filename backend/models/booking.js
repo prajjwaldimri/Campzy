@@ -12,6 +12,7 @@ const BookingSchema = new Schema(
     endDate: { type: Date },
     adultCount: { type: Number },
     childrenCount: { type: Number },
+    amount: { type: Schema.Types.Decimal128 },
   },
   { timestamps: true },
 );
