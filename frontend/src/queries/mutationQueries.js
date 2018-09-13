@@ -1,5 +1,5 @@
-const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp) {
+const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!, $name: String!) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp, name: $name) {
             jwt
         }
       }`;

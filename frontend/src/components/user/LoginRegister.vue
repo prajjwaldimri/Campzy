@@ -32,6 +32,10 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Create an Account
                   v-form(ref="form" v-model="isLoginValid")
+                  v-text-field(label="Name" color='green accent-4'
+                  v-validate="'required|alpha_spaces'" required
+                    v-model="name" clearable data-vv-name="name"
+                    :error-messages="errors.collect('name')")
                   v-text-field(label="Email" color='green accent-4'
                   v-validate="'required|email'" required
                     v-model="email" clearable data-vv-name="email"
@@ -86,6 +90,7 @@ export default {
       loginState: 0,
       isLoginValid: false,
       password: '',
+      name: '',
       email: '',
       phoneNumber: '',
       otp: '',
@@ -105,6 +110,7 @@ export default {
       this.isSignedup = true;
       const variables = {
         email: this.email,
+        name: this.name,
         password: this.password,
         phoneNumber: this.phoneNumber,
         otp: this.otp,

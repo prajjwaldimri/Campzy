@@ -20,6 +20,7 @@ const registerUser = {
     password: { type: GraphQLString },
     phoneNumber: { type: GraphQLString },
     otp: { type: GraphQLString },
+    name: { type: GraphQLString },
   },
   async resolve(parent, args) {
     try {
@@ -29,6 +30,7 @@ const registerUser = {
       }
       const passwordHash = await bcrypt.hash(args.password, 10);
       const userDocument = new UserModel({
+        name: args.name,
         email: args.email,
         password: passwordHash,
         phoneNumber: args.phoneNumber,
