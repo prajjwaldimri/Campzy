@@ -43,8 +43,8 @@
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2"
-                  :disabled="email === '' || password === ''").white--text.mt-3
+                  v-btn(block color="green" :loading='isSignedup' @click="createAccount"
+                  :disabled="email === '' || password === '' || isEmailAlreadyinUse || fields.email.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
@@ -77,10 +77,13 @@
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
-import { sendUserCredentials } from '../../queries/queries';
+import { sendUserCredentials, isEmailAvailable } from '../../queries/queries';
 import { registerUser, sendOTP, sendResetPasswordToken } from '../../queries/mutationQueries';
 
 export default {
+  $_veeValidate: {
+    validator: 'new',
+  },
   components: {
     navbar,
   },
@@ -97,16 +100,35 @@ export default {
       isLoggedin: false,
       isSignedup: false,
       isOTPSent: false,
+      isEmailAlreadyinUse: false,
     };
   },
   mounted() {
     if (this.$cookie.get('sessionToken')) {
       EventBus.$emit('success', 'Already logged in!');
-      this.$router.replace({ name: 'profile' });
+      this.$router.replace('/profile');
     }
+  },
+  watch: {
+    email(value) {
+      if (this.loginState === 1 && value.length > 6) {
+        const variables = {
+          email: value,
+        };
+        request('/graphql', isEmailAvailable, variables).then(() => {
+          this.isEmailAlreadyinUse = false;
+        }).catch((err) => {
+          if (err) {
+            EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+          }
+          this.isEmailAlreadyinUse = true;
+        });
+      }
+    },
   },
   methods: {
     regUser() {
+      console.log(this.$validator.validateAll());
       this.isSignedup = true;
       const variables = {
         email: this.email,
@@ -118,7 +140,7 @@ export default {
       request('/graphql', registerUser, variables).then((data) => {
         const jwt = JSON.parse(data.register.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('profile');
+        this.$router.push('/profile');
         EventBus.$emit('show-success-notification-short', 'SignUp Successful');
         this.isLoggedin = true;
       }).catch((err) => {
@@ -137,11 +159,10 @@ export default {
       request('/graphql', sendUserCredentials, variables).then((data) => {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('profile');
+        this.$router.push('/profile');
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
-        console.log(err);
         if (err) {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           this.isLoggedin = false;
@@ -157,7 +178,7 @@ export default {
         this.isOTPSent = true;
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('show-error-notification-short', 'Cannot send OTP');
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message || 'Cannot send OTP');
         }
         this.isOTPSent = false;
       });

@@ -34,6 +34,7 @@ const RootQuery = new GraphQLObjectType({
     searchUser: UserQueries.searchUser,
     allUsers: UserQueries.getAllUsers,
     loginUser: UserQueries.loginUser,
+    isEmailAvailable: UserQueries.isEmailAvailable,
     sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,

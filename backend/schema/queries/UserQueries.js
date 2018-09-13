@@ -7,6 +7,7 @@ const {
   BlackListedError,
   PrivilegeError,
   NotLoggedinError,
+  EmailAlreadyInUseError,
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 const BlogModel = require('../../models/blog.js');
@@ -205,6 +206,21 @@ const getCurrentUserBlog = {
   },
 };
 
+const isEmailAvailable = {
+  type: UserType,
+  args: {
+    email: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    const user = await UserModel.findOne({ email: args.email });
+    if (user) {
+      throw new EmailAlreadyInUseError();
+    } else {
+      return 'Email Available!';
+    }
+  },
+};
+
 module.exports = {
   currentUser,
   getUser,
@@ -214,4 +230,5 @@ module.exports = {
   countTotalUsers,
   searchParticularUser,
   getCurrentUserBlog,
+  isEmailAvailable,
 };

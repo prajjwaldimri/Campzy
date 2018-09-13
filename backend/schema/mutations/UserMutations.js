@@ -36,6 +36,8 @@ const registerUser = {
         phoneNumber: args.phoneNumber,
       });
       const createdUser = await userDocument.save();
+      console.log(args.name);
+      console.log(createdUser);
       await auth.sendUserToken(createdUser._id, args.email);
       return { jwt: JSON.stringify(createdUser.generateJWT()) };
     } catch (err) {

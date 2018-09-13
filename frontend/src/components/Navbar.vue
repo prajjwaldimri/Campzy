@@ -10,7 +10,7 @@
       v-btn(flat) CAMPS
       v-btn(flat v-show="!isLoggedIn") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
-        v-btn(flat slot="activator" v-show="isLoggedIn" @click="goToSettings")
+        v-btn(flat slot="activator" v-show="isLoggedIn")
           | Hey, &nbsp; {{user.name}}
         v-card
           v-list
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     goToSettings() {
-      this.$router.push('settings');
+      this.$router.push('/profile');
     },
     goToHome() {
       this.$router.push('/');

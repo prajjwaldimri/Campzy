@@ -180,6 +180,12 @@ const getBlogById = `query getUpdateBlog($id: String!){
     heroImage
 }}`;
 
+const isEmailAvailable = `query isEmailAvailable($email: String!){
+  isEmailAvailable(email: $email){
+    id
+  }
+}`;
+
 // eslint-disable-next-line
 export {
   sendUserCredentials,
@@ -196,4 +202,5 @@ export {
   getCurrentUserBlogsQuery,
   getBlogQuery,
   getBlogById,
+  isEmailAvailable,
 };

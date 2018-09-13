@@ -37,6 +37,14 @@ const WrongOTPTokenError = ApolloError.createError('WrongOTPTokenError', {
   message: 'Provided OTP is wrong.',
 });
 
+const EmailAlreadyInUseError = ApolloError.createError('EmailAlreadyInUseError', {
+  message: 'Email already in use',
+});
+
+const PhoneNumberAlreadyInUseError = ApolloError.createError('PhoneNumberAlreadyInUseError', {
+  message: 'Phone Number already in use',
+});
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message: 'An unknown error has occurred. We have logged the error and are working on it.',
 });
@@ -52,4 +60,6 @@ module.exports = {
   WrongEmailTokenError,
   OTPSendError,
   WrongOTPTokenError,
+  EmailAlreadyInUseError,
+  PhoneNumberAlreadyInUseError,
 };
