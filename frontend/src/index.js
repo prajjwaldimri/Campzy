@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import '@babel/polyfill';
 import Vuetify from 'vuetify';
+import Meta from 'vue-meta';
 import VeeValidate from 'vee-validate';
 import VueTour from 'vue-tour';
 import VueI18n from 'vue-i18n';
@@ -15,6 +16,8 @@ const VueCookie = require('vue-cookie');
 Vue.use(require('vue-moment'));
 
 Vue.use(VueI18n);
+
+Vue.use(Meta);
 
 Vue.use(Vuetify);
 Vue.use(VeeValidate);

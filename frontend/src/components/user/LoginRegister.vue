@@ -28,6 +28,9 @@
                     v-btn(flat @click="loginState = 1")
                       h4 Sign up here!
 
+                  v-flex(style="display:flex" justify-center align-center.mt-3)
+                    .g-signin2(data-onsuccess="onSignIn").mt-3
+
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light Create an Account
@@ -83,6 +86,9 @@ import { registerUser, sendOTP, sendResetPasswordToken } from '../../queries/mut
 export default {
   $_veeValidate: {
     validator: 'new',
+  },
+  metaInfo: {
+    title: 'Login to Campzy',
   },
   components: {
     navbar,
