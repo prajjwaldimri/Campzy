@@ -29,9 +29,11 @@
                     v-btn(flat @click="loginState = 1")
                       h4 Sign up here!
 
-                  v-flex(style="display:flex" justify-center align-center).mt-4
-                    g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 SignIn With Google
-                    v-btn(@click="authenticate('facebook')") SignIn With Facebook
+                  v-layout(row wrap).mt-4
+                    v-flex(sm12 md6)
+                      g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 SignIn With Google
+                    v-flex(sm12 md6)
+                      v-btn(@click="authenticate('facebook')") SignIn With Facebook
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
@@ -312,5 +314,14 @@ export default {
     background-size: cover;
     border-radius: 0 2px 2px 0;
   }
+}
+
+.g-signin2 {
+  // Properties copied from v-btn of Vuetify
+  display: inline-flex;
+  padding: 0 16px;
+  border-radius: 2px;
+  height: 36px;
+  margin: 6px 8px;
 }
 </style>
