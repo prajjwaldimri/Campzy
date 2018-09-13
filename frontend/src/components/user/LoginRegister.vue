@@ -30,9 +30,9 @@
                       h4 Sign up here!
 
                   v-layout(row wrap).mt-4
-                    v-flex(sm12 md6)
+                    v-flex(sm12 lg6)
                       g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 SignIn With Google
-                    v-flex(sm12 md6)
+                    v-flex(sm12 lg6)
                       v-btn(@click="authenticate('facebook')") SignIn With Facebook
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
