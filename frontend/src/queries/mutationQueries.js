@@ -1,8 +1,14 @@
-const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!, $name: String!) {
-          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp, name: $name) {
+const registerUser = `mutation register($email: String!, $password: String!, $phoneNumber: String!, $otp: String!, $name: String!, $googleToken: String) {
+          register(email: $email, password: $password, phoneNumber: $phoneNumber, otp: $otp, name: $name, googleToken: $googleToken) {
             jwt
         }
       }`;
+
+const googleAuth = `mutation googleAuth($token: String!){
+  googleAuth(token: $token){
+    jwt
+  }
+}`;
 
 const verifyEmailToken = `mutation confirmEmailToken($tokenValue: String!) {
   confirmEmailToken(tokenValue: $tokenValue) {
@@ -89,6 +95,7 @@ const deleteUserBlog = `mutation deleteBlog($id: String!){
 
 module.exports = {
   registerUser,
+  googleAuth,
   verifyEmailToken,
   sendVerificationEmail,
   addTentQuery,

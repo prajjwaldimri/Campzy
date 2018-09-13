@@ -13,7 +13,9 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     sparse: true,
-    validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
+    validate: [
+      validate({ validator: 'isEmail', message: 'Not a valid email' }),
+    ],
   },
   isEmailVerified: { type: Boolean, default: false },
   gdprConsent: { type: Boolean, default: false },
@@ -34,12 +36,8 @@ const UserSchema = new Schema({
       }),
     ],
   },
-  facebook: {
-    oauthToken: String,
-  },
-  google: {
-    oauthToken: String,
-  },
+  facebookToken: String,
+  googleToken: String,
   isBlacklisted: { type: Boolean, default: false },
   dateOfBirth: Date,
   ownedCampId: {

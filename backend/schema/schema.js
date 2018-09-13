@@ -50,6 +50,7 @@ const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     register: UserMutations.registerUser,
+    googleAuth: UserMutations.googleAuth,
     confirmEmailToken: TokenMutations.confirmEmailToken,
     resendEmailToken: TokenMutations.resendEmailToken,
     sendOTP: OTPMutations.sendOTP,

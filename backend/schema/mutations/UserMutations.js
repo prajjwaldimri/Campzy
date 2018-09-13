@@ -1,12 +1,14 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id", "_userId"] }] */
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
 const UserType = require('../types/UserType');
 const auth = require('../../config/auth');
 const {
   WrongOTPTokenError,
   WrongEmailTokenError,
   WrongPasswordError,
+  UserNotFoundError,
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 const TokenModel = require('../../models/token');
@@ -21,6 +23,7 @@ const registerUser = {
     phoneNumber: { type: GraphQLString },
     otp: { type: GraphQLString },
     name: { type: GraphQLString },
+    googleToken: { type: GraphQLString },
   },
   async resolve(parent, args) {
     try {
@@ -34,12 +37,40 @@ const registerUser = {
         email: args.email,
         password: passwordHash,
         phoneNumber: args.phoneNumber,
+        googleToken: args.googleToken,
       });
       const createdUser = await userDocument.save();
-      console.log(args.name);
-      console.log(createdUser);
       await auth.sendUserToken(createdUser._id, args.email);
       return { jwt: JSON.stringify(createdUser.generateJWT()) };
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+// Google Auth
+const clientID = '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com';
+const client = new OAuth2Client(clientID);
+const googleAuth = {
+  type: UserType,
+  args: {
+    token: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: args.token,
+        audience: clientID,
+      });
+
+      const user = await UserModel.findOne({ email: ticket.payload.email });
+      if (user) {
+        // User already exists in database. Link user's account to google OAuth Token
+        user.googleToken = args.token;
+        await user.save();
+        return { jwt: JSON.stringify(user.generateJWT()) };
+      }
+      throw new UserNotFoundError();
     } catch (err) {
       return err;
     }
@@ -84,8 +115,10 @@ const updateUser = {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
       let userData = await UserModel.findById(user.id, 'password');
-      const isPasswordCorrect = await bcrypt.compare(args.currentPassword, userData.password);
-      console.log(isPasswordCorrect);
+      const isPasswordCorrect = await bcrypt.compare(
+        args.currentPassword,
+        userData.password,
+      );
 
       if (isPasswordCorrect) {
         if (args.newPassword) {
@@ -111,4 +144,9 @@ const updateUser = {
   },
 };
 
-module.exports = { registerUser, resetPassword, updateUser };
+module.exports = {
+  registerUser,
+  resetPassword,
+  updateUser,
+  googleAuth,
+};

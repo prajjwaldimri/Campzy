@@ -40,6 +40,8 @@ const UserType = new GraphQLObjectType({
     blogs: {
       type: new GraphQLList(LocalBlogType),
     },
+    googleToken: { type: GraphQLString },
+    facebookToken: { type: GraphQLString },
   }),
 });
 

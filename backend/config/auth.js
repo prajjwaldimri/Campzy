@@ -5,9 +5,16 @@ const mailjet = require('node-mailjet').connect(
   process.env.MAILJET_PRIVATE,
 );
 
-const client = require('twilio')('ACabc517de4bcf13d79c5c4268f6aa90f5', process.env.TWILIO_API_KEY);
+const client = require('twilio')(
+  'ACabc517de4bcf13d79c5c4268f6aa90f5',
+  process.env.TWILIO_API_KEY,
+);
 
-const { EmailSendError, WrongEmailTokenError, OTPSendError } = require('../schema/graphqlErrors');
+const {
+  EmailSendError,
+  WrongEmailTokenError,
+  OTPSendError,
+} = require('../schema/graphqlErrors');
 
 const TokenModel = require('../models/token');
 const OTPModel = require('../models/otp');
@@ -176,7 +183,7 @@ const sendUserOTP = async (phoneNumber) => {
     }
     return await client.messages.create({
       from: '+15172251199',
-      body: `Your Campzy OTP is ${otp.otpValue}`,
+      body: `${otp.otpValue} is your Campzy OTP`,
       to: `+91${phoneNumber}`,
     });
   } catch (err) {

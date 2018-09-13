@@ -1,3 +1,4 @@
+
 <template lang="pug">
   v-container(text-xs-center).card-container
     v-layout(row)
@@ -78,11 +79,15 @@
 </template>
 
 <script>
+/* global NProgress */
 import { request } from 'graphql-request';
+import { setTimeout } from 'timers';
 import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials, isEmailAvailable } from '../../queries/queries';
-import { registerUser, sendOTP, sendResetPasswordToken } from '../../queries/mutationQueries';
+import {
+  registerUser, sendOTP, sendResetPasswordToken, googleAuth,
+} from '../../queries/mutationQueries';
 
 export default {
   $_veeValidate: {
@@ -118,6 +123,7 @@ export default {
       googleSignInParams: {
         client_id: '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com',
       },
+      googleToken: '',
     };
   },
   mounted() {
@@ -145,7 +151,29 @@ export default {
   },
   methods: {
     onSignInSuccessGoogle(googleUser) {
-      console.log(googleUser);
+      const variables = {
+        token: googleUser.getAuthResponse().id_token,
+        email: googleUser.getBasicProfile().getEmail(),
+      };
+      NProgress.start();
+      request('/graphql', googleAuth, variables).then((data) => {
+        const jwt = JSON.parse(data.googleAuth.jwt);
+        this.$cookie.set('sessionToken', jwt, { secure: true });
+        this.$router.push('/profile');
+        EventBus.$emit('show-success-notification-short', 'Login Successful');
+        this.isLoggedin = false;
+      }).catch((err) => {
+        if (err.response.errors[0].name === 'UserNotFoundError') {
+          this.loginState = 1;
+          const profile = googleUser.getBasicProfile();
+          this.email = profile.getEmail();
+          this.name = profile.getName();
+          this.googleToken = googleUser.getAuthResponse().id_token;
+        }
+        EventBus.$emit('show-info-notification-long', 'Looks like this is your first time here. \n No worries! Let\'s get you setup');
+      }).finally(() => {
+        NProgress.done();
+      });
     },
     onSignInError() {
       EventBus.$emit('show-error-notification-short', 'Login Error');
@@ -158,7 +186,9 @@ export default {
         password: this.password,
         phoneNumber: this.phoneNumber,
         otp: this.otp,
+        googleToken: this.googleToken,
       };
+      NProgress.start();
       request('/graphql', registerUser, variables).then((data) => {
         const jwt = JSON.parse(data.register.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
@@ -170,6 +200,8 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
         this.isSignedup = false;
+      }).finally(() => {
+        NProgress.done();
       });
     },
     login() {
@@ -178,6 +210,7 @@ export default {
         loginEmail: this.email,
         loginPassword: this.password,
       };
+      NProgress.start();
       request('/graphql', sendUserCredentials, variables).then((data) => {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
@@ -189,12 +222,18 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           this.isLoggedin = false;
         }
+      }).finally(() => {
+        NProgress.done();
       });
     },
     sendOTP() {
       const variables = {
         phoneNumber: this.phoneNumber,
       };
+      setTimeout(() => {
+        this.isSendOTPButtonEnabled = true;
+      }, 15000);
+      NProgress.start();
       request('/graphql', sendOTP, variables).then(() => {
         EventBus.$emit('show-info-notification-short', 'OTP Sent!');
         this.isOTPSent = true;
@@ -205,6 +244,8 @@ export default {
         }
         this.isOTPSent = false;
         this.isSendOTPButtonEnabled = true;
+      }).finally(() => {
+        NProgress.done();
       });
     },
     resetPassword() {
@@ -214,12 +255,15 @@ export default {
       const variables = {
         email: this.email,
       };
+      NProgress.start();
       request('/graphql', sendResetPasswordToken, variables).then(() => {
         EventBus.$emit('show-info-notification-short', 'Check your email for further instructions!');
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-short', 'Cannot send Verification');
         }
+      }).finally(() => {
+        NProgress.done();
       });
     },
   },
