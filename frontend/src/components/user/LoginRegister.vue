@@ -43,7 +43,7 @@
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" :loading='isSignedup' @click="createAccount"
+                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2"
                   :disabled="email === '' || password === '' || isEmailAlreadyinUse || fields.email.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
@@ -53,14 +53,14 @@
 
                 .phone-otp-content(v-else key="phone-otp")
                   v-card-title(align-center justify-center).d-flex
-                    h1.font-weight-light Verify your Phone Number
+                    h1.font-weight-light.pb-3 Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                   v-flex(align-center).d-flex
                     v-text-field(label="Phone Number" color='green accent-4'
                     v-validate="'required|numeric'" required
                       v-model="phoneNumber" clearable data-vv-name="phoneNumber"
                       :error-messages="errors.collect('phoneNumber')" type="tel")
-                    v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10") Send OTP
+                    v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10 || !isSendOTPButtonEnabled") Send OTP
                   v-flex(align-center).d-flex
                     v-text-field(shrink label="One Time Password" color='green accent-4'
                      v-model="otp" clearable
@@ -101,6 +101,7 @@ export default {
       isSignedup: false,
       isOTPSent: false,
       isEmailAlreadyinUse: false,
+      isSendOTPButtonEnabled: true,
     };
   },
   mounted() {
@@ -128,7 +129,6 @@ export default {
   },
   methods: {
     regUser() {
-      console.log(this.$validator.validateAll());
       this.isSignedup = true;
       const variables = {
         email: this.email,
@@ -176,11 +176,13 @@ export default {
       request('/graphql', sendOTP, variables).then(() => {
         EventBus.$emit('show-info-notification-short', 'OTP Sent!');
         this.isOTPSent = true;
+        this.isSendOTPButtonEnabled = false;
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message || 'Cannot send OTP');
         }
         this.isOTPSent = false;
+        this.isSendOTPButtonEnabled = true;
       });
     },
     resetPassword() {
