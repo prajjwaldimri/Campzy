@@ -2,6 +2,7 @@
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
+const { FB } = require('fb');
 const UserType = require('../types/UserType');
 const auth = require('../../config/auth');
 const {
@@ -24,6 +25,7 @@ const registerUser = {
     otp: { type: GraphQLString },
     name: { type: GraphQLString },
     googleToken: { type: GraphQLString },
+    facebookToken: { type: GraphQLString },
   },
   async resolve(parent, args) {
     try {
@@ -38,6 +40,7 @@ const registerUser = {
         password: passwordHash,
         phoneNumber: args.phoneNumber,
         googleToken: args.googleToken,
+        facebookToken: args.facebookToken,
       });
       const createdUser = await userDocument.save();
       await auth.sendUserToken(createdUser._id, args.email);
@@ -67,6 +70,33 @@ const googleAuth = {
       if (user) {
         // User already exists in database. Link user's account to google OAuth Token
         user.googleToken = args.token;
+        await user.save();
+        return { jwt: JSON.stringify(user.generateJWT()) };
+      }
+      throw new UserNotFoundError();
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+// Facebook Auth
+const facebookAuth = {
+  type: UserType,
+  args: {
+    token: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    try {
+      FB.setAccessToken(args.token);
+      const res = await FB.api('/me?fields=id,name,email');
+      if (!res || res.error) {
+        throw new Error('Wrong Access Token');
+      }
+      const user = await UserModel.findOne({ email: res.email });
+      if (user) {
+        // User already exists in system
+        user.facebookToken = args.token;
         await user.save();
         return { jwt: JSON.stringify(user.generateJWT()) };
       }
@@ -149,4 +179,5 @@ module.exports = {
   resetPassword,
   updateUser,
   googleAuth,
+  facebookAuth,
 };

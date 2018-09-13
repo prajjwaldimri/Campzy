@@ -10,6 +10,11 @@
   <link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
   <script src="https://apis.google.com/js/api:client.js"></script>
   <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+
+</head>
+
+<body>
+  <div id="app"></div>
   <script>window.fbAsyncInit = function () {
       FB.init({
         appId: '483173925498762',
@@ -22,13 +27,9 @@
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
-</head>
-
-<body>
-  <div id="app"></div>
 </body>
 
 

@@ -34,7 +34,7 @@
                       g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
                     v-flex(sm12 lg6)
                       v-btn(color="#4267b2")
-                        fb-signin-button(:params="fbSignInParams") Continue with Facebook
+                        fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError") Continue with Facebook
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
@@ -46,13 +46,13 @@
                     :error-messages="errors.collect('name')")
                   v-text-field(label="Email" color='green accent-4'
                   v-validate="'required|email'" required
-                    v-model="email" clearable data-vv-name="email"
-                    :error-messages="errors.collect('email')")
+                    v-model="email2" clearable data-vv-name="email2"
+                    :error-messages="errors.collect('email2')")
                   v-text-field(label="Password" color='green accent-4' v-model="password" clearable
                   type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                     :error-messages="errors.collect('currentPassword')")
-                  v-btn(block color="green" :loading='isSignedup' @click="loginState = 2"
-                  :disabled="email === '' || password === '' || isEmailAlreadyinUse || fields.email.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
+                  v-btn(v-if="fields.email2" block color="green" :loading='isSignedup' @click="loginState = 2"
+                  :disabled="email2 === '' || password === '' || isEmailAlreadyinUse || fields.email2.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
                     | Create your account
                   v-flex.d-flex(reverse align-center).mt-3
                     h4.font-weight-light Already have an account?
@@ -89,7 +89,7 @@ import navbar from '../Navbar.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials, isEmailAvailable } from '../../queries/queries';
 import {
-  registerUser, sendOTP, sendResetPasswordToken, googleAuth,
+  registerUser, sendOTP, sendResetPasswordToken, googleAuth, facebookAuth,
 } from '../../queries/mutationQueries';
 
 export default {
@@ -116,6 +116,7 @@ export default {
       password: '',
       name: '',
       email: '',
+      email2: '',
       phoneNumber: '',
       otp: '',
       isLoggedin: false,
@@ -127,7 +128,7 @@ export default {
         client_id: '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com',
       },
       fbSignInParams: {
-        scope: 'email,name',
+        scope: 'public_profile,email',
         return_scopes: true,
       },
       googleToken: '',
@@ -141,7 +142,7 @@ export default {
     }
   },
   watch: {
-    email(value) {
+    email2(value) {
       if (this.loginState === 1 && value.length > 6) {
         const variables = {
           email: value,
@@ -172,11 +173,36 @@ export default {
         this.isLoggedin = false;
       }).catch((err) => {
         if (err.response.errors[0].name === 'UserNotFoundError') {
-          this.loginState = 1;
           const profile = googleUser.getBasicProfile();
-          this.email = profile.getEmail();
+          this.email2 = profile.getEmail();
           this.name = profile.getName();
           this.googleToken = googleUser.getAuthResponse().id_token;
+          this.loginState = 1;
+        }
+        EventBus.$emit('show-info-notification-long', 'Looks like this is your first time here. \n No worries! Let\'s get you setup');
+      }).finally(() => {
+        NProgress.done();
+      });
+    },
+    onSignInSuccessFacebook(response) {
+      const variables = {
+        token: response.authResponse.accessToken,
+      };
+      NProgress.start();
+      request('/graphql', facebookAuth, variables).then((data) => {
+        const jwt = JSON.parse(data.facebookAuth.jwt);
+        this.$cookie.set('sessionToken', jwt, { secure: true });
+        this.$router.push('/profile');
+        EventBus.$emit('show-success-notification-short', 'Login Successful');
+        this.isLoggedin = false;
+      }).catch((err) => {
+        if (err.response.errors[0].name === 'UserNotFoundError') {
+          FB.api('/me?fields=id,name,email', (user) => {
+            this.email2 = user.email;
+            this.name = user.name;
+            this.facebookToken = response.authResponse.accessToken;
+            this.loginState = 1;
+          });
         }
         EventBus.$emit('show-info-notification-long', 'Looks like this is your first time here. \n No worries! Let\'s get you setup');
       }).finally(() => {
@@ -184,17 +210,18 @@ export default {
       });
     },
     onSignInError() {
-      EventBus.$emit('show-error-notification-short', 'Login Error');
+      EventBus.$emit('show-error-notification-short', 'Cannot login you right now. Try another login method!');
     },
     regUser() {
       this.isSignedup = true;
       const variables = {
-        email: this.email,
+        email: this.email2,
         name: this.name,
         password: this.password,
         phoneNumber: this.phoneNumber,
         otp: this.otp,
         googleToken: this.googleToken,
+        facebookToken: this.facebookToken,
       };
       NProgress.start();
       request('/graphql', registerUser, variables).then((data) => {
