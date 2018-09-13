@@ -31,9 +31,10 @@
 
                   v-layout(row wrap).mt-4
                     v-flex(sm12 lg6)
-                      g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 SignIn With Google
+                      g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
                     v-flex(sm12 lg6)
-                      v-btn(@click="authenticate('facebook')") SignIn With Facebook
+                      v-btn(color="#4267b2")
+                        fb-signin-button(:params="fbSignInParams") Continue with Facebook
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
@@ -125,7 +126,12 @@ export default {
       googleSignInParams: {
         client_id: '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com',
       },
+      fbSignInParams: {
+        scope: 'email,name',
+        return_scopes: true,
+      },
       googleToken: '',
+      facebookToken: '',
     };
   },
   mounted() {
@@ -319,9 +325,25 @@ export default {
 .g-signin2 {
   // Properties copied from v-btn of Vuetify
   display: inline-flex;
-  padding: 0 16px;
   border-radius: 2px;
   height: 36px;
   margin: 6px 8px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.fb-signin-button {
+  /* This is where you control how the button looks. Be creative! */
+  height: 100%;
+  width: 100%;
+  background-color: #4267b2;
+  color: #fff;
+}
+</style>
+
+<style lang="scss">
+// Button inside Login With Google
+.abcRioButton {
+  width: auto !important;
 }
 </style>
