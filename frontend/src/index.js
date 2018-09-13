@@ -4,10 +4,13 @@ import Vuetify from 'vuetify';
 import Meta from 'vue-meta';
 import VeeValidate from 'vee-validate';
 import VueTour from 'vue-tour';
+import GSignInButton from 'vue-google-signin-button';
 import VueI18n from 'vue-i18n';
 import App from './App.vue';
 import router from './router/router';
 import './stylus/main.styl';
+
+Vue.use(GSignInButton);
 
 require('vue-tour/dist/vue-tour.css');
 

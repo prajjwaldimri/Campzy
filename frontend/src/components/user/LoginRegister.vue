@@ -28,8 +28,9 @@
                     v-btn(flat @click="loginState = 1")
                       h4 Sign up here!
 
-                  v-flex(style="display:flex" justify-center align-center.mt-3)
-                    .g-signin2(data-onsuccess="onSignIn").mt-3
+                  v-flex(style="display:flex" justify-center align-center).mt-4
+                    g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 SignIn With Google
+                    v-btn(@click="authenticate('facebook')") SignIn With Facebook
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
@@ -89,6 +90,12 @@ export default {
   },
   metaInfo: {
     title: 'Login to Campzy',
+    script: [
+      { src: 'https://apis.google.com/js/platform.js' },
+    ],
+    meta: [{
+      name: 'google-signin-client_id', content: '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com',
+    }],
   },
   components: {
     navbar,
@@ -108,6 +115,9 @@ export default {
       isOTPSent: false,
       isEmailAlreadyinUse: false,
       isSendOTPButtonEnabled: true,
+      googleSignInParams: {
+        client_id: '566978873203-tp4eadl6alv9s6pkk8nrvhg3n1grqlsc.apps.googleusercontent.com',
+      },
     };
   },
   mounted() {
@@ -134,6 +144,12 @@ export default {
     },
   },
   methods: {
+    onSignInSuccessGoogle(googleUser) {
+      console.log(googleUser);
+    },
+    onSignInError() {
+      EventBus.$emit('show-error-notification-short', 'Login Error');
+    },
     regUser() {
       this.isSignedup = true;
       const variables = {
