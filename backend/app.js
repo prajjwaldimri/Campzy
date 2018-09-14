@@ -87,6 +87,7 @@ app.post(
       req.files.forEach((file) => {
         const fileName = `${Date.now()}__${file.originalname}`;
         filesLength += 1;
+        filesArray.push(fileName);
         aws3.putObject(
           {
             Bucket: 'campzy-images',
@@ -121,8 +122,6 @@ app.post(
                           () => {
                             if (filesLength === req.files.length) {
                               res.json(filesArray);
-                            } else {
-                              filesArray.push(fileName);
                             }
                           },
                         );

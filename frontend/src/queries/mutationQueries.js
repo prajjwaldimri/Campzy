@@ -55,8 +55,8 @@ const sendOTP = `mutation sendOTP($phoneNumber: String!) {
   }
 }`;
 
-const saveCampDetails = `mutation updateCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $amenities: [String], $placesOfInterest: [String], $tags: [String]!,$campDocuments:[String],$images:[String]!){
-  updateCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, amenities: $amenities, placesOfInterest: $placesOfInterest, tags:$tags, campDocuments: $campDocuments, images: $images){
+const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $amenities: [String], $placesOfInterest: [String], $tags: [String]!,$campDocuments:[String],$images:[String]!){
+  updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, amenities: $amenities, placesOfInterest: $placesOfInterest, tags:$tags, campDocuments: $campDocuments, images: $images){
     id
   }
 }`;

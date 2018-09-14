@@ -112,11 +112,11 @@
                         multiple chips label="Amenities"  clearable)
                       v-spacer
                       v-flex(xs6)
-                        v-combobox(v-model='placesOfInterest' attach chips
-                        label='Places of Interest' multiple clearable)
+                        //- v-combobox(v-model='placesOfInterest' attach chips
+                        //- label='Places of Interest' multiple clearable)
                     v-flex(xs12)
-                        v-combobox(v-model='tags' attach chips
-                        label='Tags' multiple clearable)
+                        //- v-combobox(v-model='tags' attach chips
+                        //- label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
                       v-model='camp.shortDescription')
@@ -162,7 +162,7 @@ export default {
       storeImages: [],
       uploadingDocuments: false,
       getOwnerDocuments: [],
-      getImages: [],
+      getImages: '',
       uploadingImages: false,
       campSwitchLabel: '',
     };
@@ -231,11 +231,9 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        res.data.forEach((item) => {
-          this.getImages.push(item.originalname);
-        });
+        this.getImages = res.data;
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-        // this.saveCampDetails();
+        this.saveCampDetails();
       }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
       }).finally(() => { this.uploadingImages = false; });
@@ -285,6 +283,7 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -328,6 +327,7 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
