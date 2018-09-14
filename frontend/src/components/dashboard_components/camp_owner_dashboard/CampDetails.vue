@@ -162,7 +162,7 @@ export default {
       storeImages: [],
       uploadingDocuments: false,
       getOwnerDocuments: [],
-      getImages: [],
+      getImages: '',
       uploadingImages: false,
       campSwitchLabel: '',
     };
@@ -231,12 +231,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        res.data.forEach((item) => {
-          this.getImages.push(item.originalname);
-        });
+        this.getImages = res.data;
+        console.log(this.getImages);
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-        // this.saveCampDetails();
-      }).catch(() => {
+        this.saveCampDetails();
+      }).catch((error) => {
+        console.log(error);
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
       }).finally(() => { this.uploadingImages = false; });
     },
@@ -324,10 +324,12 @@ export default {
         },
       });
       this.isDataUpdating = true;
-      client.request(saveCampDetails, variables).then(() => {
+      client.request(saveCampDetails, variables).then((data) => {
+        console.log(data);
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
