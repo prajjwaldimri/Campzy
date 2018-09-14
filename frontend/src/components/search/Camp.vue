@@ -143,11 +143,11 @@
 
 <script>
 import VueTinySlider from 'vue-tiny-slider';
-import { request } from 'graphql-request';
+import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { getCampByUrl } from '../../queries/queries';
-import { bookCamp } from '../../queries/mutationQueries';
+import { bookCampCheck } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -207,12 +207,19 @@ export default {
       + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
     },
     bookCamp() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
       const variables = {
         campId: this.camp.id,
         adultCount: this.adultCount,
         childrenCount: this.childrenCount,
+        fromDate: this.fromDate,
+        toDate: this.toDate,
       };
-      request('/graphql', bookCamp, variables).then((data) => {
+      client.request(bookCampCheck, variables).then((data) => {
         console.log(data);
       }).catch((err) => {
         console.log(err);

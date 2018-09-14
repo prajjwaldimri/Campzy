@@ -100,9 +100,8 @@ const deleteUserBlog = `mutation deleteBlog($id: String!){
 }`;
 
 // Booking Mutations
-
-const bookCamp = `mutation bookCamp($campId: String!, $adultCount: Int!, $childrenCount: Int!){
-  bookCamp(campId: $campId, adultCount: $adultCount, childrenCount: $childrenCount)
+const bookCampCheck = `mutation bookCampCheck($campId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!){
+  bookCampCheck(campId: $campId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate)
   {
     code
   }
@@ -125,5 +124,5 @@ module.exports = {
   addBlogQuery,
   updateBlogQuery,
   deleteUserBlog,
-  bookCamp,
+  bookCampCheck,
 };
