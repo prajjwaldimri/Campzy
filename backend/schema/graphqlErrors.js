@@ -55,6 +55,14 @@ const UserNotFoundError = ApolloError.createError('UserNotFoundError', {
   message: 'No user exists with those details',
 });
 
+const TentNotAvailableError = ApolloError.createError('TentNotAvailableError', {
+  message: 'No tents can be booked with the provided criteria',
+});
+
+const CampNotAvailableError = ApolloError.createError('CampNotAvailableError', {
+  message: 'Camp is not available to take bookings at this moment',
+});
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message:
     'An unknown error has occurred. We have logged the error and are working on it.',
@@ -74,4 +82,6 @@ module.exports = {
   EmailAlreadyInUseError,
   PhoneNumberAlreadyInUseError,
   UserNotFoundError,
+  TentNotAvailableError,
+  CampNotAvailableError,
 };
