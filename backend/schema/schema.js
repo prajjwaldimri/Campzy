@@ -79,6 +79,7 @@ const Mutation = new GraphQLObjectType({
     deleteBlog: BlogMutations.deleteBlog,
 
     bookCampCheck: BookingMutations.bookCheck,
+    bookCamp: BookingMutations.book,
   },
 });
 

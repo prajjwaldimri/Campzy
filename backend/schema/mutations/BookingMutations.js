@@ -3,7 +3,8 @@ const { GraphQLDate } = require('graphql-iso-date');
 const moment = require('moment');
 const BookingType = require('../types/BookingType');
 const CampModel = require('../../models/camp.js');
-// const UserModel = require('../../models/user.js');
+const TentModel = require('../../models/tent.js');
+const BookingModel = require('../../models/booking');
 const auth = require('../../config/auth');
 
 const {
@@ -30,7 +31,7 @@ const bookCheck = {
       throw new NotLoggedinError();
     }
     const seatsRequired = args.adultCount + args.childrenCount;
-    let availableCamp = {};
+    let availableTent = {};
 
     const preBookPeriod = moment(args.fromDate).diff(Date.now(), 'days');
 
@@ -56,15 +57,88 @@ const bookCheck = {
     campData.inventory.forEach((tent) => {
       // TODO: Check also for availability of tent
       if (tent.capacity <= seatsRequired) {
-        availableCamp = tent;
+        availableTent = tent;
       }
     });
 
-    if (availableCamp) {
-      return 'Booking Possible!';
+    if (availableTent) {
+      // Calculates the payable amount
+      const amount = availableTent.bookingPriceAdult * args.adultCount
+        + availableTent.bookingPriceChildren * args.childrenCount;
+      return { amount, tent: availableTent };
     }
     throw new TentNotAvailableError();
   },
 };
 
-module.exports = { bookCheck };
+async function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+const book = {
+  type: BookingType,
+  args: {
+    razorpayPaymentId: { type: GraphQLString },
+    tentId: { type: GraphQLString },
+    adultCount: { type: GraphQLInt },
+    childrenCount: { type: GraphQLInt },
+    fromDate: { type: GraphQLDate },
+    toDate: { type: GraphQLDate },
+  },
+  async resolve(parent, args, context) {
+    console.log(args);
+    // Check user login and get user's details
+    const user = await auth.getAuthenticatedUser(context.req);
+    console.log(user);
+
+    if (!user) {
+      throw new NotLoggedinError();
+    }
+
+    // Check if the provided tentId is correct and if the tent can be booked
+    const seatsRequired = args.adultCount + args.childrenCount;
+    const preBookPeriod = moment(args.fromDate).diff(Date.now(), 'days');
+    const tent = await TentModel.findById(args.tentId);
+
+    if (
+      !tent
+      || tent.isBooked
+      || tent.capacity < seatsRequired
+      || tent.preBookPeriod < preBookPeriod
+    ) {
+      throw new TentNotAvailableError();
+    }
+
+    // TODO: Verify Razorpay Id and collect money
+    await wait(5000); // Simulates wait of razorpay
+
+    const amount = 20400; // Collect the amount from razorpay. Also check the amount with the tent's booking amount.
+
+    // Generate a booking token
+    const booking = await BookingModel.create({
+      razorpayPaymentId: args.razorpayPaymentId,
+      tent: args.tentId,
+      user: user.id,
+      startDate: args.fromDate,
+      endDate: args.toDate,
+      adultCount: args.adultCount,
+      childrenCount: args.childrenCount,
+      amount,
+    });
+
+    // TODO: Send an email to user and camp owner
+
+    // TODO: Send sms alerts to camp owner and user
+
+    // Update the tent's status
+    tent.isBooked = true;
+    tent.isAvailable = false;
+    await tent.save();
+    // Return the booking token's id
+    return booking;
+  },
+};
+
+module.exports = { bookCheck, book };
