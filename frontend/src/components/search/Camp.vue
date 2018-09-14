@@ -137,7 +137,7 @@
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
-            v-btn(color="green" block @click="bookCamp").btn-huge.pa-2.white--text Book Your Camp
+            v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading").btn-huge.pa-2.white--text Book Your Camp
 
 </template>
 
@@ -147,7 +147,7 @@ import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { getCampByUrl } from '../../queries/queries';
-import { bookCampCheck } from '../../queries/mutationQueries';
+import { bookCampCheck, bookCamp } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -171,6 +171,7 @@ export default {
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       comments: [1, 2, 3, 4],
       mapUri: '',
+      bookButtonLoading: false,
     };
   },
   mounted() {
@@ -207,20 +208,35 @@ export default {
       + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
     },
     bookCamp() {
+      this.bookButtonLoading = true;
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      const variables = {
+      let variables = {
         campId: this.camp.id,
         adultCount: this.adultCount,
         childrenCount: this.childrenCount,
         fromDate: this.fromDate,
-        toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
         // TODO: Implement razorpay API
+        variables = {
+          razorpayPaymentId: '123',
+          tentId: data.bookCampCheck.tent.id,
+          adultCount: this.adultCount,
+          childrenCount: this.childrenCount,
+          fromDate: this.fromDate,
+          toDate: this.toDate,
+        };
+        client.request(bookCamp, variables).then((data) => {
+          console.log(data);
+        }).catch((err) => {
+          console.log(err);
+        }).finally(() => {
+          this.bookButtonLoading = false;
+        });
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });

@@ -103,6 +103,14 @@ const deleteUserBlog = `mutation deleteBlog($id: String!){
 const bookCampCheck = `mutation bookCampCheck($campId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!){
   bookCampCheck(campId: $campId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate)
   {
+    amount,
+    tent{
+      id
+    }
+  }
+}`;
+const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!, $toDate: Date!){
+  bookCamp(razorpayPaymentId: $razorpayPaymentId, tentId: $tentId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate, toDate: $toDate){
     code
   }
 }`;
@@ -125,4 +133,5 @@ module.exports = {
   updateBlogQuery,
   deleteUserBlog,
   bookCampCheck,
+  bookCamp,
 };
