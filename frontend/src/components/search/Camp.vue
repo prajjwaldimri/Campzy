@@ -37,7 +37,7 @@
               v-img(:src="image" @click="openImageDialog")
 
     v-layout(row wrap style="min-height: 90vh").py-4
-      v-flex(sm12 md6).pa-4
+      v-flex(sm12 md5 offset-md1).py-4.pr-4
         h1.display-1.pb-3 About {{camp.name}}
         v-divider
         p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
