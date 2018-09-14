@@ -7,6 +7,9 @@
   "author": "Prajjwal <prajjwaldimri@hotmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "10.8.0"
+  },
   "scripts": {
     "preinstall": "yarn global add pm2",
     "build": "webpack --mode production",
