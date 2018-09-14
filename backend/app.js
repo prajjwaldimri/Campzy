@@ -82,8 +82,11 @@ app.post(
   multer({ storage: imageStorage }).array('images', 10),
   (req, res) => {
     if (req.files.length !== 0) {
+      let filesLength = 0;
+      const filesArray = [];
       req.files.forEach((file) => {
         const fileName = `${Date.now()}__${file.originalname}`;
+        filesLength += 1;
         aws3.putObject(
           {
             Bucket: 'campzy-images',
@@ -116,7 +119,11 @@ app.post(
                             ACL: 'public-read',
                           },
                           () => {
-                            res.json(fileName);
+                            if (filesLength === req.files.length) {
+                              res.json(filesArray);
+                            } else {
+                              filesArray.push(fileName);
+                            }
                           },
                         );
                       });

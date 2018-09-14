@@ -7,6 +7,10 @@
   "author": "Prajjwal <prajjwaldimri@hotmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "10.8.0",
+    "yarn": "1.9.4"
+  },
   "scripts": {
     "preinstall": "yarn global add pm2",
     "build": "webpack --mode production",
@@ -49,6 +53,7 @@
     "imagemin": "^6.0.0",
     "jsonwebtoken": "^8.3.0",
     "markdown": "^0.5.0",
+    "moment": "^2.22.2",
     "mongoose": "^5.2.8",
     "mongoose-validator": "^2.1.0",
     "multer": "^1.3.1",

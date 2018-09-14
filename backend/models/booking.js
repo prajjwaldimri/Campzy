@@ -6,6 +6,8 @@ const { Schema } = mongoose;
 const BookingSchema = new Schema(
   {
     code: { type: String, unique: true, default: nanoid },
+    razorpayBookingId: { type: String },
+    isCompleted: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     tent: { type: Schema.Types.ObjectId, ref: 'Tent' },
     startDate: { type: Date },

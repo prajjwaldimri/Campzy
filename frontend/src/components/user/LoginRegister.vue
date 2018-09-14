@@ -138,7 +138,7 @@ export default {
   mounted() {
     if (this.$cookie.get('sessionToken')) {
       EventBus.$emit('success', 'Already logged in!');
-      this.$router.replace('/profile');
+      this.$router.go(-1);
     }
   },
   watch: {
@@ -168,7 +168,7 @@ export default {
       request('/graphql', googleAuth, variables).then((data) => {
         const jwt = JSON.parse(data.googleAuth.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('/profile');
+        this.$router.go(-1);
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
@@ -192,7 +192,7 @@ export default {
       request('/graphql', facebookAuth, variables).then((data) => {
         const jwt = JSON.parse(data.facebookAuth.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('/profile');
+        this.$router.go(-1);
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {
@@ -249,7 +249,7 @@ export default {
       request('/graphql', sendUserCredentials, variables).then((data) => {
         const jwt = JSON.parse(data.loginUser.jwt);
         this.$cookie.set('sessionToken', jwt, { secure: true });
-        this.$router.push('/profile');
+        this.$router.go(-1);
         EventBus.$emit('show-success-notification-short', 'Login Successful');
         this.isLoggedin = false;
       }).catch((err) => {

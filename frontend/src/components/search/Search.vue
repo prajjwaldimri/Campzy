@@ -20,7 +20,7 @@
                     v-select(hint="Trip duration" readonly block
                     :label="dateLabel"
                     slot="activator" color="primary" single-line persistent-hint)
-                    v-date-picker(v-model="fromDate" no-title scrollable max="2018-09")
+                    v-date-picker(v-model="fromDate" no-title scrollable)
                     v-date-picker(v-model="toDate" no-title scrollable)
 
                 v-flex
@@ -276,7 +276,7 @@ export default {
         searchTerm: this.searchInput,
         minPrice: this.priceRange[0],
         maxPrice: this.priceRange[1],
-        bookingStartDate: this.$moment().diff(this.fromDate, 'days'),
+        bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
         page: 1,
       };
       request('/graphql', campSearchUser, variables).then((data) => {
@@ -327,10 +327,18 @@ export default {
     fromDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
+
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
+        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      }
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
+
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
+        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      }
     },
     adultCount() {
       this.calculatePrice();

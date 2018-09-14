@@ -99,6 +99,14 @@ const deleteUserBlog = `mutation deleteBlog($id: String!){
   }
 }`;
 
+// Booking Mutations
+const bookCampCheck = `mutation bookCampCheck($campId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!){
+  bookCampCheck(campId: $campId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate)
+  {
+    code
+  }
+}`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -116,4 +124,5 @@ module.exports = {
   addBlogQuery,
   updateBlogQuery,
   deleteUserBlog,
+  bookCampCheck,
 };

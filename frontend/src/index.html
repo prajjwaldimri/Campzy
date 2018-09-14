@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
   <title>Campzy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
@@ -15,7 +16,8 @@
 
 <body>
   <div id="app"></div>
-  <script>window.fbAsyncInit = function () {
+  <script>
+    window.fbAsyncInit = function () {
       FB.init({
         appId: '483173925498762',
         cookie: true,  // enable cookies to allow the server to access the session
@@ -29,7 +31,8 @@
       js = d.createElement(s); js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
 </body>
 
 

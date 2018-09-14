@@ -1,6 +1,7 @@
 const { GraphQLDate } = require('graphql-iso-date');
 
 const graphql = require('graphql');
+
 const UserType = require('./UserType');
 const TentType = require('./TentType');
 
@@ -12,6 +13,7 @@ const BookingType = new GraphQLObjectType({
   name: 'Booking',
   fields: () => ({
     code: { type: GraphQLString },
+    razorpayPaymentId: { type: GraphQLString },
     user: { type: UserType },
     tent: { type: TentType },
     adultCount: { type: GraphQLInt },

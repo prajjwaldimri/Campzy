@@ -70,6 +70,7 @@ const getCampDetail = `query camp($id: String!){
 // Gets camp details available in public
 const getCampByUrl = `query campUser($url: String!){
   campUser(url: $url){
+    id,
     name,
     location,
     shortDescription,
