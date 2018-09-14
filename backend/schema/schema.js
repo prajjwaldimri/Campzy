@@ -14,6 +14,7 @@ const TentMutations = require('./mutations/TentMutations');
 const TokenMutations = require('./mutations/TokenMutations');
 const OTPMutations = require('./mutations/OTPMutations');
 const BlogMutations = require('./mutations/BlogMutations');
+const BookingMutations = require('./mutations/BookingMutations');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
@@ -27,8 +28,10 @@ const RootQuery = new GraphQLObjectType({
     allCamps: CampQueries.getAllCamps,
     searchCamp: CampQueries.searchParticularCamp,
     campSearchUser: CampQueries.campSearchUser,
+
     tent: TentQueries.getTent,
     allTents: TentQueries.getAllTents,
+
     currentUser: UserQueries.currentUser,
     user: UserQueries.getUser,
     searchUser: UserQueries.searchUser,
@@ -38,6 +41,7 @@ const RootQuery = new GraphQLObjectType({
     sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,
+
     currentUserBlogs: UserQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,
     getUpdateBlog: BlogQueries.getUpdateBlog,
@@ -57,18 +61,23 @@ const Mutation = new GraphQLObjectType({
     sendOTP: OTPMutations.sendOTP,
     resetPassword: UserMutations.resetPassword,
     updateUser: UserMutations.updateUser,
+
     addCamp: CampMutations.addCamp,
     updateCamp: CampMutations.updateCamp,
     deleteCamp: CampMutations.deleteCamp,
+    closeTentBooking: TentMutations.closeBookings,
+    campAvailability: CampMutations.campBookingStatus,
+
     addTent: TentMutations.addTent,
     updateTent: TentMutations.updateTent,
     deleteTent: TentMutations.deleteTent,
-    closeTentBooking: TentMutations.closeBookings,
-    campAvailability: CampMutations.campBookingStatus,
+
     addBlogger: BlogMutations.addBlogger,
     addBlog: BlogMutations.addBlog,
     updateBlog: BlogMutations.updateBlog,
     deleteBlog: BlogMutations.deleteBlog,
+
+    bookCamp: BookingMutations.book,
   },
 });
 

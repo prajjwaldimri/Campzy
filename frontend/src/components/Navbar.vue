@@ -8,7 +8,7 @@
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click='goToHome') HOME
       v-btn(flat) CAMPS
-      v-btn(flat v-show="!isLoggedIn") LOGIN/SIGNUP
+      v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")
           | Hey, &nbsp; {{user.name}}
@@ -87,7 +87,7 @@ export default {
       this.$cookie.delete('sessionToken');
       if (this.$cookie.get('sessionToken') == null) {
         EventBus.$emit('show-success-notification-short', 'Logout Successful');
-        this.$router.push('login');
+        this.$router.push('/login');
       } else {
         EventBus.$emit('show-error-notification-short', 'Failed to Logout');
       }

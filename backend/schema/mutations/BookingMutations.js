@@ -1,5 +1,8 @@
 const graphql = require('graphql');
 const BookingType = require('../types/BookingType');
+// const CampModel = require('../../models/camp.js');
+// const UserModel = require('../../models/user.js');
+// const auth = require('../../config/auth');
 
 const { GraphQLString, GraphQLInt } = graphql;
 

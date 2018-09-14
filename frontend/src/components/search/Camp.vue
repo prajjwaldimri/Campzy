@@ -1,6 +1,6 @@
 <template lang="pug">
   .camp-view
-    navbar(color="transparent" :app="true" :absolute="true")
+    navbar(color="transparent" :app="true" :absolute="true" :dark="true")
 
     SearchImagesDialog
 
@@ -137,7 +137,7 @@
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
-            v-btn(color="green" block).btn-huge.pa-2.white--text Book Your Camp
+            v-btn(color="green" block @click="bookCamp").btn-huge.pa-2.white--text Book Your Camp
 
 </template>
 
@@ -147,6 +147,7 @@ import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { getCampByUrl } from '../../queries/queries';
+import { bookCamp } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -204,6 +205,18 @@ export default {
       }
       this.price = (this.camp.inventory[0].bookingPriceAdult * this.adultCount)
       + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
+    },
+    bookCamp() {
+      const variables = {
+        campId: this.camp.id,
+        adultCount: this.adultCount,
+        childrenCount: this.childrenCount,
+      };
+      request('/graphql', bookCamp, variables).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 
