@@ -128,6 +128,10 @@ const book = {
       amount,
     });
 
+    // TODO: Send an email to user and camp owner
+
+    // TODO: Send sms alerts to camp owner and user
+
     // Update the tent's status
     tent.isBooked = true;
     tent.isAvailable = false;
