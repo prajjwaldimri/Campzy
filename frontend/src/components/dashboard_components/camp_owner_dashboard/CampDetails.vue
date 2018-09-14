@@ -112,11 +112,11 @@
                         multiple chips label="Amenities"  clearable)
                       v-spacer
                       v-flex(xs6)
-                        v-combobox(v-model='placesOfInterest' attach chips
-                        label='Places of Interest' multiple clearable)
+                        //- v-combobox(v-model='placesOfInterest' attach chips
+                        //- label='Places of Interest' multiple clearable)
                     v-flex(xs12)
-                        v-combobox(v-model='tags' attach chips
-                        label='Tags' multiple clearable)
+                        //- v-combobox(v-model='tags' attach chips
+                        //- label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
                       v-model='camp.shortDescription')
@@ -232,11 +232,9 @@ export default {
           },
         }).then((res) => {
         this.getImages = res.data;
-        console.log(this.getImages);
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
         this.saveCampDetails();
-      }).catch((error) => {
-        console.log(error);
+      }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
       }).finally(() => { this.uploadingImages = false; });
     },
@@ -285,6 +283,7 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -324,8 +323,7 @@ export default {
         },
       });
       this.isDataUpdating = true;
-      client.request(saveCampDetails, variables).then((data) => {
-        console.log(data);
+      client.request(saveCampDetails, variables).then(() => {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {

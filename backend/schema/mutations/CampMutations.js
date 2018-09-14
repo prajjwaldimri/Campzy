@@ -62,23 +62,16 @@ const updateCamp = {
     url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     ownerId: { type: GraphQLString },
-    shortDescription: { type: GraphQLString },
-    longDescription: { type: GraphQLString },
-    amenities: { type: new GraphQLList(GraphQLString) },
-    placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    campDocuments: { type: new GraphQLList(GraphQLString) },
-    images: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserAdmin = auth.isUserAdmin(userData);
-      const isUserCampOwner = await auth.isUserCampOwner(userData);
       if (userData === null) {
         throw new NotLoggedinError();
       }
-      if (!isUserAdmin && !isUserCampOwner) {
+      if (!isUserAdmin) {
         throw new PrivilegeError();
       }
 
@@ -93,16 +86,10 @@ const updateCamp = {
         name: args.name,
         phoneNumber: args.phoneNumber,
         email: args.email,
-        shortDescription: args.shortDescription,
-        longDescription: args.longDescription,
         location: args.location,
         url: args.url,
         tags: args.tags,
         ownerId: args.ownerId,
-        amenities: args.amenities,
-        placesOfInterest: args.placesOfInterest,
-        campDocuments: args.campDocuments,
-        images: args.images,
       });
 
       return await UserModel.findByIdAndUpdate(args.ownerId, {
@@ -115,6 +102,56 @@ const updateCamp = {
   },
 };
 
+const updateUserCamp = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    phoneNumber: { type: GraphQLString },
+    email: { type: GraphQLString },
+    location: { type: GraphQLString },
+    url: { type: GraphQLString },
+    tags: { type: new GraphQLList(GraphQLString) },
+    ownerId: { type: GraphQLString },
+    shortDescription: { type: GraphQLString },
+    longDescription: { type: GraphQLString },
+    amenities: { type: new GraphQLList(GraphQLString) },
+    placesOfInterest: { type: new GraphQLList(GraphQLString) },
+    campDocuments: { type: new GraphQLList(GraphQLString) },
+    images: { type: new GraphQLList(GraphQLString) },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      return await CampModel.findByIdAndUpdate(args.id, {
+        name: args.name,
+        phoneNumber: args.phoneNumber,
+        email: args.email,
+        shortDescription: args.shortDescription,
+        longDescription: args.longDescription,
+        location: args.location,
+        url: args.url,
+        tags: args.tags,
+        ownerId: args.ownerId,
+        amenities: args.amenities,
+        placesOfInterest: args.placesOfInterest,
+        campDocuments: args.campDocuments,
+        images: args.images,
+      });
+    } catch (err) {
+      return err;
+    }
+  },
+};
 const deleteCamp = {
   type: CampType,
   args: {
@@ -177,4 +214,5 @@ module.exports = {
   updateCamp,
   deleteCamp,
   campBookingStatus,
+  updateUserCamp,
 };
