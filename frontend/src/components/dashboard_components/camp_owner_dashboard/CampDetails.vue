@@ -123,11 +123,19 @@
                     v-flex.flex-spacing(xs12)
                       v-textarea(outline label='Camp Description' v-model='camp.longDescription')
         v-tab-item(id='images')
-          //- v-flex(xs12 md6 style='max-width:100%')
-          //-   v-card.body-card(flat)
-          //-     v-carousel
-          //-       v-carousel-item(v-for="(image,i) in camp.images" :key="i"
-          //-       :src=`'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/1536254024601__'+image`)
+          v-flex(xs12)
+            v-layout(row wrap)
+              v-flex(xs12 md3 v-for='(image, index) in camp.images'
+                  :key='index')
+                v-hover
+                  v-card.body-card(slot-scope='{ hover }' max-width='400' style='padding:0')
+                    v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+                    :aspect-ratio='16/9' )
+                      v-expand-transition
+                        div.d-flex.transition-fast-in-fast-out.red.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
+                          v-btn(flat dark icon small)
+                            v-icon(color='white') delete
+
 
     v-fab-transition
       v-tooltip(top)
@@ -283,7 +291,6 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
-        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -327,7 +334,6 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
@@ -374,5 +380,13 @@ export default {
 }
 .flex-spacing {
   margin-top: 2rem;
+}
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.9;
+  position: absolute;
+  width: 100%;
 }
 </style>
