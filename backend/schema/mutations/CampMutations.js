@@ -118,7 +118,6 @@ const updateUserCamp = {
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
     campDocuments: { type: new GraphQLList(GraphQLString) },
-    images: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -145,7 +144,62 @@ const updateUserCamp = {
         amenities: args.amenities,
         placesOfInterest: args.placesOfInterest,
         campDocuments: args.campDocuments,
-        images: args.images,
+      });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const updateCampImages = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    images: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      return await CampModel.findByIdAndUpdate(
+        args.id,
+        {
+          $push: { images: args.images },
+        },
+        { new: true },
+      );
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const deleteCampImage = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    imageName: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      return await CampModel.findByIdAndUpdate(args.id, {
+        $pull: { images: args.imageName },
       });
     } catch (err) {
       return err;
@@ -215,4 +269,6 @@ module.exports = {
   deleteCamp,
   campBookingStatus,
   updateUserCamp,
+  deleteCampImage,
+  updateCampImages,
 };

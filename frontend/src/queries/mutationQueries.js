@@ -61,6 +61,19 @@ const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $ph
   }
 }`;
 
+const updateCampImages = `mutation updateCampImages($id: String!, $images: String){
+  updateCampImages($id: id, $images: images){
+    id
+  }
+}`;
+
+const deleteCampImage = `mutation deleteCampImage($id: String, $imageName: String!){
+  deleteCampImage(id: $id, imageName: $imageName){
+    id
+
+  }
+}`;
+
 const closeTentBooking = `mutation closeTentBooking($id: String!, $isAvailable: Boolean!){
     closeTentBooking(id: $id, isAvailable: $isAvailable){
       id
@@ -126,6 +139,8 @@ module.exports = {
   sendResetPasswordToken,
   resetPasswordMutation,
   saveCampDetails,
+  updateCampImages,
+  deleteCampImage,
   closeTentBooking,
   campBooking,
   addBloggerQuery,
