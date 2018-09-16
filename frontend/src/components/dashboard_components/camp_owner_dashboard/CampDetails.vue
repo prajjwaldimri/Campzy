@@ -134,7 +134,7 @@
                       v-expand-transition
                         div.d-flex.transition-fast-in-fast-out.red.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
                           v-btn(flat dark icon small)
-                            v-icon(color='white') delete
+                            v-icon(color='white' @click='deleteImage(image)') delete
 
 
     v-fab-transition
@@ -149,7 +149,7 @@
 import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
-import { saveCampDetails, campBooking } from '../../../queries/mutationQueries';
+import { saveCampDetails, campBooking, updateCampImages, deleteCampImage } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
 export default {
@@ -239,12 +239,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        this.getImages = res.data;
-        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-        this.saveCampDetails();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-      }).finally(() => { this.uploadingImages = false; });
+          this.getImages = res.data;
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+          this.saveCampDetails();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingImages = false; });
     },
 
 
@@ -269,14 +269,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-          res.data.forEach((item) => {
-            this.getOwnerDocuments.push(item.key);
-          });
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveCampDetails();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingDocuments = false; });
+            res.data.forEach((item) => {
+              this.getOwnerDocuments.push(item.key);
+            });
+            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+            this.saveCampDetails();
+          }).catch(() => {
+            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+          }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -291,6 +291,7 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -322,7 +323,6 @@ export default {
         longDescription: this.camp.longDescription,
         tags: this.tags,
         campDocuments: this.getOwnerDocuments,
-        images: this.getImages,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -337,6 +337,28 @@ export default {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
     },
+
+    deleteImage(imageName) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        id: this.camp.id,
+        imageName: imageName,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(deleteCampImage, variables).then(() => {
+        this.getCampDetails();
+        EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
+      }).catch((err) => {
+        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      }).finally(() => { });
+    }
   },
 };
 </script>
