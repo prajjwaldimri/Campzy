@@ -337,13 +337,13 @@ export default {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
     },
-    adultCount() {
+    tentCount() {
       this.calculatePrice();
-      sessionStorage.setItem('adultCount', this.adultCount);
+      sessionStorage.setItem('tentCount', this.tentCount);
     },
-    childrenCount() {
+    personCount() {
       this.calculatePrice();
-      sessionStorage.setItem('childrenCount', this.childrenCount);
+      sessionStorage.setItem('personCount', this.personCount);
     },
   },
 };

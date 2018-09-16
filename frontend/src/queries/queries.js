@@ -20,8 +20,7 @@ const getAllTentsQuery = `query allTents{
       id
       type
       capacity
-      bookingPriceAdult
-      bookingPriceChildren
+      bookingPrice
       preBookPeriod
       isBooked
       surgePriceAdult
@@ -81,8 +80,7 @@ const getCampByUrl = `query campUser($url: String!){
     images,
     isAvailable,
     inventory {
-      bookingPriceAdult,
-      bookingPriceChildren
+      bookingPrice
     }
     coordinates {
       latitude,

@@ -120,11 +120,11 @@
           v-flex.divider-border(sm4)
             .d-flex
               v-flex(sm4 offset-sm1).pa-2
-                v-combobox(label="Adults (age > 10)" hide-details solo flat suffix="Adults"
-                v-model="adultCount" :items="adultNumbers" dense type="number")
-              v-flex(sm4 offset-sm1).pa-2
-                v-combobox(label="Children (age > 5)" hide-details solo flat suffix="Children"
-                v-model="childrenCount" :items="childrenNumbers" dense type="number")
+                v-combobox(label="Number of Tents" hide-details solo flat suffix="Tents"
+                v-model="tentCount" :items="tentNumbers" dense type="number")
+              v-flex(sm6 offset-sm1).pa-2
+                v-combobox(label="People per tent" hide-details solo flat suffix="People per tent"
+                v-model="personCount" :items="personNumbers" dense type="number")
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy style="width: 100%")
@@ -163,10 +163,10 @@ export default {
       tripDurationMenu: false,
       fromDate: null,
       toDate: null,
-      adultCount: 2,
-      adultNumbers: [1, 2, 3, 4, 5],
-      childrenCount: 1,
-      childrenNumbers: [0, 1, 2, 3, 4],
+      tentCount: 2,
+      tentNumbers: [1, 2, 3, 4, 5],
+      personCount: 1,
+      personNumbers: [1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       comments: [1, 2, 3, 4],
@@ -176,8 +176,8 @@ export default {
   },
   mounted() {
     this.getCamp();
-    this.adultCount = parseInt(sessionStorage.getItem('adultCount'), 10) || 2;
-    this.childrenCount = parseInt(sessionStorage.getItem('childrenCount'), 10) || 1;
+    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 2;
+    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
   },
@@ -204,8 +204,15 @@ export default {
       if (!this.camp.inventory) {
         return;
       }
-      this.price = (this.camp.inventory[0].bookingPriceAdult * this.adultCount)
-      + (this.camp.inventory[0].bookingPriceChildren * this.childrenCount);
+      let price = 99999999;
+      this.camp.inventory.forEach((tent) => {
+        if (tent.bookingPrice < price) {
+          price = tent.bookingPrice;
+        }
+      });
+      this.price = price;
+      this.price = (this.camp.inventory[0].bookingPrice * this.tentCount)
+      + (this.camp.inventory[0].bookingPriceChildren * this.personCount);
     },
     bookCamp() {
       this.bookButtonLoading = true;
@@ -216,8 +223,8 @@ export default {
       });
       let variables = {
         campId: this.camp.id,
-        adultCount: this.adultCount,
-        childrenCount: this.childrenCount,
+        tentCount: this.tentCount,
+        personCount: this.personCount,
         fromDate: this.fromDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
@@ -225,8 +232,8 @@ export default {
         variables = {
           razorpayPaymentId: '123',
           tentId: data.bookCampCheck.tent.id,
-          adultCount: this.adultCount,
-          childrenCount: this.childrenCount,
+          tentCount: this.tentCount,
+          personCount: this.personCount,
           fromDate: this.fromDate,
           toDate: this.toDate,
         };
@@ -247,18 +254,26 @@ export default {
     fromDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
+
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
+        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      }
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
+
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
+        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      }
     },
-    adultCount() {
+    tentCount() {
       this.calculatePrice();
-      sessionStorage.setItem('adultCount', this.adultCount);
+      sessionStorage.setItem('tentCount', this.tentCount);
     },
-    childrenCount() {
+    personCount() {
       this.calculatePrice();
-      sessionStorage.setItem('childrenCount', this.childrenCount);
+      sessionStorage.setItem('personCount', this.personCount);
     },
   },
 };

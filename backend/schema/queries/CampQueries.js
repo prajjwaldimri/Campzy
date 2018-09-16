@@ -187,7 +187,7 @@ const getCampUser = {
     try {
       return await CampModel.findOne({ url: `${args.url}` }).populate({
         path: 'inventory',
-        select: 'bookingPriceAdult bookingPriceChildren',
+        select: 'bookingPrice',
       });
     } catch (err) {
       return err;
