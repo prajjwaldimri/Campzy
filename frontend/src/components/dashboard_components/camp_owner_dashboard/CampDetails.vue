@@ -128,13 +128,16 @@
               v-flex(xs12 md3 v-for='(image, index) in camp.images'
                   :key='index')
                 v-hover
-                  v-card.body-card(slot-scope='{ hover }' max-width='400' style='padding:0')
+                  v-card.body-card(slot-scope='{ hover }' max-width='500' style='padding:0')
                     v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+                    :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image"
                     :aspect-ratio='16/9' )
                       v-expand-transition
                         div.d-flex.transition-fast-in-fast-out.red.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
                           v-btn(flat dark icon small)
                             v-icon(color='white' @click='deleteImageFromAWS(image)') delete
+                    v-card-actions.justify-center
+                      span {{image}}
 
 
     v-fab-transition
@@ -267,7 +270,6 @@ export default {
           this.getCampDetails();
           EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
         }).catch((err) => {
-          console.log(err);
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }).finally(() => { });
       });
@@ -412,9 +414,10 @@ export default {
 }
 
 .body-card {
-  margin: 2rem 2rem 0rem 2rem;
+  margin: 0.6rem;
   padding: 2rem;
-  box-shadow: none;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
 .footer-card {
   margin: 2rem 2rem 0rem 2rem;
