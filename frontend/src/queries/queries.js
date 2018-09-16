@@ -193,8 +193,7 @@ const isEmailAvailable = `query isEmailAvailable($email: String!){
   }
 }`;
 
-// eslint-disable-next-line
-export {
+module.exports = {
   sendUserCredentials,
   getAllUsers,
   getAllTentsQuery,

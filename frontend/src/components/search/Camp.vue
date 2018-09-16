@@ -173,7 +173,7 @@ export default {
       mapUri: '',
       bookButtonLoading: false,
       isBookingPossible: true,
-
+      tents: [],
     };
   },
   mounted() {
@@ -220,7 +220,9 @@ export default {
           return;
         }
         let price = 0;
+        this.tents = [];
         for (let i = 0; i < data.bestTentinCamp.length; i += 1) {
+          this.tents.push(data.bestTentinCamp[i].id);
           price += data.bestTentinCamp[i].bookingPrice;
         }
         // Add the number of days of trip criteria to price
@@ -241,29 +243,29 @@ export default {
         },
       });
       let variables = {
-        campId: this.camp.id,
-        tentCount: this.tentCount,
-        personCount: this.personCount,
+        tentIds: this.tents,
         fromDate: this.fromDate,
+        toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
         // TODO: Implement razorpay API
+        // Use data.bookCampCheck.amount to get the amount from user
         variables = {
           razorpayPaymentId: '123',
-          tentId: data.bookCampCheck.tent.id,
-          tentCount: this.tentCount,
-          personCount: this.personCount,
+          tentIds: this.tents,
           fromDate: this.fromDate,
           toDate: this.toDate,
         };
-        client.request(bookCamp, variables).then((data) => {
-          console.log(data);
-        }).catch((err) => {
-          console.log(err);
-        }).finally(() => {
-          this.bookButtonLoading = false;
-        });
+        console.log(data);
+        // client.request(bookCamp, variables).then((data) => {
+        //   console.log(data);
+        // }).catch((err) => {
+        //   console.log(err);
+        // }).finally(() => {
+        //   this.bookButtonLoading = false;
+        // });
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
