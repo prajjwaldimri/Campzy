@@ -45,7 +45,7 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           placesOfInterest,
           tags,
           images,
-          isAvailable
+          isAvailable,
         }
 
       }`;

@@ -70,6 +70,8 @@ const Mutation = new GraphQLObjectType({
     campAvailability: CampMutations.campBookingStatus,
     updateCampImages: CampMutations.updateCampImages,
     deleteCampImage: CampMutations.deleteCampImage,
+    updateCampDocuments: CampMutations.updateCampDocuments,
+    deleteCampDocument: CampMutations.deleteCampDocument,
 
     addTent: TentMutations.addTent,
     updateTent: TentMutations.updateTent,

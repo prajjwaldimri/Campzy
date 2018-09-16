@@ -55,8 +55,8 @@ const sendOTP = `mutation sendOTP($phoneNumber: String!) {
   }
 }`;
 
-const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $amenities: [String], $placesOfInterest: [String], $tags: [String]!,$campDocuments:[String],$images:[String]!){
-  updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, amenities: $amenities, placesOfInterest: $placesOfInterest, tags:$tags, campDocuments: $campDocuments, images: $images){
+const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $amenities: [String], $placesOfInterest: [String], $tags: [String]!){
+  updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, amenities: $amenities, placesOfInterest: $placesOfInterest, tags:$tags){
     id
   }
 }`;
@@ -73,6 +73,17 @@ const deleteCampImage = `mutation deleteCampImage($id: String, $imageName: Strin
 
   }
 }`;
+
+const updateCampDocuments = `mutation updateCampDocuments($id: String!, $campDocuments: String!){
+  updateCampDocuments(id: $id, campDocuments: $campDocuments){
+    id
+  }
+}`;
+
+const deleteCampDocument = `mutation deleteCampDocument($id: String!, $documentName:String!){
+  deleteCampDocument(id: $id, documentName: $documentName){
+  id
+}}`;
 
 const closeTentBooking = `mutation closeTentBooking($id: String!, $isAvailable: Boolean!){
     closeTentBooking(id: $id, isAvailable: $isAvailable){
@@ -141,6 +152,8 @@ module.exports = {
   saveCampDetails,
   updateCampImages,
   deleteCampImage,
+  updateCampDocuments,
+  deleteCampDocument,
   closeTentBooking,
   campBooking,
   addBloggerQuery,

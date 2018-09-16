@@ -46,6 +46,7 @@ const aws3 = new aws.S3();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Upload CampOwner's Documents
 const uploadDocument = multer({
   storage: multerS3({
     s3: aws3,
@@ -53,10 +54,10 @@ const uploadDocument = multer({
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata(req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
+      cb(null, { fieldName: file.originalname });
     },
     key(req, file, cb) {
-      cb(null, file.fieldname + Date.now().toString());
+      cb(null, `${Date.now()}__${file.originalname}`);
     },
   }),
 });
@@ -65,10 +66,40 @@ app.post(
   '/uploadCampOwnerDocuments',
   uploadDocument.array('document', 5),
   (req, res) => {
+    if (!req.files) {
+      throw new Error('Cannot update empty files');
+    }
+    console.log(req.files);
     res.json(req.files);
   },
 );
 
+// Delete CampOwner's Documents
+
+app.delete('/deleteDocuments', (req, res) => {
+  try {
+    if (!req.body) {
+      throw new Error('Cannot Delete Empty Body');
+    }
+    const documentDelete = req.body;
+
+    aws3.deleteObject(
+      {
+        Bucket: 'campzy-documents',
+        Key: `${documentDelete}`,
+      },
+      (err) => {
+        if (err) {
+          throw new Error('Cannot Delete');
+        }
+        res.json('Deleted');
+      },
+    );
+  } catch (err) {
+    return err;
+  }
+  return true;
+});
 // Image uploads
 
 const imageStorage = multer.memoryStorage({

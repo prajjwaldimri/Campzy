@@ -153,7 +153,7 @@ import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
 import {
-  saveCampDetails, campBooking, updateCampImages, deleteCampImage,
+  saveCampDetails, campBooking, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument,
 } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -301,11 +301,34 @@ export default {
             this.getOwnerDocuments.push(item.key);
           });
           EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveCampDetails();
+          this.saveDocumentsToCamp();
         }).catch(() => {
           EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
         }).finally(() => { this.uploadingDocuments = false; });
       }
+    },
+
+    saveDocumentsToCamp() {
+      this.getOwnerDocuments.forEach((campdoc) => {
+        if (!this.$cookie.get('sessionToken')) {
+          this.$router.push('/');
+        }
+        const variables = {
+          id: this.camp.id,
+          campDocuments: campdoc,
+        };
+        const client = new GraphQLClient('/graphql', {
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+          },
+        });
+        client.request(updateCampDocuments, variables).then(() => {
+          this.getCampDetails();
+          EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
+        }).catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }).finally(() => { });
+      });
     },
 
     // Get the camp ID related to current user
@@ -319,6 +342,7 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
+        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -329,6 +353,7 @@ export default {
           this.campSwitchLabel = 'Close Camp Bookings';
         }
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },

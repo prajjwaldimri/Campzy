@@ -117,7 +117,6 @@ const updateUserCamp = {
     longDescription: { type: GraphQLString },
     amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    campDocuments: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -143,7 +142,6 @@ const updateUserCamp = {
         ownerId: args.ownerId,
         amenities: args.amenities,
         placesOfInterest: args.placesOfInterest,
-        campDocuments: args.campDocuments,
       });
     } catch (err) {
       return err;
@@ -181,6 +179,36 @@ const updateCampImages = {
   },
 };
 
+const updateCampDocuments = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    campDocuments: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      return await CampModel.findByIdAndUpdate(
+        args.id,
+        {
+          $push: { campDocuments: args.campDocuments },
+        },
+        { new: true },
+      );
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 const deleteCampImage = {
   type: CampType,
   args: {
@@ -200,6 +228,32 @@ const deleteCampImage = {
       }
       return await CampModel.findByIdAndUpdate(args.id, {
         $pull: { images: args.imageName },
+      });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const deleteCampDocument = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    documentName: { type: GraphQLString },
+  },
+  async resole(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      return await CampModel.findByIdAndUpdate(args.id, {
+        $pull: { campDocuments: args.documentName },
       });
     } catch (err) {
       return err;
@@ -271,4 +325,6 @@ module.exports = {
   updateUserCamp,
   deleteCampImage,
   updateCampImages,
+  updateCampDocuments,
+  deleteCampDocument,
 };
