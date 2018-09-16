@@ -140,36 +140,53 @@ app.post(
 
 // Delete file from s3
 app.delete('/deleteImages', (req, res) => {
-  if (!req.body) {
-    res.send('Cannot send Empty Key');
-  } else {
-    const documentDelete = req.body.blogImage;
-    aws3.deleteObject(
-      {
-        Bucket: 'campzy-images',
-        Key: `high-res/${documentDelete}`,
-      },
-      () => {
-        aws3.deleteObject(
-          {
-            Bucket: 'campzy-images',
-            Key: `low-res/${documentDelete}`,
-          },
-          () => {
-            aws3.deleteObject(
-              {
-                Bucket: 'campzy-images',
-                Key: `thumbnails/${documentDelete}`,
-              },
-              () => {
-                res.json('Success');
-              },
-            );
-          },
-        );
-      },
-    );
+  try {
+    if (!req.body) {
+      throw new Error('Cannot send Empty Key');
+    }
+    if (req.body) {
+      let imageDelete = '';
+      if (req.body.blogImage) {
+        imageDelete = req.body.blogImage;
+      }
+      if (req.body.imageName) {
+        imageDelete = req.body.imageName;
+      }
+      aws3.deleteObject(
+        {
+          Bucket: 'campzy-images',
+          Key: `high-res/${imageDelete}`,
+        },
+        () => {
+          aws3.deleteObject(
+            {
+              Bucket: 'campzy-images',
+              Key: `low-res/${imageDelete}`,
+            },
+            () => {
+              aws3.deleteObject(
+                {
+                  Bucket: 'campzy-images',
+                  Key: `thumbnails/${imageDelete}`,
+                },
+                (err) => {
+                  if (err) {
+                    return err;
+                  }
+                  return res.json(imageDelete);
+                },
+              );
+            },
+          );
+        },
+      );
+    } else {
+      throw new Error('Cannot Delete');
+    }
+  } catch (err) {
+    return err;
   }
+  return true;
 });
 
 // Connect to MLab Database

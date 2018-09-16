@@ -134,7 +134,7 @@
                       v-expand-transition
                         div.d-flex.transition-fast-in-fast-out.red.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
                           v-btn(flat dark icon small)
-                            v-icon(color='white' @click='deleteImage(image)') delete
+                            v-icon(color='white' @click='deleteImageFromAWS(image)') delete
 
 
     v-fab-transition
@@ -149,7 +149,9 @@
 import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
-import { saveCampDetails, campBooking, updateCampImages, deleteCampImage } from '../../../queries/mutationQueries';
+import {
+  saveCampDetails, campBooking, updateCampImages, deleteCampImage,
+} from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
 export default {
@@ -239,12 +241,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-          this.getImages = res.data;
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-          this.updateImagesToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingImages = false; });
+        this.getImages = res.data;
+        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+        this.updateImagesToCamp();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+      }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -269,7 +271,6 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }).finally(() => { });
       });
-
     },
 
 
@@ -294,14 +295,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-            res.data.forEach((item) => {
-              this.getOwnerDocuments.push(item.key);
-            });
-            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-            this.saveCampDetails();
-          }).catch(() => {
-            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-          }).finally(() => { this.uploadingDocuments = false; });
+          res.data.forEach((item) => {
+            this.getOwnerDocuments.push(item.key);
+          });
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+          this.saveCampDetails();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -316,7 +317,6 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
-        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -363,13 +363,23 @@ export default {
       }).finally(() => { this.isDataUpdating = false; });
     },
 
+    deleteImageFromAWS(imageName) {
+      axios.delete('/deleteImages', { data: { imageName } }).then((data) => {
+        EventBus.$emit('show-success-notification-short', 'Successfully Deleted');
+        this.deleteImage(data.data);
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to delete');
+      });
+    },
+
+
     deleteImage(imageName) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
       const variables = {
         id: this.camp.id,
-        imageName: imageName,
+        imageName,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
