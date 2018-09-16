@@ -238,7 +238,7 @@ export default {
       fromDate: null,
       toDate: null,
       tripDurationMenu: false,
-      priceRange: [1000, 20000],
+      priceRange: [1000, 50000],
       priceLabels: [],
       tentType: ['Dome', 'Swiss'],
       tentTypes: ['Dome', 'Swiss'],
@@ -280,6 +280,7 @@ export default {
         page: 1,
         tentCount: this.tentCount,
         personCount: this.personCount,
+        tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
@@ -302,7 +303,7 @@ export default {
             minPrice = tent.bookingPrice;
           }
         });
-        this.searchResults[i].minPrice = minPrice;
+        this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
       }
     },
     sort(option) {

@@ -123,7 +123,7 @@
                 v-select(label="Number of Tents" hide-details solo flat suffix="Tents"
                 v-model="tentCount" :items="tentNumbers" dense )
               v-flex(sm6 offset-sm1).pa-2
-                v-select(label="People per tent" hide-details solo flat suffix="People per tent"
+                v-select(label="People per tent" hide-details solo flat suffix="Person per tent"
                 v-model="personCount" :items="personNumbers" dense)
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
@@ -215,11 +215,13 @@ export default {
           // TODO: Do something to show that tents are not available in this capacity
           return;
         }
-        this.price = 0;
+        let price = 0;
         for (let i = 0; i < data.bestTentinCamp.length; i += 1) {
-          this.price += data.bestTentinCamp[i].bookingPrice;
+          price += data.bestTentinCamp[i].bookingPrice;
         }
-      }).catch((err) => {
+        // Add the number of days of trip criteria to price
+        this.price = price * this.$moment(this.toDate).diff(this.fromDate, 'days');
+      }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Error getting prices for the camp');
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
@@ -269,6 +271,7 @@ export default {
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
+      this.calculatePrice();
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
@@ -277,6 +280,7 @@ export default {
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
+      this.calculatePrice();
     },
     tentCount() {
       this.calculatePrice();

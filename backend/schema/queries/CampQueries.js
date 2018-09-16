@@ -130,6 +130,7 @@ const campSearchUser = {
   args: {
     searchTerm: { type: GraphQLString },
     bookingStartDate: { type: GraphQLInt },
+    tripDuration: { type: GraphQLInt },
     minPrice: { type: GraphQLInt },
     maxPrice: { type: GraphQLInt },
     page: { type: GraphQLInt },
@@ -147,7 +148,10 @@ const campSearchUser = {
         match: {
           isAvailable: { $eq: true },
           isBooked: { $eq: false },
-          bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
+          bookingPrice: {
+            $gte: parseInt(args.minPrice / args.tripDuration, 10),
+            $lte: parseInt(args.maxPrice / args.tripDuration, 10),
+          },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
         select: 'bookingPrice capacity',
