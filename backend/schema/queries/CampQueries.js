@@ -150,15 +150,26 @@ const campSearchUser = {
           bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
-        select: 'bookingPrice',
+        select: 'bookingPrice capacity',
       })
       .limit(10)
       .skip((args.page - 1) * 10)
       .sort({ score: { $meta: 'textScore' } });
 
-    // Delete camps with no inventory
     for (let i = 0; i < results.length; i += 1) {
-      if (results[i].inventory.length === 0) {
+      const requiredCapacity = args.tentCount * args.personCount;
+      let availableCapacity = 0;
+      for (let j = 0; j < results[i].inventory.length; j += 1) {
+        availableCapacity += results[i].inventory[j].capacity;
+      }
+      // 1. Delete camps with no inventory
+      // 2. Delete camps which do not have the amount of tents required
+      // 3. Check the total capacity of camps
+      if (
+        results[i].inventory.length === 0
+        || results[i].inventory.length < args.tentCount
+        || availableCapacity < requiredCapacity
+      ) {
         delete results[i];
       }
     }

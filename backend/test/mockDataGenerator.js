@@ -43,7 +43,7 @@ async function CreateCamp(userId, phoneNumber) {
         .map(e => (e = faker.hacker.noun())),
       terrain: faker.random.arrayElement(terrainTypes),
     });
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
       let tent = await Tent.create({
         capacity: faker.random.number({ min: 1, max: 4 }),
         isAvailable: true,

@@ -244,7 +244,7 @@ export default {
       tentTypes: ['Dome', 'Swiss'],
       amenitiesSelected: [],
       amenities: ['Amenity-1', 'Amenity-2', 'Amenity-3', 'Amenity-4', 'Amenity-5', 'Amenity-6'],
-      tentCount: 2,
+      tentCount: 1,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
       personNumbers: [0, 1, 2, 3, 4],
