@@ -1,7 +1,11 @@
 const graphql = require('graphql');
 
 const {
-  GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLBoolean,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+  GraphQLInt,
+  GraphQLBoolean,
 } = graphql;
 
 const TentType = new GraphQLObjectType({
@@ -11,10 +15,8 @@ const TentType = new GraphQLObjectType({
     capacity: { type: GraphQLString },
     type: { type: GraphQLString },
     isBooked: { type: GraphQLBoolean },
-    bookingPriceAdult: { type: GraphQLInt },
-    bookingPriceChildren: { type: GraphQLInt },
-    surgePriceAdult: { type: GraphQLInt },
-    surgePriceChildren: { type: GraphQLInt },
+    bookingPrice: { type: GraphQLInt },
+    surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
     bookedBy: { type: GraphQLID },
     isAvailable: { type: GraphQLBoolean },

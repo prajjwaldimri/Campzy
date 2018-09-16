@@ -164,7 +164,7 @@ const campSearchUser = {
       }
       // 1. Delete camps with no inventory
       // 2. Delete camps which do not have the amount of tents required
-      // 3. Check the total capacity of camps
+      // 3. Compare the required capacity with available capacity
       if (
         results[i].inventory.length === 0
         || results[i].inventory.length < args.tentCount

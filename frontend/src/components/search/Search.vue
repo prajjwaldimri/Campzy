@@ -296,13 +296,13 @@ export default {
     },
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPrice = 99999;
+        let minPrice = 99999999;
         this.searchResults[i].inventory.forEach((tent) => {
           if (tent.bookingPrice < minPrice) {
             minPrice = tent.bookingPrice;
           }
         });
-        this.searchResults[i].minPrice = (minPrice * (this.tentCount));
+        this.searchResults[i].minPrice = minPrice;
       }
     },
     sort(option) {
