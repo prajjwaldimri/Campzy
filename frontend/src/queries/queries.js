@@ -80,15 +80,23 @@ const getCampByUrl = `query campUser($url: String!){
     amenities,
     images,
     isAvailable,
-    inventory {
-      bookingPrice
-    }
+    inventory{
+      capacity
+    },
     coordinates {
       latitude,
       longitude
     },
     terrain,
     rating,
+  }
+}`;
+
+const getBestTentAvailable = `query bestTentinCamp($url: String!, $tentCount: Int!, $personCount: Int!, $bookingStartDate: Int!){
+  bestTentinCamp(url: $url, tentCount: $tentCount, personCount: $personCount, bookingStartDate: $bookingStartDate){
+    id,
+    capacity,
+    bookingPrice
   }
 }`;
 
@@ -129,8 +137,8 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   }
 }`;
 
-const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!, $tentCount: Int!, $personCount: Int!) {
-  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice, tentCount: $tentCount, personCount: $personCount){
+const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!, $tentCount: Int!, $personCount: Int!, $tripDuration: Int!) {
+  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice, tentCount: $tentCount, personCount: $personCount, tripDuration: $tripDuration){
     id,
     name,
     location,
@@ -185,8 +193,7 @@ const isEmailAvailable = `query isEmailAvailable($email: String!){
   }
 }`;
 
-// eslint-disable-next-line
-export {
+module.exports = {
   sendUserCredentials,
   getAllUsers,
   getAllTentsQuery,
@@ -198,6 +205,7 @@ export {
   campSearch,
   campSearchUser,
   getCampByUrl,
+  getBestTentAvailable,
   getCurrentUserBlogsQuery,
   getBlogQuery,
   getBlogById,

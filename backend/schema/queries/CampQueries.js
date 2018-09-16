@@ -130,6 +130,7 @@ const campSearchUser = {
   args: {
     searchTerm: { type: GraphQLString },
     bookingStartDate: { type: GraphQLInt },
+    tripDuration: { type: GraphQLInt },
     minPrice: { type: GraphQLInt },
     maxPrice: { type: GraphQLInt },
     page: { type: GraphQLInt },
@@ -147,7 +148,10 @@ const campSearchUser = {
         match: {
           isAvailable: { $eq: true },
           isBooked: { $eq: false },
-          bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
+          bookingPrice: {
+            $gte: parseInt(args.minPrice / args.tripDuration, 10),
+            $lte: parseInt(args.maxPrice / args.tripDuration, 10),
+          },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
         select: 'bookingPrice capacity',
@@ -177,17 +181,19 @@ const campSearchUser = {
   },
 };
 
-// Gets Camp Details without authorization
+// Gets Camp Details from url
 const getCampUser = {
   type: CampType,
   args: {
     url: { type: GraphQLString },
+    tentCount: { type: GraphQLInt },
+    personCount: { type: GraphQLInt },
   },
   async resolve(parent, args) {
     try {
       return await CampModel.findOne({ url: `${args.url}` }).populate({
         path: 'inventory',
-        select: 'bookingPrice',
+        select: 'capacity',
       });
     } catch (err) {
       return err;

@@ -120,11 +120,11 @@
           v-flex.divider-border(sm4)
             .d-flex
               v-flex(sm4 offset-sm1).pa-2
-                v-combobox(label="Number of Tents" hide-details solo flat suffix="Tents"
-                v-model="tentCount" :items="tentNumbers" dense type="number")
+                v-select(label="Number of Tents" hide-details solo flat suffix="Tents"
+                v-model="tentCount" :items="tentNumbers" dense )
               v-flex(sm6 offset-sm1).pa-2
-                v-combobox(label="People per tent" hide-details solo flat suffix="People per tent"
-                v-model="personCount" :items="personNumbers" dense type="number")
+                v-select(label="People per tent" hide-details solo flat suffix="Person per tent"
+                v-model="personCount" :items="personNumbers" dense)
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy style="width: 100%")
@@ -137,7 +137,7 @@
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
-            v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading").btn-huge.pa-2.white--text Book Your Camp
+            v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading" :disabled="!isBookingPossible").btn-huge.pa-2.white--text Book Your Camp
 
 </template>
 
@@ -146,7 +146,7 @@ import VueTinySlider from 'vue-tiny-slider';
 import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
-import { getCampByUrl } from '../../queries/queries';
+import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
 import { bookCampCheck, bookCamp } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
@@ -172,6 +172,8 @@ export default {
       comments: [1, 2, 3, 4],
       mapUri: '',
       bookButtonLoading: false,
+      isBookingPossible: true,
+      tents: [],
     };
   },
   mounted() {
@@ -180,19 +182,22 @@ export default {
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
+    this.calculatePrice();
   },
   methods: {
     getCamp() {
       EventBus.$emit('show-progress-bar');
       const variables = {
         url: this.$route.params.campUrl,
+        tentCount: this.tentCount,
+        personCount: this.personCount,
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
-        this.calculatePrice();
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
       }).catch(() => {
-        this.$router.push('404');
+        this.$router.go(-1);
+        EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
       });
@@ -201,18 +206,34 @@ export default {
       EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });
     },
     calculatePrice() {
-      if (!this.camp.inventory) {
-        return;
-      }
-      let price = 99999999;
-      this.camp.inventory.forEach((tent) => {
-        if (tent.bookingPrice < price) {
-          price = tent.bookingPrice;
+      EventBus.$emit('show-progress-bar');
+      const variables = {
+        url: this.$route.params.campUrl,
+        tentCount: parseInt(this.tentCount, 10),
+        bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        personCount: parseInt(this.personCount, 10),
+      };
+      request('/graphql', getBestTentAvailable, variables).then((data) => {
+        if (!data.bestTentinCamp || data.bestTentinCamp.length <= 0) {
+          EventBus.$emit('show-error-notification-long', 'We don\'t have the required amount of tents available. ');
+          this.isBookingPossible = false;
+          return;
         }
+        let price = 0;
+        this.tents = [];
+        for (let i = 0; i < data.bestTentinCamp.length; i += 1) {
+          this.tents.push(data.bestTentinCamp[i].id);
+          price += data.bestTentinCamp[i].bookingPrice;
+        }
+        // Add the number of days of trip criteria to price
+        this.price = price * this.$moment(this.toDate).diff(this.fromDate, 'days');
+        this.isBookingPossible = true;
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Error getting prices for the camp');
+        this.isBookingPossible = false;
+      }).finally(() => {
+        EventBus.$emit('hide-progress-bar');
       });
-      this.price = price;
-      this.price = (this.camp.inventory[0].bookingPrice * this.tentCount)
-      + (this.camp.inventory[0].bookingPriceChildren * this.personCount);
     },
     bookCamp() {
       this.bookButtonLoading = true;
@@ -222,29 +243,29 @@ export default {
         },
       });
       let variables = {
-        campId: this.camp.id,
-        tentCount: this.tentCount,
-        personCount: this.personCount,
+        tentIds: this.tents,
         fromDate: this.fromDate,
+        toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
         // TODO: Implement razorpay API
+        // Use data.bookCampCheck.amount to get the amount from user
         variables = {
           razorpayPaymentId: '123',
-          tentId: data.bookCampCheck.tent.id,
-          tentCount: this.tentCount,
-          personCount: this.personCount,
+          tentIds: this.tents,
           fromDate: this.fromDate,
           toDate: this.toDate,
         };
-        client.request(bookCamp, variables).then((data) => {
-          console.log(data);
-        }).catch((err) => {
-          console.log(err);
-        }).finally(() => {
-          this.bookButtonLoading = false;
-        });
+        console.log(data);
+        // client.request(bookCamp, variables).then((data) => {
+        //   console.log(data);
+        // }).catch((err) => {
+        //   console.log(err);
+        // }).finally(() => {
+        //   this.bookButtonLoading = false;
+        // });
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
@@ -258,6 +279,7 @@ export default {
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
+      this.calculatePrice();
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
@@ -266,6 +288,7 @@ export default {
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
+      this.calculatePrice();
     },
     tentCount() {
       this.calculatePrice();

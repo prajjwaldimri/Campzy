@@ -238,7 +238,7 @@ export default {
       fromDate: null,
       toDate: null,
       tripDurationMenu: false,
-      priceRange: [1000, 20000],
+      priceRange: [1000, 50000],
       priceLabels: [],
       tentType: ['Dome', 'Swiss'],
       tentTypes: ['Dome', 'Swiss'],
@@ -258,6 +258,9 @@ export default {
       this.priceLabels.push(i);
     }
     this.searchInput = this.$route.params.searchterm;
+
+    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 2;
+    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
 
     // Set the default date label
     this.fromDate = this.$moment().format('YYYY-MM-DD');
@@ -280,6 +283,7 @@ export default {
         page: 1,
         tentCount: this.tentCount,
         personCount: this.personCount,
+        tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
@@ -302,7 +306,7 @@ export default {
             minPrice = tent.bookingPrice;
           }
         });
-        this.searchResults[i].minPrice = minPrice;
+        this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
       }
     },
     sort(option) {
@@ -338,12 +342,12 @@ export default {
       }
     },
     tentCount() {
-      this.calculatePrice();
       sessionStorage.setItem('tentCount', this.tentCount);
+      this.calculatePrice();
     },
     personCount() {
-      this.calculatePrice();
       sessionStorage.setItem('personCount', this.personCount);
+      this.calculatePrice();
     },
   },
 };

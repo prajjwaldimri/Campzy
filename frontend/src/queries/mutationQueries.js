@@ -125,8 +125,8 @@ const deleteUserBlog = `mutation deleteBlog($id: String!){
 }`;
 
 // Booking Mutations
-const bookCampCheck = `mutation bookCampCheck($campId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!){
-  bookCampCheck(campId: $campId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate)
+const bookCampCheck = `mutation bookCampCheck($tentIds: [String]!,  $fromDate: Date!, $toDate: Date!){
+  bookCampCheck(tentIds: $tentIds, fromDate: $fromDate, toDate: $toDate)
   {
     amount,
     tent{
@@ -134,8 +134,8 @@ const bookCampCheck = `mutation bookCampCheck($campId: String!, $adultCount: Int
     }
   }
 }`;
-const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentId: String!, $adultCount: Int!, $childrenCount: Int!, $fromDate: Date!, $toDate: Date!){
-  bookCamp(razorpayPaymentId: $razorpayPaymentId, tentId: $tentId, adultCount: $adultCount, childrenCount: $childrenCount, fromDate: $fromDate, toDate: $toDate){
+const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentId: String!, $personCount: Int!, $tentCount: Int!, $fromDate: Date!, $toDate: Date!){
+  bookCamp(razorpayPaymentId: $razorpayPaymentId, tentId: $tentId, tentCount: $tentCount, personCount: $personCount, fromDate: $fromDate, toDate: $toDate){
     code
   }
 }`;
