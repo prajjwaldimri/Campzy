@@ -20,8 +20,8 @@ const bookCheck = {
   type: BookingType,
   args: {
     campId: { type: GraphQLString },
-    adultCount: { type: GraphQLInt },
-    childrenCount: { type: GraphQLInt },
+    tentCount: { type: GraphQLInt },
+    personCount: { type: GraphQLInt },
     fromDate: { type: GraphQLDate },
   },
   async resolve(parent, args, context) {
@@ -30,7 +30,7 @@ const bookCheck = {
     if (!user) {
       throw new NotLoggedinError();
     }
-    const seatsRequired = args.adultCount + args.childrenCount;
+    const capacityRequired = args.tentCount + args.personCount;
     let availableTent = {};
 
     const preBookPeriod = moment(args.fromDate).diff(Date.now(), 'days');
@@ -38,8 +38,7 @@ const bookCheck = {
     // Get Camp's Tents
     const campData = await CampModel.findOne({
       _id: args.campId,
-      // TODO: Uncomment this before production
-      // isAvailable: { $eq: true },
+      isAvailable: { $eq: true },
     })
       .select('inventory')
       .populate({
@@ -56,7 +55,7 @@ const bookCheck = {
 
     campData.inventory.forEach((tent) => {
       // TODO: Check also for availability of tent
-      if (tent.capacity <= seatsRequired) {
+      if (tent.capacity <= capacityRequired) {
         availableTent = tent;
       }
     });
@@ -82,16 +81,14 @@ const book = {
   args: {
     razorpayPaymentId: { type: GraphQLString },
     tentId: { type: GraphQLString },
-    adultCount: { type: GraphQLInt },
-    childrenCount: { type: GraphQLInt },
+    tentCount: { type: GraphQLInt },
+    personCount: { type: GraphQLInt },
     fromDate: { type: GraphQLDate },
     toDate: { type: GraphQLDate },
   },
   async resolve(parent, args, context) {
-    console.log(args);
     // Check user login and get user's details
     const user = await auth.getAuthenticatedUser(context.req);
-    console.log(user);
 
     if (!user) {
       throw new NotLoggedinError();
@@ -134,7 +131,6 @@ const book = {
 
     // Update the tent's status
     tent.isBooked = true;
-    tent.isAvailable = false;
     await tent.save();
     // Return the booking token's id
     return booking;

@@ -8,7 +8,8 @@
       v-btn(flat @click='snackbarInfo = false') close
     v-snackbar(v-model='snackbarWarning' top color='yellow' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarWarning = false') close
-    router-view
+    transition(name="fade-transition" mode="out-in")
+      router-view(:key="$route.fullPath")
 </template>
 
 <script>

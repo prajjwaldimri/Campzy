@@ -20,8 +20,7 @@ const getAllTentsQuery = `query allTents{
       id
       type
       capacity
-      bookingPriceAdult
-      bookingPriceChildren
+      bookingPrice
       preBookPeriod
       isBooked
       surgePriceAdult
@@ -81,8 +80,7 @@ const getCampByUrl = `query campUser($url: String!){
     images,
     isAvailable,
     inventory {
-      bookingPriceAdult,
-      bookingPriceChildren
+      bookingPrice
     }
     coordinates {
       latitude,
@@ -130,8 +128,8 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   }
 }`;
 
-const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!) {
-  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice){
+const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!, $tentCount: Int!, $personCount: Int!) {
+  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice, tentCount: $tentCount, personCount: $personCount){
     id,
     name,
     location,
@@ -139,8 +137,7 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
     heroImage,
     rating,
     inventory {
-      bookingPriceAdult,
-      bookingPriceChildren
+      bookingPrice
     }
   }
 }`;

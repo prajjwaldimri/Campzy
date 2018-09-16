@@ -34,11 +34,11 @@
                 v-flex
                   v-layout(row)
                     v-flex(sm6)
-                      v-combobox(hint="Adults (age > 10)" persistent-hint
-                      v-model="adultCount" :items="adultNumbers")
+                      v-combobox(hint="Number of tents" persistent-hint
+                      v-model="tentCount" :items="tentNumbers")
                     v-flex(sm6)
-                      v-combobox(hint="Children (age > 5)" persistent-hint
-                      v-model="childrenCount" :items="childrenNumbers")
+                      v-combobox(hint="People per tent" persistent-hint
+                      v-model="personCount" :items="personNumbers")
 
                 v-flex
                   v-select(v-model="amenitiesSelected" :items="amenities" attach
@@ -175,11 +175,11 @@
                         v-flex
                           v-layout(row)
                             v-flex(sm6)
-                              v-combobox(hint="Adults (age > 10)" persistent-hint
-                              v-model="adultCount" :items="adultNumbers")
+                              v-combobox(hint="Number of Tents" persistent-hint
+                              v-model="tentCount" :items="tentNumbers")
                             v-flex(sm6)
-                              v-combobox(hint="Children (age > 5)" persistent-hint
-                              v-model="childrenCount" :items="childrenNumbers")
+                              v-combobox(hint="People per tent" persistent-hint
+                              v-model="personCount" :items="personNumbers")
 
                         v-flex
                           v-select(v-model="amenitiesSelected" :items="amenities" attach
@@ -244,10 +244,10 @@ export default {
       tentTypes: ['Dome', 'Swiss'],
       amenitiesSelected: [],
       amenities: ['Amenity-1', 'Amenity-2', 'Amenity-3', 'Amenity-4', 'Amenity-5', 'Amenity-6'],
-      adultCount: 2,
-      adultNumbers: [1, 2, 3, 4, 5],
-      childrenCount: 1,
-      childrenNumbers: [0, 1, 2, 3, 4],
+      tentCount: 1,
+      tentNumbers: [1, 2, 3, 4, 5],
+      personCount: 1,
+      personNumbers: [0, 1, 2, 3, 4],
       dateLabel: 'Choose a date',
       filterDialog: false,
       sortDialog: false,
@@ -278,6 +278,8 @@ export default {
         maxPrice: this.priceRange[1],
         bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
         page: 1,
+        tentCount: this.tentCount,
+        personCount: this.personCount,
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
@@ -294,18 +296,13 @@ export default {
     },
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPriceAdult = 99999;
-        let minPriceChildren = 99999;
+        let minPrice = 99999999;
         this.searchResults[i].inventory.forEach((tent) => {
-          if (tent.bookingPriceAdult < minPriceAdult) {
-            minPriceAdult = tent.bookingPriceAdult;
-          }
-          if (tent.bookingPriceChildren < minPriceChildren) {
-            minPriceChildren = tent.bookingPriceChildren;
+          if (tent.bookingPrice < minPrice) {
+            minPrice = tent.bookingPrice;
           }
         });
-        this.searchResults[i].minPrice = (minPriceAdult * this.adultCount)
-        + (minPriceChildren * this.childrenCount);
+        this.searchResults[i].minPrice = minPrice;
       }
     },
     sort(option) {
@@ -340,13 +337,13 @@ export default {
         this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
       }
     },
-    adultCount() {
+    tentCount() {
       this.calculatePrice();
-      sessionStorage.setItem('adultCount', this.adultCount);
+      sessionStorage.setItem('tentCount', this.tentCount);
     },
-    childrenCount() {
+    personCount() {
       this.calculatePrice();
-      sessionStorage.setItem('childrenCount', this.childrenCount);
+      sessionStorage.setItem('personCount', this.personCount);
     },
   },
 };

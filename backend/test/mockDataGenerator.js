@@ -20,6 +20,7 @@ async function CreateCamp(userId, phoneNumber) {
   try {
     camp = await Camp.create({
       name: faker.company.companyName(),
+      isAvailable: true,
       phoneNumber: phoneNumber,
       email: faker.internet.email(),
       url: faker.random.uuid(),
@@ -29,23 +30,26 @@ async function CreateCamp(userId, phoneNumber) {
       'coordinates.latitude': faker.address.latitude(),
       'coordinates.longitude': faker.address.longitude(),
       ownerId: userId,
-      images: new Array(10).fill(null).map(e => (e = 'https://loremflickr.com/1280/768/nature')),
+      images: new Array(10)
+        .fill(null)
+        .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
       heroImage: 'https://loremflickr.com/320/240/nature',
       rating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
       amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
       altitude: faker.random.number({ min: 100, max: 2000 }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
-      placesOfInterest: new Array(4).fill(null).map(e => (e = faker.hacker.noun())),
+      placesOfInterest: new Array(4)
+        .fill(null)
+        .map(e => (e = faker.hacker.noun())),
       terrain: faker.random.arrayElement(terrainTypes),
     });
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
       let tent = await Tent.create({
         capacity: faker.random.number({ min: 1, max: 4 }),
+        isAvailable: true,
         type: faker.random.arrayElement(campTypes),
-        bookingPriceAdult: faker.random.number({ min: 1000, max: 80000 }),
-        bookingPriceChildren: faker.random.number({ min: 1000, max: 80000 }),
-        surgePriceAdult: faker.random.number({ min: 1000, max: 80000 }),
-        surgePriceChildren: faker.random.number({ min: 1000, max: 80000 }),
+        bookingPrice: faker.random.number({ min: 1000, max: 80000 }),
+        surgePrice: faker.random.number({ min: 1000, max: 80000 }),
         preBookPeriod: faker.random.number({ min: 2, max: 15 }),
         camp: camp._id,
       });
@@ -70,7 +74,10 @@ async function CreateUser() {
       phoneNumber: faker.phone.phoneNumber().replace(/-/g, ''),
     });
     if (createdUser.type === 'CampOwner') {
-      createdUser.ownedCampId = await CreateCamp(createdUser._id, createdUser.phoneNumber);
+      createdUser.ownedCampId = await CreateCamp(
+        createdUser._id,
+        createdUser.phoneNumber,
+      );
       await createdUser.save();
     }
     console.info('User added');
@@ -94,7 +101,9 @@ mongoose.connection.once('open', async () => {
   await Camp.remove({});
   for (let i = 0; i < 10000; i++) {
     await Promise.all(
-      [CreateUser(), CreateUser(), CreateUser(), CreateUser()].map(handleRejection),
+      [CreateUser(), CreateUser(), CreateUser(), CreateUser()].map(
+        handleRejection,
+      ),
     );
   }
   process.exit(0);

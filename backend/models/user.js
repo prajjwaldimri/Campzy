@@ -52,7 +52,6 @@ const UserSchema = new Schema({
       ref: 'Blog',
     },
   ],
-  bookedTent: { type: Schema.Types.ObjectId, ref: 'Tent', unique: true },
 });
 
 UserSchema.index({
