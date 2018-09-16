@@ -177,17 +177,19 @@ const campSearchUser = {
   },
 };
 
-// Gets Camp Details without authorization
+// Gets Camp Details from url
 const getCampUser = {
   type: CampType,
   args: {
     url: { type: GraphQLString },
+    tentCount: { type: GraphQLInt },
+    personCount: { type: GraphQLInt },
   },
   async resolve(parent, args) {
     try {
       return await CampModel.findOne({ url: `${args.url}` }).populate({
         path: 'inventory',
-        select: 'bookingPrice',
+        select: 'capacity',
       });
     } catch (err) {
       return err;

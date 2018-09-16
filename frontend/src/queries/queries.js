@@ -80,15 +80,23 @@ const getCampByUrl = `query campUser($url: String!){
     amenities,
     images,
     isAvailable,
-    inventory {
-      bookingPrice
-    }
+    inventory{
+      capacity
+    },
     coordinates {
       latitude,
       longitude
     },
     terrain,
     rating,
+  }
+}`;
+
+const getBestTentAvailable = `query bestTentinCamp($url: String!, $tentCount: Int!, $personCount: Int!, $bookingStartDate: Int!){
+  bestTentinCamp(url: $url, tentCount: $tentCount, personCount: $personCount, bookingStartDate: $bookingStartDate){
+    id,
+    capacity,
+    bookingPrice
   }
 }`;
 
@@ -198,6 +206,7 @@ export {
   campSearch,
   campSearchUser,
   getCampByUrl,
+  getBestTentAvailable,
   getCurrentUserBlogsQuery,
   getBlogQuery,
   getBlogById,

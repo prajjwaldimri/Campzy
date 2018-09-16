@@ -120,11 +120,11 @@
           v-flex.divider-border(sm4)
             .d-flex
               v-flex(sm4 offset-sm1).pa-2
-                v-combobox(label="Number of Tents" hide-details solo flat suffix="Tents"
-                v-model="tentCount" :items="tentNumbers" dense type="number")
+                v-select(label="Number of Tents" hide-details solo flat suffix="Tents"
+                v-model="tentCount" :items="tentNumbers" dense )
               v-flex(sm6 offset-sm1).pa-2
-                v-combobox(label="People per tent" hide-details solo flat suffix="People per tent"
-                v-model="personCount" :items="personNumbers" dense type="number")
+                v-select(label="People per tent" hide-details solo flat suffix="People per tent"
+                v-model="personCount" :items="personNumbers" dense)
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
             :close-on-content-click="false" lazy style="width: 100%")
@@ -146,7 +146,7 @@ import VueTinySlider from 'vue-tiny-slider';
 import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
-import { getCampByUrl } from '../../queries/queries';
+import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
 import { bookCampCheck, bookCamp } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
@@ -180,16 +180,18 @@ export default {
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
+    this.calculatePrice();
   },
   methods: {
     getCamp() {
       EventBus.$emit('show-progress-bar');
       const variables = {
         url: this.$route.params.campUrl,
+        tentCount: this.tentCount,
+        personCount: this.personCount,
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
-        this.calculatePrice();
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
       }).catch(() => {
         this.$router.push('404');
@@ -201,18 +203,27 @@ export default {
       EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });
     },
     calculatePrice() {
-      if (!this.camp.inventory) {
-        return;
-      }
-      let price = 99999999;
-      this.camp.inventory.forEach((tent) => {
-        if (tent.bookingPrice < price) {
-          price = tent.bookingPrice;
+      EventBus.$emit('show-progress-bar');
+      const variables = {
+        url: this.$route.params.campUrl,
+        tentCount: parseInt(this.tentCount, 10),
+        bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        personCount: parseInt(this.personCount, 10),
+      };
+      request('/graphql', getBestTentAvailable, variables).then((data) => {
+        if (!data.bestTentinCamp || data.bestTentinCamp.length <= 0) {
+          // TODO: Do something to show that tents are not available in this capacity
+          return;
         }
+        this.price = 0;
+        for (let i = 0; i < data.bestTentinCamp.length; i += 1) {
+          this.price += data.bestTentinCamp[i].bookingPrice;
+        }
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', 'Error getting prices for the camp');
+      }).finally(() => {
+        EventBus.$emit('hide-progress-bar');
       });
-      this.price = price;
-      this.price = (this.camp.inventory[0].bookingPrice * this.tentCount)
-      + (this.camp.inventory[0].bookingPriceChildren * this.personCount);
     },
     bookCamp() {
       this.bookButtonLoading = true;
