@@ -133,21 +133,24 @@ const campSearchUser = {
     minPrice: { type: GraphQLInt },
     maxPrice: { type: GraphQLInt },
     page: { type: GraphQLInt },
+    tentCount: { type: GraphQLInt },
+    personCount: { type: GraphQLInt },
   },
   async resolve(parent, args) {
     const results = await CampModel.find(
       { $text: { $search: args.searchTerm } },
       { score: { $meta: 'textScore' } },
     )
-      .and({ isAvailable: { $eq: false } }) // TODO: Change this to true
+      .and({ isAvailable: { $eq: true } })
       .populate({
         path: 'inventory',
         match: {
+          isAvailable: { $eq: true },
           isBooked: { $eq: false },
-          bookingPriceAdult: { $gte: args.minPrice, $lte: args.maxPrice },
+          bookingPrice: { $gte: args.minPrice, $lte: args.maxPrice },
           preBookPeriod: { $gte: args.bookingStartDate },
         },
-        select: 'bookingPriceAdult bookingPriceChildren',
+        select: 'bookingPrice',
       })
       .limit(10)
       .skip((args.page - 1) * 10)

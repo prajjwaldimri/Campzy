@@ -130,8 +130,8 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
   }
 }`;
 
-const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!) {
-  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice){
+const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Int!, $minPrice: Int!, $maxPrice: Int!, $tentCount: Int!, $personCount: Int!) {
+  campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, minPrice: $minPrice, maxPrice: $maxPrice, tentCount: $tentCount, personCount: $personCount){
     id,
     name,
     location,
