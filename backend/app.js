@@ -81,8 +81,7 @@ app.delete('/deleteDocuments', (req, res) => {
     if (!req.body) {
       throw new Error('Cannot Delete Empty Body');
     }
-    const documentDelete = req.body;
-
+    const documentDelete = req.body.documentName;
     aws3.deleteObject(
       {
         Bucket: 'campzy-documents',
@@ -92,7 +91,7 @@ app.delete('/deleteDocuments', (req, res) => {
         if (err) {
           throw new Error('Cannot Delete');
         }
-        res.json('Deleted');
+        res.json(documentDelete);
       },
     );
   } catch (err) {

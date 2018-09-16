@@ -241,7 +241,7 @@ const deleteCampDocument = {
     id: { type: GraphQLString },
     documentName: { type: GraphQLString },
   },
-  async resole(parent, args, context) {
+  async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);

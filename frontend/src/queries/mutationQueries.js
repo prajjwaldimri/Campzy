@@ -80,10 +80,11 @@ const updateCampDocuments = `mutation updateCampDocuments($id: String!, $campDoc
   }
 }`;
 
-const deleteCampDocument = `mutation deleteCampDocument($id: String!, $documentName:String!){
+const deleteCampDocument = `mutation deleteCampDocument($id: String!, $documentName: String!){
   deleteCampDocument(id: $id, documentName: $documentName){
   id
-}}`;
+}
+}`;
 
 const closeTentBooking = `mutation closeTentBooking($id: String!, $isAvailable: Boolean!){
     closeTentBooking(id: $id, isAvailable: $isAvailable){
