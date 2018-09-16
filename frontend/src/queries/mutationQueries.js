@@ -62,7 +62,7 @@ const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $ph
 }`;
 
 const updateCampImages = `mutation updateCampImages($id: String!, $images: String){
-  updateCampImages($id: id, $images: images){
+  updateCampImages(id: $id, images: $images){
     id
   }
 }`;

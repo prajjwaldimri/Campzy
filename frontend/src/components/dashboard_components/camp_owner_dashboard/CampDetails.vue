@@ -240,11 +240,36 @@ export default {
           },
         }).then((res) => {
           this.getImages = res.data;
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveCampDetails();
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+          this.updateImagesToCamp();
         }).catch(() => {
           EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
         }).finally(() => { this.uploadingImages = false; });
+    },
+
+    updateImagesToCamp() {
+      this.getImages.forEach((image) => {
+        if (!this.$cookie.get('sessionToken')) {
+          this.$router.push('/');
+        }
+        const variables = {
+          id: this.camp.id,
+          images: image,
+        };
+        const client = new GraphQLClient('/graphql', {
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+          },
+        });
+        client.request(updateCampImages, variables).then(() => {
+          this.getCampDetails();
+          EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
+        }).catch((err) => {
+          console.log(err);
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }).finally(() => { });
+      });
+
     },
 
 
@@ -358,7 +383,7 @@ export default {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { });
-    }
+    },
   },
 };
 </script>
