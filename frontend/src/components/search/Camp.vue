@@ -137,7 +137,7 @@
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
-            v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading").btn-huge.pa-2.white--text Book Your Camp
+            v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading" :disabled="!isBookingPossible").btn-huge.pa-2.white--text Book Your Camp
 
 </template>
 
@@ -172,6 +172,8 @@ export default {
       comments: [1, 2, 3, 4],
       mapUri: '',
       bookButtonLoading: false,
+      isBookingPossible: true,
+
     };
   },
   mounted() {
@@ -194,7 +196,8 @@ export default {
         this.camp = data.campUser;
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
       }).catch(() => {
-        this.$router.push('404');
+        this.$router.go(-1);
+        EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
       });
@@ -212,7 +215,8 @@ export default {
       };
       request('/graphql', getBestTentAvailable, variables).then((data) => {
         if (!data.bestTentinCamp || data.bestTentinCamp.length <= 0) {
-          // TODO: Do something to show that tents are not available in this capacity
+          EventBus.$emit('show-error-notification-long', 'We don\'t have the required amount of tents available. ');
+          this.isBookingPossible = false;
           return;
         }
         let price = 0;
@@ -221,8 +225,10 @@ export default {
         }
         // Add the number of days of trip criteria to price
         this.price = price * this.$moment(this.toDate).diff(this.fromDate, 'days');
+        this.isBookingPossible = true;
       }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Error getting prices for the camp');
+        this.isBookingPossible = false;
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
       });

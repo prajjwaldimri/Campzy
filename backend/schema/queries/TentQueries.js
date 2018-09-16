@@ -83,6 +83,11 @@ const getBestTentinCamp = {
         tents.push(camp.inventory[i]);
       }
 
+      // If we don't have enough tents send null response.
+      if (tents.length < args.tentCount) {
+        return [];
+      }
+
       // Get the best tent according to provided tent and person count
       return tents;
     } catch (err) {

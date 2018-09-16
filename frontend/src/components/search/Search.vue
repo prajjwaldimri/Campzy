@@ -259,6 +259,9 @@ export default {
     }
     this.searchInput = this.$route.params.searchterm;
 
+    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 2;
+    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
+
     // Set the default date label
     this.fromDate = this.$moment().format('YYYY-MM-DD');
     this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
@@ -339,12 +342,12 @@ export default {
       }
     },
     tentCount() {
-      this.calculatePrice();
       sessionStorage.setItem('tentCount', this.tentCount);
+      this.calculatePrice();
     },
     personCount() {
-      this.calculatePrice();
       sessionStorage.setItem('personCount', this.personCount);
+      this.calculatePrice();
     },
   },
 };
