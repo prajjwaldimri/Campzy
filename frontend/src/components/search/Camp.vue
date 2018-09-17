@@ -127,12 +127,12 @@
                 v-model="personCount" :items="personNumbers" dense)
           v-flex(sm4).pa-2.divider-border
             v-menu(v-model="tripDurationMenu" offset-y transition="slide-y-transition"
-            :close-on-content-click="false" lazy style="width: 100%")
+            :close-on-content-click="true" lazy style="width: 100%")
               v-select(label="Trip duration" readonly block
               :label="dateLabel"  hide-details solo flat
               slot="activator" color="primary")
               v-date-picker(v-model="fromDate" no-title scrollable full-width)
-              v-date-picker(v-model="toDate" no-title scrollable full-width)
+              v-date-picker(v-model="toDate" no-title scrollable full-width @click="tripDurationMenu = false")
           v-flex(sm2 style="align-items: center").d-flex
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}

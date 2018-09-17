@@ -7,7 +7,7 @@
         | Settings
         v-icon settings
       v-tab(href="#tab-2")
-        | Recent Bookings
+        | Active Bookings
         v-icon event
       v-tab(href="#tab-3")
         | Past Bookings

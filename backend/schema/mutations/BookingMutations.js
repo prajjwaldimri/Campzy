@@ -120,6 +120,7 @@ const book = {
       endDate: args.toDate,
       tentCount: args.tentCount,
       personCount: args.personCount,
+      camp: tents[0].camp,
       amount,
     });
 

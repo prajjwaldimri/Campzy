@@ -16,6 +16,7 @@ const BookingSchema = new Schema(
     isCompleted: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     tents: { type: [Schema.Types.ObjectId], ref: 'Tent', required: true },
+    camp: { type: Schema.Types.ObjectId, ref: 'Camp', required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     tentCount: { type: Number, required: true },
