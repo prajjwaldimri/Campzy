@@ -30,7 +30,7 @@
                 h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
 
               v-flex(md5 offset-md1).mt-4
-                h5.caption.grey--text BOOKED
+                h5.caption.grey--text TRIP STARTS
                 h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
 
               v-flex(md3).mt-4
