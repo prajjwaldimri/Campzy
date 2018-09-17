@@ -7,6 +7,7 @@ const CampQueries = require('./queries/CampQueries');
 const TentQueries = require('./queries/TentQueries');
 const TokenQueries = require('./queries/TokenQueries');
 const BlogQueries = require('./queries/BlogQueries');
+const BookingQueries = require('./queries/BookingQueries');
 
 const UserMutations = require('./mutations/UserMutations');
 const CampMutations = require('./mutations/CampMutations');
@@ -46,6 +47,7 @@ const RootQuery = new GraphQLObjectType({
     currentUserBlogs: UserQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,
     getUpdateBlog: BlogQueries.getUpdateBlog,
+    getUserActiveBookings: BookingQueries.getUserActiveBookings,
   },
 });
 
