@@ -10,7 +10,7 @@ const Blog = () => import('../components/blog/Blog.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
 const Settings = () => import('../components/user/Settings.vue');
-const ActiveBookings = () => import('../components/user/ActiveBookings.vue');
+const RecentBookings = () => import('../components/user/RecentBookings.vue');
 const Billing = () => import('../components/user/Billing.vue');
 const PasswordReset = () => import('../components/user/PasswordReset.vue');
 const Dashboard = () => import('../components/Dashboard.vue');
@@ -75,7 +75,7 @@ const router = new Router({
         {
           name: 'recentBookings',
           path: 'recentBookings',
-          component: ActiveBookings,
+          component: RecentBookings,
         },
         {
           name: 'billing',
