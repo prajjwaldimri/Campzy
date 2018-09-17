@@ -193,6 +193,23 @@ const isEmailAvailable = `query isEmailAvailable($email: String!){
   }
 }`;
 
+const getUserActiveBookings = `query getUserActiveBookings {
+  getUserActiveBookings{
+    user{
+      name
+    },
+    tentCount,
+    personCount,
+    camp{
+      name,
+      url
+    },
+    amount,
+    startDate,
+    endDate
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -210,4 +227,5 @@ module.exports = {
   getBlogQuery,
   getBlogById,
   isEmailAvailable,
+  getUserActiveBookings,
 };
