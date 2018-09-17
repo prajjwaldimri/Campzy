@@ -47,36 +47,49 @@
                       v-text-field(label='IFSC Code')
         v-tab-item(id='documents')
           v-layout(row wrap)
-            v-flex(xs12 md6)
+            v-flex(xs12 md8)
               v-card.body-card(flat)
                 v-card-title.title(primary-title)
                   h2.font-weight-bold.headline Camp Documents
-                v-form(ref='form' enctype='multipart/form-data' lazy-validation)
-                    v-layout.layout(row wrap)
-                      v-flex.mt-3(xs12)
-                        v-layout(column)
-                          span PAN DETAILS
-                          input.mt-2(type='file' name='pan_card' ref='panCard'
-                          v-on:change="showFile" accept='application/pdf'
-                           required)
-                      v-flex.mt-3(xs12)
-                        v-layout(column)
-                          span GST DETAILS
-                          input.mt-2(type='file' name='gst_number'
-                          v-on:change="showFile" accept='application/pdf' required)
-                      v-flex.mt-3(xs12)
-                        v-layout(column)
-                          span TIN NUMBER
-                          input.mt-2(type='file' name='tin' v-on:change="showFile"
-                           accept='application/pdf' required )
-                      v-flex.mt-3(xs12)
-                        v-layout(column)
-                          span * Only pdf files
-                      v-flex.mt-4(xs12)
-                        v-btn.white--text(@click='uploadDocuments' color='green'
-                        :loading='uploadingDocuments') Upload Documents
+                v-layout(row wrap)
+                  v-flex(xs12 md4)
+                    v-form(ref='form' enctype='multipart/form-data' lazy-validation )
+                        v-layout.layout(row wrap)
+                          v-flex.mt-3(xs12)
+                            v-layout(column)
+                              span PAN DETAILS
+                              input.mt-2(type='file' name='pan_card' ref='panCard'
+                              v-on:change="showFile" accept='application/pdf'
+                              required :disabled='isDocument')
+                          v-flex.mt-3(xs12)
+                            v-layout(column)
+                              span GST DETAILS
+                              input.mt-2(type='file' name='gst_number'
+                              v-on:change="showFile" accept='application/pdf' required :disabled='isDocument')
+                          v-flex.mt-3(xs12)
+                            v-layout(column)
+                              span TIN NUMBER
+                              input.mt-2(type='file' name='tin' v-on:change="showFile"
+                              accept='application/pdf' required :disabled='isDocument' )
+                          v-flex.mt-3(xs12)
+                            v-layout(column)
+                              span * Only pdf files
+                          v-flex.mt-4(xs12)
+                            v-btn.white--text(@click='uploadDocuments' color='green'
+                            :loading='uploadingDocuments') Upload Documents
+                  v-flex(xs12 md8 v-show='viewDocument')
+                    v-layout(column)
+                      v-card.body-card(v-for='(document, index) in camp.campDocuments' width='100%')
+                        v-layout(row wrap)
+                          v-flex(md8)
+                            span {{document}}
+                          v-flex.justify-center(md4)
+                            span
+                              a.document-link(:href="'https://s3.ap-south-1.amazonaws.com/campzy-documents/' + document" target='_blank') View Document
+                            v-btn(small dark color='red' @click='deleteDocumentFromAws(document)') Delete
 
-            v-flex(xs12 md6)
+
+            v-flex(xs12 md4)
               v-card.body-card(flat)
                 v-card-title.title(primary-title)
                   h2.font-weight-bold.headline Upload Camp Photos
@@ -178,6 +191,8 @@ export default {
       getImages: '',
       uploadingImages: false,
       campSwitchLabel: '',
+      isDocument: false,
+      viewDocument: false,
     };
   },
 
@@ -217,14 +232,37 @@ export default {
     storeImage(event) {
       this.storeImages = event.target.files;
     },
-    deleteFile() {
+    deleteDocumentFromAws(documentName) {
       axios.delete('/deleteDocuments', {
-        data: { document: 'document1536082579486' },
+        data: { documentName },
       }).then((res) => {
-        console.log(res);
+        console.log(res.data);
+        this.deleteDocumentFromCamp(res.data);
       }).catch((err) => {
         EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
       });
+    },
+    deleteDocumentFromCamp(docName) {
+      console.log(docName);
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        id: this.camp.id,
+        documentName: docName,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(deleteCampDocument, variables).then(() => {
+        this.getCampDetails();
+        EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
+      }).catch((err) => {
+        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      }).finally(() => { });
     },
 
     uploadImages() {
@@ -352,6 +390,16 @@ export default {
         } else {
           this.campSwitchLabel = 'Close Camp Bookings';
         }
+        if (this.camp.campDocuments.length === 3) {
+          this.isDocument = true;
+        } else {
+          this.isDocument = false;
+        }
+        if (this.camp.campDocuments.length === 0 || this.camp.campDocuments.length > 3) {
+          this.viewDocument = false;
+        } else {
+          this.viewDocument = true;
+        }
       }).catch((err) => {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
@@ -391,22 +439,22 @@ export default {
     },
 
     deleteImageFromAWS(imageName) {
-      axios.delete('/deleteImages', { data: { imageName } }).then((data) => {
+      axios.delete('/deleteImages', { data: { imageName } }).then((res) => {
         EventBus.$emit('show-success-notification-short', 'Successfully Deleted');
-        this.deleteImage(data.data);
+        this.deleteImage(res.data);
       }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Failed to delete');
       });
     },
 
 
-    deleteImage(imageName) {
+    deleteImage(imgName) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
       const variables = {
         id: this.camp.id,
-        imageName,
+        imageName: imgName,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -473,5 +521,9 @@ export default {
   opacity: 0.9;
   position: absolute;
   width: 100%;
+}
+.document-link {
+  color: black;
+  font-size: 1rem;
 }
 </style>
