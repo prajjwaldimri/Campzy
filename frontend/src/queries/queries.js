@@ -202,7 +202,8 @@ const getUserActiveBookings = `query getUserActiveBookings {
     personCount,
     camp{
       name,
-      url
+      url,
+      location
     },
     amount,
     startDate,

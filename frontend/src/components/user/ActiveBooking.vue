@@ -22,8 +22,8 @@
                 h3.mt-1.subheading {{booking.personCount}} Person / Tent
 
               v-flex(md3)
-                h5.caption.grey--text AMOUNT
-                h3.mt-1.subheading 35,609
+                h5.caption.grey--text LOCATION
+                h3.mt-1.subheading {{booking.camp.location}}
 
               v-flex(md3).mt-4
                 h5.caption.grey--text AMOUNT
