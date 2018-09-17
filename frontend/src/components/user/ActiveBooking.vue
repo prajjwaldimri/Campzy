@@ -68,6 +68,8 @@ export default {
   },
   methods: {
     getActiveBookings() {
+      /* global NProgress */
+      NProgress.start();
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -80,6 +82,9 @@ export default {
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+        })
+        .finally(() => {
+          NProgress.done();
         });
     },
   },
