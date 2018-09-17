@@ -267,7 +267,10 @@ if (process.env.ENVIRONMENT === 'development') {
     key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
     cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt')),
   };
-  https.createServer(certOptions, app).listen(443);
+  https.createServer(certOptions, app).listen(443, (err) => {
+    console.log(err);
+    console.log('HTTP Server running');
+  });
 } else {
   app.listen(process.env.PORT || 4444);
 }
