@@ -133,8 +133,8 @@ const bookCampCheck = `mutation bookCampCheck($tentIds: [String]!,  $fromDate: D
     }
   }
 }`;
-const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentId: String!, $personCount: Int!, $tentCount: Int!, $fromDate: Date!, $toDate: Date!){
-  bookCamp(razorpayPaymentId: $razorpayPaymentId, tentId: $tentId, tentCount: $tentCount, personCount: $personCount, fromDate: $fromDate, toDate: $toDate){
+const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentIds: [String]!, $personCount: Int!, $tentCount: Int!, $fromDate: Date!, $toDate: Date!){
+  bookCamp(razorpayPaymentId: $razorpayPaymentId, tentIds: $tentIds, tentCount: $tentCount, personCount: $personCount, fromDate: $fromDate, toDate: $toDate){
     code
   }
 }`;

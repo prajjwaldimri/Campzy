@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const nanoid = require('nanoid');
+const en = require('nanoid-good/locale/en');
+const nanoid = require('nanoid-good')(en);
 
 const { Schema } = mongoose;
 
@@ -8,13 +9,13 @@ const BookingSchema = new Schema(
     code: {
       type: String,
       unique: true,
-      default: nanoid,
+      default: () => nanoid(20),
       required: true,
     },
     razorpayPaymentId: { type: String, required: true },
     isCompleted: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    tent: { type: [Schema.Types.ObjectId], ref: 'Tent', required: true },
+    tents: { type: [Schema.Types.ObjectId], ref: 'Tent', required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     tentCount: { type: Number, required: true },

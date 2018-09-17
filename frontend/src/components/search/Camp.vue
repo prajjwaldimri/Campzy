@@ -253,20 +253,25 @@ export default {
         variables = {
           razorpayPaymentId: '123',
           tentIds: this.tents,
+          personCount: this.personCount,
+          tentCount: this.tentCount,
           fromDate: this.fromDate,
           toDate: this.toDate,
         };
-        console.log(data);
-        // client.request(bookCamp, variables).then((data) => {
-        //   console.log(data);
-        // }).catch((err) => {
-        //   console.log(err);
-        // }).finally(() => {
-        //   this.bookButtonLoading = false;
-        // });
+        client.request(bookCamp, variables).then((data) => {
+          console.log(data);
+        }).catch((err) => {
+          console.log(err);
+        }).finally(() => {
+          this.bookButtonLoading = false;
+        });
       }).catch((err) => {
-        console.log(err);
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        if (err.response.errors[0].message === 'NotLoggedInError') {
+          EventBus.$emit('show-info-notification-short', 'Please Login First!');
+          this.$router.push('/login');
+        } else {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }
       });
     },
   },

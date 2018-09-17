@@ -41,7 +41,7 @@ const getAuthenticatedUser = request => new Promise((resolve, reject) => {
   const token = getTokenFromHeaders(request);
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err) {
-      reject(new Error('Incorrect or Expired JWT'));
+      reject(new Error('NotLoggedInError'));
     }
     resolve(payload);
   });

@@ -63,7 +63,7 @@ const book = {
   type: BookingType,
   args: {
     razorpayPaymentId: { type: GraphQLString },
-    tentId: { type: GraphQLString },
+    tentIds: { type: new GraphQLList(GraphQLString) },
     tentCount: { type: GraphQLInt },
     personCount: { type: GraphQLInt },
     fromDate: { type: GraphQLDate },
@@ -78,33 +78,48 @@ const book = {
     }
 
     // Check if the provided tentId is correct and if the tent can be booked
-    const seatsRequired = args.adultCount + args.childrenCount;
     const preBookPeriod = moment(args.fromDate).diff(Date.now(), 'days');
-    const tent = await TentModel.findById(args.tentId);
 
-    if (
-      !tent
-      || tent.isBooked
-      || tent.capacity < seatsRequired
-      || tent.preBookPeriod < preBookPeriod
-    ) {
+    const tents = await TentModel.find({
+      _id: { $in: args.tentIds },
+      isBooked: { $eq: false },
+      preBookPeriod: { $gte: preBookPeriod },
+    });
+
+    if (!tents || tents.length < args.tentIds.length) {
+      throw new TentNotAvailableError();
+    }
+
+    // Calculates the payable amount
+    let amount = 0;
+    for (let i = 0; i < tents.length; i += 1) {
+      amount += tents[i].bookingPrice;
+    }
+    // Multiply by trip duration
+    amount *= moment(args.toDate).diff(args.fromDate, 'days');
+
+    if (!tents || tents.length < args.tentIds.length) {
       throw new TentNotAvailableError();
     }
 
     // TODO: Verify Razorpay Id and collect money
     await wait(5000); // Simulates wait of razorpay
 
-    const amount = 20400; // Collect the amount from razorpay. Also check the amount with the tent's booking amount.
+    // Collect the amount from razorpay. Also check the amount with the tent's booking amount.
+
+    // Compare the collected amount with payable amount
+
+    // Send sms and emails to the user with their booking tickets
 
     // Generate a booking token
     const booking = await BookingModel.create({
       razorpayPaymentId: args.razorpayPaymentId,
-      tent: args.tentId,
+      tents: args.tentIds,
       user: user.id,
       startDate: args.fromDate,
       endDate: args.toDate,
-      adultCount: args.adultCount,
-      childrenCount: args.childrenCount,
+      tentCount: args.tentCount,
+      personCount: args.personCount,
       amount,
     });
 
@@ -113,8 +128,11 @@ const book = {
     // TODO: Send sms alerts to camp owner and user
 
     // Update the tent's status
-    tent.isBooked = true;
-    await tent.save();
+    tents.forEach(async (tent) => {
+      const modifiedTent = tent;
+      modifiedTent.isBooked = true;
+      await modifiedTent.save();
+    });
     // Return the booking token's id
     return booking;
   },
