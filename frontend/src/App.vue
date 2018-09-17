@@ -9,7 +9,7 @@
     v-snackbar(v-model='snackbarWarning' top color='yellow' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarWarning = false') close
     transition(name="fade-transition" mode="out-in")
-      router-view(:key="$route.fullPath")
+      router-view
 </template>
 
 <script>

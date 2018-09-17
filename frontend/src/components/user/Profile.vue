@@ -6,8 +6,8 @@
       v-tab(href="#tab-1" @click="$router.push('/profile')")
         | Settings
         v-icon settings
-      v-tab(href="#tab-2")
-        | Active Bookings
+      v-tab(href="#tab-2" @click="$router.push('/profile/activeBooking')")
+        | Active Booking
         v-icon event
       v-tab(href="#tab-3")
         | Past Bookings
@@ -16,14 +16,15 @@
         | Billings
         v-icon credit_card
 
-    router-view
+    transition(name="fade-transition" mode="out-in")
+      router-view
 
 
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
      fixed).hidden-md-and-up
       v-btn(dark @click="$router.push('/profile')")
         v-icon settings
-      v-btn(dark)
+      v-btn(dark @click="$router.push('/profile/activeBooking')")
         v-icon event
       v-btn(dark)
         v-icon receipt
