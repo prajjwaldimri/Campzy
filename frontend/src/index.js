@@ -6,6 +6,8 @@ import VeeValidate from 'vee-validate';
 import VueTour from 'vue-tour';
 import GSignInButton from 'vue-google-signin-button';
 import FBSignInButton from 'vue-facebook-signin-button';
+import 'vue-loaders/dist/vue-loaders.css';
+import * as VueLoaders from 'vue-loaders';
 import VueI18n from 'vue-i18n';
 import App from './App.vue';
 import router from './router/router';
@@ -20,6 +22,8 @@ Vue.use(require('vue-moment'));
 Vue.use(VueI18n);
 
 Vue.use(Meta);
+
+Vue.use(VueLoaders);
 
 Vue.use(Vuetify);
 Vue.use(VeeValidate);

@@ -73,8 +73,8 @@ const router = new Router({
           component: Settings,
         },
         {
-          name: 'activeBooking',
-          path: 'activeBooking',
+          name: 'activeBookings',
+          path: 'activeBookings',
           component: ActiveBooking,
         },
         {

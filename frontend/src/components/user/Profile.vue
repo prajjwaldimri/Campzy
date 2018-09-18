@@ -6,8 +6,8 @@
       v-tab(href="#tab-1" @click="$router.push('/profile')")
         | Settings
         v-icon settings
-      v-tab(href="#tab-2" @click="$router.push('/profile/activeBooking')")
-        | Active Booking
+      v-tab(href="#tab-2" @click="$router.push('/profile/activeBookings')")
+        | Active Bookings
         v-icon event
       v-tab(href="#tab-3")
         | Past Bookings

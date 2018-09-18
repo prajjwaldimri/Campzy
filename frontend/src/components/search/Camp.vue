@@ -260,7 +260,7 @@ export default {
         };
         client.request(bookCamp, variables).then((data) => {
           EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
-          this.$router.push('/profile/activeBooking');
+          this.$router.push('/profile/activeBookings');
         }).catch((err) => {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }).finally(() => {

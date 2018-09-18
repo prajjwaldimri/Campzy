@@ -2,6 +2,8 @@
   .home
     navbar
 
+    transition(name="fade-transition" appear)
+      line-scale-pulse-out-rapid-loader(color="green" size="40px" v-if="!searchComplete")
     v-container(fluid).top-container
       SearchImagesDialog
       v-layout(row wrap align-start)
@@ -80,7 +82,7 @@
                           v-img(:src="result.heroImage" width="100%" height="15rem" cover
                           slot-scope="{ hover }")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
-                              v-progress-circular(indeterminate color="grey lighten-5")
+                              v-progress-circular(indeterminate color="green darken-5")
                             v-expand-transition
                               .d-flex(v-if="hover" style="height: 100%"
                               class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
@@ -251,6 +253,7 @@ export default {
       dateLabel: 'Choose a date',
       filterDialog: false,
       sortDialog: false,
+      isSearching: false,
     };
   },
   mounted() {
@@ -354,6 +357,15 @@ export default {
 </script>
 
 <style lang="scss">
+.line-scale-pulse-out-rapid {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  @media screen and (max-width: 960px) {
+    left: 50%;
+  }
+}
+
 .top-container {
   @media screen and (max-width: 960px) {
     padding: 0;
