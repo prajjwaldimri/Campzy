@@ -363,6 +363,7 @@ export default {
   left: 60%;
   @media screen and (max-width: 960px) {
     left: 50%;
+    transform: translateX(-50%);
   }
 }
 
