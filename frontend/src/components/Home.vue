@@ -1,20 +1,33 @@
 <template lang="pug">
   .home-flex
-    .d-flex.account-flex
-      v-btn(flat large @click="$router.push('login')") My Account
     .search-flex
-      .campzy-logo.pb-4
+      .campzy-logo.pb-4.pt-4
         img(src="/vectors/Campzy-logo.svg")
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick"
-      hint="You can search for Nature, Leh, Mountains, etc.").mb-0
-    .d-flex.users-flex.py-2
-      h1.headline.grey--text.text--darken-2.mb-2(style="text-align: center")
-        | Currently operational in Uttarakhand and Himanchal Pradesh
-      span.title.grey--text.text--darken-1.hidden-sm-and-down
-        ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
-        |  users served
+      hint="You can search for Nature, Leh, Mountains, etc.").mb-1
+
+      .d-flex.actions-flex
+        v-flex(justify-center align-center).button-flex.px-1
+          v-btn(outline color="blue" fab to="login")
+            v-icon vpn_key
+          h3.subheading Login/Register
+        v-flex(justify-center align-center).button-flex
+          v-btn(color="orange darken-2" fab :to="profile" outline)
+            v-icon trending_up
+          h3.subheading Trending Camps
+        v-flex(justify-center align-center).button-flex.px-1
+          v-btn(color="green darken-2" fab to="profile" outline)
+            v-icon account_box
+          h3.subheading My Account
+
+    //- .d-flex.users-flex.py-2
+    //-   h1.headline.grey--text.text--darken-2.mb-2(style="text-align: center")
+    //-     | Currently operational in Uttarakhand and Himanchal Pradesh
+    //-   span.title.grey--text.text--darken-1.hidden-sm-and-down
+    //-     ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
+    //-     |  users served
 
 
 </template>
@@ -26,6 +39,9 @@ import ICountUp from 'vue-countup-v2';
 
 export default {
   name: 'Home',
+  metaInfo: {
+    title: 'Campzy',
+  },
   components: {
     ICountUp,
   },
@@ -93,6 +109,20 @@ export default {
       }
     }
 
+    .actions-flex {
+      width: 100%;
+      align-content: space-between;
+
+      .button-flex {
+        display: flex;
+        flex-direction: column;
+
+        > .subheading {
+          letter-spacing: 1px;
+        }
+      }
+    }
+
     .campzy-logo {
       min-width: 40vw;
       @media screen and (max-width: 960px) {
@@ -105,10 +135,6 @@ export default {
         height: 4.2rem;
       }
     }
-  }
-
-  .account-flex {
-    align-self: flex-end;
   }
 
   .users-flex {
