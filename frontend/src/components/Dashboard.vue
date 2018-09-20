@@ -199,7 +199,7 @@ export default {
           this.user = data.currentUser;
           this.isLoggedIn = true;
           if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.user.type !== 'Blogger') {
-            this.$router.push('/login');
+            this.$router.push('/');
             EventBus.$emit('show-error-notification-short', 'Your account does not have the capability to perfomr this action');
           }
           if (this.user.type === 'CampOwner') {

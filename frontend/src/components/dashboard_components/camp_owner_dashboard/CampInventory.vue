@@ -21,8 +21,10 @@
           td Rs. {{props.item.bookingPrice}}
           td Rs. {{props.item.surgePrice}}
           td {{props.item.preBookPeriod}} Days
-          td {{props.item.bookedBy}}
-          td {{props.item.isBooked}}
+          td(v-if='props.item.bookedBy') {{props.item.bookedBy.name}}
+          td(v-else) none
+          td.align-center
+            v-checkbox(v-model='props.item.isBooked' color='green' disabled)
           td.align-center
             v-switch(v-model='props.item.isAvailable' color='green'
             @change='openTentBooking(props.item.isAvailable,props.item.id)')
@@ -51,8 +53,8 @@ export default {
         { text: 'Booking Price', value: 'bookingPrice' },
         { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
-        { text: 'Booked By', value: 'bookedBy' },
-        { text: 'Is Booked', value: 'isBooked' },
+        { text: 'Booked By', value: 'bookedBy.name' },
+        { text: 'IS Booked ?', value: 'isBooked' },
         { text: 'Open Booking', value: 'actions', sortable: false },
       ],
       tents: [],
@@ -108,7 +110,9 @@ export default {
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.allTents;
+        console.log(this.tents);
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {
         this.isTableLoading = false;

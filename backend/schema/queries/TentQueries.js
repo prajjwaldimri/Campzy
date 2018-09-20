@@ -43,7 +43,10 @@ const getAllTents = {
       if (!isUserCampOwner) {
         return new Error('Not Privileged Enough');
       }
-      return await TentModel.find({ camp: userData.ownedCampId });
+      const allTents = await TentModel.find({
+        camp: userData.ownedCampId,
+      }).populate('bookedBy');
+      return allTents;
     } catch (err) {
       return err;
     }

@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const UserType = require('./UserType');
 
 const {
   GraphQLObjectType,
@@ -18,7 +19,7 @@ const TentType = new GraphQLObjectType({
     bookingPrice: { type: GraphQLInt },
     surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
-    bookedBy: { type: GraphQLID },
+    bookedBy: { type: UserType },
     isAvailable: { type: GraphQLBoolean },
   }),
 });

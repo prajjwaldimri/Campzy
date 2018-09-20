@@ -72,7 +72,6 @@ const book = {
   async resolve(parent, args, context) {
     // Check user login and get user's details
     const user = await auth.getAuthenticatedUser(context.req);
-
     if (!user) {
       throw new NotLoggedinError();
     }
@@ -83,6 +82,7 @@ const book = {
     const tents = await TentModel.find({
       _id: { $in: args.tentIds },
       isBooked: { $eq: false },
+      bookedBy: { $eq: null },
       preBookPeriod: { $gte: preBookPeriod },
     });
 
@@ -132,6 +132,7 @@ const book = {
     tents.forEach(async (tent) => {
       const modifiedTent = tent;
       modifiedTent.isBooked = true;
+      modifiedTent.bookedBy = user.id;
       await modifiedTent.save();
     });
     // Return the booking token's id
