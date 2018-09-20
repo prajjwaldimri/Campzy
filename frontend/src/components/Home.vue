@@ -9,15 +9,15 @@
       hint="You can search for Nature, Leh, Mountains, etc.").mb-1
 
       .d-flex.actions-flex
-        v-flex(justify-center align-center).button-flex.px-1
+        v-flex(justify-center align-center).button-flex.px-2
           v-btn(outline color="blue" fab to="login")
             v-icon vpn_key
           h3.subheading Login/Register
-        v-flex(justify-center align-center).button-flex
+        v-flex(justify-center align-center).button-flex.px-1
           v-btn(color="orange darken-2" fab :to="profile" outline)
             v-icon trending_up
           h3.subheading Trending Camps
-        v-flex(justify-center align-center).button-flex.px-1
+        v-flex(justify-center align-center).button-flex.px-2
           v-btn(color="green darken-2" fab to="profile" outline)
             v-icon account_box
           h3.subheading My Account
@@ -112,6 +112,7 @@ export default {
     .actions-flex {
       width: 100%;
       align-content: space-between;
+      flex-wrap: wrap;
 
       .button-flex {
         display: flex;

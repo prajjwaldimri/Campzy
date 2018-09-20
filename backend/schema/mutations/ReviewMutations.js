@@ -1,11 +1,12 @@
 const graphql = require('graphql');
 const ReviewModel = require('../../models/review');
+const CampModel = require('../../models/camp');
 
 const ReviewType = require('../types/ReviewType');
 
 const { GraphQLString, GraphQLFloat } = graphql;
 
-const { NotLoggedinError } = require('../graphqlErrors');
+const { NotLoggedinError, CampNotAvailableError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const addReview = {
@@ -21,12 +22,30 @@ const addReview = {
       throw new NotLoggedinError();
     }
 
+    const camp = await CampModel.findById(args.campId);
+
+    if (camp === null) {
+      throw new CampNotAvailableError();
+    }
+
     const review = await ReviewModel.create({
       stars: args.stars,
       comment: args.comment,
       camp: args.campId,
       user: user.id,
     });
+
+    // Calculate the average review
+    const allCampReviews = await ReviewModel.find({ camp: args.campId });
+    let averageRating = 0;
+
+    for (let i = 0; i < allCampReviews.length; i += 1) {
+      averageRating += allCampReviews[i].stars;
+    }
+
+    camp.averageRating = averageRating / allCampReviews.length;
+    camp.ratingsCount = allCampReviews.length;
+    await camp.save();
 
     return review;
   },
