@@ -201,40 +201,6 @@ export default {
   },
 
   methods: {
-    getBookings() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
-      }
-
-      const bookings = `query campBookings($id : String!){
-        campBookings(id : $id){
-          bookings {
-            id,
-            user,
-            camp,
-            startDate,
-            endDate
-          }
-        }
-      }`;
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-      const variables = {
-        id: this.camp.id,
-      };
-      client.request(bookings, variables).then((data) => {
-        console.log(data);
-        // this.getCampDetails();
-      }).catch((err) => {
-        console.log(err);
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      });
-    },
-
-
     campBookingStatus(campAvailable, campId) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -270,14 +236,12 @@ export default {
       axios.delete('/deleteDocuments', {
         data: { documentName },
       }).then((res) => {
-        console.log(res.data);
         this.deleteDocumentFromCamp(res.data);
       }).catch((err) => {
         EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
       });
     },
     deleteDocumentFromCamp(docName) {
-      console.log(docName);
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
@@ -294,7 +258,6 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { });
     },
@@ -316,12 +279,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-          this.getImages = res.data;
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-          this.updateImagesToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingImages = false; });
+        this.getImages = res.data;
+        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+        this.updateImagesToCamp();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+      }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -369,14 +332,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-            res.data.forEach((item) => {
-              this.getOwnerDocuments.push(item.key);
-            });
-            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-            this.saveDocumentsToCamp();
-          }).catch(() => {
-            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-          }).finally(() => { this.uploadingDocuments = false; });
+          res.data.forEach((item) => {
+            this.getOwnerDocuments.push(item.key);
+          });
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+          this.saveDocumentsToCamp();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -414,7 +377,6 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
-        console.log(data);
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
@@ -434,9 +396,7 @@ export default {
         } else {
           this.viewDocument = true;
         }
-        this.getBookings();
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
@@ -500,7 +460,6 @@ export default {
         this.getCampDetails();
         EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { });
     },

@@ -11,7 +11,6 @@ const {
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 const BlogModel = require('../../models/blog.js');
-const BookingModel = require('../../models/booking.js');
 
 const { GraphQLString, GraphQLList, GraphQLInt } = graphql;
 
@@ -210,31 +209,6 @@ const getCurrentUserBlog = {
   },
 };
 
-const getCampBookings = {
-  type: UserType,
-  args: {
-    id: { type: GraphQLString },
-  },
-  async resolve(parent, args, context) {
-    try {
-      const user = await auth.getAuthenticatedUser(context.req);
-      const userData = await UserModel.findById(user.id);
-      const isUserCampOwner = await auth.isUserCampOwner(userData);
-      if (userData === null) {
-        throw new NotLoggedinError();
-      }
-      if (!isUserCampOwner) {
-        throw new PrivilegeError();
-      }
-
-      const getBooking = await BookingModel.find({ camp: args.id });
-      return { bookings: getBooking };
-    } catch (err) {
-      return err;
-    }
-  },
-};
-
 const isEmailAvailable = {
   type: UserType,
   args: {
@@ -260,5 +234,4 @@ module.exports = {
   searchParticularUser,
   getCurrentUserBlog,
   isEmailAvailable,
-  getCampBookings,
 };

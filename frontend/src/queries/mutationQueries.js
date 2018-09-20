@@ -40,13 +40,13 @@ const resetPasswordMutation = `mutation resetPassword($newPassword: String!, $co
   }
 }`;
 
-const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!, $surgePrice: String!) {
-  addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime , surgePrice: $surgePrice){
+const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: String!) {
+  addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
     type,
     capacity,
     bookingPrice,
     preBookPeriod,
-    surgePrice
+    surgePrice,
   }
 }`;
 const sendOTP = `mutation sendOTP($phoneNumber: String!) {

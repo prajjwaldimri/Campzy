@@ -6,7 +6,8 @@ const auth = require('../../config/auth');
 
 const { NotLoggedinError } = require('../graphqlErrors');
 
-const { GraphQLList } = graphql;
+const { GraphQLList, GraphQLString } = graphql;
+const { PrivilegeError } = require('../graphqlErrors');
 
 const getUserActiveBookings = {
   type: new GraphQLList(BookingType),
@@ -46,6 +47,48 @@ const getUserActiveBookings = {
   },
 };
 
+const getCampBookings = {
+  type: new GraphQLList(BookingType),
+  args: {
+    id: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      const getBooking = await BookingModel.find({ camp: args.id }).populate(
+        'user tent',
+      );
+      const campBookings = [];
+
+      getBooking.forEach((campBooking) => {
+        let newCampBooking = {};
+
+        newCampBooking = JSON.parse(JSON.stringify(campBooking));
+        newCampBooking.startDate = new Date(campBooking.startDate);
+        newCampBooking.endDate = new Date(campBooking.endDate);
+        newCampBooking.amount = campBooking.amount.toString();
+        campBookings.push(newCampBooking);
+      });
+      return campBookings;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 const getUserPastBookings = {};
 
-module.exports = { getUserActiveBookings, getUserPastBookings };
+module.exports = {
+  getUserActiveBookings,
+  getUserPastBookings,
+  getCampBookings,
+};

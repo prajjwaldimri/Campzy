@@ -60,6 +60,7 @@ export default {
       isTableLoading: false,
       closeBookingDialog: false,
       closeBooking: true,
+      isTentBooked: '',
     };
   },
   mounted() {

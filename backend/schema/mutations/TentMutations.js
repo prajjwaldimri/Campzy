@@ -15,7 +15,6 @@ const addTent = {
     capacity: { type: GraphQLString },
     type: { type: GraphQLString },
     bookingPrice: { type: GraphQLString },
-    surgePrice: { type: GraphQLString },
     preBookPeriod: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
@@ -29,12 +28,14 @@ const addTent = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
+      const ownedCamp = await CampModel.findOne(
+        { ownerId: userData._id },
+        'id',
+      );
       const tent = new TentModel({
         capacity: args.capacity,
         type: args.type,
         bookingPrice: args.bookingPrice,
-        surgePrice: args.surgePrice,
         preBookPeriod: args.preBookPeriod,
         camp: ownedCamp._id,
       });
@@ -67,7 +68,10 @@ const updateTent = {
         throw new PrivilegeError();
       }
 
-      const ownedCamp = await CampModel.findOne({ ownerId: userData._id }, 'id');
+      const ownedCamp = await CampModel.findOne(
+        { ownerId: userData._id },
+        'id',
+      );
       const tent = new TentModel({
         capacity: args.capacity,
         isBooked: args.isBooked,
@@ -103,7 +107,9 @@ const deleteTent = {
 
       const tent = await TentModel.findById(args.id, 'camp');
       const associatedCamp = await CampModel.findById(tent.camp);
-      const newInventory = associatedCamp.inventory.filter(value => value !== args.id);
+      const newInventory = associatedCamp.inventory.filter(
+        value => value !== args.id,
+      );
       associatedCamp.inventory = newInventory;
       await associatedCamp.save();
       return await TentModel.findByIdAndRemove(args.id);
