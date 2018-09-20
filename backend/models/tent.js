@@ -8,9 +8,10 @@ const TentSchema = new Schema({
   isBooked: { type: Boolean, default: false },
   bookingPrice: Number,
   preBookPeriod: Number,
+  surgePrice: Number,
   camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
   bookedBy: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
   },
   isAvailable: { type: Boolean, default: false },

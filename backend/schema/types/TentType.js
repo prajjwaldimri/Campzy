@@ -16,6 +16,7 @@ const TentType = new GraphQLObjectType({
     type: { type: GraphQLString },
     isBooked: { type: GraphQLBoolean },
     bookingPrice: { type: GraphQLInt },
+    surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
     bookedBy: { type: GraphQLID },
     isAvailable: { type: GraphQLBoolean },

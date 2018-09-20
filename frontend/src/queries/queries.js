@@ -24,6 +24,7 @@ const getAllTentsQuery = `query allTents{
       preBookPeriod
       isBooked
       isAvailable
+      surgePrice
     }
   }
   `;
