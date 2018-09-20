@@ -110,9 +110,7 @@ export default {
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.allTents;
-        console.log(this.tents);
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {
         this.isTableLoading = false;

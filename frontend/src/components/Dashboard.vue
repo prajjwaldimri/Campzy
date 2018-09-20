@@ -18,7 +18,7 @@
           v-list.pt-3
             v-list-tile(avatar)
               v-list-tile-avatar
-                img(src="https://randomuser.me/api/portraits/men/85.jpg")
+                img(:src="userProfileImage")
               v-list-tile-content
                 v-list-tile-title.increase-letter-spacing-2 {{user.name}}
         v-container.side-container(fluid)
@@ -123,6 +123,7 @@ export default {
       isBlogger: false,
       isDrawerOpen: true,
       bottomNav: 0,
+      userProfileImage: '',
       adminSteps: [
         {
           target: '#v-step-0',
@@ -197,6 +198,8 @@ export default {
       client.request(query)
         .then((data) => {
           this.user = data.currentUser;
+          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${this.user.name}`;
+
           this.isLoggedIn = true;
           if (this.user.type !== 'Admin' && this.user.type !== 'CampOwner' && this.user.type !== 'Blogger') {
             this.$router.push('/');
