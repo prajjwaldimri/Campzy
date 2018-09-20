@@ -19,7 +19,6 @@
           td.font-weight-bold {{props.item.type}}
           td {{props.item.capacity}} Persons
           td Rs. {{props.item.bookingPrice}}
-          td Rs. {{props.item.surgePrice}}
           td {{props.item.preBookPeriod}} Days
           td {{props.item.bookedBy}}
           td {{props.item.isBooked}}
@@ -49,7 +48,6 @@ export default {
         },
         { text: 'Tent Capacity', value: 'capacity' },
         { text: 'Booking Price', value: 'bookingPrice' },
-        { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
         { text: 'Booked By', value: 'bookedBy' },
         { text: 'Is Booked', value: 'isBooked' },
@@ -60,6 +58,7 @@ export default {
       isTableLoading: false,
       closeBookingDialog: false,
       closeBooking: true,
+      isTentBooked: '',
     };
   },
   mounted() {

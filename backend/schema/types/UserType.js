@@ -23,17 +23,6 @@ const LocalBlogType = new GraphQLObjectType({
   }),
 });
 
-const CampBookingsType = new GraphQLObjectType({
-  name: 'CampBooking',
-  fields: () => ({
-    id: { type: GraphQLID },
-    user: { type: GraphQLID },
-    camp: { type: GraphQLID },
-    startDate: { type: GraphQLString },
-    endDate: { type: GraphQLString },
-  }),
-});
-
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
@@ -53,7 +42,6 @@ const UserType = new GraphQLObjectType({
     },
     googleToken: { type: GraphQLString },
     facebookToken: { type: GraphQLString },
-    bookings: { type: new GraphQLList(CampBookingsType) },
   }),
 });
 

@@ -23,8 +23,6 @@ const getAllTentsQuery = `query allTents{
       bookingPrice
       preBookPeriod
       isBooked
-      surgePriceAdult
-      surgePriceChildren
       isAvailable
     }
   }
@@ -211,6 +209,19 @@ const getUserActiveBookings = `query getUserActiveBookings {
   }
 }`;
 
+const campBookings = `query campBookings($id : String!){
+        campBookings(id : $id){
+            user {
+              name
+            },
+            tentCount,
+           startDate,
+           endDate,
+           personCount,
+           amount,
+        }
+      }`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -229,4 +240,5 @@ module.exports = {
   getBlogById,
   isEmailAvailable,
   getUserActiveBookings,
+  campBookings,
 };

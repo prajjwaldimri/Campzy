@@ -43,12 +43,13 @@ const RootQuery = new GraphQLObjectType({
     sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,
-    campBookings: UserQueries.getCampBookings,
 
     currentUserBlogs: UserQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,
     getUpdateBlog: BlogQueries.getUpdateBlog,
     getUserActiveBookings: BookingQueries.getUserActiveBookings,
+
+    campBookings: BookingQueries.getCampBookings,
   },
 });
 
