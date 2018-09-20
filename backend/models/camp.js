@@ -21,7 +21,9 @@ const CampSchema = new Schema({
     required: true,
     unique: true,
     sparse: true,
-    validate: [validate({ validator: 'isEmail', message: 'Not a valid email' })],
+    validate: [
+      validate({ validator: 'isEmail', message: 'Not a valid email' }),
+    ],
   },
   images: [String],
   heroImage: String,
@@ -30,7 +32,10 @@ const CampSchema = new Schema({
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },
   longDescription: String,
-  tags: { type: [String], validate: [val => val.length <= 10, 'Only 10 tags are allowed'] },
+  tags: {
+    type: [String],
+    validate: [val => val.length <= 10, 'Only 10 tags are allowed'],
+  },
   amenities: { type: [String] },
   services: { type: [String] },
   placesOfInterest: { type: [String] },
@@ -49,6 +54,8 @@ const CampSchema = new Schema({
   terrain: String,
   inventory: [{ type: Schema.Types.ObjectId, ref: 'Tent' }],
   campDocuments: [String],
+  averageRating: { type: Number, default: 0 },
+  ratingsCount: { type: Number, default: 0 },
 });
 
 CampSchema.index(
