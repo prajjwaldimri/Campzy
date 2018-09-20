@@ -77,7 +77,7 @@
                           v-flex.mt-4(xs12)
                             v-btn.white--text(@click='uploadDocuments' color='green'
                             :loading='uploadingDocuments') Upload Documents
-                  v-flex(xs12 md8 v-show='viewDocument')
+                  v-flex(xs12 md8)
                     v-layout(column)
                       v-card.body-card(v-for='(document, index) in camp.campDocuments' width='100%')
                         v-layout(row wrap)
@@ -191,8 +191,8 @@ export default {
       getImages: '',
       uploadingImages: false,
       campSwitchLabel: '',
-      isDocument: false,
       viewDocument: false,
+      isDocument: false,
     };
   },
 
@@ -201,6 +201,40 @@ export default {
   },
 
   methods: {
+    getBookings() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+
+      const bookings = `query campBookings($id : String!){
+        campBookings(id : $id){
+          bookings {
+            id,
+            user,
+            camp,
+            startDate,
+            endDate
+          }
+        }
+      }`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: this.camp.id,
+      };
+      client.request(bookings, variables).then((data) => {
+        console.log(data);
+        // this.getCampDetails();
+      }).catch((err) => {
+        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+
     campBookingStatus(campAvailable, campId) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -282,12 +316,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        this.getImages = res.data;
-        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-        this.updateImagesToCamp();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-      }).finally(() => { this.uploadingImages = false; });
+          this.getImages = res.data;
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+          this.updateImagesToCamp();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -335,14 +369,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-          res.data.forEach((item) => {
-            this.getOwnerDocuments.push(item.key);
-          });
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveDocumentsToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingDocuments = false; });
+            res.data.forEach((item) => {
+              this.getOwnerDocuments.push(item.key);
+            });
+            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+            this.saveDocumentsToCamp();
+          }).catch(() => {
+            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+          }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -400,6 +434,7 @@ export default {
         } else {
           this.viewDocument = true;
         }
+        this.getBookings();
       }).catch((err) => {
         console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
