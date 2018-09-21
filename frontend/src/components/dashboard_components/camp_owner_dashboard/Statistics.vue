@@ -29,15 +29,15 @@
               v-layout(row wrap)
                 v-flex(xs12 md6)
                   v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Available Tents
+                    h3.font-weight-normal.text-uppercase Total Tents
                     span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="1000" :duration="2")
+                      ICountUp(:startVal="0" :endVal="totalTents" :duration="2")
                       |  Tents
                 v-flex(xs12 md6)
                   v-layout(column).align-center
                     h3.font-weight-normal.text-uppercase Booked Tents
                     span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
+                      ICountUp(:startVal="0" :endVal="bookedTents" :duration="2")
                       |  Tents
         v-flex(xs12 md4)
           v-card
@@ -177,7 +177,7 @@
 import ICountUp from 'vue-countup-v2';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
-import { campBookings } from '../../../queries/queries';
+import { campBookings, countTents, countBookedTent } from '../../../queries/queries';
 
 export default {
   name: 'defaultDash',
@@ -191,6 +191,8 @@ export default {
       isTypeAdmin: false,
       user: [],
       campBookings: [],
+      totalTents: 0,
+      bookedTents: 0,
       headers: [
         {
           text: 'Customer Id',
@@ -251,8 +253,48 @@ export default {
 
   mounted() {
     this.getCurrentUserType();
+    this.countBooked();
   },
+
   methods: {
+    countBooked() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countBookedTent)
+        .then((data) => {
+          this.bookedTents = data.countBookedTent.bookedTentCount;
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
+    countTent() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countTents)
+        .then((data) => {
+          this.totalTents = data.countCampTents.count;
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
     getCurrentUserType() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -271,6 +313,7 @@ export default {
           if (data.currentUser.type === 'CampOwner') {
             this.isTypeCampOwner = true;
             this.getCampId();
+            this.countTent();
           }
           if (data.currentUser.type === 'Admin') {
             this.isTypeAdmin = true;

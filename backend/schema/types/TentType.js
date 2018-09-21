@@ -21,6 +21,8 @@ const TentType = new GraphQLObjectType({
     preBookPeriod: { type: GraphQLString },
     bookedBy: { type: UserType },
     isAvailable: { type: GraphQLBoolean },
+    count: { type: GraphQLInt },
+    bookedTentCount: { type: GraphQLInt },
   }),
 });
 

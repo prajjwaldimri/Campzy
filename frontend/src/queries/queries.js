@@ -32,6 +32,17 @@ const getAllTentsQuery = `query allTents{
   }
   `;
 
+const countTents = `query countCampTents{
+  countCampTents{
+    count,
+}}`;
+
+const countBookedTent = `query countBookedTent{
+  countBookedTent{
+    bookedTentCount,
+  }
+}`;
+
 const getCurrentUserCampDetails = `query currentUserCamp{
         currentUserCamp {
           id,
@@ -245,4 +256,6 @@ module.exports = {
   isEmailAvailable,
   getUserActiveBookings,
   campBookings,
+  countTents,
+  countBookedTent,
 };

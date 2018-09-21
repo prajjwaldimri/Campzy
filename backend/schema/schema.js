@@ -34,6 +34,8 @@ const RootQuery = new GraphQLObjectType({
     tent: TentQueries.getTent,
     allTents: TentQueries.getAllTents,
     bestTentinCamp: TentQueries.getBestTentinCamp,
+    countCampTents: TentQueries.countCampInventory,
+    countBookedTent: TentQueries.countBookedTent,
 
     currentUser: UserQueries.currentUser,
     user: UserQueries.getUser,
