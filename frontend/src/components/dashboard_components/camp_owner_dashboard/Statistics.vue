@@ -277,8 +277,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
-          // EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
     getCampId() {
@@ -300,7 +299,6 @@ export default {
           this.getBookings(data.currentUserCamp.id);
         })
         .catch((err) => {
-          console.log(err);
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
@@ -317,10 +315,8 @@ export default {
         id: campID,
       };
       client.request(campBookings, variables).then((data) => {
-        console.log(data);
         this.campBookings = data.campBookings;
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },

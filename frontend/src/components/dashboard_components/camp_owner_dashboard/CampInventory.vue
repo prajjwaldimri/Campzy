@@ -7,10 +7,11 @@
         v-text-field(solo label="Search" append-icon="search")
 
       v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
-        v-dialog(v-model="addTentDialog" persistent max-width="500px")
-          v-btn(color="green" slot="activator").white--text Add Tent
-            v-icon(right dark) add_box
-          addTent
+        v-switch(v-model='campAvailable.isAvailable' color='green'
+        @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
+        :label='campSwitchLabel'
+        )
+
 
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
@@ -21,11 +22,17 @@
           td Rs. {{props.item.bookingPrice}}
           td Rs. {{props.item.surgePrice}}
           td {{props.item.preBookPeriod}} Days
-          td {{props.item.bookedBy}}
-          td {{props.item.isBooked}}
+          td(v-if='props.item.bookedBy') {{props.item.bookedBy.name}}
+          td(v-else) none
+          td.align-center
+            v-checkbox(v-model='props.item.isBooked' color='green' disabled)
           td.align-center
             v-switch(v-model='props.item.isAvailable' color='green'
             @change='openTentBooking(props.item.isAvailable,props.item.id)')
+    v-dialog(v-model="addTentDialog" persistent max-width="500px")
+      v-btn(color="green" slot="activator" fab dark bottom right fixed)
+        v-icon add
+      addTent
 </template>
 
 <script>
@@ -33,7 +40,7 @@ import { GraphQLClient } from 'graphql-request';
 import { getAllTentsQuery } from '../../../queries/queries';
 import AddTent from './TentManager/AddTent.vue';
 import { EventBus } from '../../../event-bus';
-import { closeTentBooking } from '../../../queries/mutationQueries';
+import { closeTentBooking, campBooking } from '../../../queries/mutationQueries';
 
 export default {
   components: {
@@ -51,8 +58,8 @@ export default {
         { text: 'Booking Price', value: 'bookingPrice' },
         { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
-        { text: 'Booked By', value: 'bookedBy' },
-        { text: 'Is Booked', value: 'isBooked' },
+        { text: 'Booked By', value: 'bookedBy.name' },
+        { text: 'IS Booked ?', value: 'isBooked' },
         { text: 'Open Booking', value: 'actions', sortable: false },
       ],
       tents: [],
@@ -61,6 +68,8 @@ export default {
       closeBookingDialog: false,
       closeBooking: true,
       isTentBooked: '',
+      campAvailable: [],
+      campSwitchLabel: '',
     };
   },
   mounted() {
@@ -72,6 +81,7 @@ export default {
   },
 
   methods: {
+
     openTentBooking(isCloseBooking, tentId) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -108,10 +118,64 @@ export default {
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.allTents;
+        this.getCampStatus();
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => {
         this.isTableLoading = false;
+      });
+    },
+
+    getCampStatus() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+
+      const campStatus = `query currentUserCamp{
+        currentUserCamp {
+          id,
+          isAvailable,
+        }
+      }`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(campStatus).then((data) => {
+        this.campAvailable = data.currentUserCamp;
+        if (this.campAvailable.isAvailable === false) {
+          this.campSwitchLabel = 'Open Camp Bookings';
+        } else {
+          this.campSwitchLabel = 'Close Camp Bookings';
+        }
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    campBookingStatus(campAvailable, campId) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: campId,
+        isAvailable: campAvailable,
+      };
+      client.request(campBooking, variables).then((data) => {
+        if (data.campAvailability.isAvailable === false) {
+          EventBus.$emit('show-error-notification-short', 'Booking Closed for this Camp');
+        } else {
+          EventBus.$emit('show-success-notification-short', 'Booking Open for this Camp');
+        }
+        this.getCampStatus();
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
   },

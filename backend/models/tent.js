@@ -11,7 +11,7 @@ const TentSchema = new Schema({
   surgePrice: Number,
   camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
   bookedBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'User',
   },
   isAvailable: { type: Boolean, default: false },
