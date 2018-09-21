@@ -169,7 +169,7 @@ export default {
       personNumbers: [1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      comments: [1, 2, 3, 4],
+      comments: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       mapUri: '',
       bookButtonLoading: false,
       isBookingPossible: true,

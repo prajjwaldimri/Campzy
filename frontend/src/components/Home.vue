@@ -55,7 +55,7 @@ export default {
     // Animate Home Elements
 
     anime({
-      targets: ['.campzy-logo', '.search-flex .v-input', '.home-flex .account-flex', '.home-flex .users-flex'],
+      targets: ['.campzy-logo', '.search-flex .v-input', '.home-flex .account-flex', '.home-flex .actions-flex'],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
