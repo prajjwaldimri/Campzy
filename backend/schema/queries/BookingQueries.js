@@ -87,8 +87,35 @@ const getCampBookings = {
 
 const getUserPastBookings = {};
 
+const countCampActiveBookings = {
+  type: BookingType,
+  args: {
+    id: { type: GraphQLString },
+  },
+
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      const countActiveBooking = await BookingModel.count({ camp: args.id });
+      return { countActiveBooking };
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   getUserActiveBookings,
   getUserPastBookings,
   getCampBookings,
+  countCampActiveBookings,
 };

@@ -13,7 +13,7 @@
                   v-layout(column).align-center
                     h3.font-weight-normal.text-uppercase Active Bookings
                     span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="1000" :duration="2")
+                      ICountUp(:startVal="0" :endVal="activeCampBooking" :duration="2")
                       |  Bookings
                 v-flex(xs12 md6)
                   v-layout(column).align-center
@@ -57,7 +57,7 @@
                     color="green darken-3" background-color="grey darken-1"
                     empty-icon="$vuetify.icons.ratingFull"
                     half-increments
-                    hover)
+                    hover readonly)
       v-layout(row wrap)
         v-flex(xs12)
           v-card(flat)
@@ -177,7 +177,9 @@
 import ICountUp from 'vue-countup-v2';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
-import { campBookings, countTents, countBookedTent } from '../../../queries/queries';
+import {
+  campBookings, countTents, countBookedTent, countCampActiveBooking,
+} from '../../../queries/queries';
 
 export default {
   name: 'defaultDash',
@@ -194,6 +196,7 @@ export default {
       totalTents: 0,
       bookedTents: 0,
       campRating: 0,
+      activeCampBooking: 0,
       headers: [
         {
           text: 'Customer Id',
@@ -254,7 +257,6 @@ export default {
 
   mounted() {
     this.getCurrentUserType();
-    this.countBooked();
   },
 
   methods: {
@@ -291,6 +293,7 @@ export default {
       client.request(countTents)
         .then((data) => {
           this.totalTents = data.countCampTents.count;
+          this.countBooked();
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
@@ -342,6 +345,7 @@ export default {
       client.request(getcampID)
         .then((data) => {
           this.getBookings(data.currentUserCamp.id);
+          this.countBookings(data.currentUserCamp.id);
           this.campRating = data.currentUserCamp.rating;
         })
         .catch((err) => {
@@ -362,6 +366,25 @@ export default {
       };
       client.request(campBookings, variables).then((data) => {
         this.campBookings = data.campBookings;
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    countBookings(campId) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: campId,
+      };
+      client.request(countCampActiveBooking, variables).then((data) => {
+        this.activeCampBooking = data.countCampActiveBookings.countActiveBooking;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });

@@ -27,6 +27,7 @@ const BookingType = new GraphQLObjectType({
     amount: { type: GraphQLFloat },
     startDate: { type: GraphQLDate },
     endDate: { type: GraphQLDate },
+    countActiveBooking: { type: GraphQLInt },
   }),
 });
 

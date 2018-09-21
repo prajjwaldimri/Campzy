@@ -53,6 +53,7 @@ const RootQuery = new GraphQLObjectType({
     getUserActiveBookings: BookingQueries.getUserActiveBookings,
 
     campBookings: BookingQueries.getCampBookings,
+    countCampActiveBookings: BookingQueries.countCampActiveBookings,
   },
 });
 

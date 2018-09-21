@@ -237,6 +237,12 @@ const campBookings = `query campBookings($id : String!){
         }
       }`;
 
+const countCampActiveBooking = `query countCampActiveBookings($id: String!){
+  countCampActiveBookings(id: $id){
+    countActiveBooking
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -258,4 +264,5 @@ module.exports = {
   campBookings,
   countTents,
   countBookedTent,
+  countCampActiveBooking,
 };
