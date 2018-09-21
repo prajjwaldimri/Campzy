@@ -53,7 +53,7 @@
                 v-flex(xs12 md6)
                   v-layout(column).align-center
                     h3.font-weight-normal.text-uppercase Camp Rating
-                    v-rating.mt-3(v-model="rating" small
+                    v-rating.mt-3(v-model="campRating" small
                     color="green darken-3" background-color="grey darken-1"
                     empty-icon="$vuetify.icons.ratingFull"
                     half-increments
@@ -193,6 +193,7 @@ export default {
       campBookings: [],
       totalTents: 0,
       bookedTents: 0,
+      campRating: 0,
       headers: [
         {
           text: 'Customer Id',
@@ -330,6 +331,7 @@ export default {
       const getcampID = `query currentUserCamp{
         currentUserCamp {
         id,
+        rating,
       }}`;
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -340,6 +342,7 @@ export default {
       client.request(getcampID)
         .then((data) => {
           this.getBookings(data.currentUserCamp.id);
+          this.campRating = data.currentUserCamp.rating;
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
