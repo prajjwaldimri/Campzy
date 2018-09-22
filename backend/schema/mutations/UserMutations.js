@@ -10,6 +10,7 @@ const {
   WrongEmailTokenError,
   WrongPasswordError,
   UserNotFoundError,
+  NotLoggedinError,
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 const TokenModel = require('../../models/token');
@@ -174,10 +175,28 @@ const updateUser = {
   },
 };
 
+const addCampToWishlist = {
+  type: UserType,
+  args: {
+    campId: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    const user = await auth.getAuthenticatedUser(context.req);
+    const userData = await UserModel.findById(user.id).select('wishlist');
+    if (userData === null) {
+      throw new NotLoggedinError();
+    }
+
+    userData.wishlist.push(args.campId);
+    await userData.save();
+  },
+};
+
 module.exports = {
   registerUser,
   resetPassword,
   updateUser,
   googleAuth,
   facebookAuth,
+  addCampToWishlist,
 };

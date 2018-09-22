@@ -52,6 +52,7 @@ const UserSchema = new Schema({
       ref: 'Blog',
     },
   ],
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Camp' }],
 });
 
 UserSchema.index({
