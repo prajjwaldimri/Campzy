@@ -47,6 +47,7 @@ export default {
       userProfileImage: '',
       userName: '',
       bottomNav: 0,
+
     };
   },
   components: {
@@ -74,6 +75,15 @@ export default {
       client.request(query)
         .then((data) => {
           this.userName = data.currentUser.name;
+          if (data.currentUser.type === 'Admin') {
+            this.isAdmin = true;
+          }
+          if (data.currentUser.type === 'CampOwner') {
+            this.isCampOwner = true;
+          }
+          if (data.currentUser.type === 'Blogger') {
+            this.isBlogger = true;
+          }
           if (this.userName === null) {
             this.userName = 'Unnamed User';
           }

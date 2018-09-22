@@ -114,7 +114,7 @@
                 h2.font-weight-bold.headline CAMP DETAILS
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
-                    v-layout(row)
+                    v-layout(row wrap)
                       v-flex(xs12 md6)
                         v-layout(column)
                           span.headline Amenities
@@ -135,12 +135,14 @@
                               v-checkbox(label='Charging Points' color='success' v-model='amenities.chargingPoints')
 
                       v-spacer
-                      v-flex(xs6)
-                        //- v-combobox(v-model='placesOfInterest' attach chips
-                        //- label='Places of Interest' multiple clearable)
-                    v-flex(xs12)
-                        //- v-combobox(v-model='tags' attach chips
-                        //- label='Tags' multiple clearable)
+                      v-flex(xs12 md6)
+                        v-layout(column)
+                          v-flex(xs12 md6)
+                            v-combobox(v-model='placesOfInterest' attach chips
+                            label='Places of Interest' multiple clearable)
+                          v-flex.mt-4(xs12 md6)
+                              v-combobox(v-model='tags' attach chips
+                              label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
                       v-model='camp.shortDescription')
@@ -173,6 +175,7 @@
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
 import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
@@ -182,6 +185,9 @@ import {
 import { EventBus } from '../../../event-bus';
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   data() {
     return {
       el: 0,
