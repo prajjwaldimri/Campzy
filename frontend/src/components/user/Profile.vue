@@ -25,7 +25,7 @@
      fixed).hidden-md-and-up
       v-btn(dark @click="$router.push('/profile')")
         v-icon settings
-      v-btn(dark @click="$router.push('/profile/activeBooking')")
+      v-btn(dark @click="$router.push('/profile/activeBookings')")
         v-icon event
       v-btn(dark)
         v-icon receipt
