@@ -115,9 +115,25 @@
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-layout(row)
-                      v-flex(xs5)
-                        v-select(:items="amenitiesItems" v-model="amenities"
-                        multiple chips label="Amenities"  clearable)
+                      v-flex(xs12 md6)
+                        v-layout(column)
+                          span.headline Amenities
+                          v-layout(row wrap)
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Washroom-Attached' color='success' v-model='amenities.washRoomAttached')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Bonfire' color='success' v-model='amenities.bonfire')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='24 Hour Hot Water' color='success' v-model='amenities.hotWater')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Mobile Connectivity' color='success' v-model='amenities.mobileConnectivity')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Meals Included' color='success' v-model='amenities.mealsInclude')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Pets Allowed' color='success' v-model='amenities.petsAllowed')
+                            v-flex(xs6 md4)
+                              v-checkbox(label='Charging Points' color='success' v-model='amenities.chargingPoints')
+
                       v-spacer
                       v-flex(xs6)
                         //- v-combobox(v-model='placesOfInterest' attach chips
@@ -161,7 +177,7 @@ import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
 import {
-  saveCampDetails, campBooking, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument,
+  saveCampDetails, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument, addAmenities,
 } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -171,8 +187,16 @@ export default {
       el: 0,
       camp: {},
       isDataUpdating: false,
-      amenitiesItems: ['Pool Table', 'Ping Pong', 'Carpet Ball', 'TV/Movies', 'Hockey Table', 'Shuffleboard', 'Fishing', 'Swimming', 'Zip Line'],
-      amenities: [],
+      amenitiesItems: [
+        { name: 'Washroom-Attached', value: true },
+        { name: 'Bonfire', value: true },
+        { name: '24 hour hot water', value: true },
+        { name: 'Mobile connectivity', value: true },
+        { name: 'Meals included', value: true },
+        { name: 'Pets allowed', value: true },
+        { name: 'Charging points', value: true },
+      ],
+      amenities: {},
       placesOfInterest: [],
       tags: [],
       panNumber: null,
@@ -187,6 +211,7 @@ export default {
       uploadingImages: false,
       viewDocument: false,
       isDocument: false,
+
     };
   },
 
@@ -249,12 +274,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-          this.getImages = res.data;
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-          this.updateImagesToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingImages = false; });
+        this.getImages = res.data;
+        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+        this.updateImagesToCamp();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+      }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -302,14 +327,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-            res.data.forEach((item) => {
-              this.getOwnerDocuments.push(item.key);
-            });
-            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-            this.saveDocumentsToCamp();
-          }).catch(() => {
-            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-          }).finally(() => { this.uploadingDocuments = false; });
+          res.data.forEach((item) => {
+            this.getOwnerDocuments.push(item.key);
+          });
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+          this.saveDocumentsToCamp();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -377,7 +402,6 @@ export default {
         url: this.camp.url,
         email: this.camp.email,
         ownerId: this.camp.ownerId,
-        amenities: this.amenities,
         placesOfInterest: this.placesOfInterest,
         shortDescription: this.camp.shortDescription,
         longDescription: this.camp.longDescription,
@@ -391,11 +415,40 @@ export default {
       });
       this.isDataUpdating = true;
       client.request(saveCampDetails, variables).then(() => {
-        this.getCampDetails();
+        this.saveAmenity();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isDataUpdating = false; });
+    },
+
+    saveAmenity() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        id: this.camp.id,
+        washRoomAttached: this.amenities.washRoomAttached,
+        bonfire: this.amenities.bonfire,
+        hotWater: this.amenities.hotWater,
+        mobileConnectivity: this.amenities.mobileConnectivity,
+        mealsInclude: this.amenities.mealsInclude,
+        petsAllowed: this.amenities.petsAllowed,
+        chargingPoints: this.amenities.chargingPoints,
+
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(addAmenities, variables).then(() => {
+        this.getCampDetails();
+        EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
+      }).catch((err) => {
+        console.log(err);
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      }).finally();
     },
 
     deleteImageFromAWS(imageName) {
@@ -456,7 +509,7 @@ export default {
   box-shadow: none;
 }
 .layout {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .item-align {

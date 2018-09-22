@@ -21,6 +21,19 @@ const CoordinateType = new GraphQLObjectType({
   }),
 });
 
+const AmenitiesType = new GraphQLObjectType({
+  name: 'Amenities',
+  fields: () => ({
+    washRoomAttached: { type: GraphQLBoolean },
+    bonfire: { type: GraphQLBoolean },
+    hotWater: { type: GraphQLBoolean },
+    mobileConnectivity: { type: GraphQLBoolean },
+    mealsInclude: { type: GraphQLBoolean },
+    petsAllowed: { type: GraphQLBoolean },
+    chargingPoints: { type: GraphQLBoolean },
+  }),
+});
+
 const CampType = new GraphQLObjectType({
   name: 'Camp',
   fields: () => ({
@@ -45,7 +58,7 @@ const CampType = new GraphQLObjectType({
     ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
-    amenities: { type: new GraphQLList(GraphQLString) },
+    amenities: { type: AmenitiesType },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
     images: { type: new GraphQLList(GraphQLString) },
     heroImage: { type: GraphQLString },
