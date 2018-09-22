@@ -99,7 +99,15 @@ const getCampByUrl = `query campUser($url: String!){
     longDescription,
     placesOfInterest,
     tags,
-    amenities,
+    amenities{
+      washRoomAttached,
+      bonfire,
+      hotWater,
+      mobileConnectivity,
+      mealsInclude,
+      petsAllowed,
+      chargingPoints,
+    },
     images,
     isAvailable,
     inventory{
