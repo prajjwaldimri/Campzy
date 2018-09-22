@@ -36,10 +36,10 @@
                 v-flex
                   v-layout(row)
                     v-flex(sm6)
-                      v-combobox(hint="Number of tents" persistent-hint
+                      v-select(hint="Number of tents" persistent-hint
                       v-model="tentCount" :items="tentNumbers")
                     v-flex(sm6)
-                      v-combobox(hint="People per tent" persistent-hint
+                      v-select(hint="People per tent" persistent-hint
                       v-model="personCount" :items="personNumbers")
 
                 v-flex
@@ -177,10 +177,10 @@
                         v-flex
                           v-layout(row)
                             v-flex(sm6)
-                              v-combobox(hint="Number of Tents" persistent-hint
+                              v-select(hint="Number of Tents" persistent-hint
                               v-model="tentCount" :items="tentNumbers")
                             v-flex(sm6)
-                              v-combobox(hint="People per tent" persistent-hint
+                              v-select(hint="People per tent" persistent-hint
                               v-model="personCount" :items="personNumbers")
 
                         v-flex
