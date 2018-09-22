@@ -225,6 +225,7 @@ const isEmailAvailable = `query isEmailAvailable($email: String!){
 
 const getUserActiveBookings = `query getUserActiveBookings {
   getUserActiveBookings{
+    code,
     user{
       name
     },

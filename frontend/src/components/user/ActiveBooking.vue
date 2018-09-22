@@ -9,6 +9,7 @@
               h5.headline.font-weight-medium {{booking.user.name}}
               router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
                 h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
+              h6.subheading.mt-3 Booking Id: {{booking.code}}
           v-divider(vertical).pr-5
 
           v-flex(md6).pl-5
