@@ -53,8 +53,17 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           url,
           shortDescription,
           longDescription,
-          amenities,
           placesOfInterest,
+          amenities{
+            washRoomAttached,
+            bonfire,
+            hotWater,
+            mobileConnectivity,
+            mealsInclude,
+            petsAllowed,
+            chargingPoints,
+
+          },
           tags,
           images,
           isAvailable,

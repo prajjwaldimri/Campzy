@@ -115,7 +115,6 @@ const updateUserCamp = {
     ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
-    amenities: { type: new GraphQLList(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args, context) {
@@ -140,8 +139,48 @@ const updateUserCamp = {
         url: args.url,
         tags: args.tags,
         ownerId: args.ownerId,
-        amenities: args.amenities,
         placesOfInterest: args.placesOfInterest,
+      });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const saveAmenities = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    washRoomAttached: { type: GraphQLBoolean },
+    bonfire: { type: GraphQLBoolean },
+    hotWater: { type: GraphQLBoolean },
+    mobileConnectivity: { type: GraphQLBoolean },
+    mealsInclude: { type: GraphQLBoolean },
+    petsAllowed: { type: GraphQLBoolean },
+    chargingPoints: { type: GraphQLBoolean },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      return await CampModel.findByIdAndUpdate(args.id, {
+        amenities: {
+          washRoomAttached: args.washRoomAttached,
+          bonfire: args.bonfire,
+          hotWater: args.hotWater,
+          mobileConnectivity: args.mobileConnectivity,
+          mealsInclude: args.mealsInclude,
+          petsAllowed: args.petsAllowed,
+          chargingPoints: args.chargingPoints,
+        },
       });
     } catch (err) {
       return err;
@@ -327,4 +366,5 @@ module.exports = {
   updateCampImages,
   updateCampDocuments,
   deleteCampDocument,
+  saveAmenities,
 };

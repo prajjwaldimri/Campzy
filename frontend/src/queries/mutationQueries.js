@@ -55,8 +55,14 @@ const sendOTP = `mutation sendOTP($phoneNumber: String!) {
   }
 }`;
 
-const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $amenities: [String], $placesOfInterest: [String], $tags: [String]!){
-  updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, amenities: $amenities, placesOfInterest: $placesOfInterest, tags:$tags){
+const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $ownerId: String!, $shortDescription: String!, $longDescription: String!, $placesOfInterest: [String], $tags: [String]!){
+  updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, ownerId: $ownerId, shortDescription: $shortDescription, longDescription: $longDescription, placesOfInterest: $placesOfInterest, tags:$tags){
+    id
+  }
+}`;
+
+const addAmenities = `mutation saveAmenities($id: String!,$washRoomAttached: Boolean!, $bonfire: Boolean!, $hotWater: Boolean!,$mobileConnectivity: Boolean!, $mealsInclude: Boolean!,$petsAllowed: Boolean!, $chargingPoints: Boolean!){
+  saveAmenities(id: $id,washRoomAttached: $washRoomAttached, bonfire: $bonfire, hotWater: $hotWater,mobileConnectivity: $mobileConnectivity, mealsInclude: $mealsInclude,petsAllowed: $petsAllowed, chargingPoints: $chargingPoints){
     id
   }
 }`;
@@ -163,4 +169,5 @@ module.exports = {
   deleteUserBlog,
   bookCampCheck,
   bookCamp,
+  addAmenities,
 };

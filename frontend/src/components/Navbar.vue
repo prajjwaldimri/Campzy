@@ -19,6 +19,11 @@
                 v-icon settings
               v-list-tile-content
                 v-list-tile-title Settings
+            v-list-tile(v-show='isAdmin || isCampOwner || isBlogger' @click="$router.push('/dashboard')")
+              v-list-tile-action
+                v-icon work
+              v-list-tile-content
+                v-list-tile-title Dashboard
             v-list-tile(@click='signOut')
               v-list-tile-action
                 v-icon directions_walk
@@ -43,6 +48,9 @@ export default {
     isLoggedIn: false,
     dropdown: false,
     user: {},
+    isBlogger: false,
+    isAdmin: false,
+    isCampOwner: false,
   }),
   props: {
     color: String,
@@ -58,7 +66,8 @@ export default {
     const query = `{currentUser {
         name,
         email,
-        dateOfBirth
+        dateOfBirth,
+        type,
       }}`;
     const client = new GraphQLClient('/graphql', {
       headers: {
@@ -69,6 +78,15 @@ export default {
     client.request(query)
       .then((data) => {
         this.user = data.currentUser;
+        if (this.user.type === 'Admin') {
+          this.isAdmin = true;
+        }
+        if (this.user.type === 'CampOwner') {
+          this.isCampOwner = true;
+        }
+        if (this.user.type === 'Blogger') {
+          this.isBlogger = true;
+        }
         this.isLoggedIn = true;
         if (this.user.name === null) {
           this.user.name = 'Unnamed User';
