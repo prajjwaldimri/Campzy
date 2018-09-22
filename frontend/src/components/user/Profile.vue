@@ -1,3 +1,4 @@
+/* global LC_API */
 <template lang="pug">
   div
     navbar(:dark="true")
@@ -35,7 +36,6 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { setTimeout } from 'timers';
 import navbar from '../Navbar.vue';
 
 import { EventBus } from '../../event-bus';
@@ -84,8 +84,8 @@ export default {
     }
 
 
-    var LC_API = LC_API || {};
-    LC_API.on_after_load = function () {
+    var LC_API = LC_API || {}; //eslint-disable-line
+    LC_API.on_after_load = () => {
       LC_API.hide_chat_window();
     };
   },

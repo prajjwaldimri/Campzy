@@ -40,7 +40,10 @@
 
           v-divider(vertical).pr-3
           v-flex(md3).pl-5
-            .d-flex.justify-center.align-center(style="height: 100%")
+            .d-flex.justify-center(style="height: 100%; flex-direction: column")
+              v-btn(color="primary" @click="showChat").white--text
+                v-icon.mr-2 live_help
+                span Need Help?
               v-btn(color="error").white--text
                 v-icon.mr-2 cancel
                 span Cancel Booking
@@ -49,6 +52,7 @@
 </template>
 
 <script>
+/* global LC_API */
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../event-bus';
 import { getUserActiveBookings } from '../../queries/queries';
@@ -89,6 +93,9 @@ export default {
         .finally(() => {
           NProgress.done();
         });
+    },
+    showChat() {
+      LC_API.open_chat_window();
     },
   },
 };
