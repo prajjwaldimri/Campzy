@@ -35,12 +35,34 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
+import { setTimeout } from 'timers';
 import navbar from '../Navbar.vue';
 
 import { EventBus } from '../../event-bus';
 
 export default {
   name: 'Profile',
+  metaInfo: {
+    script: [
+      // LiveChat
+      {
+        innerHTML: `window.__lc = window.__lc || {};
+    window.__lc.license = 10150997;
+    (function () {
+      var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+      lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+    })();`,
+        type: 'text/javascript',
+      },
+    ],
+    noscript: [
+      {
+        innerHTML: `<a href="https://www.livechatinc.com/chat-with/10150997/">Chat with us</a>,
+    powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener" target="_blank">LiveChat</a>`,
+      },
+    ],
+  },
   data() {
     return {
       drawer: true,
@@ -60,6 +82,12 @@ export default {
     } else {
       this.getProfileImage();
     }
+
+
+    var LC_API = LC_API || {};
+    LC_API.on_after_load = function () {
+      LC_API.hide_chat_window();
+    };
   },
   methods: {
     getProfileImage() {

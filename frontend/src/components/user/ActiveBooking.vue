@@ -54,6 +54,9 @@ import { EventBus } from '../../event-bus';
 import { getUserActiveBookings } from '../../queries/queries';
 
 export default {
+  metaInfo: {
+    title: 'Active Bookings',
+  },
   data() {
     return {
       bookings: [],
