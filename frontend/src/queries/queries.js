@@ -83,7 +83,15 @@ const getCampDetail = `query camp($id: String!){
       longDescription,
       placesOfInterest,
       tags,
-      amenities,
+      amenities{
+        washRoomAttached,
+        bonfire,
+        hotWater,
+        mobileConnectivity,
+        mealsInclude,
+        petsAllowed,
+        chargingPoints,
+      },
 
   }
 }

@@ -40,9 +40,24 @@
           h2.font-weight-normal Camp Details
         v-container(fluid)
           v-layout(column)
-            v-flex(xs12)
-              v-combobox(v-model='campDetail.amenities' attach chips
-              label='Amenities' multiple readonly)
+            v-flex(xs12 md6)
+              v-layout(column)
+                span.headline Amenities
+                v-layout(row wrap)
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Washroom-Attached' color='success' v-model='amenities.washRoomAttached')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Bonfire' color='success' v-model='amenities.bonfire')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='24 Hour Hot Water' color='success' v-model='amenities.hotWater')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Mobile Connectivity' color='success' v-model='amenities.mobileConnectivity')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Meals Included' color='success' v-model='amenities.mealsInclude')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Pets Allowed' color='success' v-model='amenities.petsAllowed')
+                  v-flex(xs6 md4)
+                    v-checkbox(label='Charging Points' color='success' v-model='amenities.chargingPoints')
             v-flex(xs12)
               v-combobox(v-model='campDetail.placesOfInterest' attach chips
               label='Places of Interest' multiple readonly)
@@ -65,6 +80,7 @@ export default {
   data() {
     return {
       campDetail: {},
+      amenities: {},
     };
   },
   mounted() {
@@ -86,6 +102,7 @@ export default {
       });
       client.request(getCampDetail, variables).then((data) => {
         this.campDetail = data.camp;
+        this.amenities = this.campDetail.amenities;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
