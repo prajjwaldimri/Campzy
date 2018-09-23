@@ -25,6 +25,14 @@
                       v-text-field(label='Phone Number' v-model='camp.phoneNumber' readonly)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Camp Url' v-model='camp.url' readonly)
+                    v-flex.flex-spacing(xs12)
+                      v-dialog(v-model='loc' width='500')
+                        v-btn(slot='activator' @click='getLocation' fab dark)
+                          v-icon my_location
+                        v-card
+                          .iframe-container.mt-4
+                            iframe(:src="campLocation" allowfullscreen)
+
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
@@ -184,6 +192,7 @@ import {
 } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
+
 export default {
   components: {
     InfiniteLoading,
@@ -217,6 +226,11 @@ export default {
       uploadingImages: false,
       viewDocument: false,
       isDocument: false,
+      currentLocation: '',
+      loc: false,
+      campLocation: '',
+      coordinates: {},
+
 
     };
   },
@@ -487,6 +501,26 @@ export default {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { });
     },
+
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      } else {
+        return new Error('Geolocation is not supported by this browser.');
+      }
+      return true;
+    },
+
+    showPosition(position) {
+      const latlon = `${position.coords.latitude},${position.coords.longitude}`;
+      this.campLocation = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=14`;
+      this.coordinates = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      console.log(this.coordinates);
+    },
+
   },
 };
 </script>
@@ -543,5 +577,20 @@ export default {
 .document-link {
   color: black;
   font-size: 1rem;
+}
+
+.iframe-container {
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+
+  iframe {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }
 </style>
