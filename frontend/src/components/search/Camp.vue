@@ -37,50 +37,40 @@
               v-img(:src="image" @click="openImageDialog")
 
     v-layout(row wrap style="min-height: 90vh").py-4
-      v-flex(sm12 md5 offset-md1).py-4.pr-4
+      v-flex(sm12 md5 offset-md1).py-4.content-flex
         h1.display-1.pb-3 About {{camp.name}}
         v-divider
         p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
 
         h1.headline.mt-5.px-1.font-weight-bold Amenities
         v-layout(row).px-1.mt-4
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon(color="green") loyalty
             h4.grey--text Campzy Guarantee
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon(color="brown") pets
             h4.grey--text Pets Allowed
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon rowing
             h4.grey--text Adventure Sports
-          v-flex(sm2).text-xs-center
-            v-icon(color="red") trending_up
-            h4.grey--text Trending
-          v-flex(sm2).text-xs-center
-            v-icon(color="blue") wifi
-            h4.grey--text Internet Available
+
         v-layout(row).px-1.mt-4
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon(color="green") loyalty
             h4.grey--text Campzy Guarantee
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon(color="brown") pets
             h4.grey--text Pets Allowed
-          v-flex(sm2).text-xs-center
+          v-flex(sm3).text-xs-center
             v-icon rowing
             h4.grey--text Adventure Sports
-          v-flex(sm2).text-xs-center
-            v-icon(color="red") trending_up
-            h4.grey--text Trending
-          v-flex(sm2).text-xs-center
-            v-icon(color="blue") wifi
-            h4.grey--text Internet Available
+
 
         h1.headline.mt-5.px-1.font-weight-bold Location
         .iframe-container.mt-4
@@ -100,7 +90,7 @@
       v-flex(sm12 md5).py-4.pl-4
         h3.display-1.pb-3 Recent Opinions
         v-divider
-        v-card(v-for="comment in comments").ma-4.pa-4
+        v-card(v-for="comment in comments").ma-4.pa-4.comment-card
           v-layout(row wrap)
             v-flex(md2 sm3)
               v-avatar(color="red")
@@ -258,7 +248,7 @@ export default {
           fromDate: this.fromDate,
           toDate: this.toDate,
         };
-        client.request(bookCamp, variables).then((data) => {
+        client.request(bookCamp, variables).then(() => {
           EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
           this.$router.push('/profile/activeBookings');
         }).catch((err) => {
@@ -346,6 +336,13 @@ export default {
   border-right: 2px solid rgba(246, 246, 246, 1);
 }
 
+.content-flex {
+  padding-right: 2rem;
+  @media screen and (max-width: 960px) {
+    padding-left: 2rem;
+  }
+}
+
 .image-flex {
   flex-direction: column;
   align-items: center;
@@ -361,6 +358,10 @@ export default {
   font-family: "Permanent Marker", cursive !important;
   text-shadow: 0px 0px 20px black;
   text-align: center;
+}
+
+.comment-card {
+  margin-left: 0 !important;
 }
 
 .iframe-container {
