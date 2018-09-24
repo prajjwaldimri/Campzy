@@ -146,6 +146,12 @@ export default {
     'tiny-slider': VueTinySlider,
     SearchImagesDialog,
   },
+  metaInfo() {
+    return {
+      title: this.camp.name,
+      titleTemplate: 'Campzy - %s',
+    };
+  },
   data() {
     return {
       camp: {},
