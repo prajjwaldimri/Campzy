@@ -86,6 +86,7 @@
     "vue-moment": "^4.0.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
+    "vue-tel-input": "^2.0.6",
     "vue-tiny-slider": "^0.1.27",
     "vue-tour": "^1.0.1",
     "vuetify": "^1.1.14",

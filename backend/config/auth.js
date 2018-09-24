@@ -213,7 +213,7 @@ const sendUserOTP = async (phoneNumber) => {
     let otp = await OTPModel.findOne({ phoneNumber });
     if (!otp) {
       otp = new OTPModel({
-        phoneNumber: `+91${phoneNumber}`,
+        phoneNumber: `${phoneNumber}`,
         otpValue: `${generateRandomNumbers(6)}`,
       });
       await otp.save();
@@ -221,7 +221,7 @@ const sendUserOTP = async (phoneNumber) => {
     return await client.messages.create({
       from: '+15172251199',
       body: `${otp.otpValue} is your Campzy OTP`,
-      to: `+91${phoneNumber}`,
+      to: `${phoneNumber}`,
     });
   } catch (err) {
     throw new OTPSendError();
@@ -234,7 +234,7 @@ const verifyUserOTP = async (otpValue, phoneNumber) => {
     if (!otp) {
       return false;
     }
-    if (`+91${phoneNumber}` === otp.phoneNumber) {
+    if (`${phoneNumber}` === otp.phoneNumber) {
       return true;
     }
     return false;

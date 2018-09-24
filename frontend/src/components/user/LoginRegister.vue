@@ -64,10 +64,11 @@
                     h1.font-weight-light.pb-3 Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                   v-flex(align-center).d-flex
-                    v-text-field(label="Phone Number" color='green accent-4'
-                    v-validate="'required|numeric'" required
-                      v-model="phoneNumber" clearable data-vv-name="phoneNumber"
-                      :error-messages="errors.collect('phoneNumber')" type="tel")
+                    vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
+                    //- v-text-field(label="Phone Number" color='green accent-4'
+                    //- v-validate="'required|numeric'" required
+                    //-   v-model="phoneNumber" clearable data-vv-name="phoneNumber"
+                    //-   :error-messages="errors.collect('phoneNumber')" type="tel")
                     v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10 || !isSendOTPButtonEnabled") Send OTP
                   v-flex(align-center).d-flex
                     v-text-field(shrink label="One Time Password" color='green accent-4'
@@ -263,7 +264,7 @@ export default {
     },
     sendOTP() {
       const variables = {
-        phoneNumber: this.phoneNumber,
+        phoneNumber: this.phoneNumber.replace(/\s/g, ''),
       };
       setTimeout(() => {
         this.isSendOTPButtonEnabled = true;
