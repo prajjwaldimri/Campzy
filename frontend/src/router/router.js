@@ -23,6 +23,7 @@ const ViewCamp = () => import('../components/dashboard_components/admin-dashboar
 const AllBlogs = () => import('../components/dashboard_components/blogger_dashboard/AllBlogs.vue');
 const AddBlog = () => import('../components/dashboard_components/blogger_dashboard/AddBlogs.vue');
 const EditBlog = () => import('../components/dashboard_components/blogger_dashboard/EditBlog.vue');
+const EmailVerification = () => import('../components/user/EmailVerificationLink.vue');
 
 Vue.use(Router);
 
@@ -62,6 +63,11 @@ const router = new Router({
       path: '/resetPassword/:token',
       name: 'resetPassword',
       component: PasswordReset,
+    },
+    {
+      path: '/emailVerification/:token',
+      name: 'emailVerification',
+      component: EmailVerification,
     },
     {
       path: '/profile',

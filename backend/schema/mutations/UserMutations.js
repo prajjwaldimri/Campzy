@@ -44,7 +44,7 @@ const registerUser = {
         facebookToken: args.facebookToken,
       });
       const createdUser = await userDocument.save();
-      await auth.sendUserToken(createdUser._id, args.email);
+      await auth.sendEmailVerificationToken(createdUser._id, args.email);
       return { jwt: JSON.stringify(createdUser.generateJWT()) };
     } catch (err) {
       return err;

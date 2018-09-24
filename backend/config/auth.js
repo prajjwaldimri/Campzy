@@ -139,6 +139,43 @@ const sendResetPasswordToken = async (userId, email) => {
   }
 };
 
+const sendEmailVerificationToken = async (userId, email) => {
+  try {
+    let token = await TokenModel.findOne({ _userId: userId });
+    if (!token) {
+      token = new TokenModel({
+        _userId: userId,
+        tokenValue: crypto.randomBytes(16).toString('hex'),
+      });
+      await token.save();
+    }
+    // TODO: Switch to main domain
+    return await mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: 'support@campzy.in',
+            Name: 'Campzy',
+          },
+          To: [
+            {
+              Email: email,
+            },
+          ],
+          TemplateID: 541428,
+          TemplateLanguage: true,
+          Subject: 'Email Verification Link',
+          Variables: {
+            verificationToken: token.tokenValue,
+          },
+        },
+      ],
+    });
+  } catch (err) {
+    throw new EmailSendError();
+  }
+};
+
 const verifyUserToken = async (tokenValue) => {
   try {
     const token = await TokenModel.findOne({ tokenValue });
@@ -216,4 +253,5 @@ module.exports = {
   sendUserOTP,
   verifyUserOTP,
   sendResetPasswordToken,
+  sendEmailVerificationToken,
 };
