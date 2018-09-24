@@ -367,7 +367,9 @@ export default {
 }
 
 .comment-card {
-  margin-left: 0 !important;
+  @media screen and (max-width: 960px) {
+    margin-left: 0 !important;
+  }
 }
 
 .iframe-container {
