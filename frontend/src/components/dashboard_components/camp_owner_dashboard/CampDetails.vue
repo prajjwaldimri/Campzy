@@ -504,21 +504,18 @@ export default {
 
     getLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.showPosition);
+        navigator.geolocation.getCurrentPosition((position) => {
+          const latlon = `${position.coords.latitude},${position.coords.longitude}`;
+          this.campLocation = `https://www.google.com/maps/embed/v1/place?q=${latlon}&key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=16`;
+          this.coordinates = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+        }, msg => new Error(`Please enable your GPS position future.${msg}`), { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
       } else {
         return new Error('Geolocation is not supported by this browser.');
       }
       return true;
-    },
-
-    showPosition(position) {
-      const latlon = `${position.coords.latitude},${position.coords.longitude}`;
-      this.campLocation = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=14`;
-      this.coordinates = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-      console.log(this.coordinates);
     },
 
   },
