@@ -4,13 +4,13 @@
 
       v-card(v-for="booking in bookings").py-5
         v-layout(row wrap)
-          v-flex(md2).pl-5
+          v-flex(md2 sm12).pl-5
             v-flex
               h5.headline.font-weight-medium {{booking.user.name}}
               router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
                 h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
               h6.subheading.mt-3 Booking Id: {{booking.code}}
-          v-divider(vertical).pr-5
+          v-divider(vertical).pr-5.hidden-sm-and-down
 
           v-flex(md6).pl-5
             v-layout(row wrap)
@@ -39,8 +39,8 @@
                 h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
 
 
-          v-divider(vertical).pr-3
-          v-flex(md3).pl-5
+          v-divider(vertical).pr-3.hidden-sm-and-down
+          v-flex(md3 sm12)
             .d-flex.justify-center(style="height: 100%; flex-direction: column")
               v-btn(color="primary" @click="showChat").white--text
                 v-icon.mr-2 live_help
