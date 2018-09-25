@@ -1,5 +1,4 @@
 const graphql = require('graphql');
-const UserModel = require('../../models/user.js');
 const UserType = require('./UserType');
 const TentType = require('./TentType');
 
@@ -49,9 +48,6 @@ const CampType = new GraphQLObjectType({
     url: { type: GraphQLString },
     owner: {
       type: UserType,
-      resolve(parent) {
-        return UserModel.findById(parent.ownerId, 'name email');
-      },
     },
     coordinates: { type: CoordinateType },
     terrain: { type: GraphQLString },

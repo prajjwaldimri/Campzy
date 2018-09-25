@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const CampType = require('./CampType');
+// const CampType = require('./CampType');
 
 const {
   GraphQLObjectType,
@@ -44,7 +44,7 @@ const UserType = new GraphQLObjectType({
     },
     googleToken: { type: GraphQLString },
     facebookToken: { type: GraphQLString },
-    wishlist: { type: new GraphQLList(CampType) },
+    wishlist: { type: new GraphQLList(GraphQLString) },
   }),
 });
 
