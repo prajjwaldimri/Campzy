@@ -24,7 +24,8 @@ export default {
 
   methods: {
     verifyEmail() {
-      this.token = this.$route.params.trim();
+      this.token = this.$route.params.token.trim();
+      console.log(this.token);
       if (this.token === '') {
         return;
       }
