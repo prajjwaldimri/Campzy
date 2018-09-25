@@ -291,7 +291,8 @@ export default {
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
         this.calculatePrice();
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err);
         this.searchResults = [];
       }).finally(() => {
         this.searchComplete = true;

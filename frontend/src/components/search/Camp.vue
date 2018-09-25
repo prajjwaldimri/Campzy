@@ -16,6 +16,8 @@
                 v-icon(dark color="green") star
                 span.title.pl-1.green--text.font-weight-bold {{camp.rating}}
                 span.subheading.pl-2 (16,035 ratings)
+              v-btn(icon)
+                v-icon bookmark
 
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
