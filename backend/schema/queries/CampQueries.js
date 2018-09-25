@@ -138,46 +138,50 @@ const campSearchUser = {
     personCount: { type: GraphQLInt },
   },
   async resolve(parent, args) {
-    const results = await CampModel.find(
-      { $text: { $search: args.searchTerm } },
-      { score: { $meta: 'textScore' } },
-    )
-      .and({ isAvailable: { $eq: true } })
-      .populate({
-        path: 'inventory',
-        match: {
-          isAvailable: { $eq: true },
-          isBooked: { $eq: false },
-          bookingPrice: {
-            $gte: parseInt(args.minPrice / args.tripDuration, 10),
-            $lte: parseInt(args.maxPrice / args.tripDuration, 10),
+    try {
+      const results = await CampModel.find(
+        { $text: { $search: args.searchTerm } },
+        { score: { $meta: 'textScore' } },
+      )
+        .and({ isAvailable: { $eq: true } })
+        .populate({
+          path: 'inventory',
+          match: {
+            isAvailable: { $eq: true },
+            isBooked: { $eq: false },
+            bookingPrice: {
+              $gte: parseInt(args.minPrice / args.tripDuration, 10),
+              $lte: parseInt(args.maxPrice / args.tripDuration, 10),
+            },
+            preBookPeriod: { $gte: args.bookingStartDate },
           },
-          preBookPeriod: { $gte: args.bookingStartDate },
-        },
-        select: 'bookingPrice capacity',
-      })
-      .limit(10)
-      .skip((args.page - 1) * 10)
-      .sort({ score: { $meta: 'textScore' } });
+          select: 'bookingPrice capacity',
+        })
+        .limit(10)
+        .skip((args.page - 1) * 10)
+        .sort({ score: { $meta: 'textScore' } });
 
-    for (let i = 0; i < results.length; i += 1) {
-      const requiredCapacity = args.tentCount * args.personCount;
-      let availableCapacity = 0;
-      for (let j = 0; j < results[i].inventory.length; j += 1) {
-        availableCapacity += results[i].inventory[j].capacity;
+      for (let i = 0; i < results.length; i += 1) {
+        const requiredCapacity = args.tentCount * args.personCount;
+        let availableCapacity = 0;
+        for (let j = 0; j < results[i].inventory.length; j += 1) {
+          availableCapacity += results[i].inventory[j].capacity;
+        }
+        // 1. Delete camps with no inventory
+        // 2. Delete camps which do not have the amount of tents required
+        // 3. Compare the required capacity with available capacity
+        if (
+          results[i].inventory.length === 0
+          || results[i].inventory.length < args.tentCount
+          || availableCapacity < requiredCapacity
+        ) {
+          delete results[i];
+        }
       }
-      // 1. Delete camps with no inventory
-      // 2. Delete camps which do not have the amount of tents required
-      // 3. Compare the required capacity with available capacity
-      if (
-        results[i].inventory.length === 0
-        || results[i].inventory.length < args.tentCount
-        || availableCapacity < requiredCapacity
-      ) {
-        delete results[i];
-      }
+      return results;
+    } catch (err) {
+      return err;
     }
-    return results;
   },
 };
 
