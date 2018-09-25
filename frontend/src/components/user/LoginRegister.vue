@@ -63,21 +63,22 @@
                   v-card-title(align-center justify-center).d-flex
                     h1.font-weight-light.pb-3 Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
-                  v-flex(align-center).d-flex
-                    vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
-                    //- v-text-field(label="Phone Number" color='green accent-4'
-                    //- v-validate="'required|numeric'" required
-                    //-   v-model="phoneNumber" clearable data-vv-name="phoneNumber"
-                    //-   :error-messages="errors.collect('phoneNumber')" type="tel")
-                    v-btn(@click="sendOTP" :disabled="phoneNumber.length < 10 || !isSendOTPButtonEnabled") Send OTP
-                  v-flex(align-center).d-flex
-                    v-text-field(shrink label="One Time Password" color='green accent-4'
-                     v-model="otp" clearable
-                    type="number" counter="6" data-vv-name="OTP" v-validate="'digits:6'"
-                      :error-messages="errors.collect('OTP')" )
-                    v-btn(color="green" :loading='isSignedup' @click="regUser"
-                    :disabled="!isOTPSent" block).white--text.mt-3
-                      | Complete Registration
+                    v-flex(align-center).d-flex
+                      v-layout(row)
+                        v-flex(md6)
+                          vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
+                        v-flex(md5 offset-md1)
+                          v-btn(block @click="sendOTP" color="info" :disabled="phoneNumber.length < 10" :loading="!isSendOTPButtonEnabled") Send OTP
+                    v-flex(align-center).d-flex
+                      v-layout(row)
+                        v-flex(md6)
+                          v-text-field(label="One Time Password" color='green accent-4'
+                          v-model="otp" clearable data-vv-name="OTP" v-validate="'digits:6'"
+                            :error-messages="errors.collect('OTP')" )
+                        v-flex(md5 offset-md1)
+                          v-btn(block color="green" :loading='isSignedup' @click="regUser"
+                          :disabled="!isOTPSent").white--text.mt-3
+                            | Verify
 
 
 </template>
@@ -341,6 +342,14 @@ export default {
     @media screen and (max-width: 960px) {
       padding: 1rem;
     }
+  }
+
+  .vue-tel-input {
+    // Matching Vuetify's Style
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: none;
+    border-bottom: 1px solid #bbb;
   }
 
   .right-image {
