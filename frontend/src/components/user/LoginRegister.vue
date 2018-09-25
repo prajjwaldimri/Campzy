@@ -219,7 +219,7 @@ export default {
         email: this.email2,
         name: this.name,
         password: this.password,
-        phoneNumber: this.phoneNumber,
+        phoneNumber: this.phoneNumber.replace(/\s/g, ''),
         otp: this.otp,
         googleToken: this.googleToken,
         facebookToken: this.facebookToken,

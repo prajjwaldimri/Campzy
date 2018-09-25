@@ -213,7 +213,7 @@ const sendUserOTP = async (phoneNumber) => {
     let otp = await OTPModel.findOne({ phoneNumber });
     if (!otp) {
       otp = new OTPModel({
-        phoneNumber: `${phoneNumber}`,
+        phoneNumber,
         otpValue: `${generateRandomNumbers(6)}`,
       });
       await otp.save();
@@ -221,7 +221,7 @@ const sendUserOTP = async (phoneNumber) => {
     return await client.messages.create({
       from: '+15172251199',
       body: `${otp.otpValue} is your Campzy OTP`,
-      to: `${phoneNumber}`,
+      to: phoneNumber,
     });
   } catch (err) {
     throw new OTPSendError();
