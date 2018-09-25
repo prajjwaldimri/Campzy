@@ -257,8 +257,8 @@ app.use(
 app.use(rollbar.errorHandler());
 
 // Last ditch error handler
-app.use((err) => {
-  rollbar.critical(err);
+app.use((error) => {
+  rollbar.critical(error);
 });
 
 if (process.env.ENVIRONMENT === 'development') {
