@@ -224,6 +224,22 @@ const isEmailAvailable = {
   },
 };
 
+const getWishlist = {
+  type: UserType,
+  args: {},
+  async resolve(parent, args, context) {
+    const user = await auth.getAuthenticatedUser(context.req);
+    const userData = await UserModel.findById(user.id)
+      .select('wishlist')
+      .populate({ path: 'wishlist', select: 'id, name' });
+    if (userData === null) {
+      throw new NotLoggedinError();
+    }
+
+    return { wishlist: userData.wishlist };
+  },
+};
+
 module.exports = {
   currentUser,
   getUser,
@@ -234,4 +250,5 @@ module.exports = {
   searchParticularUser,
   getCurrentUserBlog,
   isEmailAvailable,
+  getWishlist,
 };
