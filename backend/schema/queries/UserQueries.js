@@ -229,9 +229,7 @@ const getWishlist = {
   args: {},
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
-    const userData = await UserModel.findById(user.id)
-      .select('wishlist')
-      .populate({ path: 'wishlist', select: 'id, name' });
+    const userData = await UserModel.findById(user.id).select('wishlist');
     if (userData === null) {
       throw new NotLoggedinError();
     }
