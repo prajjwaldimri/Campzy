@@ -141,6 +141,7 @@ const sendResetPasswordToken = async (userId, email) => {
 
 const sendEmailVerificationToken = async (userId, email) => {
   try {
+    console.log(email);
     let token = await TokenModel.findOne({ _userId: userId });
     if (!token) {
       token = new TokenModel({
@@ -149,6 +150,7 @@ const sendEmailVerificationToken = async (userId, email) => {
       });
       await token.save();
     }
+    console.log(token);
     // TODO: Switch to main domain
     return await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [

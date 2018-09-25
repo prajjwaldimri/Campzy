@@ -65,7 +65,7 @@ const router = new Router({
       component: PasswordReset,
     },
     {
-      path: '/emailVerification/:token',
+      path: '/emailVerification',
       name: 'emailVerification',
       component: EmailVerification,
     },

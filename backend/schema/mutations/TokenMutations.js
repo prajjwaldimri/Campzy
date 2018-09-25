@@ -24,7 +24,7 @@ const resendEmailToken = {
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
-      await auth.sendUserToken(user.id, user.email);
+      await auth.sendEmailVerificationToken(user.id, user.email);
       return 'Sent Verification Email';
     } catch (err) {
       return err;
