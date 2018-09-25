@@ -1,13 +1,16 @@
 <template lang="pug">
-  v-container
-    v-card.align-center
-      v-flex.justify-center
-        v-img(src='/vectors/like.svg' width='125' height='125')
+  .home-flex
+    .success-text.pb-4.pt-4(v-show='isSuccess')
+      h1 Successfully Verified!
+    .error-text.pb-4.pt-4(v-show='isFailed')
+      h1 Verification Failed!
+
 
 </template>
 
 <script>
 import { request } from 'graphql-request';
+import { setTimeout } from 'timers';
 import { EventBus } from '../../event-bus';
 import { verifyEmailToken } from '../../queries/mutationQueries';
 
@@ -15,6 +18,8 @@ export default {
   data() {
     return {
       token: '',
+      isSuccess: false,
+      isFailed: false,
     };
   },
 
@@ -34,9 +39,13 @@ export default {
       request('/graphql', verifyEmailToken, variables).then(() => {
         EventBus.$emit('show-success-notification-long', 'Email Verified');
         EventBus.$emit('email-verification-successful');
+        this.isSuccess = true;
+        setTimeout(() => { this.router.push('/profile'); }, 2000);
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+          this.isFailed = true;
+          setTimeout(() => { this.router.push('/profile'); }, 2000);
         }
       }).finally(() => {
         this.closeDialog();
@@ -45,3 +54,32 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.home-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  max-height: 100vh;
+
+  .success-text {
+    color: green;
+    min-width: 40vw;
+    @media screen and (max-width: 960px) {
+      min-width: 90vw;
+    }
+    text-align: center;
+    user-select: none;
+  }
+  .error-text {
+    color: red;
+    min-width: 40vw;
+    @media screen and (max-width: 960px) {
+      min-width: 90vw;
+    }
+    text-align: center;
+    user-select: none;
+  }
+}
+</style>
