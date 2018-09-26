@@ -42,13 +42,14 @@ export default {
         this.isSuccess = true;
         setTimeout(() => {
           this.$router.push('/profile');
-          console.log('Profile');
         }, 2000);
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
           this.isFailed = true;
-          this.router.push('/profile');
+          setTimeout(() => {
+            this.router.push('/profile');
+          }, 2000);
         }
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
