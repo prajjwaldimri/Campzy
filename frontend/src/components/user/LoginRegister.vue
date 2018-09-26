@@ -256,7 +256,6 @@ export default {
         this.isLoggedin = false;
       }).catch((err) => {
         if (err) {
-          console.log(err);
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           this.isLoggedin = false;
         }
