@@ -7,7 +7,7 @@
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click='goToHome') HOME
-      v-btn(flat) CAMPS
+      v-btn(flat) WISH LIST
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")

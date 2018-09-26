@@ -78,30 +78,6 @@ const isUserBlogger = (user) => {
   return false;
 };
 
-const sendUserToken = async (userId, email) => {
-  try {
-    let token = await TokenModel.findOne({ _userId: userId });
-    if (!token) {
-      token = new TokenModel({
-        _userId: userId,
-        tokenValue: crypto.randomBytes(16).toString('hex'),
-      });
-      await token.save();
-    }
-    return await mailjet.post('send').request({
-      FromEmail: 'support@campzy.in',
-      From: 'Campzy',
-      Subject: 'Campzy Verification Email',
-      'Html-part': `<html><body>Hi, Please enter this verification code into the prompt at Campzy. \n ${
-        token.tokenValue
-      }</body></html>`,
-      Recipients: [{ Email: email }],
-    });
-  } catch (err) {
-    throw new EmailSendError();
-  }
-};
-
 const sendResetPasswordToken = async (userId, email) => {
   try {
     let token = await TokenModel.findOne({ _userId: userId });
@@ -248,7 +224,6 @@ module.exports = {
   isUserCampOwner,
   isUserAdmin,
   isUserBlogger,
-  sendUserToken,
   verifyUserToken,
   sendUserOTP,
   verifyUserOTP,

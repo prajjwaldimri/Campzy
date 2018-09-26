@@ -1,9 +1,8 @@
 <template lang="pug">
   div
-    EmailVerification
     v-alert.alert-dialog(:value='!isEmailVerified' type='warning')
-      span Your Email is not verified!
-      v-btn(flat small @click='openEmailVerificationDialog') &nbsp;Please click here to verify Email.
+      span Your Email is not verified! If you do not recieve any mail,
+      v-btn(flat small @click='resendVerificationEmail') &nbsp; Please click here to resend it.
     .settings-page
       v-container(grid-list-lg)
         v-layout(row wrap)
@@ -50,16 +49,15 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 
-import EmailVerification from './EmailVerification.vue';
+import { setTimeout } from 'timers';
+import { sendVerificationEmail } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
   $_veeValidate: {
     validator: 'new',
   },
-  components: {
-    EmailVerification,
-  },
+
   data() {
     return {
       user: {},
@@ -69,6 +67,7 @@ export default {
     };
   },
   mounted() {
+    this.isWatchList = true;
     if (!this.$cookie.get('sessionToken')) {
       this.$router.push({ name: 'login' });
     } else {
@@ -147,6 +146,20 @@ export default {
           this.$cookie.delete('sessionToken');
           this.$router.push({ name: 'login' });
         });
+    },
+    resendVerificationEmail() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client.request(sendVerificationEmail).then(() => {
+        EventBus.$emit('show-success-notification-long', 'Sent Verification Email');
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+        }
+      });
     },
   },
 };
