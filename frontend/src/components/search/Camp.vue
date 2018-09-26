@@ -148,15 +148,10 @@ export default {
     'tiny-slider': VueTinySlider,
     SearchImagesDialog,
   },
-  metaInfo() {
-    return {
-      title: this.camp.name,
-      titleTemplate: 'Campzy - %s',
-    };
-  },
   data() {
     return {
       camp: {},
+      campName: '',
       price: 0,
       tripDurationMenu: false,
       fromDate: null,
@@ -172,6 +167,15 @@ export default {
       bookButtonLoading: false,
       isBookingPossible: true,
       tents: [],
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.camp.name,
+      titleTemplate: 'Campzy - %s',
+      script: [
+        { src: 'https://checkout.razorpay.com/v1/checkout.js' },
+      ],
     };
   },
   mounted() {
