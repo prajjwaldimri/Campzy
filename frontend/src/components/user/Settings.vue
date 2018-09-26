@@ -1,6 +1,5 @@
 <template lang="pug">
   div
-    EmailVerification
     v-alert.alert-dialog(:value='!isEmailVerified' type='warning')
       span Your Email is not verified! If you do not recieve any mail,
       v-btn(flat small @click='resendVerificationEmail') &nbsp; Please click here to resend it.
@@ -50,6 +49,7 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 
+import { setTimeout } from 'timers';
 import { sendVerificationEmail } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 

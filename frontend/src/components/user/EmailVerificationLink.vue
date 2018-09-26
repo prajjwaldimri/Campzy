@@ -10,7 +10,6 @@
 
 <script>
 import { request } from 'graphql-request';
-import { setTimeout } from 'timers';
 import { EventBus } from '../../event-bus';
 import { verifyEmailToken } from '../../queries/mutationQueries';
 
@@ -29,6 +28,7 @@ export default {
 
   methods: {
     verifyEmail() {
+      EventBus.$emit('show-progress-bar');
       this.token = this.$route.params.token.trim();
       if (this.token === '') {
         return;
@@ -40,15 +40,15 @@ export default {
         EventBus.$emit('show-success-notification-long', 'Email Verified');
         EventBus.$emit('email-verification-successful');
         this.isSuccess = true;
-        setTimeout(() => { this.router.push('/profile'); }, 2000);
+        this.router.push('/profile');
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
           this.isFailed = true;
-          setTimeout(() => { this.router.push('/profile'); }, 2000);
+          this.router.push('/profile');
         }
       }).finally(() => {
-        this.closeDialog();
+        EventBus.$emit('hide-progress-bar');
       });
     },
   },
