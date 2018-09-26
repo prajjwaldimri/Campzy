@@ -187,7 +187,7 @@ export default {
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
     this.calculatePrice();
-    this.getUser();
+    
   },
   methods: {
     getCamp() {
@@ -278,6 +278,7 @@ export default {
         toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
+        this.getUser();
         const that = this;
         that.bookButtonLoading = true;
         // Implement razorpay API
