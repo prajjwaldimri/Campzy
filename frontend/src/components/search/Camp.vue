@@ -134,6 +134,7 @@
 </template>
 
 <script>
+/* global Razorpay */
 import VueTinySlider from 'vue-tiny-slider';
 import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
@@ -167,6 +168,7 @@ export default {
       bookButtonLoading: false,
       isBookingPossible: true,
       tents: [],
+      user: {},
     };
   },
   metaInfo() {
@@ -185,6 +187,7 @@ export default {
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
     this.calculatePrice();
+    this.getUser();
   },
   methods: {
     getCamp() {
@@ -203,6 +206,31 @@ export default {
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
       });
+    },
+    getUser() {
+      const query = `{currentUser {
+            name,
+            email,
+            phoneNumber,
+          }}`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(query)
+        .then((data) => {
+          this.user = data.currentUser;
+          if (this.user.isEmailVerified === false) {
+            this.isEmailVerified = false;
+          }
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+          this.$cookie.delete('sessionToken');
+          this.$router.push({ name: 'login' });
+        });
     },
     openImageDialog() {
       EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });
@@ -250,24 +278,40 @@ export default {
         toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
-        // TODO: Implement razorpay API
-        // Use data.bookCampCheck.amount to get the amount from user
-        variables = {
-          razorpayPaymentId: '123',
-          tentIds: this.tents,
-          personCount: this.personCount,
-          tentCount: this.tentCount,
-          fromDate: this.fromDate,
-          toDate: this.toDate,
+        // Implement razorpay API
+        const razorOptions = {
+          key: 'rzp_test_7nPC922fL6RkVG',
+          amount: data.bookCampCheck.amount * 100, // Razorpay counts money in paise
+          name: 'Campzy',
+          description: 'Purchase Description',
+          handler(response) {
+            // Use data.bookCampCheck.amount to get the amount from user
+            variables = {
+              razorpayPaymentId: response.razorpay_payment_id,
+              tentIds: this.tents,
+              personCount: this.personCount,
+              tentCount: this.tentCount,
+              fromDate: this.fromDate,
+              toDate: this.toDate,
+            };
+            client.request(bookCamp, variables).then(() => {
+              EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
+              this.$router.push('/profile/activeBookings');
+            }).catch((err) => {
+              EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+            }).finally(() => {
+              this.bookButtonLoading = false;
+            });
+          },
+          prefill: {
+            name: this.user.name,
+            email: this.user.email,
+            contact: this.user.phoneNumber,
+          },
         };
-        client.request(bookCamp, variables).then(() => {
-          EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
-          this.$router.push('/profile/activeBookings');
-        }).catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        }).finally(() => {
-          this.bookButtonLoading = false;
-        });
+
+        const rzpl = new Razorpay(razorOptions);
+        rzpl.open();
       }).catch((err) => {
         if (err.response.errors[0].message === 'NotLoggedInError') {
           EventBus.$emit('show-info-notification-short', 'Please Login First!');

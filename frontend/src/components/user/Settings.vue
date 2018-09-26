@@ -49,7 +49,6 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 
-import { setTimeout } from 'timers';
 import { sendVerificationEmail } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
