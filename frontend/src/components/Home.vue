@@ -14,7 +14,7 @@
             v-icon vpn_key
           h3.subheading Login/Register
         v-flex(justify-center align-center).button-flex.px-1
-          v-btn(color="orange darken-2" fab :to="profile" outline)
+          v-btn(color="orange darken-2" fab outline)
             v-icon trending_up
           h3.subheading Trending Camps
         v-flex(justify-center align-center).button-flex.px-2
