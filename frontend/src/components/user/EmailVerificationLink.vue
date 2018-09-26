@@ -38,9 +38,8 @@ export default {
       };
       request('/graphql', verifyEmailToken, variables).then(() => {
         EventBus.$emit('show-success-notification-long', 'Email Verified');
-        EventBus.$emit('email-verification-successful');
         this.isSuccess = true;
-        this.router.push('/profile');
+        this.$router.push('/profile');
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);

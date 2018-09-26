@@ -67,6 +67,7 @@ export default {
     };
   },
   mounted() {
+    this.isWatchList = true;
     if (!this.$cookie.get('sessionToken')) {
       this.$router.push({ name: 'login' });
     } else {
