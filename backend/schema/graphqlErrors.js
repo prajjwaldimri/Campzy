@@ -63,6 +63,14 @@ const CampNotAvailableError = ApolloError.createError('CampNotAvailableError', {
   message: 'Camp is not available to take bookings at this moment',
 });
 
+const AmountNotCapturedError = ApolloError.createError(
+  'AmountNotCapturedError',
+  {
+    message:
+      "Couldn't process your payment. Any amount debited will be refunded",
+  },
+);
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message:
     'An unknown error has occurred. We have logged the error and are working on it.',
@@ -84,4 +92,5 @@ module.exports = {
   UserNotFoundError,
   TentNotAvailableError,
   CampNotAvailableError,
+  AmountNotCapturedError,
 };

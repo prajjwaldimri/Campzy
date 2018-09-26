@@ -278,6 +278,8 @@ export default {
         toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
+        const that = this;
+        that.bookButtonLoading = true;
         // Implement razorpay API
         const razorOptions = {
           key: 'rzp_test_7nPC922fL6RkVG',
@@ -288,19 +290,20 @@ export default {
             // Use data.bookCampCheck.amount to get the amount from user
             variables = {
               razorpayPaymentId: response.razorpay_payment_id,
-              tentIds: this.tents,
-              personCount: this.personCount,
-              tentCount: this.tentCount,
-              fromDate: this.fromDate,
-              toDate: this.toDate,
+              tentIds: that.tents,
+              personCount: that.personCount,
+              tentCount: that.tentCount,
+              fromDate: that.fromDate,
+              toDate: that.toDate,
             };
             client.request(bookCamp, variables).then(() => {
               EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
-              this.$router.push('/profile/activeBookings');
+              that.$router.push('/profile/activeBookings');
             }).catch((err) => {
+              console.log(err);
               EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
             }).finally(() => {
-              this.bookButtonLoading = false;
+              that.bookButtonLoading = false;
             });
           },
           prefill: {
@@ -319,6 +322,8 @@ export default {
         } else {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
+      }).finally(() => {
+        this.bookButtonLoading = false;
       });
     },
   },
