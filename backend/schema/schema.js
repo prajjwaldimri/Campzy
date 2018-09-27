@@ -46,6 +46,7 @@ const RootQuery = new GraphQLObjectType({
     sendResetPasswordToken: TokenQueries.sendResetPasswordToken,
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,
+    getUserWishlist: UserQueries.getWishlist,
 
     currentUserBlogs: UserQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,
@@ -70,6 +71,7 @@ const Mutation = new GraphQLObjectType({
     sendOTP: OTPMutations.sendOTP,
     resetPassword: UserMutations.resetPassword,
     updateUser: UserMutations.updateUser,
+    addCampToWishlist: UserMutations.addCampToWishlist,
 
     addCamp: CampMutations.addCamp,
     updateCamp: CampMutations.updateCamp,

@@ -16,6 +16,12 @@ const facebookAuth = `mutation facebookAuth($token: String!){
   }
 }`;
 
+const addCampToWishlist = `mutation addCampToWishlist($campId: String!){
+  addCampToWishlist(campId: $campId){
+    id
+  }
+}`;
+
 const verifyEmailToken = `mutation confirmEmailToken($tokenValue: String!) {
   confirmEmailToken(tokenValue: $tokenValue) {
     tokenValue
@@ -170,4 +176,5 @@ module.exports = {
   bookCampCheck,
   bookCamp,
   addAmenities,
+  addCampToWishlist,
 };

@@ -16,8 +16,7 @@
                 v-icon(dark color="green") star
                 span.title.pl-1.green--text.font-weight-bold {{camp.rating}}
                 span.subheading.pl-2 (16,035 ratings)
-              v-btn(icon)
-                v-icon bookmark
+              v-btn( dark flat @click='addToWishList(camp.id)') Add to WishList
 
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
@@ -139,7 +138,7 @@ import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
-import { bookCampCheck, bookCamp } from '../../queries/mutationQueries';
+import { bookCampCheck, bookCamp, addCampToWishlist } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -271,6 +270,24 @@ export default {
         } else {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
+      });
+    },
+
+    addToWishList(campID) {
+      console.log(campID);
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        campId: campID,
+      };
+
+      client.request(addCampToWishlist, variables).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
       });
     },
   },
