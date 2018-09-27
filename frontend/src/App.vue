@@ -90,4 +90,10 @@ export default {
 
 <style lang="scss">
 @import "./scss/main.scss";
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 </style>
