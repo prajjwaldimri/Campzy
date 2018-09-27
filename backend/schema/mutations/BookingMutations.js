@@ -98,14 +98,14 @@ const book = {
         throw new TentNotAvailableError();
       }
 
-      // TODO: Verify Razorpay Id and collect money
+      // Verify Razorpay Id and collect money
 
       const instance = new Razorpay({
         key_id: process.env.RAZORPAY_API_KEY,
         key_secret: process.env.RAZORPAY_API_SECRET,
       });
 
-      const razorpayAmount = amount * 100; // Razorpay process amount in paise
+      const razorpayAmount = amount * 100; // Razorpay processes amount in paise
 
       const payment = await instance.payments.capture(
         args.razorpayPaymentId,
@@ -119,7 +119,7 @@ const book = {
 
       // Compare the collected amount with payable amount
 
-      // Send sms and emails to the user with their booking tickets
+      // TODO: Send sms and emails to the user with their booking tickets
 
       // Generate a booking token
       const booking = await BookingModel.create({

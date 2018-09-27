@@ -187,7 +187,7 @@ export default {
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
     this.calculatePrice();
-    
+    this.getUser();
   },
   methods: {
     getCamp() {
@@ -208,6 +208,9 @@ export default {
       });
     },
     getUser() {
+      if (!this.$cookie.get('sessionToken')) {
+        return;
+      }
       const query = `{currentUser {
             name,
             email,
@@ -228,8 +231,6 @@ export default {
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-          this.$cookie.delete('sessionToken');
-          this.$router.push({ name: 'login' });
         });
     },
     openImageDialog() {
@@ -278,7 +279,6 @@ export default {
         toDate: this.toDate,
       };
       client.request(bookCampCheck, variables).then((data) => {
-        this.getUser();
         const that = this;
         that.bookButtonLoading = true;
         // Implement razorpay API
