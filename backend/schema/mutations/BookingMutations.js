@@ -111,7 +111,7 @@ const book = {
         args.razorpayPaymentId,
         razorpayAmount,
       );
-      if (payment.status !== 'captured') {
+      if (payment.status !== 'captured' || payment.error_code !== null) {
         throw new AmountNotCapturedError();
       }
 
