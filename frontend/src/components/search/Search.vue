@@ -140,80 +140,80 @@
                           v-rating(v-model="result.rating" color="green" small
                           background-color="green lighten-3" half-increments readonly)
 
-                v-dialog(v-model="filterDialog" fullscreen).hidden-md-and-up
-                  v-card.hidden-md-and-up
-                    v-card-title(primary-title)
-                      h3.headline.mb-0 Filters
-                    v-container(fluid grid-list-md).top-search
-                      v-layout(column justify-center)
-                        v-flex
-                          v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
-                          color="green" single-line required v-model="searchInput"
-                          @click:append="search" @keyup.enter="search")
+              v-dialog(v-model="filterDialog" fullscreen).hidden-md-and-up
+                v-card.hidden-md-and-up
+                  v-card-title(primary-title)
+                    h3.headline.mb-0 Filters
+                  v-container(fluid grid-list-md).top-search
+                    v-layout(column justify-center)
+                      v-flex
+                        v-text-field(hint="Try Nature, Leh, Mountains....." append-icon="search"
+                        color="green" single-line required v-model="searchInput"
+                        @click:append="search" @keyup.enter="search")
 
-                        v-flex
-                          v-menu(v-model="tripDurationMenu" offset-y
-                          ransition="slide-y-transition"
-                          :close-on-content-click="false" lazy style="width: 100%")
-                            v-select(hint="Trip duration" readonly block
-                            :label="dateLabel"
-                            slot="activator" color="primary" single-line persistent-hint)
-                            v-date-picker(v-model="fromDate" no-title scrollable
-                            full-width).hidden-md-and-up
-                            v-date-picker(v-model="toDate" no-title scrollable
-                            full-width).hidden-md-and-up
+                      v-flex
+                        v-menu(v-model="tripDurationMenu" offset-y
+                        ransition="slide-y-transition"
+                        :close-on-content-click="false" lazy style="width: 100%")
+                          v-select(hint="Trip duration" readonly block
+                          :label="dateLabel"
+                          slot="activator" color="primary" single-line persistent-hint)
+                          v-date-picker(v-model="fromDate" no-title scrollable
+                          full-width).hidden-md-and-up
+                          v-date-picker(v-model="toDate" no-title scrollable
+                          full-width).hidden-md-and-up
 
-                        v-flex
-                          v-range-slider(v-model="priceRange" :max="80000" :min="1000"
-                            :step="500"
-                            hint="Price Range" persistent-hint color="green"
-                            thumb-label :thumb-size="48")
+                      v-flex
+                        v-range-slider(v-model="priceRange" :max="80000" :min="1000"
+                          :step="500"
+                          hint="Price Range" persistent-hint color="green"
+                          thumb-label :thumb-size="48")
 
-                        v-flex
-                          v-select(v-model="tentType" :items="tentTypes" attach
-                            chips persistent-hint
-                          multiple hint="Tent types")
-
-                        v-flex
-                          v-layout(row)
-                            v-flex(sm6)
-                              v-select(hint="Number of Tents" persistent-hint
-                              v-model="tentCount" :items="tentNumbers")
-                            v-flex(sm6)
-                              v-select(hint="People per tent" persistent-hint
-                              v-model="personCount" :items="personNumbers")
-
-                        v-flex
-                          v-select(v-model="amenitiesSelected" :items="amenities" attach
+                      v-flex
+                        v-select(v-model="tentType" :items="tentTypes" attach
                           chips persistent-hint
-                          multiple hint="Amenities")
-                            template(slot="selection" slot-scope="{item, index}")
-                              v-chip(v-if="index <= 2")
-                                span {{item}}
-                              v-chip(v-if="index === 3").grey--text.caption
-                                | (+ {{amenitiesSelected.length - 3}} others)
-                  v-btn(fixed dark fab bottom right color="primary"
-                  @click.native="search")
-                    v-icon done_all
+                        multiple hint="Tent types")
+
+                      v-flex
+                        v-layout(row)
+                          v-flex(sm6)
+                            v-select(hint="Number of Tents" persistent-hint
+                            v-model="tentCount" :items="tentNumbers")
+                          v-flex(sm6)
+                            v-select(hint="People per tent" persistent-hint
+                            v-model="personCount" :items="personNumbers")
+
+                      v-flex
+                        v-select(v-model="amenitiesSelected" :items="amenities" attach
+                        chips persistent-hint
+                        multiple hint="Amenities")
+                          template(slot="selection" slot-scope="{item, index}")
+                            v-chip(v-if="index <= 2")
+                              span {{item}}
+                            v-chip(v-if="index === 3").grey--text.caption
+                              | (+ {{amenitiesSelected.length - 3}} others)
+                v-btn(fixed dark fab bottom right color="primary"
+                @click.native="search")
+                  v-icon done_all
 
 
-                v-dialog(v-model="sortDialog").hidden-sm-and-down
-                  v-card
-                    v-list
-                      v-list-tile(@click="sort('price')")
-                        v-list-tile-title Price (Low to High)
-                      v-list-tile(@click="sort('priceReverse')")
-                        v-list-tile-title Price (High to Low)
+              v-dialog(v-model="sortDialog").hidden-sm-and-down
+                v-card
+                  v-list
+                    v-list-tile(@click="sort('price')")
+                      v-list-tile-title Price (Low to High)
+                    v-list-tile(@click="sort('priceReverse')")
+                      v-list-tile-title Price (High to Low)
 
 
-                v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
-                  v-btn(flat @click.native="filterDialog=true")
-                    span Filter
-                    v-icon filter_list
+              v-bottom-nav(fixed color="white" :value="true").hidden-md-and-up
+                v-btn(flat @click.native="filterDialog=true")
+                  span Filter
+                  v-icon filter_list
 
-                  v-btn(flat @click.native="sortDialog=true")
-                    span Sort
-                    v-icon poll
+                v-btn(flat @click.native="sortDialog=true")
+                  span Sort
+                  v-icon poll
 
 
 </template>
