@@ -153,4 +153,14 @@ const book = {
   },
 };
 
-module.exports = { bookCheck, book };
+const cancelBooking = {
+  type: BookingType,
+  args: {
+    bookingCode: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    console.log(context);
+  },
+};
+
+module.exports = { bookCheck, book, cancelBooking };

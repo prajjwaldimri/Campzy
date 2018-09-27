@@ -42,7 +42,7 @@
           v-divider(vertical).pr-3.hidden-sm-and-down
           v-flex(md3 sm12)
             .d-flex.justify-center(style="height: 100%; flex-direction: column")
-              v-btn(color="primary" @click="showChat").white--text
+              v-btn(color="primary" @click="showChat(booking.code)").white--text
                 v-icon.mr-2 live_help
                 span Need Help?
               v-btn(color="error").white--text
@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       bookings: [],
+      phoneNumber: '',
     };
   },
   mounted() {
@@ -73,6 +74,7 @@ export default {
     } else {
       this.getActiveBookings();
     }
+    this.getUser();
   },
   methods: {
     getActiveBookings() {
@@ -95,7 +97,38 @@ export default {
           NProgress.done();
         });
     },
-    showChat() {
+    getUser() {
+      const query = `{currentUser {
+            name,
+            email,
+            phoneNumber,
+          }}`;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(query)
+        .then((data) => {
+          // eslint-disable-next-line
+          window.__lc.visitor = {
+            name: data.currentUser.name,
+            email: data.currentUser.email,
+          };
+
+          this.phoneNumber = data.currentUser.phoneNumber;
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+        });
+    },
+    showChat(bookingCode) {
+      // eslint-disable-next-line
+      window.__lc.params = [
+        { name: 'Phone', value: this.phoneNumber },
+        { name: 'Booking Code', value: bookingCode },
+      ];
       LC_API.open_chat_window();
     },
   },
