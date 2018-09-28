@@ -138,7 +138,7 @@ import VueTinySlider from 'vue-tiny-slider';
 import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
-import { getCampByUrl, getBestTentAvailable, getWishList } from '../../queries/queries';
+import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
 import { bookCampCheck, bookCamp, addCampToWishlist } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
@@ -345,19 +345,7 @@ export default {
       });
     },
 
-    getUserWishList() {
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
 
-      client.request(getWishList).then((data) => {
-        console.log(data);
-      }).catch((err) => {
-        console.log(err);
-      });
-    },
   },
 
   watch: {

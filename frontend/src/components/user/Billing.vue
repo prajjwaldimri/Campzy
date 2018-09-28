@@ -16,6 +16,38 @@
             v-btn(flat) LINK ACCOUNT
 </template>
 
+<script>
+import { GraphQLClient } from 'graphql-request';
+import { getWishList } from '../../queries/queries';
+import { EventBus } from '../../event-bus';
+
+export default {
+  data() {
+
+  },
+
+  mounted() {
+
+  },
+  methods: {
+    getUserWishList() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(getWishList).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+      });
+    },
+  },
+};
+</script>
+
+
 <style lang="scss" scoped>
 .settings-card {
   padding: 2rem;
