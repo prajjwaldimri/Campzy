@@ -7,7 +7,7 @@ const TentType = require('../types/TentType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLBoolean } = graphql;
+const { GraphQLString, GraphQLBoolean, GraphQLInt } = graphql;
 
 const addTent = {
   type: TentType,
@@ -16,6 +16,7 @@ const addTent = {
     type: { type: GraphQLString },
     bookingPrice: { type: GraphQLString },
     preBookPeriod: { type: GraphQLString },
+    surgePrice: { type: GraphQLInt },
   },
   async resolve(parent, args, context) {
     try {
@@ -37,6 +38,7 @@ const addTent = {
         type: args.type,
         bookingPrice: args.bookingPrice,
         preBookPeriod: args.preBookPeriod,
+        surgePrice: args.surgePrice,
         camp: ownedCamp._id,
       });
       return await tent.save();

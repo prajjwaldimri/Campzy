@@ -46,7 +46,7 @@ const resetPasswordMutation = `mutation resetPassword($newPassword: String!, $co
   }
 }`;
 
-const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: String!) {
+const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: Int!) {
   addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
     type,
     capacity,

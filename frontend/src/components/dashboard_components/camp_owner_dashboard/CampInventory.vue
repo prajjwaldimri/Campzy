@@ -33,7 +33,7 @@
             v-btn(icon)
               v-icon edit
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
-      v-btn(color="green" slot="activator" fab dark bottom right fixed)
+      v-btn(color="green" slot="activator" fab dark bottom right fixed).elevation-19
         v-icon add
       addTent
 </template>
@@ -190,7 +190,7 @@ export default {
 <style lang="scss" scoped>
 .inventory-container {
   @media screen and (min-width: 960px) {
-    padding: 5rem;
+    padding: 1rem;
   }
   height: 100%;
 }
