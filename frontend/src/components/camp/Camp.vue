@@ -3,6 +3,7 @@
     navbar(color="transparent" :app="true" :absolute="true" :dark="true")
 
     SearchImagesDialog
+    ReviewCampDialog
 
     v-responsive(height="90vh")
       v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
@@ -137,7 +138,8 @@
 import VueTinySlider from 'vue-tiny-slider';
 import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
-import SearchImagesDialog from './SearchImagesDialog.vue';
+import SearchImagesDialog from '../search/SearchImagesDialog.vue';
+import ReviewCamp from './ReviewCamp.vue';
 import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
 import { bookCampCheck, bookCamp, addCampToWishlist } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
@@ -147,6 +149,7 @@ export default {
     navbar,
     'tiny-slider': VueTinySlider,
     SearchImagesDialog,
+    ReviewCampDialog: ReviewCamp,
   },
   data() {
     return {
@@ -227,7 +230,7 @@ export default {
           if (this.user.isEmailVerified === false) {
             this.isEmailVerified = false;
           }
-          this.getUserWishList();
+          // this.getUserWishList();
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);

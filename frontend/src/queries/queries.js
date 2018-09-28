@@ -275,6 +275,13 @@ const countCampActiveBooking = `query countCampActiveBookings($id: String!){
   }
 }`;
 
+const getLatestCampForReview = `query getLatestCampForReview{
+  getLatestCampForReview{
+    id,
+    name
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -298,4 +305,5 @@ module.exports = {
   countBookedTent,
   countCampActiveBooking,
   getWishList,
+  getLatestCampForReview,
 };

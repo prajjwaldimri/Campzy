@@ -1,6 +1,8 @@
 const graphql = require('graphql');
-// const ReviewModel = require('../../models/review');
+const moment = require('moment');
+const ReviewModel = require('../../models/review');
 const CampModel = require('../../models/camp');
+const BookingModel = require('../../models/booking');
 
 const ReviewType = require('../types/ReviewType');
 const CampType = require('../types/CampType');
@@ -14,9 +16,35 @@ const getLatestCampForReview = {
   type: CampType,
   args: {},
   async resolve(parent, args, context) {
-    const user = await auth.getAuthenticatedUser(context.req);
-    if (user === null) {
-      throw new NotLoggedinError();
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      if (user === null) {
+        throw new NotLoggedinError();
+      }
+      const latestBooking = await BookingModel.findOne({ user: user.id })
+        .sort('createdAt')
+        .limit(1)
+        .select('id camp endDate')
+        .populate('camp');
+      if (!latestBooking) {
+        return null;
+      }
+      const dateDifference = moment(Date.now()).diff(
+        latestBooking.endDate,
+        'days',
+      );
+      if (dateDifference < 0) {
+        return null;
+      }
+      const isRatingPresent = await ReviewModel.findOne({
+        booking: latestBooking._id, // eslint-disable-line
+      });
+      if (isRatingPresent) {
+        return null;
+      }
+      return latestBooking.camp;
+    } catch (err) {
+      return err;
     }
   },
 };

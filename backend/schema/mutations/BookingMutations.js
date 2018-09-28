@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { GraphQLDate } = require('graphql-iso-date');
 const moment = require('moment');
 const Razorpay = require('razorpay');
+// const math = require('mathjs');
 const BookingType = require('../types/BookingType');
 // const CampModel = require('../../models/camp.js');
 const TentModel = require('../../models/tent.js');
@@ -152,6 +153,22 @@ const book = {
     }
   },
 };
+
+// function AddComissionandTaxes(amount) {
+//   return Promise((resolve, reject) => {
+//     if (parseFloat(amount) === undefined) {
+//       reject('Amount is not valid');
+//     }
+//     const commission = math.fraction(0);
+//     const gst = math.fraction(0);
+//     if (amount < 1000) {
+//     } else if (amount < 2500) {
+//     } else if (amount < 7500) {
+//     } else {
+//     }
+//     resolve(amount + gst);
+//   });
+// }
 
 const cancelBooking = {
   type: BookingType,
