@@ -1,9 +1,6 @@
 <template lang="pug">
   .home-flex
-    .success-text.pb-4.pt-4(v-show='isSuccess')
-      h1 Successfully Verified!
-    .error-text.pb-4.pt-4(v-show='isFailed')
-      h1 Verification Failed!
+    line-scale-pulse-out-rapid-loader(color="green" size="40px" v-if="!emailVerified")
 
 
 </template>
@@ -20,6 +17,7 @@ export default {
       token: '',
       isSuccess: false,
       isFailed: false,
+      emailVerified: false,
     };
   },
 
@@ -39,15 +37,15 @@ export default {
       };
       request('/graphql', verifyEmailToken, variables).then(() => {
         EventBus.$emit('show-success-notification-long', 'Email Verified');
-        this.isSuccess = true;
         setTimeout(() => {
+          this.emailVerified = true;
           this.$router.push('/profile');
         }, 2000);
       }).catch((err) => {
         if (err) {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-          this.isFailed = true;
           setTimeout(() => {
+            this.emailVerified = true;
             this.router.push('/profile');
           }, 2000);
         }
@@ -66,24 +64,5 @@ export default {
   align-items: center;
   min-height: 100vh;
   max-height: 100vh;
-
-  .success-text {
-    color: green;
-    min-width: 40vw;
-    @media screen and (max-width: 960px) {
-      min-width: 90vw;
-    }
-    text-align: center;
-    user-select: none;
-  }
-  .error-text {
-    color: red;
-    min-width: 40vw;
-    @media screen and (max-width: 960px) {
-      min-width: 90vw;
-    }
-    text-align: center;
-    user-select: none;
-  }
 }
 </style>

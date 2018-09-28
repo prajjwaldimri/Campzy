@@ -29,6 +29,9 @@
           td.align-center
             v-switch(v-model='props.item.isAvailable' color='green'
             @change='openTentBooking(props.item.isAvailable,props.item.id)')
+          td.align-center
+            v-btn(icon)
+              v-icon edit
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
       v-btn(color="green" slot="activator" fab dark bottom right fixed)
         v-icon add
@@ -61,6 +64,7 @@ export default {
         { text: 'Booked By', value: 'bookedBy.name' },
         { text: 'IS Booked ?', value: 'isBooked' },
         { text: 'Open Booking', value: 'actions', sortable: false },
+        { text: 'Edit Tent', value: 'actions', sortable: false },
       ],
       tents: [],
       addTentDialog: false,

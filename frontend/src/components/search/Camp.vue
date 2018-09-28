@@ -227,7 +227,7 @@ export default {
           if (this.user.isEmailVerified === false) {
             this.isEmailVerified = false;
           }
-          // this.getUserWishList();
+          this.getUserWishList();
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
@@ -329,7 +329,6 @@ export default {
     },
 
     addToWishList(campID) {
-      console.log(campID);
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -339,10 +338,10 @@ export default {
         campId: campID,
       };
 
-      client.request(addCampToWishlist, variables).then((data) => {
-        console.log(data);
+      client.request(addCampToWishlist, variables).then(() => {
+        EventBus.$emit('show-info-notification-short', 'Added to your Wishlist!');
       }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
       });
     },
 

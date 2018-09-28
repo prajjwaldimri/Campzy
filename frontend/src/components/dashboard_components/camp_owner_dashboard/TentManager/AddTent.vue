@@ -18,8 +18,8 @@
         v-spacer
         v-flex(xs12 md6)
           v-text-field(v-model="calculatedPrice" label="Final Price" prepend-icon="money"
-          data-vv-name="finalPrice" v-validate="'required'"
-          :error-messages="errors.collect('bookingPrice')" readonly)
+          data-vv-name="finalPrice" v-validate="'required'" hint='*includes all Taxes' persistent-hint
+          :error-messages="errors.collect('finalPrice')" readonly)
 
       v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
        data-vv-name="surgePrice"
@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     calculatePrice(tentPrice) {
-      console.log(typeof (tentPrice));
       const newPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
       this.calculatedPrice = `Rs.${newPrice}`;
       console.log(this.calculatedPrice);
