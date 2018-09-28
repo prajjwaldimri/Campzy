@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const ReviewModel = require('../../models/review');
 const CampModel = require('../../models/camp');
-
+const BookingModel = require('../../models/booking');
 const ReviewType = require('../types/ReviewType');
 
 const { GraphQLString, GraphQLFloat } = graphql;
@@ -28,11 +28,17 @@ const addReview = {
       throw new CampNotAvailableError();
     }
 
+    const latestBooking = await BookingModel.findOne({ user: user.id })
+      .sort('createdAt')
+      .limit(1)
+      .select('id camp endDate');
+
     const review = await ReviewModel.create({
       stars: args.stars,
       comment: args.comment,
       camp: args.campId,
       user: user.id,
+      booking: latestBooking._id, // eslint-disable-line
     });
 
     // Calculate the average review
