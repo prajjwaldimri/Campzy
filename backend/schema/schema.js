@@ -8,6 +8,7 @@ const TentQueries = require('./queries/TentQueries');
 const TokenQueries = require('./queries/TokenQueries');
 const BlogQueries = require('./queries/BlogQueries');
 const BookingQueries = require('./queries/BookingQueries');
+const ReviewQueries = require('./queries/ReviewQueries');
 
 const UserMutations = require('./mutations/UserMutations');
 const CampMutations = require('./mutations/CampMutations');
@@ -55,6 +56,8 @@ const RootQuery = new GraphQLObjectType({
 
     campBookings: BookingQueries.getCampBookings,
     countCampActiveBookings: BookingQueries.countCampActiveBookings,
+
+    getLatestCampForReview: ReviewQueries.getLatestCampForReview,
   },
 });
 

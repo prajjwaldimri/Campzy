@@ -5,7 +5,7 @@ import Router from 'vue-router';
 const NotFoundPage = () => import('../components/404.vue');
 const Home = () => import('../components/Home.vue');
 const Search = () => import('../components/search/Search.vue');
-const Camp = () => import('../components/search/Camp.vue');
+const Camp = () => import('../components/camp/Camp.vue');
 const Blog = () => import('../components/blog/Blog.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
