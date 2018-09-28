@@ -77,7 +77,6 @@ export default {
 
     client.request(query)
       .then((data) => {
-        console.log(data);
         this.user = data.currentUser;
         if (this.user.type === 'Admin') {
           this.isAdmin = true;
@@ -94,7 +93,6 @@ export default {
         }
       })
       .catch((err) => {
-        console.log(err);
         this.user = {}; this.isLoggedIn = false;
       });
   },

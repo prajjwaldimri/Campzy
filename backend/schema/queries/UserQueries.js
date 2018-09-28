@@ -233,7 +233,7 @@ const getWishlist = {
     if (userData === null) {
       throw new NotLoggedinError();
     }
-    console.log(userData);
+    console.log(userData.wishlist);
     return { wishlist: userData.wishlist };
   },
 };

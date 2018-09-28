@@ -72,6 +72,12 @@ const getCurrentUserCampDetails = `query currentUserCamp{
 
       }`;
 
+const getWishList = `query getUserWishlist{
+    getUserWishlist{
+      wishlist
+    }
+  }`;
+
 const getCampDetail = `query camp($id: String!){
   camp(id: $id){
       name,
@@ -291,4 +297,5 @@ module.exports = {
   countTents,
   countBookedTent,
   countCampActiveBooking,
+  getWishList,
 };

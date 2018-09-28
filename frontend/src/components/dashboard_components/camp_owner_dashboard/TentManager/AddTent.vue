@@ -10,10 +10,17 @@
       v-text-field(v-model="tent.capacity" label="Capacity"
       prepend-icon="supervisor_account" clearable  data-vv-name="tentCapacity"
       v-validate="'required'" :error-messages="errors.collect('tentCapacity')")
+      v-layout(row)
+        v-flex(xs12 md6)
+          v-text-field(v-model="tent.price" label="Booking Price" prepend-icon="money" clearable
+          data-vv-name="bookingPrice" v-validate="'required'"
+          :error-messages="errors.collect('bookingPrice')" @change='calculatePrice(tent.price)')
+        v-spacer
+        v-flex(xs12 md6)
+          v-text-field(v-model="calculatedPrice" label="Final Price" prepend-icon="money"
+          data-vv-name="finalPrice" v-validate="'required'"
+          :error-messages="errors.collect('bookingPrice')" readonly)
 
-      v-text-field(v-model="tent.price" label="Booking Price" prepend-icon="money" clearable
-       data-vv-name="bookingPrice" v-validate="'required|alpha_dash'"
-      :error-messages="errors.collect('bookingPrice')")
       v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
        data-vv-name="surgePrice"
       :error-messages="errors.collect('surgePrice')")
@@ -49,9 +56,16 @@ export default {
     return {
       tent: {},
       totalTents: '',
+      calculatedPrice: '',
     };
   },
   methods: {
+    calculatePrice(tentPrice) {
+      console.log(typeof (tentPrice));
+      const newPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
+      this.calculatedPrice = `Rs.${newPrice}`;
+      console.log(this.calculatedPrice);
+    },
     closeDialog() {
       EventBus.$emit('campowner-close-add-tent-dialog');
     },
@@ -89,5 +103,6 @@ export default {
       this.closeDialog();
     },
   },
+
 };
 </script>
