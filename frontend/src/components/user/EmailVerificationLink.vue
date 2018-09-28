@@ -1,6 +1,7 @@
 <template lang="pug">
   .home-flex
-    line-scale-pulse-out-rapid-loader(color="green" size="40px" v-if="!emailVerified")
+    .loading-flex
+      line-scale-pulse-out-rapid-loader(color="green" size="80px" v-if="!emailVerified")
 
 
 </template>
@@ -15,8 +16,6 @@ export default {
   data() {
     return {
       token: '',
-      isSuccess: false,
-      isFailed: false,
       emailVerified: false,
     };
   },
@@ -64,5 +63,13 @@ export default {
   align-items: center;
   min-height: 100vh;
   max-height: 100vh;
+
+  .loading-flex {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
