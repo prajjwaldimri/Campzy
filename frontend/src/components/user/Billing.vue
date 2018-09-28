@@ -23,11 +23,12 @@ import { EventBus } from '../../event-bus';
 
 export default {
   data() {
-
+    return {
+      wishList: [],
+    };
   },
-
   mounted() {
-
+    this.getUserWishList();
   },
   methods: {
     getUserWishList() {
