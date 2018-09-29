@@ -61,6 +61,10 @@ export default {
     addCamp: AddCamp,
     editCamp: EditCamp,
   },
+  metaInfo: {
+    title: 'Dashboard | Camp Management',
+  },
+
   data() {
     return {
       headers: [

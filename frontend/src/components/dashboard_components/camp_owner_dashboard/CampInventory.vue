@@ -23,17 +23,13 @@
             td Rs. {{props.item.bookingPrice}}
             td Rs. {{props.item.surgePrice}}
             td {{props.item.preBookPeriod}} Days
-            td(v-if='props.item.bookedBy') {{props.item.bookedBy.name}}
-            td(v-else) none
-            td.align-center
-              v-checkbox(v-model='props.item.isBooked' color='green' disabled)
             td.align-center
               v-switch(v-model='props.item.isAvailable' color='green'
               @change='openTentBooking(props.item.isAvailable,props.item.id)')
             td.align-center
               v-btn(icon)
                 v-icon edit
-        template(slot="expand" slot-scope="props" focused)
+        template(slot="expand" slot-scope="props")
           v-card(flat)
             v-card-title Tent Options
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
@@ -53,6 +49,9 @@ export default {
   components: {
     addTent: AddTent,
   },
+  metaInfo: {
+    title: 'Dashboard | Inventory',
+  },
 
   data() {
     return {
@@ -65,8 +64,6 @@ export default {
         { text: 'Booking Price', value: 'bookingPrice' },
         { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
-        { text: 'Booked By', value: 'bookedBy.name' },
-        { text: 'IS Booked ?', value: 'isBooked' },
         { text: 'Open Booking', value: 'actions', sortable: false },
         { text: 'Edit Tent', value: 'actions', sortable: false },
       ],

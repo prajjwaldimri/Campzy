@@ -40,6 +40,10 @@ export default {
   $_veeValidate: {
     validator: 'new',
   },
+  metaInfo: {
+    title: 'Dashboard | All Blogs',
+  },
+
   data() {
     return {
       blogs: {},
