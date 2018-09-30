@@ -2,6 +2,7 @@
 const graphql = require('graphql');
 const moment = require('moment');
 const { filter } = require('p-iteration');
+const { GraphQLDate } = require('graphql-iso-date');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const BookingModel = require('../../models/booking');
@@ -133,7 +134,9 @@ const campSearchUser = {
   type: new GraphQLList(CampType),
   args: {
     searchTerm: { type: GraphQLString },
-    bookingStartDate: { type: GraphQLInt },
+    preBookPeriod: { type: GraphQLInt },
+    bookingStartDate: { type: GraphQLDate },
+    bookingEndDate: { type: GraphQLDate },
     tripDuration: { type: GraphQLInt },
     minPrice: { type: GraphQLInt },
     maxPrice: { type: GraphQLInt },
@@ -156,7 +159,7 @@ const campSearchUser = {
               $gte: parseInt(args.minPrice / args.tripDuration, 10),
               $lte: parseInt(args.maxPrice / args.tripDuration, 10),
             },
-            preBookPeriod: { $gte: args.bookingStartDate },
+            preBookPeriod: { $gte: args.preBookPeriod },
             capacity: { $gte: args.personCount },
           },
           select: 'id bookingPrice capacity',
@@ -170,6 +173,9 @@ const campSearchUser = {
         let { inventory } = result;
         inventory = inventory.filter((tent) => {
           // Check if any of the disabled dates fall between the booking start and end date
+          if (!tent.disabledDates) {
+            return true;
+          }
           const isDisableDateInBetween = tent.disabledDates.some(date => moment(date).isBetween(
             moment(args.bookingStartDate).subtract(1, 'day'),
             moment(args.bookingEndDate).add(1, 'day'),
@@ -212,7 +218,6 @@ const campSearchUser = {
 
       return results;
     } catch (err) {
-      console.log(err);
       return err;
     }
   },
