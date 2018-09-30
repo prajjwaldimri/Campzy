@@ -55,6 +55,17 @@ const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $
     surgePrice,
   }
 }`;
+
+const updateTentQuery = `mutation updateTent($id: String!, $tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: Int!) {
+  updateTent(id: $id, type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
+    id,
+    type,
+    capacity,
+    bookingPrice,
+    preBookPeriod,
+    surgePrice,
+  }
+}`;
 const sendOTP = `mutation sendOTP($phoneNumber: String!) {
   sendOTP(phoneNumber: $phoneNumber) {
     otpValue
@@ -172,6 +183,7 @@ module.exports = {
   verifyEmailToken,
   sendVerificationEmail,
   addTentQuery,
+  updateTentQuery,
   sendOTP,
   sendResetPasswordToken,
   resetPasswordMutation,

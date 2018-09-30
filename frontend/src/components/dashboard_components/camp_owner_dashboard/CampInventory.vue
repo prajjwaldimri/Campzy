@@ -1,6 +1,7 @@
 <template lang="pug">
   v-container.inventory-container
     closeByDate
+    editTent
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
@@ -26,7 +27,7 @@
             v-switch(v-model='props.item.isAvailable' color='green'
             @change='openTentBooking(props.item.isAvailable,props.item.id)')
           td.align-center
-            v-btn(icon)
+            v-btn(icon @click='editTent(props.item.id)')
               v-icon edit
           td.align-centers
             v-btn(icon flat @click='openDatePicker(props.item.id)')
@@ -41,6 +42,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { getAllTentsQuery } from '../../../queries/queries';
 import AddTent from './TentManager/AddTent.vue';
+import EditTent from './TentManager/EditTent.vue';
 import { EventBus } from '../../../event-bus';
 import { closeTentBooking, campBooking } from '../../../queries/mutationQueries';
 import CloseBooking from './CloseBookingsByDate.vue';
@@ -49,6 +51,7 @@ export default {
   components: {
     addTent: AddTent,
     closeByDate: CloseBooking,
+    editTent: EditTent,
   },
   metaInfo: {
     title: 'Dashboard | Inventory',
@@ -93,6 +96,9 @@ export default {
   methods: {
     openDatePicker(tentid) {
       EventBus.$emit('open-close-booking-date-picker', tentid);
+    },
+    editTent(tentid) {
+      EventBus.$emit('campowner-open-edit-tent-dialog', tentid);
     },
 
     openTentBooking(isCloseBooking, tentId) {

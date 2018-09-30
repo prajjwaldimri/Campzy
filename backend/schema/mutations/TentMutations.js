@@ -51,11 +51,12 @@ const addTent = {
 const updateTent = {
   type: TentType,
   args: {
+    id: { type: GraphQLString },
     capacity: { type: GraphQLString },
     isBooked: { type: GraphQLBoolean },
     type: { type: GraphQLString },
     bookingPrice: { type: GraphQLString },
-    surgePrice: { type: GraphQLString },
+    surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
@@ -70,20 +71,16 @@ const updateTent = {
         throw new PrivilegeError();
       }
 
-      const ownedCamp = await CampModel.findOne(
-        { ownerId: userData._id },
-        'id',
-      );
-      const tent = new TentModel({
+      const tent = await TentModel.findByIdAndUpdate(args.id, {
         capacity: args.capacity,
         isBooked: args.isBooked,
         type: args.type,
         bookingPrice: args.bookingPrice,
         surgePrice: args.surgePrice,
         preBookPeriod: args.preBookPeriod,
-        camp: ownedCamp._id,
       });
-      return await tent.save();
+      console.log(tent);
+      return tent;
     } catch (err) {
       return err;
     }
