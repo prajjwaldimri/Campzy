@@ -200,7 +200,7 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
     location,
     url,
     heroImage,
-    rating,
+    averageRating,
     inventory {
       id,
       bookingPrice

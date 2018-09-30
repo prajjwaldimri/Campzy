@@ -97,10 +97,10 @@
                           h3.title.mb-2.pl-2
                             | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                           v-tooltip(right)
-                            v-rating(v-model="result.rating" color="green"
+                            v-rating(v-model="result.averageRating" color="green"
                             background-color="green lighten-3" half-increments
                             readonly slot="activator")
-                            span {{result.rating}}
+                            span {{result.averageRating}}
 
                       v-flex(md4).result-column.hidden-sm-and-down
                         .row.feature-row
@@ -137,7 +137,7 @@
                           | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                         .d-flex(style="align-items: center").mt-1
                           h3.mr-2 4.5
-                          v-rating(v-model="result.rating" color="green" small
+                          v-rating(v-model="result.averageRating" color="green" small
                           background-color="green lighten-3" half-increments readonly)
 
               v-dialog(v-model="filterDialog" fullscreen).hidden-md-and-up
@@ -300,8 +300,7 @@ export default {
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
         this.calculatePrice();
-      }).catch((err) => {
-        console.log(err);
+      }).catch(() => {
         this.searchResults = [];
       }).finally(() => {
         this.searchComplete = true;
@@ -314,7 +313,6 @@ export default {
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
         let minPrice = 0;
-        console.log('*******');
         this.searchResults[i].inventory.forEach((tent) => {
           minPrice += tent.bookingPrice;
         });
