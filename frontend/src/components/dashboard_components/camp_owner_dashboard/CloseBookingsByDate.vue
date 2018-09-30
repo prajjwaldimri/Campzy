@@ -31,10 +31,36 @@ export default {
     EventBus.$on('open-close-booking-date-picker', (tentid) => {
       this.tentID = tentid;
       this.closeBookings = true;
+      this.getTents();
     });
   },
 
   methods: {
+    getTents() {
+      // console.log(tentid);
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const getTentById = `query tent($id: String!){
+          tent(id: $id){
+            disabledDates
+          }
+        }`;
+      const variables = {
+        id: this.tentID,
+      };
+
+      client.request(getTentById, variables).then((data) => {
+        this.disabledDates = data.tent.disabledDates;
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
     closeBookingByDate() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');

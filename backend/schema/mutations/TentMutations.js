@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id", "_userId"] }] */
 const graphql = require('graphql');
+const { GraphQLDate } = require('graphql-iso-date');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const TentModel = require('../../models/tent.js');
@@ -81,7 +82,6 @@ const updateTent = {
         surgePrice: args.surgePrice,
         preBookPeriod: args.preBookPeriod,
       });
-      console.log(tent);
       return tent;
     } catch (err) {
       return err;
@@ -157,11 +157,12 @@ const disabledTentBookings = {
   type: TentType,
   args: {
     id: { type: GraphQLString },
-    disabledDates: { type: new GraphQLList(GraphQLString) },
+    disabledDates: { type: new GraphQLList(GraphQLDate) },
   },
 
   async resolve(parent, args, context) {
     try {
+      console.log(args.disabledDates[0]);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserCampOwner = auth.isUserCampOwner(userData);

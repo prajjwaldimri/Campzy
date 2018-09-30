@@ -169,7 +169,7 @@ const addReview = `mutation addReview($stars: Float!, $comment: String, $campId:
   }
 }`;
 
-const closeBookingByDates = `mutation closeBookingByDates($id: String!, $disabledDates: [String]!)
+const closeBookingByDates = `mutation closeBookingByDates($id: String!, $disabledDates: [Date])
         {
         closeBookingByDates(id: $id, disabledDates: $disabledDates){
           id

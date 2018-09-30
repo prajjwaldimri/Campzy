@@ -1,3 +1,4 @@
+const { GraphQLDate } = require('graphql-iso-date');
 const graphql = require('graphql');
 const UserType = require('./UserType');
 
@@ -24,7 +25,7 @@ const TentType = new GraphQLObjectType({
     isAvailable: { type: GraphQLBoolean },
     count: { type: GraphQLInt },
     bookedTentCount: { type: GraphQLInt },
-    disabledDates: { type: new GraphQLList(GraphQLString) },
+    disabledDates: { type: new GraphQLList(GraphQLDate) },
   }),
 });
 
