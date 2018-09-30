@@ -22,8 +22,8 @@
                     v-select(hint="Trip duration" readonly block
                     :label="dateLabel"
                     slot="activator" color="primary" single-line persistent-hint)
-                    v-date-picker(v-model="fromDate" no-title scrollable)
-                    v-date-picker(v-model="toDate" no-title scrollable)
+                    v-date-picker(v-model="fromDate" no-title scrollable :allowed-dates="allowedDates")
+                    v-date-picker(v-model="toDate" no-title scrollable :allowed-dates="allowedDates")
 
                 v-flex
                   v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
@@ -97,10 +97,10 @@
                           h3.title.mb-2.pl-2
                             | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                           v-tooltip(right)
-                            v-rating(v-model="result.rating" color="green"
+                            v-rating(v-model="result.averageRating" color="green"
                             background-color="green lighten-3" half-increments
                             readonly slot="activator")
-                            span {{result.rating}}
+                            span {{result.averageRating}}
 
                       v-flex(md4).result-column.hidden-sm-and-down
                         .row.feature-row
@@ -137,7 +137,7 @@
                           | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                         .d-flex(style="align-items: center").mt-1
                           h3.mr-2 4.5
-                          v-rating(v-model="result.rating" color="green" small
+                          v-rating(v-model="result.averageRating" color="green" small
                           background-color="green lighten-3" half-increments readonly)
 
               v-dialog(v-model="filterDialog" fullscreen).hidden-md-and-up
@@ -159,9 +159,9 @@
                           :label="dateLabel"
                           slot="activator" color="primary" single-line persistent-hint)
                           v-date-picker(v-model="fromDate" no-title scrollable
-                          full-width).hidden-md-and-up
+                          full-width :allowed-dates="allowedDates").hidden-md-and-up
                           v-date-picker(v-model="toDate" no-title scrollable
-                          full-width).hidden-md-and-up
+                          full-width :allowed-dates="allowedDates").hidden-md-and-up
 
                       v-flex
                         v-range-slider(v-model="priceRange" :max="80000" :min="1000"
@@ -232,6 +232,12 @@ export default {
     InfiniteLoading,
     SearchImagesDialog,
   },
+  metaInfo() {
+    return {
+      title: this.searchInput,
+      titleTemplate: '%s - Campzy',
+    };
+  },
   data() {
     return {
       searchInput: '',
@@ -272,6 +278,7 @@ export default {
   },
 
   methods: {
+    allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
     search() {
       EventBus.$emit('show-progress-bar');
       this.filterDialog = false;
@@ -282,7 +289,9 @@ export default {
         searchTerm: this.searchInput,
         minPrice: this.priceRange[0],
         maxPrice: this.priceRange[1],
-        bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        bookingStartDate: this.fromDate,
+        bookingEndDate: this.toDate,
+        preBookPeriod: this.$moment(this.fromDate).diff(Date.now(), 'days'),
         page: 1,
         tentCount: this.tentCount,
         personCount: this.personCount,
@@ -291,8 +300,7 @@ export default {
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;
         this.calculatePrice();
-      }).catch((err) => {
-        console.log(err);
+      }).catch(() => {
         this.searchResults = [];
       }).finally(() => {
         this.searchComplete = true;
@@ -304,11 +312,9 @@ export default {
     },
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPrice = 99999999;
+        let minPrice = 0;
         this.searchResults[i].inventory.forEach((tent) => {
-          if (tent.bookingPrice < minPrice) {
-            minPrice = tent.bookingPrice;
-          }
+          minPrice += tent.bookingPrice;
         });
         this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
       }
@@ -333,16 +339,16 @@ export default {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
     },
     tentCount() {

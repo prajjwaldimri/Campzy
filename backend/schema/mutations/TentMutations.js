@@ -128,7 +128,6 @@ const closeBookings = {
   },
   async resolve(parent, args, context) {
     try {
-      console.log(args);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserCampOwner = auth.isUserCampOwner(userData);

@@ -36,9 +36,11 @@ const bookCheck = {
 
     const tents = await TentModel.find({
       _id: { $in: args.tentIds },
-      isBooked: { $eq: false },
+      isAvailable: { $eq: true },
       preBookPeriod: { $gte: preBookPeriod },
     });
+
+    // console.log(tents);
 
     if (!tents || tents.length < args.tentIds.length) {
       throw new TentNotAvailableError();
@@ -78,8 +80,6 @@ const book = {
 
       const tents = await TentModel.find({
         _id: { $in: args.tentIds },
-        isBooked: { $eq: false },
-        bookedBy: { $eq: null },
         preBookPeriod: { $gte: preBookPeriod },
       });
 
@@ -139,16 +139,10 @@ const book = {
 
       // TODO: Send sms alerts to camp owner and user
 
-      // Update the tent's status
-      tents.forEach(async (tent) => {
-        const modifiedTent = tent;
-        modifiedTent.isBooked = true;
-        modifiedTent.bookedBy = user.id;
-        await modifiedTent.save();
-      });
       // Return the booking token's id
       return booking;
     } catch (err) {
+      console.log(err);
       return err;
     }
   },

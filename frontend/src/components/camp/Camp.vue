@@ -15,8 +15,8 @@
             .d-flex.align-self-start.pb-4.px-5
               span
                 v-icon(dark color="green") star
-                span.title.pl-1.green--text.font-weight-bold {{camp.rating}}
-                span.subheading.pl-2 (16,035 ratings)
+                span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+                span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
               v-btn( dark flat @click='addToWishList(camp.id)') Add to WishList
 
     v-responsive(height="40vh").hidden-sm-and-down
@@ -123,8 +123,10 @@
               v-select(label="Trip duration" readonly block
               :label="dateLabel"  hide-details solo flat
               slot="activator" color="primary")
-              v-date-picker(v-model="fromDate" no-title scrollable full-width)
-              v-date-picker(v-model="toDate" no-title scrollable full-width @click="tripDurationMenu = false")
+              v-date-picker(v-model="fromDate" no-title scrollable :allowed-dates="allowedDates").hidden-sm-and-down
+              v-date-picker(v-model="fromDate" no-title scrollable full-width :allowed-dates="allowedDates").hidden-md-and-up
+              v-date-picker(v-model="toDate" no-title scrollable @click="tripDurationMenu = false" :allowed-dates="allowedDates").hidden-sm-and-down
+              v-date-picker(v-model="toDate" no-title scrollable full-width @click="tripDurationMenu = false" :allowed-dates="allowedDates").hidden-md-and-up
           v-flex(sm2 style="align-items: center").d-flex
             span(style="text-align: center").pa-2.headline.font-weight-bold
               | @ {{ $n(price, 'currency', 'en-IN') }}
@@ -188,10 +190,10 @@ export default {
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
-    this.calculatePrice();
     this.getUser();
   },
   methods: {
+    allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
     getCamp() {
       EventBus.$emit('show-progress-bar');
       const variables = {
@@ -244,20 +246,22 @@ export default {
       const variables = {
         url: this.$route.params.campUrl,
         tentCount: parseInt(this.tentCount, 10),
-        bookingStartDate: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        preBookPeriod: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        bookingStartDate: this.fromDate,
+        bookingEndDate: this.toDate,
         personCount: parseInt(this.personCount, 10),
       };
       request('/graphql', getBestTentAvailable, variables).then((data) => {
-        if (!data.bestTentinCamp || data.bestTentinCamp.length <= 0) {
+        if (!data.bestTentInCamp || data.bestTentInCamp.length <= 0) {
           EventBus.$emit('show-error-notification-long', 'We don\'t have the required amount of tents available. ');
           this.isBookingPossible = false;
           return;
         }
         let price = 0;
         this.tents = [];
-        for (let i = 0; i < data.bestTentinCamp.length; i += 1) {
-          this.tents.push(data.bestTentinCamp[i].id);
-          price += data.bestTentinCamp[i].bookingPrice;
+        for (let i = 0; i < data.bestTentInCamp.length; i += 1) {
+          this.tents.push(data.bestTentInCamp[i].id);
+          price += data.bestTentInCamp[i].bookingPrice;
         }
         // Add the number of days of trip criteria to price
         this.price = price * this.$moment(this.toDate).diff(this.fromDate, 'days');
@@ -356,8 +360,8 @@ export default {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
       this.calculatePrice();
     },
@@ -365,8 +369,8 @@ export default {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
       this.calculatePrice();
     },

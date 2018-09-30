@@ -34,7 +34,8 @@ async function CreateCamp(userId, phoneNumber) {
         .fill(null)
         .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
       heroImage: 'https://loremflickr.com/320/240/nature',
-      rating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
+      averageRating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
+      ratingsCount: faker.random.number({ min: 100, max: 5000 }),
       amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
       altitude: faker.random.number({ min: 100, max: 2000 }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),

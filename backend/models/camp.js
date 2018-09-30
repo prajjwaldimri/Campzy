@@ -58,7 +58,6 @@ const CampSchema = new Schema({
     type: String,
     unique: true,
   },
-  rating: Number,
   terrain: String,
   inventory: [{ type: Schema.Types.ObjectId, ref: 'Tent' }],
   campDocuments: [String],
