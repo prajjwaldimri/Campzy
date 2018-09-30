@@ -16,7 +16,7 @@ const addTent = {
   args: {
     capacity: { type: GraphQLString },
     type: { type: GraphQLString },
-    bookingPrice: { type: GraphQLString },
+    bookingPrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
     surgePrice: { type: GraphQLInt },
   },
@@ -57,7 +57,7 @@ const updateTent = {
     capacity: { type: GraphQLString },
     isBooked: { type: GraphQLBoolean },
     type: { type: GraphQLString },
-    bookingPrice: { type: GraphQLString },
+    bookingPrice: { type: GraphQLInt },
     surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
   },

@@ -90,6 +90,10 @@ export default {
       this.addTentDialog = false;
       this.getAllTents();
     });
+
+    EventBus.$on('close-edit-tent-dialog', () => {
+      this.getAllTents();
+    });
     this.getAllTents();
   },
 

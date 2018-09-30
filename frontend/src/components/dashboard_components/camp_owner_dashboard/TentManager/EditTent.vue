@@ -39,7 +39,8 @@
         v-spacer
         v-btn(color="grey darken-1" flat @click.native="closeDialog")
           | Cancel
-        v-btn(color="green" @click.native="saveTent").white--text Save
+        v-btn(color="green" @click.native="updateTent"
+        :loading='updating').white--text Save
 
 </template>
 
@@ -62,6 +63,7 @@ export default {
       editTentDialog: false,
       disabledDates: [],
       tentId: '',
+      updating: false,
     };
   },
   mounted() {
@@ -93,11 +95,9 @@ export default {
     calculatePrice(tentPrice) {
       this.calculatedPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
     },
-    closeDialog() {
-      this.tent = {};
-      this.editTentDialog = false;
-    },
-    saveTent() {
+
+    updateTent() {
+      this.updating = true;
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           if (!this.$cookie.get('sessionToken')) {
@@ -150,9 +150,16 @@ export default {
       }).catch(() => {
         this.tent = {};
         this.disabledDates = [];
+
         EventBus.$emit('show-error-notification-short', 'Failed to Update');
       });
       this.closeDialog();
+    },
+    closeDialog() {
+      this.tent = {};
+      this.updating = false;
+      this.editTentDialog = false;
+      EventBus.$emit('close-edit-tent-dialog');
     },
 
   },

@@ -46,7 +46,7 @@ const resetPasswordMutation = `mutation resetPassword($newPassword: String!, $co
   }
 }`;
 
-const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: Int!) {
+const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: Int!, $preBookTime: String!,$surgePrice: Int!) {
   addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
     type,
     capacity,
@@ -56,7 +56,7 @@ const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $
   }
 }`;
 
-const updateTentQuery = `mutation updateTent($id: String!, $tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: Int!) {
+const updateTentQuery = `mutation updateTent($id: String!, $tentType: String!, $capacity: String!, $bookingPrice: Int!, $preBookTime: String!,$surgePrice: Int!) {
   updateTent(id: $id, type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
     id,
     type,
