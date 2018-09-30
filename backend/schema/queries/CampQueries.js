@@ -162,10 +162,10 @@ const campSearchUser = {
             preBookPeriod: { $gte: args.preBookPeriod },
             capacity: { $gte: args.personCount },
           },
-          select: 'id bookingPrice capacity',
+          select: 'id bookingPrice capacity disabledDates',
         })
-        .limit(10)
-        .skip((args.page - 1) * 10)
+        .limit(20)
+        .skip((args.page - 1) * 20)
         .sort({ score: { $meta: 'textScore' } });
 
       results = await filter(results, async (result) => {
@@ -173,9 +173,7 @@ const campSearchUser = {
         let { inventory } = result;
         inventory = inventory.filter((tent) => {
           // Check if any of the disabled dates fall between the booking start and end date
-          if (!tent.disabledDates) {
-            return true;
-          }
+
           const isDisableDateInBetween = tent.disabledDates.some(date => moment(date).isBetween(
             moment(args.bookingStartDate).subtract(1, 'day'),
             moment(args.bookingEndDate).add(1, 'day'),

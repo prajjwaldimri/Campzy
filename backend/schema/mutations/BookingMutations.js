@@ -40,6 +40,8 @@ const bookCheck = {
       preBookPeriod: { $gte: preBookPeriod },
     });
 
+    // console.log(tents);
+
     if (!tents || tents.length < args.tentIds.length) {
       throw new TentNotAvailableError();
     }

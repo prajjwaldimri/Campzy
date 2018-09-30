@@ -313,11 +313,10 @@ export default {
     },
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPrice = 99999999;
+        let minPrice = 0;
+        console.log('*******');
         this.searchResults[i].inventory.forEach((tent) => {
-          if (tent.bookingPrice < minPrice) {
-            minPrice = tent.bookingPrice;
-          }
+          minPrice += tent.bookingPrice;
         });
         this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
       }

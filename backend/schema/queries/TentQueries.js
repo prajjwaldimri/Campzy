@@ -113,18 +113,15 @@ const getBestTentInCamp = {
         return !isDisableDateInBetween;
       });
 
-      const tents = inventory
-        .sort((a, b) => a.bookingPrice - b.bookingPrice)
-        .slice(0, args.tentCount);
+      let tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
+      tents = tents.slice(0, args.tentCount);
 
       // If we don't have enough tents send empty response.
       if (tents.length < args.tentCount) {
         return [];
       }
-
       return tents;
     } catch (err) {
-      console.log(err);
       return err;
     }
   },
