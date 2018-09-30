@@ -132,12 +132,13 @@ const getCampByUrl = `query campUser($url: String!){
       longitude
     },
     terrain,
-    rating,
+    averageRating,
+    ratingsCount
   }
 }`;
 
-const getBestTentAvailable = `query bestTentinCamp($url: String!, $tentCount: Int!, $personCount: Int!, $bookingStartDate: Int!){
-  bestTentinCamp(url: $url, tentCount: $tentCount, personCount: $personCount, bookingStartDate: $bookingStartDate){
+const getBestTentAvailable = `query bestTentInCamp($url: String!, $tentCount: Int!, $personCount: Int!, $preBookPeriod: Int!, $bookingStartDate: Date!, $bookingEndDate: Date!){
+  bestTentInCamp(url: $url, tentCount: $tentCount, personCount: $personCount, preBookPeriod: $preBookPeriod, bookingStartDate: $bookingStartDate, bookingEndDate: $bookingEndDate){
     id,
     capacity,
     bookingPrice

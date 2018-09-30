@@ -22,8 +22,8 @@
                     v-select(hint="Trip duration" readonly block
                     :label="dateLabel"
                     slot="activator" color="primary" single-line persistent-hint)
-                    v-date-picker(v-model="fromDate" no-title scrollable)
-                    v-date-picker(v-model="toDate" no-title scrollable)
+                    v-date-picker(v-model="fromDate" no-title scrollable :allowed-dates="allowedDates")
+                    v-date-picker(v-model="toDate" no-title scrollable :allowed-dates="allowedDates")
 
                 v-flex
                   v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
@@ -159,9 +159,9 @@
                           :label="dateLabel"
                           slot="activator" color="primary" single-line persistent-hint)
                           v-date-picker(v-model="fromDate" no-title scrollable
-                          full-width).hidden-md-and-up
+                          full-width :allowed-dates="allowedDates").hidden-md-and-up
                           v-date-picker(v-model="toDate" no-title scrollable
-                          full-width).hidden-md-and-up
+                          full-width :allowed-dates="allowedDates").hidden-md-and-up
 
                       v-flex
                         v-range-slider(v-model="priceRange" :max="80000" :min="1000"
@@ -232,6 +232,12 @@ export default {
     InfiniteLoading,
     SearchImagesDialog,
   },
+  metaInfo() {
+    return {
+      title: this.searchInput,
+      titleTemplate: '%s - Campzy',
+    };
+  },
   data() {
     return {
       searchInput: '',
@@ -272,6 +278,7 @@ export default {
   },
 
   methods: {
+    allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
     search() {
       EventBus.$emit('show-progress-bar');
       this.filterDialog = false;
@@ -333,16 +340,16 @@ export default {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 2) {
-        this.toDate = this.$moment(this.fromDate).add(2, 'days').format('YYYY-MM-DD');
+      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
       }
     },
     tentCount() {

@@ -1,6 +1,10 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const graphql = require('graphql');
+const moment = require('moment');
+const { filter } = require('p-iteration');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
+const BookingModel = require('../../models/booking');
 const CampType = require('../types/CampType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
@@ -153,26 +157,56 @@ const campSearchUser = {
               $lte: parseInt(args.maxPrice / args.tripDuration, 10),
             },
             preBookPeriod: { $gte: args.bookingStartDate },
+            capacity: { $gte: args.personCount },
           },
-          select: 'bookingPrice capacity',
+          select: 'id bookingPrice capacity',
         })
         .limit(10)
         .skip((args.page - 1) * 10)
         .sort({ score: { $meta: 'textScore' } });
 
-      results = results.filter((result) => {
+      results = await filter(results, async (result) => {
         const requiredCapacity = args.tentCount * args.personCount;
-        let availableCapacity = 0;
-        for (let j = 0; j < result.inventory.length; j += 1) {
-          availableCapacity += result.inventory[j].capacity;
+        let { inventory } = result;
+        inventory = inventory.filter((tent) => {
+          // Check if any of the disabled dates fall between the booking start and end date
+          const isDisableDateInBetween = tent.disabledDates.some(date => moment(date).isBetween(
+            moment(args.bookingStartDate).subtract(1, 'day'),
+            moment(args.bookingEndDate).add(1, 'day'),
+            'days',
+          ));
+          return !isDisableDateInBetween;
+        });
 
+        inventory = await filter(inventory, async (tent) => {
           // Get all bookings of tents
           // Check whether the provided clashes with other bookings
-        }
+          const bookings = await BookingModel.find({ tents: tent._id });
+          const isDisableDateInBetween = bookings.some(
+            booking => moment(args.bookingStartDate).isBetween(
+              moment(booking.startDate).subtract(1, 'day'),
+              moment(booking.endDate).add(1, 'day'),
+              'days',
+            )
+              || moment(args.bookingEndDate).isBetween(
+                moment(booking.startDate).subtract(1, 'day'),
+                moment(booking.endDate).add(1, 'day'),
+                'days',
+              ),
+          );
+
+          return !isDisableDateInBetween;
+        });
+
+        const availableCapacity = inventory.reduce(
+          (prevCapacity, tent) => prevCapacity + tent.capacity,
+          0,
+        );
+
         return (
-          result.inventory.length === 0
-          || result.inventory.length < args.tentCount
-          || availableCapacity < requiredCapacity
+          inventory.length !== 0
+          && inventory.length >= args.tentCount
+          && availableCapacity >= requiredCapacity
         );
       });
 

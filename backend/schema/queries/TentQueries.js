@@ -1,7 +1,12 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const graphql = require('graphql');
+const moment = require('moment');
+const { filter } = require('p-iteration');
+const { GraphQLDate } = require('graphql-iso-date');
 const TentModel = require('../../models/tent.js');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
+const BookingModel = require('../../models/booking');
 const TentType = require('../types/TentType');
 const auth = require('../../config/auth');
 
@@ -53,13 +58,15 @@ const getAllTents = {
   },
 };
 
-const getBestTentinCamp = {
+const getBestTentInCamp = {
   type: new GraphQLList(TentType),
   args: {
     url: { type: GraphQLString },
     tentCount: { type: GraphQLInt },
     personCount: { type: GraphQLInt },
-    bookingStartDate: { type: GraphQLInt },
+    preBookPeriod: { type: GraphQLInt },
+    bookingStartDate: { type: GraphQLDate },
+    bookingEndDate: { type: GraphQLDate },
   },
   async resolve(parent, args) {
     try {
@@ -68,32 +75,56 @@ const getBestTentinCamp = {
           path: 'inventory',
           match: {
             isAvailable: { $eq: true },
-            isBooked: { $eq: false },
-            preBookPeriod: { $gte: args.bookingStartDate },
+            preBookPeriod: { $gte: args.preBookPeriod },
             capacity: { $gte: args.personCount },
           },
-          select: 'bookingPrice id capacity',
-          sort: 'bookingPrice',
+          select: 'bookingPrice id capacity disabledDates',
         })
         .select('id inventory');
 
-      const tents = [];
+      let { inventory } = camp;
+      inventory = inventory.filter((tent) => {
+        // Check if any of the disabled dates fall between the booking start and end date
+        const isDisableDateInBetween = tent.disabledDates.some(date => moment(date).isBetween(
+          moment(args.bookingStartDate).subtract(1, 'day'),
+          moment(args.bookingEndDate).add(1, 'day'),
+          'days',
+        ));
+        return !isDisableDateInBetween;
+      });
 
-      for (let i = 0; i < camp.inventory.length; i += 1) {
-        if (tents.length === args.tentCount) {
-          break;
-        }
-        tents.push(camp.inventory[i]);
-      }
+      inventory = await filter(inventory, async (tent) => {
+        // Get all bookings of tents
+        // Check whether the provided clashes with other bookings
+        const bookings = await BookingModel.find({ tents: tent._id });
+        const isDisableDateInBetween = bookings.some(
+          booking => moment(args.bookingStartDate).isBetween(
+            moment(booking.startDate).subtract(1, 'day'),
+            moment(booking.endDate).add(1, 'day'),
+            'days',
+          )
+            || moment(args.bookingEndDate).isBetween(
+              moment(booking.startDate).subtract(1, 'day'),
+              moment(booking.endDate).add(1, 'day'),
+              'days',
+            ),
+        );
 
-      // If we don't have enough tents send null response.
+        return !isDisableDateInBetween;
+      });
+
+      const tents = inventory
+        .sort((a, b) => a.bookingPrice - b.bookingPrice)
+        .slice(0, args.tentCount);
+
+      // If we don't have enough tents send empty response.
       if (tents.length < args.tentCount) {
         return [];
       }
 
-      // Get the best tent according to provided tent and person count
       return tents;
     } catch (err) {
+      console.log(err);
       return err;
     }
   },
@@ -152,7 +183,7 @@ const countBookedTent = {
 module.exports = {
   getTent,
   getAllTents,
-  getBestTentinCamp,
+  getBestTentInCamp,
   countCampInventory,
   countBookedTent,
 };

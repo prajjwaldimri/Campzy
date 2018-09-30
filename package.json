@@ -63,6 +63,7 @@
     "nanoid-good": "^1.2.1",
     "node-mailjet": "^3.2.1",
     "nodemon": "^1.18.3",
+    "p-iteration": "^1.1.7",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pbkdf2": "^3.0.16",
