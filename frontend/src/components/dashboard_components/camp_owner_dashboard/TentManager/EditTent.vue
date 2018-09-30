@@ -23,8 +23,8 @@
           v-spacer
           v-flex(xs12 md6)
             v-text-field(v-model="calculatedPrice" label="Final Price" prepend-icon="account_balance_wallet"
-            data-vv-name="finalPrice" v-validate="'required'" hint='*Including all Taxes' persistent-hint
-            :error-messages="errors.collect('finalPrice')" readonly)
+            data-vv-name="finalPrice"  hint='*Including all Taxes' persistent-hint
+             readonly)
 
         v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
         data-vv-name="surgePrice"
@@ -94,6 +94,7 @@ export default {
       this.calculatedPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
     },
     closeDialog() {
+      this.tent = {};
       this.editTentDialog = false;
     },
     saveTent() {
@@ -120,12 +121,9 @@ export default {
             },
           });
 
-          client.request(updateTentQuery, variables).then((data) => {
-            console.log(data);
-            this.tent = {};
+          client.request(updateTentQuery, variables).then(() => {
             this.closeBookingByDate();
           }).catch((err) => {
-            console.log(err);
             EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           });
         }
@@ -133,28 +131,26 @@ export default {
     },
 
     closeBookingByDate() {
-      this.disabledDates.forEach((dates) => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/');
-        }
-        const client = new GraphQLClient('/graphql', {
-          headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
-        });
-        const variables = {
-          id: this.tent.id,
-          disabledDates: dates,
-        };
-        client.request(closeBookingByDates, variables).then(() => {
-          this.disabledDates = [];
-          this.closeBookings = false;
-          EventBus.$emit('show-success-notification-short', 'Tents are closed for these dates');
-        }).catch((err) => {
-          this.disabledDates = [];
-          this.closeBookings = false;
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: this.tent.id,
+        disabledDates: this.disabledDates,
+      };
+      client.request(closeBookingByDates, variables).then(() => {
+        this.tent = {};
+        this.disabledDates = [];
+        EventBus.$emit('show-success-notification-short', 'Successfully Update');
+      }).catch(() => {
+        this.tent = {};
+        this.disabledDates = [];
+        EventBus.$emit('show-error-notification-short', 'Failed to Update');
       });
       this.closeDialog();
     },

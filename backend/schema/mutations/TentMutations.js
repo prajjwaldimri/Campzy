@@ -7,7 +7,9 @@ const TentType = require('../types/TentType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLBoolean, GraphQLInt } = graphql;
+const {
+  GraphQLString, GraphQLBoolean, GraphQLInt, GraphQLList,
+} = graphql;
 
 const addTent = {
   type: TentType,
@@ -155,7 +157,7 @@ const disabledTentBookings = {
   type: TentType,
   args: {
     id: { type: GraphQLString },
-    disabledDates: { type: GraphQLString },
+    disabledDates: { type: new GraphQLList(GraphQLString) },
   },
 
   async resolve(parent, args, context) {
@@ -170,7 +172,7 @@ const disabledTentBookings = {
         throw new PrivilegeError();
       }
       const tent = await TentModel.findByIdAndUpdate(args.id, {
-        $push: { disabledDates: args.disabledDates },
+        disabledDates: args.disabledDates,
       });
       return tent;
     } catch (err) {

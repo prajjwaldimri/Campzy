@@ -36,28 +36,26 @@ export default {
 
   methods: {
     closeBookingByDate() {
-      this.disabledDates.forEach((dates) => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/');
-        }
-        const client = new GraphQLClient('/graphql', {
-          headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
-        });
-        const variables = {
-          id: this.tentID,
-          disabledDates: dates,
-        };
-        client.request(closeBookingByDates, variables).then(() => {
-          this.disabledDates = [];
-          this.closeBookings = false;
-          EventBus.$emit('show-success-notification-short', 'Tents are closed for these dates');
-        }).catch((err) => {
-          this.disabledDates = [];
-          this.closeBookings = false;
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: this.tentID,
+        disabledDates: this.disabledDates,
+      };
+      client.request(closeBookingByDates, variables).then(() => {
+        this.disabledDates = [];
+        this.closeBookings = false;
+        EventBus.$emit('show-success-notification-short', 'Tents are closed for these dates');
+      }).catch((err) => {
+        this.disabledDates = [];
+        this.closeBookings = false;
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
 
