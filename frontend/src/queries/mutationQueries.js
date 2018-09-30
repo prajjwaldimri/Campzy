@@ -158,6 +158,13 @@ const addReview = `mutation addReview($stars: Float!, $comment: String, $campId:
   }
 }`;
 
+const closeBookingByDates = `mutation closeBookingByDates($id: String!, $disabledDates: String!)
+        {
+        closeBookingByDates(id: $id, disabledDates: $disabledDates){
+          id
+        }
+        }`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -184,4 +191,5 @@ module.exports = {
   addAmenities,
   addCampToWishlist,
   addReview,
+  closeBookingByDates,
 };

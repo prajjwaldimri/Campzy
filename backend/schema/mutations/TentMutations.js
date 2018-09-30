@@ -154,9 +154,38 @@ const closeBookings = {
   },
 };
 
+const disabledTentBookings = {
+  type: TentType,
+  args: {
+    id: { type: GraphQLString },
+    disabledDates: { type: GraphQLString },
+  },
+
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      const tent = await TentModel.findByIdAndUpdate(args.id, {
+        $push: { disabledDates: args.disabledDates },
+      });
+      return tent;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   addTent,
   updateTent,
   deleteTent,
   closeBookings,
+  disabledTentBookings,
 };

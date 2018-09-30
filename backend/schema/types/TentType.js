@@ -7,6 +7,7 @@ const {
   GraphQLID,
   GraphQLInt,
   GraphQLBoolean,
+  GraphQLList,
 } = graphql;
 
 const TentType = new GraphQLObjectType({
@@ -23,6 +24,7 @@ const TentType = new GraphQLObjectType({
     isAvailable: { type: GraphQLBoolean },
     count: { type: GraphQLInt },
     bookedTentCount: { type: GraphQLInt },
+    disabledDates: { type: new GraphQLList(GraphQLString) },
   }),
 });
 

@@ -1,5 +1,6 @@
 <template lang="pug">
   v-container.inventory-container
+    closeByDate
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
@@ -11,54 +12,25 @@
         @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
         :label='campSwitchLabel'
         )
-      v-spacer
-      .d-flex(md4 xs12 align-content-start justify-center)
-        v-menu(ref="closeBookings"
-        :close-on-content-click="false"
-        v-model="closeBookings"
-        :nudge-right="40"
-        :return-value.sync="disabledDates"
-        lazy
-        transition="scale-transition"
-        offset-y
-        full-width
-        min-width="290px")
-          v-combobox( slot="activator"
-          v-model="disabledDates"
-          multiple
-          chips
-          small-chips
-          label="Booking close Dates"
-          prepend-icon="event"
-          readonly)
-          v-date-picker(v-model="disabledDates" multiple color="green"  scrollable)
-            v-spacer
-            v-btn( flat color="primary" @click="closeBookings = false") Cancel
-            v-btn( flat color="primary" @click="saveDates($refs.closeBookings.save(disabledDates))" ) OK
-
 
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading" ).elevation-1
         template(slot="items" slot-scope="props")
-          tr(@click="props.expanded = !props.expanded")
-            td.font-weight-bold {{props.item.type}}
-            td {{props.item.capacity}} Persons
-            td Rs. {{props.item.bookingPrice}}
-            td Rs. {{props.item.surgePrice}}
-            td {{props.item.preBookPeriod}} Days
-            td.align-center
-              v-checkbox(v-model='props.item.isBooked' color='green'
-              disabled)
-            td.align-center
-              v-switch(v-model='props.item.isAvailable' color='green'
-              @change='openTentBooking(props.item.isAvailable,props.item.id)')
-            td.align-center
-              v-btn(icon)
-                v-icon edit
-        template(slot="expand" slot-scope="props")
-          v-card(flat)
-            v-card-title.font-weight-bold Tent Options
+          td.font-weight-bold {{props.item.type}}
+          td {{props.item.capacity}} Persons
+          td Rs. {{props.item.bookingPrice}}
+          td Rs. {{props.item.surgePrice}}
+          td {{props.item.preBookPeriod}} Days
+          td.align-center
+            v-switch(v-model='props.item.isAvailable' color='green'
+            @change='openTentBooking(props.item.isAvailable,props.item.id)')
+          td.align-center
+            v-btn(icon)
+              v-icon edit
+          td.align-centers
+            v-btn(icon flat @click='openDatePicker(props.item.id)')
+              v-icon date_range
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
       v-btn(color="green" slot="activator" fab dark bottom right fixed).elevation-19
         v-icon add
@@ -71,10 +43,12 @@ import { getAllTentsQuery } from '../../../queries/queries';
 import AddTent from './TentManager/AddTent.vue';
 import { EventBus } from '../../../event-bus';
 import { closeTentBooking, campBooking } from '../../../queries/mutationQueries';
+import CloseBooking from './CloseBookingsByDate.vue';
 
 export default {
   components: {
     addTent: AddTent,
+    closeByDate: CloseBooking,
   },
   metaInfo: {
     title: 'Dashboard | Inventory',
@@ -84,6 +58,7 @@ export default {
     return {
       disabledDates: [],
       closeBookings: false,
+      selectedTents: [],
       headers: [
         {
           text: 'Tent Type',
@@ -93,9 +68,9 @@ export default {
         { text: 'Booking Price', value: 'bookingPrice' },
         { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
-        { text: 'Is Booked?', value: 'actions', sortable: false },
         { text: 'Open Booking', value: 'actions', sortable: false },
         { text: 'Edit Tent', value: 'actions', sortable: false },
+        { text: 'Close Dates', value: 'actions', sortable: false },
       ],
       tents: [],
       addTentDialog: false,
@@ -116,8 +91,8 @@ export default {
   },
 
   methods: {
-    saveDates() {
-      console.log(this.disabledDates);
+    openDatePicker(tentid) {
+      EventBus.$emit('open-close-booking-date-picker', tentid);
     },
 
     openTentBooking(isCloseBooking, tentId) {
@@ -156,6 +131,7 @@ export default {
       this.isTableLoading = true;
       client.request(getAllTentsQuery).then((data) => {
         this.tents = data.allTents;
+        console.log(this.tents);
         this.getCampStatus();
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);

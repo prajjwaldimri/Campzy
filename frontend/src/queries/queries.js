@@ -25,9 +25,7 @@ const getAllTentsQuery = `query allTents{
       isBooked
       isAvailable
       surgePrice
-      bookedBy {
-        name
-      }
+      disabledDates
     }
   }
   `;
