@@ -197,6 +197,10 @@ export default {
   components: {
     InfiniteLoading,
   },
+  metaInfo: {
+    title: 'Dashboard | Camp Details',
+  },
+
   data() {
     return {
       el: 0,

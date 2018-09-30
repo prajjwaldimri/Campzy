@@ -186,6 +186,10 @@ export default {
   components: {
     ICountUp,
   },
+  metaInfo: {
+    title: 'Dashboard | Statistics',
+  },
+
   data() {
     return {
       rating: 4,

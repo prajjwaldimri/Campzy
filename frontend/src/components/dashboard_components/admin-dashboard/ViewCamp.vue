@@ -77,6 +77,10 @@ import { EventBus } from '../../../event-bus';
 import { getCampDetail } from '../../../queries/queries';
 
 export default {
+  metaInfo: {
+    title: 'Dashboard | View Camp',
+  },
+
   data() {
     return {
       campDetail: {},

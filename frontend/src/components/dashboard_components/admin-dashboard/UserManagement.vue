@@ -51,6 +51,10 @@ export default {
   components: {
     addBlogger: AddBlogger,
   },
+  metaInfo: {
+    title: 'Dashboard | User Mangement',
+  },
+
   data() {
     return {
       headers: [
