@@ -1,37 +1,37 @@
 <template lang="pug">
   v-container.inventory-container
+    closeByDate
+    editTent
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
-      v-flex(sm5)
+      v-flex(xs12 md5)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
+      v-flex(xs12 md3 offset-sm4 align-content-start justify-center).d-flex
         v-switch(v-model='campAvailable.isAvailable' color='green'
         @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
         :label='campSwitchLabel'
         )
 
-
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
-      must-sort :loading="isTableLoading").elevation-1
+      must-sort :loading="isTableLoading" ).elevation-1
         template(slot="items" slot-scope="props")
-          tr(@click="props.expanded = !props.expanded")
-            td.font-weight-bold {{props.item.type}}
-            td {{props.item.capacity}} Persons
-            td Rs. {{props.item.bookingPrice}}
-            td Rs. {{props.item.surgePrice}}
-            td {{props.item.preBookPeriod}} Days
-            td.align-center
-              v-switch(v-model='props.item.isAvailable' color='green'
-              @change='openTentBooking(props.item.isAvailable,props.item.id)')
-            td.align-center
-              v-btn(icon)
-                v-icon edit
-        template(slot="expand" slot-scope="props")
-          v-card(flat)
-            v-card-title Tent Options
+          td.font-weight-bold {{props.item.type}}
+          td {{props.item.capacity}} Persons
+          td Rs. {{props.item.bookingPrice}}
+          td Rs. {{props.item.surgePrice}}
+          td {{props.item.preBookPeriod}} Days
+          td.align-center
+            v-switch(v-model='props.item.isAvailable' color='green'
+            @change='openTentBooking(props.item.isAvailable,props.item.id)')
+          td.align-center
+            v-btn(icon @click='editTent(props.item.id)')
+              v-icon edit
+          td.align-centers
+            v-btn(icon flat @click='openDatePicker(props.item.id)')
+              v-icon date_range
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
       v-btn(color="green" slot="activator" fab dark bottom right fixed).elevation-19
         v-icon add
@@ -42,12 +42,16 @@
 import { GraphQLClient } from 'graphql-request';
 import { getAllTentsQuery } from '../../../queries/queries';
 import AddTent from './TentManager/AddTent.vue';
+import EditTent from './TentManager/EditTent.vue';
 import { EventBus } from '../../../event-bus';
 import { closeTentBooking, campBooking } from '../../../queries/mutationQueries';
+import CloseBooking from './CloseBookingsByDate.vue';
 
 export default {
   components: {
     addTent: AddTent,
+    closeByDate: CloseBooking,
+    editTent: EditTent,
   },
   metaInfo: {
     title: 'Dashboard | Inventory',
@@ -55,6 +59,9 @@ export default {
 
   data() {
     return {
+      disabledDates: [],
+      closeBookings: false,
+      selectedTents: [],
       headers: [
         {
           text: 'Tent Type',
@@ -66,6 +73,7 @@ export default {
         { text: 'Pre Book Time', value: 'perBookPeriod' },
         { text: 'Open Booking', value: 'actions', sortable: false },
         { text: 'Edit Tent', value: 'actions', sortable: false },
+        { text: 'Close Dates', value: 'actions', sortable: false },
       ],
       tents: [],
       addTentDialog: false,
@@ -82,10 +90,20 @@ export default {
       this.addTentDialog = false;
       this.getAllTents();
     });
+
+    EventBus.$on('close-edit-tent-dialog', () => {
+      this.getAllTents();
+    });
     this.getAllTents();
   },
 
   methods: {
+    openDatePicker(tentid) {
+      EventBus.$emit('open-close-booking-date-picker', tentid);
+    },
+    editTent(tentid) {
+      EventBus.$emit('campowner-open-edit-tent-dialog', tentid);
+    },
 
     openTentBooking(isCloseBooking, tentId) {
       if (!this.$cookie.get('sessionToken')) {

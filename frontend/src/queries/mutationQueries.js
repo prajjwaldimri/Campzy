@@ -46,8 +46,19 @@ const resetPasswordMutation = `mutation resetPassword($newPassword: String!, $co
   }
 }`;
 
-const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: String!, $preBookTime: String!,$surgePrice: Int!) {
+const addTentQuery = `mutation addTent($tentType: String!, $capacity: String!, $bookingPrice: Int!, $preBookTime: String!,$surgePrice: Int!) {
   addTent(type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
+    type,
+    capacity,
+    bookingPrice,
+    preBookPeriod,
+    surgePrice,
+  }
+}`;
+
+const updateTentQuery = `mutation updateTent($id: String!, $tentType: String!, $capacity: String!, $bookingPrice: Int!, $preBookTime: String!,$surgePrice: Int!) {
+  updateTent(id: $id, type: $tentType, capacity: $capacity, bookingPrice: $bookingPrice, preBookPeriod: $preBookTime,surgePrice: $surgePrice){
+    id,
     type,
     capacity,
     bookingPrice,
@@ -158,6 +169,13 @@ const addReview = `mutation addReview($stars: Float!, $comment: String, $campId:
   }
 }`;
 
+const closeBookingByDates = `mutation closeBookingByDates($id: String!, $disabledDates: [String]!)
+        {
+        closeBookingByDates(id: $id, disabledDates: $disabledDates){
+          id
+        }
+        }`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -165,6 +183,7 @@ module.exports = {
   verifyEmailToken,
   sendVerificationEmail,
   addTentQuery,
+  updateTentQuery,
   sendOTP,
   sendResetPasswordToken,
   resetPasswordMutation,
@@ -184,4 +203,5 @@ module.exports = {
   addAmenities,
   addCampToWishlist,
   addReview,
+  closeBookingByDates,
 };

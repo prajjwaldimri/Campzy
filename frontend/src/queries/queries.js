@@ -25,12 +25,23 @@ const getAllTentsQuery = `query allTents{
       isBooked
       isAvailable
       surgePrice
-      bookedBy {
-        name
-      }
+      disabledDates
     }
   }
   `;
+
+const getTentById = `query tent($id: String!){
+    tent(id: $id){
+      id
+      capacity
+      type
+      bookingPrice
+      preBookPeriod
+      surgePrice
+      isAvailable
+      disabledDates
+    }
+  }`;
 
 const countTents = `query countCampTents{
   countCampTents{
@@ -307,4 +318,5 @@ module.exports = {
   countCampActiveBooking,
   getWishList,
   getLatestCampForReview,
+  getTentById,
 };

@@ -7,14 +7,16 @@ const TentType = require('../types/TentType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLBoolean, GraphQLInt } = graphql;
+const {
+  GraphQLString, GraphQLBoolean, GraphQLInt, GraphQLList,
+} = graphql;
 
 const addTent = {
   type: TentType,
   args: {
     capacity: { type: GraphQLString },
     type: { type: GraphQLString },
-    bookingPrice: { type: GraphQLString },
+    bookingPrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
     surgePrice: { type: GraphQLInt },
   },
@@ -51,11 +53,12 @@ const addTent = {
 const updateTent = {
   type: TentType,
   args: {
+    id: { type: GraphQLString },
     capacity: { type: GraphQLString },
     isBooked: { type: GraphQLBoolean },
     type: { type: GraphQLString },
-    bookingPrice: { type: GraphQLString },
-    surgePrice: { type: GraphQLString },
+    bookingPrice: { type: GraphQLInt },
+    surgePrice: { type: GraphQLInt },
     preBookPeriod: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
@@ -70,20 +73,16 @@ const updateTent = {
         throw new PrivilegeError();
       }
 
-      const ownedCamp = await CampModel.findOne(
-        { ownerId: userData._id },
-        'id',
-      );
-      const tent = new TentModel({
+      const tent = await TentModel.findByIdAndUpdate(args.id, {
         capacity: args.capacity,
         isBooked: args.isBooked,
         type: args.type,
         bookingPrice: args.bookingPrice,
         surgePrice: args.surgePrice,
         preBookPeriod: args.preBookPeriod,
-        camp: ownedCamp._id,
       });
-      return await tent.save();
+      console.log(tent);
+      return tent;
     } catch (err) {
       return err;
     }
@@ -153,9 +152,38 @@ const closeBookings = {
   },
 };
 
+const disabledTentBookings = {
+  type: TentType,
+  args: {
+    id: { type: GraphQLString },
+    disabledDates: { type: new GraphQLList(GraphQLString) },
+  },
+
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      const tent = await TentModel.findByIdAndUpdate(args.id, {
+        disabledDates: args.disabledDates,
+      });
+      return tent;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   addTent,
   updateTent,
   deleteTent,
   closeBookings,
+  disabledTentBookings,
 };
