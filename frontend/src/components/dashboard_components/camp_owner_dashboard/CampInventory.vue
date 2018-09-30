@@ -3,19 +3,43 @@
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
-      v-flex(sm5)
+      v-flex(xs12 md5)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(sm3 offset-sm4 align-content-start justify-center).d-flex
+      v-flex(xs12 md3 offset-sm4 align-content-start justify-center).d-flex
         v-switch(v-model='campAvailable.isAvailable' color='green'
         @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
         :label='campSwitchLabel'
         )
+      v-spacer
+      .d-flex(md4 xs12 align-content-start justify-center)
+        v-menu(ref="closeBookings"
+        :close-on-content-click="false"
+        v-model="closeBookings"
+        :nudge-right="40"
+        :return-value.sync="disabledDates"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px")
+          v-combobox( slot="activator"
+          v-model="disabledDates"
+          multiple
+          chips
+          small-chips
+          label="Booking close Dates"
+          prepend-icon="event"
+          readonly)
+          v-date-picker(v-model="disabledDates" multiple color="green"  scrollable)
+            v-spacer
+            v-btn( flat color="primary" @click="closeBookings = false") Cancel
+            v-btn( flat color="primary" @click="saveDates($refs.closeBookings.save(disabledDates))" ) OK
 
 
     v-layout(row)
       v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
-      must-sort :loading="isTableLoading").elevation-1
+      must-sort :loading="isTableLoading" ).elevation-1
         template(slot="items" slot-scope="props")
           tr(@click="props.expanded = !props.expanded")
             td.font-weight-bold {{props.item.type}}
@@ -24,6 +48,9 @@
             td Rs. {{props.item.surgePrice}}
             td {{props.item.preBookPeriod}} Days
             td.align-center
+              v-checkbox(v-model='props.item.isBooked' color='green'
+              disabled)
+            td.align-center
               v-switch(v-model='props.item.isAvailable' color='green'
               @change='openTentBooking(props.item.isAvailable,props.item.id)')
             td.align-center
@@ -31,7 +58,7 @@
                 v-icon edit
         template(slot="expand" slot-scope="props")
           v-card(flat)
-            v-card-title Tent Options
+            v-card-title.font-weight-bold Tent Options
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
       v-btn(color="green" slot="activator" fab dark bottom right fixed).elevation-19
         v-icon add
@@ -55,6 +82,8 @@ export default {
 
   data() {
     return {
+      disabledDates: [],
+      closeBookings: false,
       headers: [
         {
           text: 'Tent Type',
@@ -64,6 +93,7 @@ export default {
         { text: 'Booking Price', value: 'bookingPrice' },
         { text: 'Surged Price', value: 'surgePrice' },
         { text: 'Pre Book Time', value: 'perBookPeriod' },
+        { text: 'Is Booked?', value: 'actions', sortable: false },
         { text: 'Open Booking', value: 'actions', sortable: false },
         { text: 'Edit Tent', value: 'actions', sortable: false },
       ],
@@ -86,6 +116,9 @@ export default {
   },
 
   methods: {
+    saveDates() {
+      console.log(this.disabledDates);
+    },
 
     openTentBooking(isCloseBooking, tentId) {
       if (!this.$cookie.get('sessionToken')) {
