@@ -93,8 +93,8 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        console.log(res);
-        this.heroImage = res.data[0];
+        const [image] = res.data;
+        this.heroImage = image;
         this.saveBlog(this.heroImage);
       }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Upload');
