@@ -79,7 +79,7 @@
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
                         v-hover
-                          v-img(:src="result.heroImage" width="100%" height="16rem" cover
+                          v-img(:src="result.heroImage" width="100%" height="17rem" cover
                           slot-scope="{ hover }")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
                               v-progress-circular(indeterminate color="green darken-5")
@@ -91,7 +91,7 @@
 
                       v-flex(md4).result-column.pl-3.pt-3
                         .pl-2
-                          h1.display-1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
+                          h1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
                           h3.title.grey--text.mt-3.text--darken-2 {{result.location}}
                         div.mt-4
                           h3.title.mb-3.pl-2
@@ -105,7 +105,7 @@
                       v-flex(md4).result-column.hidden-sm-and-down.pl-3
                         .row.feature-row
                           v-icon.mr-3 cloud
-                          span.increase-letter-spacing-1(v-if="result.temperature") {{result.temperature}}
+                          span.increase-letter-spacing-1(v-if="result.temperature") {{result.temperature}} ({{result.temperatureSummary}})
                           span.increase-letter-spacing-1(v-else) Can't get temperature
 
                         .row.feature-row(v-if="result.terrain.forest")

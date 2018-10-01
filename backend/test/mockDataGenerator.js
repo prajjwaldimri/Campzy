@@ -16,12 +16,12 @@ const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
 
 async function CreateCamp(userId, phoneNumber) {
   let camp;
-  let tents = [];
+  const tents = [];
   try {
     camp = await Camp.create({
       name: faker.company.companyName(),
       isAvailable: true,
-      phoneNumber: phoneNumber,
+      phoneNumber,
       email: faker.internet.email(),
       url: faker.random.uuid(),
       shortDescription: faker.lorem.sentence(),
@@ -52,7 +52,7 @@ async function CreateCamp(userId, phoneNumber) {
       'terrain.glacier': true,
     });
     for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
-      let tent = await Tent.create({
+      const tent = await Tent.create({
         capacity: faker.random.number({ min: 1, max: 4 }),
         isAvailable: true,
         type: faker.random.arrayElement(campTypes),
@@ -61,7 +61,7 @@ async function CreateCamp(userId, phoneNumber) {
         preBookPeriod: faker.random.number({ min: 2, max: 15 }),
         camp: camp._id,
       });
-      let review = await Review.create({
+      await Review.create({
         stars: faker.random.number({ min: 1, max: 5 }),
         comment: faker.lorem.sentences(),
         camp: camp._id,

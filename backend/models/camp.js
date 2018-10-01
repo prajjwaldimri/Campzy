@@ -48,6 +48,7 @@ const CampSchema = new Schema({
   services: { type: [String] },
   placesOfInterest: [{ name: String, distance: String }],
   temperature: { type: String },
+  temperatureSummary: { type: String },
   altitude: { type: String },
   hourDriveFromDelhi: { type: Date },
   coordinates: {

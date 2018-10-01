@@ -214,7 +214,8 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
       id,
       bookingPrice
     },
-
+    temperature,
+    temperatureSummary,
     terrain {
       glacier,
       forest,
