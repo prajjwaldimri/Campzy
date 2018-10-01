@@ -46,7 +46,7 @@ const CampSchema = new Schema({
     chargingPoints: { type: Boolean, default: false },
   },
   services: { type: [String] },
-  placesOfInterest: { type: [String] },
+  placesOfInterest: [{ name: String, distance: String }],
   temperature: { type: String },
   altitude: { type: String },
   hourDriveFromDelhi: { type: Date },

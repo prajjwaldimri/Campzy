@@ -42,7 +42,17 @@ async function CreateCamp(userId, phoneNumber) {
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
       placesOfInterest: new Array(4)
         .fill(null)
-        .map(e => (e = faker.hacker.noun())),
+        .map(
+          e =>
+            (e = {
+              name: faker.hacker.noun(),
+              distance: faker.random.number({
+                min: 0,
+                max: 10,
+                precision: 0.1,
+              }),
+            }),
+        ),
       terrain: faker.random.arrayElement(terrainTypes),
     });
     for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {

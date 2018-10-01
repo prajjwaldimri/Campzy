@@ -33,6 +33,14 @@ const AmenitiesType = new GraphQLObjectType({
   }),
 });
 
+const PlacesOfInterestType = new GraphQLObjectType({
+  name: 'PlacesOfInterest',
+  fields: () => ({
+    name: { type: GraphQLString },
+    distance: { type: GraphQLFloat },
+  }),
+});
+
 const CampType = new GraphQLObjectType({
   name: 'Camp',
   fields: () => ({
@@ -55,7 +63,7 @@ const CampType = new GraphQLObjectType({
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
     amenities: { type: AmenitiesType },
-    placesOfInterest: { type: new GraphQLList(GraphQLString) },
+    placesOfInterest: { type: new GraphQLList(PlacesOfInterestType) },
     images: { type: new GraphQLList(GraphQLString) },
     heroImage: { type: GraphQLString },
     count: { type: GraphQLInt },

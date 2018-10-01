@@ -122,7 +122,10 @@ const getCampByUrl = `query campUser($url: String!){
     location,
     shortDescription,
     longDescription,
-    placesOfInterest,
+    placesOfInterest{
+      name,
+      distance
+    }
     tags,
     amenities{
       washRoomAttached,

@@ -45,7 +45,7 @@
         p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
 
         h1.headline.mt-5.px-1.font-weight-bold Amenities
-        v-container(grid-list-lg fluid).mt-2.px-0
+        v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
           v-layout(row wrap)
             v-flex(sm4 md3).text-xs-center
               v-icon wb_cloudy
@@ -109,10 +109,10 @@
         v-list(two-line).mt-4
           v-list-tile(v-for="place in camp.placesOfInterest")
             v-list-tile-content
-              v-list-tile-title place
-            v-list-tile-avatar
-              img(src="https://images.pexels.com/users/avatars/121938/eberhard-grossgasteiger-438.jpeg?w=200&h=200&fit=crop&crop=faces")
-          v-divider
+              v-list-tile-title {{place.name}}
+            .d-flex
+              v-icon.px-2 near_me
+              span {{place.distance.toFixed(1)}} Km
 
       v-divider(inset vertical).mx-3
 
@@ -231,7 +231,8 @@ export default {
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err);
         this.$router.go(-1);
         EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
       }).finally(() => {
