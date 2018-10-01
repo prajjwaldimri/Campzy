@@ -2,7 +2,11 @@
   v-container(fluid)
     v-card.mt-4(v-for='(blog, index) in blogs')
       v-card-title.title(primary-title)
-        h2.font-weight-bold.headline {{blog.title}}
+        v-layout(row wrap)
+          v-flex(xs10)
+            h2.font-weight-bold.headline {{blog.title}}
+          v-flex(xs2)
+            a(:href="'/blog/' + blog.url" target='_blank' style='color:black') View Blog
       v-card-text
         v-flex(xs12)
           v-form(ref='form' lazy-validation)
