@@ -122,6 +122,7 @@ export default {
       });
       client.request(addBlogQuery, variables).then(() => {
         EventBus.$emit('show-success-notification-short', 'Successfully added');
+        this.$router.push('/dashboard/allBlogs');
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isBlogAdded = false; });

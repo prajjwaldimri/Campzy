@@ -15,12 +15,12 @@
                 v-flex(xs12)
                   v-text-field( label='Blog Description' v-model='blog.description'
                   data-vv-name="blogTitle" v-validate="'min:4|required'"
-                  :error-messages="errors.collect('blogTitle')" readonly)
+                  :error-messages="errors.collect('blogTitle')" readonly flat)
                 v-spacer
                 v-flex(xs12).mt-1
                   v-textarea(label='Content' v-model='blog.content'
                   data-vv-name="blogContent" v-validate="'min:4|required'"
-                  :error-messages="errors.collect('blogContent')" outline readonly)
+                  :error-messages="errors.collect('blogContent')"  readonly box)
               v-flex.ml-2(xs4)
                 v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage"
                 aspect-ratio="1.4" contain)

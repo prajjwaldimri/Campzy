@@ -3,7 +3,7 @@
     v-flex(xs12)
       v-card
         v-card-title.title(primary-title)
-          h2.font-weight-bold.headline Write Blog
+          h2.font-weight-bold.headline Edit Blog
         v-container(fluid)
           v-layout(column)
             v-flex(xs12)
@@ -38,7 +38,7 @@
         v-card-actions
           v-spacer
           v-btn(flat) Clear
-          v-btn(color='green' dark @click='saveBlog'
+          v-btn(color='green' dark @click='saveHeroImage'
           :loading='isBlogAdded') save
 
 </template>
@@ -96,25 +96,30 @@ export default {
     },
     saveHeroImage() {
       const updateImages = this.storeHeroImages;
-      for (let i = 0; i < updateImages.length; i += 1) {
-        this.files.push(updateImages[i]);
+      if (updateImages.length === 0) {
+        this.saveBlog();
+      } else {
+        for (let i = 0; i < updateImages.length; i += 1) {
+          this.files.push(updateImages[i]);
+        }
+        const formData = new FormData();
+        for (let i = 0; i < this.files.length; i += 1) {
+          const file = this.files[i];
+          formData.append('images', file);
+        }
+        axios.post('/uploadImages', formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }).then((res) => {
+          const [image] = res.data;
+          this.blog.heroImage = image;
+          this.saveBlog();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        });
       }
-      const formData = new FormData();
-      for (let i = 0; i < this.files.length; i += 1) {
-        const file = this.files[i];
-        formData.append('images', file);
-      }
-      axios.post('/uploadImages', formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }).then((res) => {
-        this.heroImage = res.data;
-        this.saveBlog(this.heroImage);
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-      });
     },
 
     saveBlog() {
@@ -138,6 +143,7 @@ export default {
       });
       client.request(updateBlogQuery, variables).then(() => {
         EventBus.$emit('show-success-notification-short', 'Successfully Updated');
+        this.$router.push('/dashboard/allBlogs');
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       }).finally(() => { this.isBlogAdded = false; });
