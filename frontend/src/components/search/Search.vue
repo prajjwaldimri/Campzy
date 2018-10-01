@@ -105,7 +105,7 @@
                       v-flex(md4).result-column.hidden-sm-and-down.pl-3
                         .row.feature-row
                           v-icon.mr-3 cloud
-                          span.increase-letter-spacing-1(v-if="result.temperature") {{result.temperature}} ({{result.temperatureSummary}})
+                          span.increase-letter-spacing-1(v-if="result.temperature") {{result.temperature}} °C ({{result.temperatureSummary}})
                           span.increase-letter-spacing-1(v-else) Can't get temperature
 
                         .row.feature-row(v-if="result.terrain.forest")

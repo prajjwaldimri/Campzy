@@ -141,6 +141,8 @@ const getCampByUrl = `query campUser($url: String!){
     inventory{
       capacity
     },
+    temperature,
+    temperatureSummary,
     coordinates {
       latitude,
       longitude

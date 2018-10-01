@@ -49,7 +49,7 @@
           v-layout(row wrap)
             v-flex(sm4 md3).text-xs-center
               v-icon wb_cloudy
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 29&#176;C (Current)
+              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 {{camp.temperature}} °C ({{camp.temperatureSummary}})
 
             v-flex(sm4 md3 v-if="camp.amenities.bonfire").text-xs-center
               v-icon(color="red") whatshot
