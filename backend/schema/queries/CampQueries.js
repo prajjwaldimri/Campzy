@@ -171,7 +171,7 @@ const campSearchUser = {
       results = await filter(results, async (result) => {
         const requiredCapacity = args.tentCount * args.personCount;
         let { inventory } = result;
-        inventory = inventory.filter((tent) => {
+        inventory = await filter(inventory, (tent) => {
           // Check if any of the disabled dates fall between the booking start and end date
 
           const isDisableDateInBetween = tent.disabledDates.some(date => moment(date).isBetween(
@@ -181,6 +181,9 @@ const campSearchUser = {
           ));
           return !isDisableDateInBetween;
         });
+
+        const tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
+        inventory = tents.slice(0, args.tentCount);
 
         inventory = await filter(inventory, async (tent) => {
           // Get all bookings of tents

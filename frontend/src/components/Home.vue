@@ -10,7 +10,7 @@
 
       .d-flex.actions-flex
         v-flex(justify-center align-center).button-flex.px-2
-          v-btn(outline color="blue" fab to="login")
+          v-btn(outline color="blue" fab @click="login")
             v-icon vpn_key
           h3.subheading Login/Register
         v-flex(justify-center align-center).button-flex.px-1
@@ -67,6 +67,13 @@ export default {
     });
   },
   methods: {
+    login() {
+      if (this.$cookie.get('sessionToken')) {
+        this.$router.push('profile');
+      } else {
+        this.$router.push('login');
+      }
+    },
     searchClick() {
       if (this.searchInput === '') {
         anime({

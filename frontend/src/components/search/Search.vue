@@ -345,6 +345,7 @@ export default {
     calculatePrice() {
       for (let i = 0; i < this.searchResults.length; i += 1) {
         let minPrice = 0;
+        console.log(this.searchResults[i].name, this.searchResults[i].inventory.length);
         this.searchResults[i].inventory.forEach((tent) => {
           minPrice += tent.bookingPrice;
         });

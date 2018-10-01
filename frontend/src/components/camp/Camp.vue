@@ -80,7 +80,7 @@
               v-icon(disabled) signal_cellular_4_bar
               .subheading.grey--text.font-weight-regular.mt-1 Mobile Connectivity
 
-            v-flex(xs6 md3 v-if="camp.amenities.washroomAttached").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.washRoomAttached").text-xs-center
               v-icon(color="pink") meeting_room
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
             v-flex(xs6 md3 v-else).text-xs-center
