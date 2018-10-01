@@ -94,11 +94,15 @@ export default {
     storeHeroImage(event) {
       this.storeHeroImages = event.target.files;
     },
+
+    // Save heroImage to AWS
     saveHeroImage() {
       const updateImages = this.storeHeroImages;
       if (updateImages.length === 0) {
         this.saveBlog();
       } else {
+        this.deleteImageFromAWS();
+        this.isBlogAdded = true;
         for (let i = 0; i < updateImages.length; i += 1) {
           this.files.push(updateImages[i]);
         }
@@ -122,11 +126,22 @@ export default {
       }
     },
 
+    // Delete old heroImage for AWS
+    deleteImageFromAWS() {
+      const blogImage = this.blog.heroImage;
+      axios.delete('/deleteImages', { data: { blogImage } }).then(() => {
+        EventBus.$emit('show-success-notification-short', 'Successfully Deleted');
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to delete');
+      });
+    },
+
+    // Save Blog Details
     saveBlog() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-      this.isBlogAdded = true;
+
       const variables = {
         id: this.$route.params.id,
         url: this.blog.url,

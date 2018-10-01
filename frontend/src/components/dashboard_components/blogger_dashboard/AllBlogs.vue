@@ -23,7 +23,8 @@
                   :error-messages="errors.collect('blogContent')"  readonly box)
               v-flex.ml-2(xs4)
                 v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage"
-                aspect-ratio="1.4" contain)
+                :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage"
+                aspect-ratio="1.4")
       v-card-actions
         v-spacer
         v-btn(color='red' dark @click='deleteBlog(blog.id,blog.heroImage)'
