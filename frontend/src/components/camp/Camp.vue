@@ -47,57 +47,57 @@
         h1.headline.mt-5.px-1.font-weight-bold Amenities
         v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
           v-layout(row wrap)
-            v-flex(sm4 md3).text-xs-center
+            v-flex(xs6 md3).text-xs-center
               v-icon wb_cloudy
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
               .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
 
-            v-flex(sm4 md3 v-if="camp.amenities.bonfire").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.bonfire").text-xs-center
               v-icon(color="red") whatshot
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Bonfire
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) whatshot
               .subheading.grey--text.font-weight-regular.mt-1 Bonfire
 
-            v-flex(sm4 md3 v-if="camp.amenities.petsAllowed").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.petsAllowed").text-xs-center
               v-icon(color="brown") pets
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Pets Allowed
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) pets
               .subheading.grey--text.font-weight-regular.mt-1 Pets Allowed
 
-            v-flex(sm4 md3 v-if="camp.amenities.chargingPoints").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.chargingPoints").text-xs-center
               v-icon(color="blue") battery_charging_full
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Charging Points
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) battery_charging_full
               .subheading.grey--text.font-weight-regular.mt-1 Charging Points
 
-            v-flex(sm4 md3 v-if="camp.amenities.mobileConnectivity").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.mobileConnectivity").text-xs-center
               v-icon(color="blue") signal_cellular_4_bar
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Mobile Connectivity
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) signal_cellular_4_bar
               .subheading.grey--text.font-weight-regular.mt-1 Mobile Connectivity
 
-            v-flex(sm4 md3 v-if="camp.amenities.washroomAttached").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.washroomAttached").text-xs-center
               v-icon(color="pink") meeting_room
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) meeting_room
               .subheading.grey--text.font-weight-regular.mt-1 Washroom Attached
 
-            v-flex(sm4 md3 v-if="camp.amenities.mealsInclude").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.mealsInclude").text-xs-center
               v-icon(color="orange darken-4") room_service
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) room_service
               .subheading.grey--text.font-weight-regular.mt-1 Meals Included
 
-            v-flex(sm4 md3 v-if="camp.amenities.hotWater").text-xs-center
+            v-flex(xs6 md3 v-if="camp.amenities.hotWater").text-xs-center
               v-icon(color="red darken-4") hot_tub
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Water
-            v-flex(sm4 md3 v-else).text-xs-center
+            v-flex(xs6 md3 v-else).text-xs-center
               v-icon(disabled) hot_tub
               .subheading.grey--text.font-weight-regular.mt-1 Hot Water
 
