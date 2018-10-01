@@ -89,12 +89,12 @@
                                 v-btn(dark @click.prevent="openImageDialog(result.name, result.name)")
                                   | View All Images
 
-                      v-flex(md4).result-column.pl-3
-                        div
-                          h1.font-weight-thin.grey--text.text--darken-3.pl-2 {{result.name}}
-                          h3.grey--text.mt-2.pl-2 {{result.location}}
-                        div
-                          h3.title.mb-2.pl-2
+                      v-flex(md4).result-column.pl-3.pt-3
+                        .pl-2
+                          h1.display-1.font-weight-thin.grey--text.text--darken-3 {{result.name}}
+                          h3.title.grey--text.mt-3.text--darken-2 {{result.location}}
+                        div.mt-4
+                          h3.title.mb-3.pl-2
                             | Starting @ {{ $n(result.minPrice, 'currency', 'en-IN') }}
                           v-tooltip(right)
                             v-rating(v-model="result.averageRating" color="green"
