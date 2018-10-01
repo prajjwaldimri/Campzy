@@ -39,6 +39,12 @@ export default {
   components: {
     navbar,
   },
+  metaInfo() {
+    return {
+      title: this.blog.title,
+      titleTemplate: '%s - Campzy',
+    };
+  },
   data() {
     return {
       blog: {},
