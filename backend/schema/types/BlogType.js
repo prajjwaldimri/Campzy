@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { GraphQLDate } = require('graphql-iso-date');
 const UserType = require('./UserType');
 
 const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
@@ -14,6 +15,7 @@ const BlogType = new GraphQLObjectType({
     heroImage: { type: GraphQLString },
     heroImageCaption: { type: GraphQLString },
     authorId: { type: UserType },
+    createdAt: { type: GraphQLDate },
   }),
 });
 

@@ -260,7 +260,8 @@ const getBlogQuery = `query getBlog($url: String!){
     heroImageCaption,
     authorId {
       name
-    }
+    },
+    createdAt
   }
 }`;
 
