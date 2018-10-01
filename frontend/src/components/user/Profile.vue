@@ -43,6 +43,7 @@ import { EventBus } from '../../event-bus';
 export default {
   name: 'Profile',
   metaInfo: {
+    title: 'Profile - Campzy',
     script: [
       // LiveChat
       {
