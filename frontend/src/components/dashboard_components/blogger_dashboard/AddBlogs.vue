@@ -93,10 +93,11 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        this.heroImage = res.data;
+        console.log(res);
+        this.heroImage = res.data[0];
         this.saveBlog(this.heroImage);
       }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        EventBus.$emit('show-error-notification-long', 'Failed to Upload');
       });
     },
 
