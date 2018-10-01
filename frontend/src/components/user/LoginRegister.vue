@@ -10,7 +10,7 @@
               transition(name="fade-transition" appear key="login" mode="out-in")
                 .login-content(v-if="loginState == 0")
                   v-card-title(align-center justify-center).d-flex
-                    h1.font-weight-light Login
+                    h1.display-1.pb-4 Login
                   v-form(ref="form" v-model="isLoginValid")
                     v-text-field(label="Email" color='green accent-4'
                     v-validate="'required|email'" required
@@ -38,7 +38,7 @@
 
                 .signup-content(v-else-if="loginState == 1" key="signup")
                   v-card-title(align-center justify-center).d-flex
-                    h1.font-weight-light Create an Account
+                    h1.display-1.pb-4 Create an Account
                   v-form(ref="form" v-model="isLoginValid")
                   v-text-field(label="Name" color='green accent-4'
                   v-validate="'required|alpha_spaces'" required
@@ -61,7 +61,7 @@
 
                 .phone-otp-content(v-else key="phone-otp")
                   v-card-title(align-center justify-center).d-flex
-                    h1.font-weight-light.pb-3 Verify your Phone Number
+                    h1.display-1.pb-4 Verify your Phone Number
                   v-form(ref="form" v-model="isLoginValid")
                     v-flex(align-center).d-flex
                       v-layout(row)
