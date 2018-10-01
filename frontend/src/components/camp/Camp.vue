@@ -49,7 +49,8 @@
           v-layout(row wrap)
             v-flex(sm4 md3).text-xs-center
               v-icon wb_cloudy
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 {{camp.temperature}} °C ({{camp.temperatureSummary}})
+              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
+              .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
 
             v-flex(sm4 md3 v-if="camp.amenities.bonfire").text-xs-center
               v-icon(color="red") whatshot
