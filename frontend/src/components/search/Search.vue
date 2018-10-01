@@ -279,12 +279,15 @@ export default {
 
   methods: {
     allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
+
     search() {
       EventBus.$emit('show-progress-bar');
+      this.searchComplete = false;
       this.filterDialog = false;
       if (this.searchInput.trim() === '') {
         return;
       }
+      this.$router.push({ name: 'search', params: { searchterm: this.searchInput.trim() } });
       const variables = {
         searchTerm: this.searchInput,
         minPrice: this.priceRange[0],
