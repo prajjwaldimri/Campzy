@@ -10,12 +10,12 @@
 
         .mt-4.justify-start(style="display: flex; align-items: center")
           v-avatar(size="48")
-            img(src="https://cdn-images-1.medium.com/fit/c/78/78/0*oQdsjTMu_jj0OP8U")
+            img(:src="'https://ui-avatars.com/api/?name=' + blog.authorId.name")
           div.ml-3
             h2.subheading(v-if="blog.authorId") {{blog.authorId.name}}
             span.body-2 {{blog.createdAt | moment("MMMM Do YYYY")}},
             v-icon(small).ml-2.mr-1 access_time
-            span.body-2 {{ [readTime, 'minutes'] | duration('humanize', true)}}
+            span.body-2 {{ [readTime, 'minutes'] | duration('humanize', false)}} read
 
       v-flex(sm12 md6).pb-4
         v-img(v-if="blog.heroImage" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + blog.heroImage" height="100%" width="100%")
