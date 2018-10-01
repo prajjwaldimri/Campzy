@@ -79,7 +79,7 @@
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
                         v-hover
-                          v-img(:src="result.heroImage" width="100%" height="15rem" cover
+                          v-img(:src="result.heroImage" width="100%" height="16rem" cover
                           slot-scope="{ hover }")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
                               v-progress-circular(indeterminate color="green darken-5")
