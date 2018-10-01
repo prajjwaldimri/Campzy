@@ -93,7 +93,6 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        console.log(res);
         this.heroImage = res.data[0];
         this.saveBlog(this.heroImage);
       }).catch(() => {
