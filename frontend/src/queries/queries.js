@@ -64,7 +64,10 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           url,
           shortDescription,
           longDescription,
-          placesOfInterest,
+          placesOfInterest{
+            name,
+            distance
+          },
           amenities{
             washRoomAttached,
             bonfire,
@@ -98,7 +101,10 @@ const getCampDetail = `query camp($id: String!){
       location,
       shortDescription,
       longDescription,
-      placesOfInterest,
+      placesOfInterest{
+        name,
+        distance
+      },
       tags,
       amenities{
         washRoomAttached,
