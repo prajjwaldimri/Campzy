@@ -288,6 +288,7 @@ export default {
     resetPassword() {
       if (this.email.trim() === '') {
         EventBus.$emit('show-error-notification-short', 'Enter your email in the Email Field first!');
+        return;
       }
       const variables = {
         email: this.email,
@@ -297,7 +298,7 @@ export default {
         EventBus.$emit('show-info-notification-short', 'Check your email for further instructions!');
       }).catch((err) => {
         if (err) {
-          EventBus.$emit('show-error-notification-short', 'Cannot send Verification');
+          EventBus.$emit('show-error-notification-short', 'Please check the entered email again.');
         }
       }).finally(() => {
         NProgress.done();

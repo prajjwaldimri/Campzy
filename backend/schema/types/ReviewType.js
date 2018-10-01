@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 
 const { GraphQLObjectType, GraphQLString, GraphQLFloat } = graphql;
+const { GraphQLDate } = require('graphql-iso-date');
 
 const UserType = require('./UserType');
 const CampType = require('./CampType');
@@ -12,6 +13,7 @@ const ReviewType = new GraphQLObjectType({
     comment: { type: GraphQLString },
     user: { type: UserType },
     camp: { type: CampType },
+    createdAt: { type: GraphQLDate },
   }),
 });
 

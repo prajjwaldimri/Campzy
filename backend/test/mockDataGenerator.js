@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const Camp = require('../models/camp');
 const Tent = require('../models/tent');
+const Review = require('../models/review');
 
 faker.locale = 'en_IND';
 
@@ -34,9 +35,9 @@ async function CreateCamp(userId, phoneNumber) {
         .fill(null)
         .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
       heroImage: 'https://loremflickr.com/320/240/nature',
-      averageRating: faker.random.number({ min: 1, max: 5, precision: 0.1 }),
-      ratingsCount: faker.random.number({ min: 100, max: 5000 }),
       amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
+      averageRating: faker.random.number({ min: 1, max: 5 }),
+      ratingsCount: faker.random.number({ min: 100, max: 10000 }),
       altitude: faker.random.number({ min: 100, max: 2000 }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
       placesOfInterest: new Array(4)
@@ -53,6 +54,12 @@ async function CreateCamp(userId, phoneNumber) {
         surgePrice: faker.random.number({ min: 1000, max: 80000 }),
         preBookPeriod: faker.random.number({ min: 2, max: 15 }),
         camp: camp._id,
+      });
+      let review = await Review.create({
+        stars: faker.random.number({ min: 1, max: 5 }),
+        comment: faker.lorem.sentences(),
+        camp: camp._id,
+        user: userId,
       });
       camp.inventory.push(tent._id);
     }

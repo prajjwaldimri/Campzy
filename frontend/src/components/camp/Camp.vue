@@ -45,31 +45,30 @@
         p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
 
         h1.headline.mt-5.px-1.font-weight-bold Amenities
-        v-layout(row).px-1.mt-4
-          v-flex(sm3).text-xs-center
+        v-layout(row wrap).mt-4
+          v-flex(sm4 md3).text-xs-center
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center
             v-icon(color="green") loyalty
             h4.grey--text Campzy Guarantee
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center
             v-icon(color="brown") pets
             h4.grey--text Pets Allowed
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center
             v-icon rowing
             h4.grey--text Adventure Sports
 
-        v-layout(row).px-1.mt-4
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center.mt-4
             v-icon wb_cloudy
             h4.grey--text 29&#176;C (Current)
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center.mt-4
             v-icon(color="green") loyalty
             h4.grey--text Campzy Guarantee
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center.mt-4
             v-icon(color="brown") pets
             h4.grey--text Pets Allowed
-          v-flex(sm3).text-xs-center
+          v-flex(sm4 md3).text-xs-center.mt-4
             v-icon rowing
             h4.grey--text Adventure Sports
 
@@ -92,17 +91,17 @@
       v-flex(sm12 md5).py-4.pl-4
         h3.display-1.pb-3 Recent Opinions
         v-divider
-        v-card(v-for="comment in comments").ma-4.pa-4.comment-card
+        v-card(v-for="review in reviews").ma-4.pa-4.comment-card
           v-layout(row wrap)
             v-flex(md2 sm3)
               v-avatar(color="red")
-                span.white--text.headline K
-            v-flex(md7 sm7)
-              span.subheading Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            v-flex(md3 sm12)
+                img(:src="'https://ui-avatars.com/api/?name=' + review.user.name")
+            v-flex(md6 sm7)
+              span.subheading {{review.comment}}
+            v-flex(md3 sm12 offset-md1)
               v-layout(column)
-                span.subtitle.grey--text.text--darken-2.ml-1 3 Days ago
-                v-rating(small dense v-model="4.5").mt-1
+                span.subtitle.grey--text.text--darken-2.ml-1 {{review.createdAt | moment("from", "now")}}
+                v-rating(readonly small dense v-model="review.stars").mt-1
 
 
     //- Bottom Bar
@@ -142,7 +141,7 @@ import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from '../search/SearchImagesDialog.vue';
 import ReviewCamp from './ReviewCamp.vue';
-import { getCampByUrl, getBestTentAvailable } from '../../queries/queries';
+import { getCampByUrl, getBestTentAvailable, getReviewsForCamp } from '../../queries/queries';
 import { bookCampCheck, bookCamp, addCampToWishlist } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
@@ -157,6 +156,7 @@ export default {
     return {
       camp: {},
       campName: '',
+      reviews: [],
       price: 0,
       tripDurationMenu: false,
       fromDate: null,
@@ -167,7 +167,6 @@ export default {
       personNumbers: [1, 2, 3, 4],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      comments: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       mapUri: '',
       bookButtonLoading: false,
       isBookingPossible: true,
@@ -209,6 +208,7 @@ export default {
         EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
+        this.getReviews();
       });
     },
     getUser() {
@@ -237,6 +237,16 @@ export default {
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
         });
+    },
+    getReviews() {
+      const variables = {
+        campId: this.camp.id,
+      };
+      request('/graphql', getReviewsForCamp, variables).then((data) => {
+        this.reviews = data.getReviewsForCamp;
+      }).catch(() => {
+        EventBus.$emit('show-info-notification-short', 'No Reviews for this camp.');
+      });
     },
     openImageDialog() {
       EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });

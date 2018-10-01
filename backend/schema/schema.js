@@ -58,6 +58,7 @@ const RootQuery = new GraphQLObjectType({
     countCampActiveBookings: BookingQueries.countCampActiveBookings,
 
     getLatestCampForReview: ReviewQueries.getLatestCampForReview,
+    getReviewsForCamp: ReviewQueries.getReviewsForCamp,
   },
 });
 

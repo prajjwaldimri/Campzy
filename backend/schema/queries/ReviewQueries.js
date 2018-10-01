@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: ["error", {"allow" : ["_id"]}] */
 const graphql = require('graphql');
 const moment = require('moment');
 const ReviewModel = require('../../models/review');
@@ -55,10 +56,14 @@ const getReviewsForCamp = {
     campId: { type: GraphQLString },
   },
   async resolve(parent, args) {
-    const camp = await CampModel.findById(args.campId);
+    const camp = await CampModel.findById(args.campId).select('id');
     if (camp === null) {
       throw new CampNotAvailableError();
     }
+    return ReviewModel.find({ camp: camp._id }).populate({
+      path: 'user',
+      select: 'name',
+    });
   },
 };
 

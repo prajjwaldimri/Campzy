@@ -295,6 +295,17 @@ const getLatestCampForReview = `query getLatestCampForReview{
   }
 }`;
 
+const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
+  getReviewsForCamp(campId: $campId){
+    stars,
+    comment,
+    user{
+      name
+    },
+    createdAt
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -320,4 +331,5 @@ module.exports = {
   getWishList,
   getLatestCampForReview,
   getTentById,
+  getReviewsForCamp,
 };
