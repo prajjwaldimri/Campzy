@@ -25,16 +25,16 @@
         tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
         :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
         :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
-          v-responsive(height="30vh" v-for="image in camp.images")
+          v-responsive(v-for="image in camp.images")
             v-card
               v-img(:src="image" @click="openImageDialog")
       //- For Mobile
-    v-responsive(height="30vh").hidden-md-and-up
+    v-responsive(height="40vh").hidden-md-and-up
       v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
         tiny-slider(:mouse-drag="true" :loop="true" items="1"
         :nav="false" :controls="false" :lazyload="true" v-if="camp.images"
         :autoplay="true" :autoplay-button-output="false")
-          v-responsive(height="40vh" v-for="image in camp.images")
+          v-responsive(height="50vh" v-for="image in camp.images")
             v-card
               v-img(:src="image" @click="openImageDialog")
 
