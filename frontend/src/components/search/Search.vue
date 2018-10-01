@@ -102,22 +102,51 @@
                             readonly slot="activator")
                             span {{result.averageRating}}
 
-                      v-flex(md4).result-column.hidden-sm-and-down
+                      v-flex(md4).result-column.hidden-sm-and-down.pl-3
                         .row.feature-row
-                          v-icon.mr-3 ac_unit
-                          span.increase-letter-spacing-1 29 C (Snowing)
-                        .row.feature-row
-                          v-icon.mr-3 nature
-                          span.increase-letter-spacing-1 Jungle Terrain
-                        .row.feature-row
-                          v-icon.mr-3 wifi_off
-                          span.increase-letter-spacing-1 No Internet
-                        .row.feature-row
-                          v-icon.mr-3 accessible
-                          span.increase-letter-spacing-1 Wheel Chair Accessible
-                        .row.feature-row
-                          v-icon.mr-3.green--text verified_user
-                          span.increase-letter-spacing-1 Campzy Quality Assurance
+                          v-icon.mr-3 cloud
+                          span.increase-letter-spacing-1(v-if="result.temperature") {{result.temperature}}
+                          span.increase-letter-spacing-1(v-else) Can't get temperature
+
+                        .row.feature-row(v-if="result.terrain.forest")
+                          v-icon.mr-3(color="green") nature
+                          span.increase-letter-spacing-1 Forest Terrain
+                        .row.feature-row(v-if="result.terrain.glacier")
+                          v-icon.mr-3(color="light-blue") ac_unit
+                          span.increase-letter-spacing-1 Glacier Terrain
+                        .row.feature-row(v-if="result.terrain.hill")
+                          v-icon.mr-3(color="brown") terrain
+                          span.increase-letter-spacing-1 Hill Terrain
+                        .row.feature-row(v-if="result.terrain.desert")
+                          v-icon.mr-3(color="green") nature
+                          span.increase-letter-spacing-1 Desert Terrain
+                        .row.feature-row(v-if="result.terrain.ocean")
+                          v-icon.mr-3(color="blue") waves
+                          span.increase-letter-spacing-1 Ocean Terrain
+                        .row.feature-row(v-if="result.terrain.river")
+                          v-icon.mr-3(color="light-blue") pool
+                          span.increase-letter-spacing-1 River Terrain
+
+                        .row.feature-row(v-if="result.amenities.washRoomAttached")
+                          v-icon.mr-3(color="pink") meeting_room
+                          span.increase-letter-spacing-1 Washroom attached
+                        .row.feature-row(v-else)
+                          v-icon.mr-3(disabled) meeting_room
+                          span.increase-letter-spacing-1.grey--text Washroom attached
+
+                        .row.feature-row(v-if="result.amenities.mealsInclude")
+                          v-icon.mr-3(color="orange darken-4") room_service
+                          span.increase-letter-spacing-1 Meals included
+                        .row.feature-row(v-else)
+                          v-icon.mr-3(disabled) room_service
+                          span.increase-letter-spacing-1.grey--text Meals included
+
+                        .row.feature-row(v-if="result.amenities.chargingPoints")
+                          v-icon.mr-3(color="blue") battery_charging_full
+                          span.increase-letter-spacing-1 Charging Points
+                        .row.feature-row(v-else)
+                          v-icon.mr-3(disabled) battery_charging_full
+                          span.increase-letter-spacing-1.grey--text Charging Points
 
 
                   //- Mobile layout for search cards

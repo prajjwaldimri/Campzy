@@ -86,7 +86,7 @@
               v-icon(disabled) meeting_room
               .subheading.grey--text.font-weight-regular.mt-1 Washroom Attached
 
-            v-flex(sm4 md3 v-if="camp.amenities.washRoomAttached").text-xs-center
+            v-flex(sm4 md3 v-if="camp.amenities.mealsInclude").text-xs-center
               v-icon(color="orange darken-4") room_service
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
             v-flex(sm4 md3 v-else).text-xs-center

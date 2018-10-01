@@ -41,6 +41,18 @@ const PlacesOfInterestType = new GraphQLObjectType({
   }),
 });
 
+const TerrainType = new GraphQLObjectType({
+  name: 'Terrain',
+  fields: () => ({
+    glacier: { type: GraphQLBoolean },
+    forest: { type: GraphQLBoolean },
+    desert: { type: GraphQLBoolean },
+    ocean: { type: GraphQLBoolean },
+    hill: { type: GraphQLBoolean },
+    river: { type: GraphQLBoolean },
+  }),
+});
+
 const CampType = new GraphQLObjectType({
   name: 'Camp',
   fields: () => ({
@@ -58,7 +70,7 @@ const CampType = new GraphQLObjectType({
       type: UserType,
     },
     coordinates: { type: CoordinateType },
-    terrain: { type: GraphQLString },
+    terrain: { type: TerrainType },
     ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },

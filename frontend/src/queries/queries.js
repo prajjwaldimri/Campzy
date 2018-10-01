@@ -145,7 +145,14 @@ const getCampByUrl = `query campUser($url: String!){
       latitude,
       longitude
     },
-    terrain,
+    terrain {
+      glacier,
+      forest,
+      desert,
+      ocean,
+      hill,
+      river
+    },
     averageRating,
     ratingsCount
   }
@@ -191,8 +198,7 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
       url,
       owner {
         name
-      }
-
+      },
   }
 }`;
 
@@ -207,7 +213,25 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
     inventory {
       id,
       bookingPrice
-    }
+    },
+
+    terrain {
+      glacier,
+      forest,
+      desert,
+      ocean,
+      hill,
+      river
+    },
+    amenities{
+      washRoomAttached,
+      bonfire,
+      hotWater,
+      mobileConnectivity,
+      mealsInclude,
+      petsAllowed,
+      chargingPoints,
+    },
   }
 }`;
 const getCurrentUserBlogsQuery = `query currentUserBlogs{

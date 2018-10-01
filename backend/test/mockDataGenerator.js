@@ -13,7 +13,6 @@ faker.locale = 'en_IND';
 // Add 100 users, camps and their tents
 const userTypes = ['Camper', 'CampOwner', 'Admin'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
-const terrainTypes = ['Jungle', 'Snow', 'Mountain', 'Dessert'];
 
 async function CreateCamp(userId, phoneNumber) {
   let camp;
@@ -35,25 +34,22 @@ async function CreateCamp(userId, phoneNumber) {
         .fill(null)
         .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
       heroImage: 'https://loremflickr.com/320/240/nature',
-      amenities: new Array(8).fill(null).map(e => (e = faker.random.word())),
       averageRating: faker.random.number({ min: 1, max: 5 }),
       ratingsCount: faker.random.number({ min: 100, max: 10000 }),
       altitude: faker.random.number({ min: 100, max: 2000 }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
-      placesOfInterest: new Array(4)
-        .fill(null)
-        .map(
-          e =>
-            (e = {
-              name: faker.hacker.noun(),
-              distance: faker.random.number({
-                min: 0,
-                max: 10,
-                precision: 0.1,
-              }),
+      placesOfInterest: new Array(4).fill(null).map(
+        e =>
+          (e = {
+            name: faker.hacker.noun(),
+            distance: faker.random.number({
+              min: 0,
+              max: 10,
+              precision: 0.1,
             }),
-        ),
-      terrain: faker.random.arrayElement(terrainTypes),
+          }),
+      ),
+      'terrain.glacier': true,
     });
     for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
       let tent = await Tent.create({
