@@ -18,16 +18,9 @@
             v-icon trending_up
           h3.subheading Trending Camps
         v-flex(justify-center align-center).button-flex.px-2
-          v-btn(color="green darken-2" fab to="profile" outline)
-            v-icon account_box
-          h3.subheading My Account
-
-    //- .d-flex.users-flex.py-2
-    //-   h1.headline.grey--text.text--darken-2.mb-2(style="text-align: center")
-    //-     | Currently operational in Uttarakhand and Himanchal Pradesh
-    //-   span.title.grey--text.text--darken-1.hidden-sm-and-down
-    //-     ICountUp(:startVal="0" :endVal="51235" :duration="2" :options="{useEasing: true}")
-    //-     |  users served
+          v-btn(color="blue-grey" fab outline)
+            v-icon chrome_reader_mode
+          h3.subheading Blogs
 
 
 </template>
