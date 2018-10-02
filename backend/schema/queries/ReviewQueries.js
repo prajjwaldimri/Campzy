@@ -60,10 +60,12 @@ const getReviewsForCamp = {
     if (camp === null) {
       throw new CampNotAvailableError();
     }
-    return ReviewModel.find({ camp: camp._id }).populate({
-      path: 'user',
-      select: 'name',
-    });
+    return ReviewModel.find({ camp: camp._id })
+      .populate({
+        path: 'user',
+        select: 'name',
+      })
+      .sort('-createdAt');
   },
 };
 
