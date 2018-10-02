@@ -1,6 +1,5 @@
 
 <template lang="pug">
-.login-register
   v-container(text-xs-center).card-container
     v-layout(row)
       v-flex(xs12)
@@ -311,10 +310,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-register {
-  background: #4caf50 !important;
-  height: 100%;
-}
 .card-container {
   @media screen and (min-width: 961px) {
     padding: 2rem 2rem;
