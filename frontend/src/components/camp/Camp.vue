@@ -437,7 +437,7 @@ export default {
   }
 }
 
-#tns1-ow {
+.tns-outer {
   @media screen and (min-width: 960px) {
     flex: 1 1 auto !important;
   }
