@@ -13,11 +13,15 @@ const webpack = require('webpack');
 const path = require('path');
 const history = require('connect-history-api-fallback');
 const https = require('https');
-const Rollbar = require('rollbar');
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const bodyParser = require('body-parser');
+const Sentry = require('@sentry/node');
+
+Sentry.init({
+  dsn: 'https://0d8a506e3fad49c8b2448261d9fb373e@sentry.io/1293718',
+});
 
 const {
   deleteImage,
@@ -32,17 +36,12 @@ aws.config.update({
   region: 'us-east-1',
 });
 
-const rollbar = new Rollbar({
-  accessToken: process.env.ROLLBAR_KEY,
-  captureUncaught: true,
-  captureUnhandledRejections: true,
-  environment: process.env.ENVIRONMENT,
-});
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
 require('./models/user');
 
 const app = express();
+app.use(Sentry.Handlers.requestHandler());
 app.use(compression());
 app.use(cors());
 
@@ -129,11 +128,11 @@ app.use(
   })),
 );
 
-app.use(rollbar.errorHandler());
-
 // Last ditch error handler
-app.use((error) => {
-  rollbar.critical(error);
+app.use(Sentry.Handlers.errorHandler());
+app.use((error, req, res) => {
+  res.statusCode = 500;
+  res.end(`${res.sentry}\n`);
 });
 
 if (process.env.ENVIRONMENT === 'development') {
