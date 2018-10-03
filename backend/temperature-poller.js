@@ -28,6 +28,7 @@ async function temperatureRetriever() {
       updatedCamp.temperature = response.currently.temperature;
       updatedCamp.temperatureSummary = response.currently.summary;
       await updatedCamp.save();
+      console.log('Done');
     });
   } catch (err) {
     console.log(err);
