@@ -48,7 +48,7 @@ const getCurrentUserCamp = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      return await CampModel.findById(userData.ownedCampId);
+      return await CampModel.findById(userData.ownedCampId).populate('ownerId', 'id');
     } catch (err) {
       return err;
     }
@@ -72,7 +72,8 @@ const getAllCamps = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await CampModel.find({}).populate('ownerId', 'name')
+      return await CampModel.find({})
+        .populate('ownerId', 'name')
         .limit(8)
         .skip((args.page - 1) * 8);
     } catch (err) {
@@ -244,6 +245,21 @@ const getCampUser = {
   },
 };
 
+const isCampUrlAvailable = {
+  type: CampType,
+  args: {
+    url: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    const user = await CampModel.findOne({ url: args.url });
+    if (user) {
+      throw new Error('Url is already taken');
+    } else {
+      return 'Url Available!';
+    }
+  },
+};
+
 module.exports = {
   getCamp,
   getCurrentUserCamp,
@@ -252,4 +268,5 @@ module.exports = {
   searchParticularCamp,
   campSearchUser,
   getCampUser,
+  isCampUrlAvailable,
 };

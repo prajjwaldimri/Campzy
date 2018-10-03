@@ -11,9 +11,9 @@
       prepend-icon="edit_location" clearable  data-vv-name="campLocation"
       v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
 
-      v-text-field(v-model="camp.url" label="Url" prepend-icon="link" clearable
-       data-vv-name="campUrl" v-validate="'min:4|required|alpha_dash'"
-      :error-messages="errors.collect('campUrl')")
+      v-text-field(v-model="url" label="Url" prepend-icon="link" clearable
+       data-vv-name="url" v-validate="'min:4|required|alpha_dash'"
+      :error-messages="errors.collect('url')")
 
       v-text-field(v-model="camp.phoneNumber" label="Phone Number" prepend-icon="phone"
       clearable  data-vv-name="campPhone" v-validate="'digits:10|required'" type="number"
@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient, request } from 'graphql-request';
+import { isCampUrlAvailable } from '../../../../queries/queries';
 import { EventBus } from '../../../../event-bus';
 
 export default {
@@ -61,6 +62,7 @@ export default {
   data() {
     return {
       camp: {},
+      url: '',
       searchedUsers: [],
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
@@ -114,6 +116,8 @@ export default {
         }
       });
     },
+
+
   },
   watch: {
     camp(val) {
@@ -149,6 +153,22 @@ export default {
       }).catch(() => {
         this.searchedUsers = [];
       }).finally(() => { this.isOwnerFieldLoading = false; });
+    },
+    url(value) {
+      console.log(typeof value);
+      const variables = {
+        url: value,
+      };
+      request('/graphql', isCampUrlAvailable, variables).then((data) => {
+        console.log(data);
+        // this.isEmailAlreadyinUse = false;
+      }).catch((err) => {
+        console.log(err);
+        if (err) {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }
+        // this.isEmailAlreadyinUse = true;
+      });
     },
   },
 };

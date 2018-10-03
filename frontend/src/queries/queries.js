@@ -57,7 +57,9 @@ const countBookedTent = `query countBookedTent{
 const getCurrentUserCampDetails = `query currentUserCamp{
         currentUserCamp {
           id,
-          ownerId,
+          ownerId{
+            id
+          },
           name,
           email,
           phoneNumber,
@@ -373,7 +375,11 @@ const allBookings = `query allBookings{
            
         }
       }`;
-
+const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
+  isCampUrlAvailable(url: $url){
+    id
+  }
+}`;
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -402,4 +408,5 @@ module.exports = {
   getReviewsForCamp,
   getWishlistInProfile,
   allBookings,
+  isCampUrlAvailable,
 };
