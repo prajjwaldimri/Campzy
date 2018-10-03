@@ -73,7 +73,7 @@
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
     fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
-      id='v-step-0' v-show='isAdmin && isCampOwner')
+      id='v-step-0' v-show='isAdmin || isCampOwner')
         span Statistics
         v-icon data_usage
       v-btn(dark @click="$router.push('/dashboard/addBlog')"
