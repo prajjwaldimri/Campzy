@@ -19,8 +19,8 @@
                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                 span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
               .d-flex.align-self-end
-                v-btn(v-if='!isInWishList' dark outline color='blue' @click='addToWishList(camp.id)') Add to WishList
-                v-btn(v-else dark outline color='error' @click='removeFromWishList(camp.id)' ) Remove from WishList
+                v-btn(v-if='!isInWishList' dark small outline color='blue' @click='addToWishList(camp.id)') Add to WishList
+                v-btn(v-else dark small outline color='error' @click='removeFromWishList(camp.id)' ) Remove from WishList
 
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
