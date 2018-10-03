@@ -71,7 +71,7 @@ const CampType = new GraphQLObjectType({
     },
     coordinates: { type: CoordinateType },
     terrain: { type: TerrainType },
-    ownerId: { type: GraphQLString },
+    ownerId: { type: UserType },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
     amenities: { type: AmenitiesType },

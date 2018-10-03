@@ -56,7 +56,8 @@ const CampSchema = new Schema({
     longitude: { type: String },
   },
   ownerId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     unique: true,
   },
   terrain: {
