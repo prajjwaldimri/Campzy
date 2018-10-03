@@ -17,7 +17,8 @@
     "dev": "nodemon backend/app.js",
     "precommit": "lint-staged",
     "start": "pm2-runtime backend/app.js",
-    "heroku-postbuild": "webpack --mode production"
+    "heroku-postbuild": "webpack --mode production",
+    "temp-poller": "node backend/temperature-poller.js"
   },
   "lint-staged": {
     "*.js": [
