@@ -281,6 +281,7 @@ export default {
           }
         })
         .catch((err) => {
+          console.log(err);
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
@@ -371,6 +372,7 @@ export default {
       client.request(campBookings, variables).then((data) => {
         this.campBookings = data.campBookings;
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
@@ -449,6 +451,7 @@ export default {
       client.request(allBookings).then((data) => {
         this.adminBookings = data.allBookings;
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
