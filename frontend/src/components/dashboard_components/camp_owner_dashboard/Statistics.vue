@@ -86,13 +86,14 @@
                           h5.caption.grey--text AMOUNT
                           h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
 
+                        v-flex(md3).mt-4
+                          h5.caption.grey--text TRIP DURATION
+                          h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
+
                         v-flex(md5).mt-4
                           h5.caption.grey--text TRIP STARTS
                           h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
 
-                        v-flex(md3).mt-4
-                          h5.caption.grey--text TRIP DURATION
-                          h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
 
                     v-divider(vertical).pr-3
                     v-flex(md3).pl-5
@@ -163,14 +164,41 @@
           v-card
             v-card-title.justify-center
               h3.font-weight-black.text-uppercase Active bookings
-            v-container(fluid)
-              v-data-table(:headers="headers" :items="activeBookings" hide-actions)
-                template(slot="items" slot-scope="props")
-                  td {{ props.item.id }}
-                  td {{ props.item.name }}
-                  td {{ props.item.tentType }}
-                  td {{ props.item.duration }} day(s)
-                  td {{ props.item.bookingStatus }}
+            v-container
+              v-layout(column)
+                v-card(v-for="booking in adminBookings").py-5
+                  v-layout(row wrap)
+                    v-flex(md2).pl-5
+                      v-flex
+                        h5.headline.font-weight-medium {{booking.user.name}}
+                        router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
+                          h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
+                          h6.subheading.mt-3 Booking Id: {{booking.code}}
+
+                    v-divider(vertical).px-5
+
+                    v-flex(md8).pl-5
+                      v-layout(row wrap)
+                        v-flex(md3)
+                          h5.caption.grey--text OCCUPANCY
+                          h3.mt-1.subheading {{booking.tentCount}} Tents
+
+                        v-flex(md5)
+                          h5.caption.grey--text CAPACITY
+                          h3.mt-1.subheading {{booking.personCount}} Person / Tent
+
+                        v-flex(md3)
+                          h5.caption.grey--text AMOUNT
+                          h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
+
+                        v-flex(md3).mt-4
+                          h5.caption.grey--text TRIP DURATION
+                          h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
+
+                        v-flex(md5).mt-4
+                          h5.caption.grey--text TRIP STARTS
+                          h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
+
 </template>
 
 <script>
@@ -178,7 +206,7 @@ import ICountUp from 'vue-countup-v2';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
 import {
-  campBookings, countTents, countBookedTent, countCampActiveBooking, countAllUsers, countAllCamps,
+  campBookings, countTents, countBookedTent, countCampActiveBooking, countAllUsers, countAllCamps, allBookings,
 } from '../../../queries/queries';
 
 export default {
@@ -202,6 +230,7 @@ export default {
       campRating: 0,
       totalUsers: 0,
       totalCamps: 0,
+      adminBookings: [],
       activeCampBooking: 0,
       headers: [
         {
@@ -214,50 +243,6 @@ export default {
         { text: 'Duration', value: 'duration' },
         { text: 'Status', value: 'bookingStatus' },
       ],
-      activeBookings: [
-        {
-          id: 123,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 124,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 125,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 126,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 127,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 128,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-      ],
     };
   },
 
@@ -266,45 +251,8 @@ export default {
   },
 
   methods: {
-    countBooked() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
 
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-
-      client.request(countBookedTent)
-        .then((data) => {
-          this.bookedTents = data.countBookedTent.bookedTentCount;
-        })
-        .catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
-    },
-    countTent() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
-
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-
-      client.request(countTents)
-        .then((data) => {
-          this.totalTents = data.countCampTents.count;
-          this.countBooked();
-        })
-        .catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
-    },
+    // Get User type
     getCurrentUserType() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -329,12 +277,58 @@ export default {
             this.isTypeAdmin = true;
             this.countUsers();
             this.countCamps();
+            this.getAdminBookings();
           }
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
+
+    // Count CampOwner's booked tent
+    countBooked() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countBookedTent)
+        .then((data) => {
+          this.bookedTents = data.countBookedTent.bookedTentCount;
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
+
+    // Count CampOwner's total inventory
+    countTent() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countTents)
+        .then((data) => {
+          this.totalTents = data.countCampTents.count;
+          this.countBooked();
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
+
+    // Get CampId to get its bookings
     getCampId() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -360,6 +354,8 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
+
+    // Get CampOwner's active bookings
     getBookings(campID) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -379,6 +375,8 @@ export default {
       });
     },
 
+
+    // Count CampOwner's active bookings
     countBookings(campId) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -398,6 +396,8 @@ export default {
       });
     },
 
+    // Count All users if Current user is admin
+
     countUsers() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -415,6 +415,8 @@ export default {
       });
     },
 
+
+    //  Count total camps
     countCamps() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -427,6 +429,25 @@ export default {
 
       client.request(countAllCamps).then((data) => {
         this.totalCamps = data.countCamps.count;
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+
+    // Get all active bookings
+    getAdminBookings() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(allBookings).then((data) => {
+        this.adminBookings = data.allBookings;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });

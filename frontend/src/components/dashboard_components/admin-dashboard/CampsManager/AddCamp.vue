@@ -11,9 +11,9 @@
       prepend-icon="edit_location" clearable  data-vv-name="campLocation"
       v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
 
-      v-text-field(v-model="camp.url" label="Url" prepend-icon="link" clearable
-       data-vv-name="campUrl" v-validate="'min:4|required|alpha_dash'"
-      :error-messages="errors.collect('campUrl')")
+      v-text-field(v-model="url" label="Url" prepend-icon="link" clearable
+       data-vv-name="url" v-validate="'min:4|required|alpha_dash'"
+      :error-messages="errors.collect('url')")
 
       v-text-field(v-model="camp.phoneNumber" label="Phone Number" prepend-icon="phone"
       clearable  data-vv-name="campPhone" v-validate="'digits:10|required'" type="number"
@@ -45,12 +45,13 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click.native="saveCamp").white--text Save
+      v-btn(color="green" @click.native="saveCamp"  :disabled="isUrlAlreadyinUse").white--text Save
 
 </template>
 
 <script>
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient, request } from 'graphql-request';
+import { isCampUrlAvailable } from '../../../../queries/queries';
 import { EventBus } from '../../../../event-bus';
 
 export default {
@@ -61,10 +62,12 @@ export default {
   data() {
     return {
       camp: {},
+      url: '',
       searchedUsers: [],
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
       searchUsers: null,
+      isUrlAlreadyinUse: false,
     };
   },
   methods: {
@@ -94,7 +97,7 @@ export default {
             phoneNumber: this.camp.phoneNumber,
             email: this.camp.email,
             location: this.camp.location,
-            url: this.camp.url,
+            url: this.url,
             ownerId: this.camp.owner,
           };
           const client = new GraphQLClient('/graphql', {
@@ -114,6 +117,8 @@ export default {
         }
       });
     },
+
+
   },
   watch: {
     camp(val) {
@@ -149,6 +154,21 @@ export default {
       }).catch(() => {
         this.searchedUsers = [];
       }).finally(() => { this.isOwnerFieldLoading = false; });
+    },
+
+    // Check Url Availability
+    url(value) {
+      const variables = {
+        url: value,
+      };
+      request('/graphql', isCampUrlAvailable, variables).then(() => {
+        this.isUrlAlreadyinUse = false;
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }
+        this.isUrlAlreadyinUse = true;
+      });
     },
   },
 };
