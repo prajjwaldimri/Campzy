@@ -10,18 +10,12 @@ import 'vue-loaders/dist/vue-loaders.css';
 import * as VueLoaders from 'vue-loaders';
 import VueTelInput from 'vue-tel-input';
 import VueI18n from 'vue-i18n';
-import * as Sentry from '@sentry/browser';
 import App from './App.vue';
 import router from './router/router';
 import './stylus/main.styl';
 
 // Vue Telephone input
 import 'vue-tel-input/dist/vue-tel-input.css';
-
-Sentry.init({
-  dsn: 'https://0d8a506e3fad49c8b2448261d9fb373e@sentry.io/1293718',
-  integrations: [new Sentry.Integrations.Vue({ Vue })],
-});
 
 require('vue-tour/dist/vue-tour.css');
 

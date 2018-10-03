@@ -122,7 +122,6 @@ const sendEmailVerificationToken = async (userId, email) => {
       });
       await token.save();
     }
-    // TODO: Switch to main domain
     return await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
         {

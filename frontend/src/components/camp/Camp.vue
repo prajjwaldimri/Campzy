@@ -1,6 +1,6 @@
 <template lang="pug">
   .camp-view
-    navbar(color="transparent" :app="true" :absolute="true" :dark="true")
+    navbar(:app="true" :absolute="true" :dark="true")
 
     SearchImagesDialog
     ReviewCampDialog
