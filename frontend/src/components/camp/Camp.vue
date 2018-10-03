@@ -6,7 +6,7 @@
     ReviewCampDialog
 
     v-responsive(height="90vh")
-      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center"
+      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center" v-if="camp.heroImage"
       :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + camp.heroImage")
         v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
           .d-flex.image-flex
