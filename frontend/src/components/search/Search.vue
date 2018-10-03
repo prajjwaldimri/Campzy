@@ -118,7 +118,7 @@
                           v-icon.mr-3(color="brown") terrain
                           span.increase-letter-spacing-1 Hill Terrain
                         .row.feature-row(v-if="result.terrain.desert")
-                          v-icon.mr-3(color="green") nature
+                          v-icon.mr-3(color="yellow darken-3") waves
                           span.increase-letter-spacing-1 Desert Terrain
                         .row.feature-row(v-if="result.terrain.ocean")
                           v-icon.mr-3(color="blue") waves
