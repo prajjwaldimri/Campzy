@@ -19,9 +19,11 @@ const multerS3 = require('multer-s3');
 const bodyParser = require('body-parser');
 const Sentry = require('@sentry/node');
 
-Sentry.init({
-  dsn: 'https://0d8a506e3fad49c8b2448261d9fb373e@sentry.io/1293718',
-});
+if (process.env.ENVIRONMENT === 'production') {
+  Sentry.init({
+    dsn: 'https://0d8a506e3fad49c8b2448261d9fb373e@sentry.io/1293718',
+  });
+}
 
 const {
   deleteImage,
@@ -129,7 +131,9 @@ app.use(
 );
 
 // Last ditch error handler
-app.use(Sentry.Handlers.errorHandler());
+if (process.env.ENVIRONMENT === 'production') {
+  app.use(Sentry.Handlers.errorHandler());
+}
 
 if (process.env.ENVIRONMENT === 'development') {
   // HTTPS on localhost
