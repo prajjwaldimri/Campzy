@@ -2,7 +2,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { forEach } = require('p-iteration');
-const axios = require('axios');
+const rp = require('request-promise-native'); //eslint-disable-line
 const Camp = require('./models/camp');
 
 mongoose.connect(
@@ -17,27 +17,25 @@ async function temperatureRetriever() {
     );
     await forEach(camps, async (camp) => {
       const updatedCamp = camp;
-      const response = await axios.get(
+      let response = await rp(
         `https://api.darksky.net/forecast/${process.env.DARKSKY_SECRET}/${
           camp.coordinates.latitude
         },${
           camp.coordinates.longitude
-        }?exclude=minutely,hourly,daily,alerts,flags?units=si`,
+        }?exclude=minutely,hourly,daily,alerts,flags&units=si`,
       );
-      updatedCamp.temperature = response.data.currently.temperature;
-      updatedCamp.temperatureSummary = response.data.currently.summary;
+      response = JSON.parse(response);
+      updatedCamp.temperature = response.currently.temperature;
+      updatedCamp.temperatureSummary = response.currently.summary;
       await updatedCamp.save();
     });
   } catch (err) {
     console.log(err);
+    process.exit(0);
   }
 }
 
-function handleRejection(p) {
-  return p.catch(err => ({ error: err }));
-}
-
 mongoose.connection.once('open', async () => {
-  await Promise.all([temperatureRetriever()].map(handleRejection));
+  await temperatureRetriever();
   process.exit(0);
 });
