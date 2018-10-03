@@ -24,6 +24,17 @@ const LocalBlogType = new GraphQLObjectType({
     heroImageCaption: { type: GraphQLString },
   }),
 });
+const LocalWishlistType = new GraphQLObjectType({
+  name: 'LocalWishlist',
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    url: { type: GraphQLString },
+    location: { type: GraphQLString },
+    shortDescription: { type: GraphQLString },
+    averageRating: { type: GraphQLInt },
+  }),
+});
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -45,6 +56,7 @@ const UserType = new GraphQLObjectType({
     googleToken: { type: GraphQLString },
     facebookToken: { type: GraphQLString },
     wishlist: { type: new GraphQLList(GraphQLString) },
+    localWishlist: { type: new GraphQLList(LocalWishlistType) },
   }),
 });
 

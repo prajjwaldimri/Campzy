@@ -48,6 +48,7 @@ const RootQuery = new GraphQLObjectType({
     countUsers: UserQueries.countTotalUsers,
     searchUniqueUser: UserQueries.searchParticularUser,
     getUserWishlist: UserQueries.getWishlist,
+    getWishlistInProfile: UserQueries.getWishlistInProfile,
 
     currentUserBlogs: UserQueries.getCurrentUserBlog,
     getBlog: BlogQueries.getBlog,

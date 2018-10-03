@@ -92,6 +92,18 @@ const getWishList = `query getUserWishlist{
     }
   }`;
 
+const getWishlistInProfile = `query getWishlistInProfile{
+    getWishlistInProfile{
+      localWishlist{
+        id,
+        name,
+        url,location,
+        shortDescription,
+        averageRating,
+      }
+    }
+  }`;
+
 const getCampDetail = `query camp($id: String!){
   camp(id: $id){
       name,
@@ -369,4 +381,5 @@ module.exports = {
   getLatestCampForReview,
   getTentById,
   getReviewsForCamp,
+  getWishlistInProfile,
 };

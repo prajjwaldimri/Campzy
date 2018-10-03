@@ -18,7 +18,7 @@
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-import { getWishList } from '../../queries/queries';
+import { getWishlistInProfile } from '../../queries/queries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -38,9 +38,10 @@ export default {
         },
       });
 
-      client.request(getWishList).then((data) => {
+      client.request(getWishlistInProfile).then((data) => {
         console.log(data);
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
       });
     },

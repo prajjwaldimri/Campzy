@@ -238,6 +238,21 @@ const getWishlist = {
   },
 };
 
+const getWishlistInProfile = {
+  type: UserType,
+  args: {},
+  async resolve(parent, args, context) {
+    const user = await auth.getAuthenticatedUser(context.req);
+    const userData = await UserModel.findById(user.id)
+      .select('wishlist')
+      .populate('wishlist');
+    if (userData === null) {
+      throw new NotLoggedinError();
+    }
+    return { localWishlist: userData.wishlist };
+  },
+};
+
 module.exports = {
   currentUser,
   getUser,
@@ -249,4 +264,5 @@ module.exports = {
   getCurrentUserBlog,
   isEmailAvailable,
   getWishlist,
+  getWishlistInProfile,
 };

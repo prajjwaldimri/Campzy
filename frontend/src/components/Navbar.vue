@@ -6,15 +6,15 @@
       span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
-      v-btn(flat @click='goToHome') HOME
-      v-btn(flat) WISH LIST
+      v-btn(flat @click="$router.push('/')") HOME
+      v-btn(flat @click="$router.push('/profile/billing')") WISH LIST
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")
           | Hey, &nbsp; {{user.name}}
         v-card
           v-list
-            v-list-tile(@click='goToSettings')
+            v-list-tile(@click="$router.push('/profile')")
               v-list-tile-action
                 v-icon settings
               v-list-tile-content
@@ -31,11 +31,31 @@
                 v-list-tile-title Sign out
 
     v-toolbar-items.hidden-md-and-up
-      v-btn(icon)
+      v-btn(icon @click="$router.push('/')")
         v-icon home
+      v-btn(icon flat v-show="!isLoggedIn" to='/login')
+          v-icon account_circle
+      v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
+        v-btn(icon flat v-show="isLoggedIn" slot='activator')
+          v-icon account_circle
+        v-card
+          v-list
+            v-list-tile(@click="$router.push('/profile')")
+              v-list-tile-action
+                v-icon settings
+              v-list-tile-content
+                v-list-tile-title Settings
+            v-list-tile(v-show='isAdmin || isCampOwner || isBlogger' @click="$router.push('/dashboard')")
+              v-list-tile-action
+                v-icon work
+              v-list-tile-content
+                v-list-tile-title Dashboard
+            v-list-tile(@click='signOut')
+              v-list-tile-action
+                v-icon directions_walk
+              v-list-tile-content
+                v-list-tile-title Sign out
 
-      v-btn(icon flat)
-        v-icon account_circle
 
 </template>
 <script>
@@ -92,17 +112,11 @@ export default {
           this.user.name = 'Unnamed User';
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.user = {}; this.isLoggedIn = false;
       });
   },
   methods: {
-    goToSettings() {
-      this.$router.push('/profile');
-    },
-    goToHome() {
-      this.$router.push('/');
-    },
     signOut() {
       this.$cookie.delete('sessionToken');
       if (this.$cookie.get('sessionToken') == null) {
