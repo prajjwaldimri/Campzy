@@ -181,8 +181,8 @@ const getCampByUrl = `query campUser($url: String!){
   }
 }`;
 
-const getCampImages = `query campUser($url: String!){
-  campUser(url: $url){
+const getCampImages = `query getImagesOfCamp($url: String!){
+  getImagesOfCamp(url: $url){
     id,
     name,
     images,

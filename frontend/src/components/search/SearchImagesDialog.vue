@@ -8,10 +8,10 @@
           span Close
           v-icon close
       v-carousel(dark style="height: 90vh" v-if="imagesLoaded")
-        v-carousel-item(v-for="(image,i) in images" :key="i")
-          v-responsive
-            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
-            :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+        v-carousel-item(v-for="(image,i) in images" :key="i" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image")
+          //- v-responsive
+          //-   v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+          //-   :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
 
 </template>
 
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       showDialog: false,
-      images: [''],
+      images: [],
       campName: '',
       campUrl: '',
       imagesLoaded: false,
@@ -32,7 +32,6 @@ export default {
   },
   mounted() {
     EventBus.$on('open-image-dialog', (campUrl) => {
-      console.log(campUrl);
       this.campUrl = campUrl.campUrl;
       this.getImages();
       this.showDialog = true;
@@ -52,9 +51,11 @@ export default {
         url: this.campUrl,
       };
       request('/graphql', getCampImages, variables).then((data) => {
-        this.campName = data.campUser.name;
-        this.images = data.campUser.images;
-      }).catch(() => {
+        console.log(data);
+        this.campName = data.getImagesOfCamp.name;
+        this.images = data.getImagesOfCamp.images;
+      }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', 'Cannot get images at this time');
       }).finally(() => {
         EventBus.$emit('hide-progress-bar');
