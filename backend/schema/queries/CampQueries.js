@@ -72,7 +72,8 @@ const getAllCamps = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await CampModel.find({}).populate('ownerId', 'name')
+      return await CampModel.find({})
+        .populate('ownerId', 'name')
         .limit(8)
         .skip((args.page - 1) * 8);
     } catch (err) {

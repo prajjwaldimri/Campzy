@@ -248,6 +248,7 @@
 </template>
 
 <script>
+/* eslint no-param-reassign: ["error", { "props": false }] */
 import InfiniteLoading from 'vue-infinite-loading';
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
@@ -343,14 +344,19 @@ export default {
       EventBus.$emit('open-image-dialog', { campId, campName });
     },
     calculatePrice() {
-      for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPrice = 0;
-        console.log(this.searchResults[i].name, this.searchResults[i].inventory.length);
-        this.searchResults[i].inventory.forEach((tent) => {
-          minPrice += tent.bookingPrice;
-        });
-        this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
-      }
+      this.searchResults.forEach((searchResult) => {
+        // If the backend search provides more tents than needed then sort the tents and remove additional ones
+        let { inventory } = searchResult;
+        if (inventory.length > this.tentCount) {
+          const tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
+          inventory = tents.slice(0, this.tentCount);
+        }
+        searchResult.inventory = inventory;
+
+        // Calculate the minimum price for each Camp.
+        const minPrice = searchResult.inventory.reduce((price, tent) => price + tent.bookingPrice, 0);
+        searchResult.minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
+      });
     },
     sort(option) {
       this.sortDialog = false;
