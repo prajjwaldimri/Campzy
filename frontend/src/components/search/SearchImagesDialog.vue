@@ -8,10 +8,11 @@
           span Close
           v-icon close
       v-carousel(dark style="height: 90vh" v-if="imagesLoaded")
-        v-carousel-item(v-for="(image,i) in images" :key="i" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image")
-          //- v-responsive
-          //-   v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
-          //-   :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+        v-carousel-item(v-for="(image,i) in images" :key="i" )
+          .d-flex
+            v-responsive
+              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+              :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
 
 </template>
 
@@ -27,7 +28,7 @@ export default {
       images: [],
       campName: '',
       campUrl: '',
-      imagesLoaded: false,
+      imagesLoaded: true,
     };
   },
   mounted() {
