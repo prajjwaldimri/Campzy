@@ -45,7 +45,7 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click.native="saveCamp").white--text Save
+      v-btn(color="green" @click.native="saveCamp"  :disabled="isUrlAlreadyinUse").white--text Save
 
 </template>
 
@@ -67,6 +67,7 @@ export default {
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
       searchUsers: null,
+      isUrlAlreadyinUse: false,
     };
   },
   methods: {
@@ -96,7 +97,7 @@ export default {
             phoneNumber: this.camp.phoneNumber,
             email: this.camp.email,
             location: this.camp.location,
-            url: this.camp.url,
+            url: this.url,
             ownerId: this.camp.owner,
           };
           const client = new GraphQLClient('/graphql', {
@@ -154,20 +155,19 @@ export default {
         this.searchedUsers = [];
       }).finally(() => { this.isOwnerFieldLoading = false; });
     },
+
+    // Check Url Availability
     url(value) {
-      console.log(typeof value);
       const variables = {
         url: value,
       };
-      request('/graphql', isCampUrlAvailable, variables).then((data) => {
-        console.log(data);
-        // this.isEmailAlreadyinUse = false;
+      request('/graphql', isCampUrlAvailable, variables).then(() => {
+        this.isUrlAlreadyinUse = false;
       }).catch((err) => {
-        console.log(err);
         if (err) {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
-        // this.isEmailAlreadyinUse = true;
+        this.isUrlAlreadyinUse = true;
       });
     },
   },
