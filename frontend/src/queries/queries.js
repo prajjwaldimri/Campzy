@@ -180,6 +180,14 @@ const getCampByUrl = `query campUser($url: String!){
   }
 }`;
 
+const getCampImages = `query campUser($url: String!){
+  campUser(url: $url){
+    id,
+    name,
+    images,
+  }
+}`;
+
 const getBestTentAvailable = `query bestTentInCamp($url: String!, $tentCount: Int!, $personCount: Int!, $preBookPeriod: Int!, $bookingStartDate: Date!, $bookingEndDate: Date!){
   bestTentInCamp(url: $url, tentCount: $tentCount, personCount: $personCount, preBookPeriod: $preBookPeriod, bookingStartDate: $bookingStartDate, bookingEndDate: $bookingEndDate){
     id,
@@ -372,7 +380,6 @@ const allBookings = `query allBookings{
              url,
            },
            code
-           
         }
       }`;
 const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
@@ -392,6 +399,7 @@ module.exports = {
   campSearch,
   campSearchUser,
   getCampByUrl,
+  getCampImages,
   getBestTentAvailable,
   getCurrentUserBlogsQuery,
   getBlogQuery,

@@ -86,7 +86,7 @@
                             v-expand-transition
                               .d-flex(v-if="hover" style="height: 100%"
                               class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
-                                v-btn(dark @click.prevent="openImageDialog(result.name, result.name)")
+                                v-btn(dark @click.prevent="openImageDialog(result.url)")
                                   | View All Images
 
                       v-flex(md4).result-column.pl-3.pt-3
@@ -340,8 +340,8 @@ export default {
         EventBus.$emit('hide-progress-bar');
       });
     },
-    openImageDialog(campId, campName) {
-      EventBus.$emit('open-image-dialog', { campId, campName });
+    openImageDialog(campUrl, campName) {
+      EventBus.$emit('open-image-dialog', { campUrl, campName });
     },
     calculatePrice() {
       this.searchResults.forEach((searchResult) => {
