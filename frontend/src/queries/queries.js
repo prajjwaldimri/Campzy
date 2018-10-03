@@ -156,6 +156,7 @@ const getCampByUrl = `query campUser($url: String!){
       petsAllowed,
       chargingPoints,
     },
+    heroImage,
     images,
     isAvailable,
     inventory{

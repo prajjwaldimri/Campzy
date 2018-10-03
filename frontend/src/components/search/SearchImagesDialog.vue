@@ -32,6 +32,7 @@ export default {
   },
   mounted() {
     EventBus.$on('open-image-dialog', (campUrl) => {
+      console.log(campUrl);
       this.campUrl = campUrl.campUrl;
       this.getImages();
       this.showDialog = true;
