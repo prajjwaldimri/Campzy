@@ -13,6 +13,16 @@ faker.locale = 'en_IND';
 // Add 100 users, camps and their tents
 const userTypes = ['Camper', 'CampOwner', 'Admin'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
+const s3Images = [
+  '1538556993356__camp1.jpeg',
+  '1538556993388__camp2.jpeg',
+  '1538556993391__camp3.jpeg',
+  '1538556993395__camp4.jpeg',
+  '1538556993405__camp5.jpeg',
+  '1538556993407__camp6.jpeg',
+  '1538556993411__camp7.jpeg',
+  '1538556993420__camp8.jpeg',
+];
 
 async function CreateCamp(userId, phoneNumber) {
   let camp;
@@ -32,8 +42,8 @@ async function CreateCamp(userId, phoneNumber) {
       ownerId: userId,
       images: new Array(10)
         .fill(null)
-        .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
-      heroImage: 'https://loremflickr.com/320/240/nature',
+        .map(e => (e = faker.random.arrayElement(s3Images))),
+      heroImage: faker.random.arrayElement(s3Images),
       averageRating: faker.random.number({ min: 1, max: 5 }),
       ratingsCount: faker.random.number({ min: 100, max: 10000 }),
       altitude: faker.random.number({ min: 100, max: 2000 }),
