@@ -110,7 +110,7 @@
         .iframe-container.mt-4
           iframe(v-if="camp" :src="mapUri" allowfullscreen)
 
-        h1.headline.mt-5.px-1.font-weight-bold Places of Interest
+        h1.headline.mt-5.pt-3.px-1.font-weight-bold Places of Interest
         v-list(two-line).mt-4
           v-list-tile(v-for="place in camp.placesOfInterest")
             v-list-tile-content
