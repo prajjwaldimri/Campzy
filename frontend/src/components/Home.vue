@@ -9,32 +9,34 @@
       hint="You can search for Nature, Leh, Mountains, etc.").mb-0
 
       .d-flex.actions-flex.py-2
-        v-flex(justify-center align-center).button-flex.px-2.hidden-sm-and-down
-          v-btn(outline color="blue" fab @click="login")
-            v-icon vpn_key
-          h3.subheading Login/Register
-        v-flex(justify-center align-center).button-flex.px-1.hidden-sm-and-down
-          v-btn(color="orange darken-2" fab outline)
-            v-icon trending_up
-          h3.subheading Trending Camps
-        v-flex(justify-center align-center).button-flex.px-2.hidden-sm-and-down
-          v-btn(color="blue-grey" fab outline)
-            v-icon chrome_reader_mode
-          h3.subheading Blogs
+        v-layout(row).hidden-sm-and-down
+          v-flex(justify-center align-center md4).button-flex
+            v-btn(outline color="blue" fab @click="login")
+              v-icon account_box
+            h3.subheading Account
+          v-flex(justify-center align-center md4).button-flex
+            v-btn(color="orange darken-2" fab outline)
+              v-icon trending_up
+            h3.subheading Trending
+          v-flex(justify-center align-center md4).button-flex
+            v-btn(color="blue-grey" fab outline)
+              v-icon chrome_reader_mode
+            h3.subheading Blogs
 
         //- Mobile Layout
-        v-flex(justify-center align-center).button-flex.px-2.hidden-md-and-up
-          v-btn(outline color="blue" fab @click="login" small)
-            v-icon vpn_key
-          h3.body-2 Login/Register
-        v-flex(justify-center align-center).button-flex.px-2.hidden-md-and-up
-          v-btn(color="orange darken-2" fab outline small)
-            v-icon trending_up
-          h3.body-2 Trending
-        v-flex(justify-center align-center).button-flex.px-4.hidden-md-and-up
-          v-btn(color="blue-grey" fab outline small)
-            v-icon chrome_reader_mode
-          h3.body-2 Blogs
+        v-layout(row).hidden-md-and-up
+          v-flex(justify-center align-center sm4).button-flex
+            v-btn(outline color="blue" fab @click="login" small)
+              v-icon account_box
+            h3.body-2 Account
+          v-flex(justify-center align-center sm4).button-flex
+            v-btn(color="orange darken-2" fab outline small)
+              v-icon trending_up
+            h3.body-2 Trending
+          v-flex(justify-center align-center sm4).button-flex
+            v-btn(color="blue-grey" fab outline small)
+              v-icon chrome_reader_mode
+            h3.body-2 Blogs
 
 
 </template>
