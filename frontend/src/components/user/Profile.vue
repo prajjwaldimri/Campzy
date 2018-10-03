@@ -2,7 +2,7 @@
 <template lang="pug">
   div
     navbar(:dark="true")
-    v-tabs(dark icons-and-text grow centered style="width:100%").hidden-sm-and-down
+    v-tabs(dark icons-and-text grow centered style="width:100%" v-model="selectedTab").hidden-sm-and-down
       v-tabs-slider(color="green")
       v-tab(href="#tab-1" @click="$router.push('/profile')")
         | Settings
@@ -70,6 +70,7 @@ export default {
       userProfileImage: '',
       userName: '',
       bottomNav: 0,
+      selectedTab: 'tab-1',
 
     };
   },
@@ -82,6 +83,20 @@ export default {
       EventBus.$emit('show-error-notification-short', 'Please Login First');
     } else {
       this.getProfileImage();
+    }
+
+    // Select the proper tab based on the url
+
+    switch (this.$route.name) {
+      case 'activeBookings':
+        this.selectedTab = 'tab-2';
+        break;
+
+      case 'billing':
+        this.selectedTab = 'tab-4';
+        break;
+
+      default: this.selectedTab = 'tab-1';
     }
 
 
