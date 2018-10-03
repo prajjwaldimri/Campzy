@@ -39,6 +39,13 @@ async function CreateCamp(userId, phoneNumber) {
       location: faker.fake('{{address.city}}, {{address.state}}'),
       'coordinates.latitude': faker.address.latitude(),
       'coordinates.longitude': faker.address.longitude(),
+      'amenities.washroomAttached': faker.random.boolean(),
+      'amenities.mealsInclude': faker.random.boolean(),
+      'amenities.bonfire': faker.random.boolean(),
+      'amenities.hotWater': faker.random.boolean(),
+      'amenities.mobileConnectivity': faker.random.boolean(),
+      'amenities.chargingPoints': faker.random.boolean(),
+      'amenities.petsAllowed': faker.random.boolean(),
       ownerId: userId,
       images: new Array(10)
         .fill(null)
@@ -123,6 +130,7 @@ mongoose.connection.once('open', async () => {
   await User.remove({});
   await Tent.remove({});
   await Camp.remove({});
+  await Review.remove({});
   for (let i = 0; i < 10000; i++) {
     await Promise.all(
       [CreateUser(), CreateUser(), CreateUser(), CreateUser()].map(
