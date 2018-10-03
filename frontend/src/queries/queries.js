@@ -355,6 +355,25 @@ const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
   }
 }`;
 
+const allBookings = `query allBookings{
+        allBookings{
+          user {
+              name
+            },
+            tentCount,
+           startDate,
+           endDate,
+           personCount,
+           amount,
+           camp{
+             name,
+             url,
+           },
+           code
+           
+        }
+      }`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -382,4 +401,5 @@ module.exports = {
   getTentById,
   getReviewsForCamp,
   getWishlistInProfile,
+  allBookings,
 };

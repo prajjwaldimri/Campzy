@@ -113,9 +113,46 @@ const countCampActiveBookings = {
   },
 };
 
+const allBookings = {
+  type: new GraphQLList(BookingType),
+  args: {},
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserAdmin = await auth.isUserAdmin(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserAdmin) {
+        throw new PrivilegeError();
+      }
+      const allBooking = await BookingModel.find({})
+        .populate('user', 'name')
+        .populate('camp', 'name url code');
+      const adminBookings = [];
+
+      allBooking.forEach((booking) => {
+        let newCampBooking = {};
+
+        newCampBooking = JSON.parse(JSON.stringify(booking));
+        newCampBooking.startDate = new Date(booking.startDate);
+        newCampBooking.endDate = new Date(booking.endDate);
+        newCampBooking.amount = booking.amount.toString();
+        adminBookings.push(newCampBooking);
+      });
+      console.log(adminBookings);
+      return adminBookings;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   getUserActiveBookings,
   getUserPastBookings,
   getCampBookings,
   countCampActiveBookings,
+  allBookings,
 };
