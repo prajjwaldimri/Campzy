@@ -130,10 +130,6 @@ app.use(
 
 // Last ditch error handler
 app.use(Sentry.Handlers.errorHandler());
-app.use((error, req, res) => {
-  res.statusCode = 500;
-  res.end(`${res.sentry}\n`);
-});
 
 if (process.env.ENVIRONMENT === 'development') {
   // HTTPS on localhost
