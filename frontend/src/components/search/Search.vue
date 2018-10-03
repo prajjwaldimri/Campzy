@@ -152,8 +152,8 @@
                   //- Mobile layout for search cards
                   v-layout(column).hidden-md-and-up.pt-2
                     v-flex.image-wrapper
-                      v-img(:src="result.heroImage" contain
-                      @click="openImageDialog(result.name, result.name)")
+                      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/'+result.heroImage" contain :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/'+result.heroImage"
+                      @click="openImageDialog(result.url)")
                         v-layout(slot="placeholder" fill-height align-center justify-center)
                           v-progress-circular(indeterminate color="grey lighten-5")
 
