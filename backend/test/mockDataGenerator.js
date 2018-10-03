@@ -13,6 +13,7 @@ faker.locale = 'en_IND';
 // Add 100 users, camps and their tents
 const userTypes = ['Camper', 'CampOwner', 'Admin'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
+const terrainTypes = ['glacier', 'forest', 'desert', 'ocean', 'hill', 'river'];
 const s3Images = [
   '1538556993356__camp1.jpeg',
   '1538556993388__camp2.jpeg',
@@ -33,6 +34,7 @@ async function CreateCamp(userId, phoneNumber) {
       isAvailable: true,
       phoneNumber,
       email: faker.internet.email(),
+      [`terrain.${faker.random.arrayElement(terrainTypes)}`]: true,
       url: faker.random.uuid(),
       shortDescription: faker.lorem.sentence(),
       longDescription: faker.lorem.paragraph(),
@@ -66,7 +68,6 @@ async function CreateCamp(userId, phoneNumber) {
             }),
           }),
       ),
-      'terrain.glacier': true,
     });
     for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
       const tent = await Tent.create({
