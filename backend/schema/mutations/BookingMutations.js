@@ -2,12 +2,14 @@ const graphql = require('graphql');
 const { GraphQLDate } = require('graphql-iso-date');
 const moment = require('moment');
 const Razorpay = require('razorpay');
-// const math = require('mathjs');
+const pluralize = require('pluralize');
 const BookingType = require('../types/BookingType');
-// const CampModel = require('../../models/camp.js');
-const TentModel = require('../../models/tent.js');
+const CampModel = require('../../models/camp.js');
+const UserModel = require('../../models/user');
+const TentModel = require('../../models/tent');
 const BookingModel = require('../../models/booking');
 const auth = require('../../config/auth');
+const sms = require('../../communication/sms');
 
 const {
   NotLoggedinError,
@@ -116,12 +118,6 @@ const book = {
         throw new AmountNotCapturedError();
       }
 
-      // Collect the amount from razorpay. Also check the amount with the tent's booking amount.
-
-      // Compare the collected amount with payable amount
-
-      // TODO: Send sms and emails to the user with their booking tickets
-
       // Generate a booking token
       const booking = await BookingModel.create({
         razorpayPaymentId: payment.id,
@@ -135,6 +131,39 @@ const book = {
         amount,
       });
 
+      const userData = await UserModel.findById(user.id).select(
+        'name phoneNumber',
+      );
+      const campData = await CampModel.findById(tents[0].camp).select(
+        'name phoneNumber',
+      );
+      // TODO: Send sms and emails to the user with their booking tickets
+      // Send sms to user
+      await sms.sendSMS(
+        userData.phoneNumber,
+        `Successfully booked ${
+          campData.name
+        }. Your booking starts from ${moment(args.fromDate).format(
+          'dddd, MMMM Do YYYY',
+        )} and ends on ${moment(args.toDate).format(
+          'dddd, MMMM Do YYYY',
+        )}. You can see your bookings @ https://campzy.in/profile/activeBookings. Enjoy!`,
+      );
+
+      // Send sms to camp owner
+      await sms.sendSMS(
+        campData.phoneNumber,
+        `${userData.name} has booked ${pluralize(
+          'tent',
+          args.tentCount,
+          true,
+        )} in your camp ${campData.name} from ${moment(args.fromDate).format(
+          'dddd, MMMM Do YYYY',
+        )} to ${moment(args.toDate).format(
+          'dddd, MMMM Do YYYY',
+        )} for ₹ ${amount}. Congrats!`,
+      );
+
       // TODO: Send an email to user and camp owner
 
       // TODO: Send sms alerts to camp owner and user
@@ -142,7 +171,6 @@ const book = {
       // Return the booking token's id
       return booking;
     } catch (err) {
-      console.log(err);
       return err;
     }
   },
