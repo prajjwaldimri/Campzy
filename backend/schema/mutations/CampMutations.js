@@ -112,10 +112,11 @@ const updateUserCamp = {
     location: { type: GraphQLString },
     url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
-    ownerId: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
+    placeName: { type: GraphQLString },
+    distance: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
     try {
@@ -138,8 +139,10 @@ const updateUserCamp = {
         location: args.location,
         url: args.url,
         tags: args.tags,
-        ownerId: args.ownerId,
-        placesOfInterest: args.placesOfInterest,
+        placesOfInterest: {
+          name: args.placeName,
+          distance: args.distance,
+        },
       });
     } catch (err) {
       return err;
@@ -182,6 +185,42 @@ const saveAmenities = {
           chargingPoints: args.chargingPoints,
         },
       });
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const savePlacesOfInterest = {
+  type: CampType,
+  args: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    distance: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    try {
+      console.log(args.name);
+      console.log(args.distance);
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+
+      const places = await CampModel.findByIdAndUpdate(args.id, {
+        $push: {
+          placesOfInterest: {
+            name: args.name,
+            distance: args.distance,
+          },
+        },
+      });
+      return places;
     } catch (err) {
       return err;
     }
@@ -367,4 +406,5 @@ module.exports = {
   updateCampDocuments,
   deleteCampDocument,
   saveAmenities,
+  savePlacesOfInterest,
 };

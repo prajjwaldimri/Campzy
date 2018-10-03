@@ -146,10 +146,10 @@
                       v-flex(xs12 md6)
                         v-layout(column)
                           v-flex(xs12 md6)
-                            v-combobox(v-model='placesOfInterest' attach chips
-                            label='Places of Interest' multiple clearable)
-                          v-flex.mt-4(xs12 md6)
-                              v-combobox(v-model='tags' attach chips
+                          //-   v-combobox(v-model='placesOfInterest' attach chips
+                          //-   label='Places of Interest' multiple clearable)
+                          //- v-flex.mt-4(xs12 md6)
+                          //-     v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
@@ -188,7 +188,7 @@ import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
 import {
-  saveCampDetails, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument, addAmenities,
+  saveCampDetails, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument, addAmenities, addPlacesOfInterest,
 } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
 
@@ -216,7 +216,7 @@ export default {
         { name: 'Charging points', value: true },
       ],
       amenities: {},
-      placesOfInterest: [],
+      placesOfInterest: {},
       tags: [],
       panNumber: null,
       tinNumber: null,
@@ -397,7 +397,8 @@ export default {
       });
       client.request(getCurrentUserCampDetails).then((data) => {
         this.camp = data.currentUserCamp;
-        this.placesOfInterest = this.camp.placesOfInterest;
+        console.log(this.camp.placesOfInterest);
+        // this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
         this.amenities = this.camp.amenities;
         if (this.camp.campDocuments.length === 3) {
@@ -425,8 +426,6 @@ export default {
         phoneNumber: this.camp.phoneNumber,
         url: this.camp.url,
         email: this.camp.email,
-        ownerId: this.camp.ownerId,
-        placesOfInterest: this.placesOfInterest,
         shortDescription: this.camp.shortDescription,
         longDescription: this.camp.longDescription,
         tags: this.tags,
@@ -438,11 +437,13 @@ export default {
         },
       });
       this.isDataUpdating = true;
+      this.saveAmenity();
+      this.savePlacesOfInterests();
       client.request(saveCampDetails, variables).then(() => {
-        this.saveAmenity();
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        this.getCampDetails();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to update');
       }).finally(() => { this.isDataUpdating = false; });
     },
 
@@ -467,12 +468,50 @@ export default {
         },
       });
       client.request(addAmenities, variables).then(() => {
-        this.getCampDetails();
-        EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
-      }).catch((err) => {
-        console.log(err);
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      }).finally();
+      }).catch(() => {
+        EventBus.$emit('show-info-notification-short', 'Failed to Update Amenities');
+      });
+    },
+    savePlacesOfInterests() {
+      this.placesOfInterest = [
+
+        {
+          name: 'abc',
+          distance: '5km',
+        },
+        {
+          name: 'abc2',
+          distance: '5km',
+        },
+        {
+          name: 'abc3',
+          distance: '5km',
+        },
+
+      ];
+      console.log(this.placesOfInterest);
+      console.log(this.placesOfInterest.length);
+      this.placesOfInterest.forEach((place) => {
+        console.log(place);
+        if (!this.$cookie.get('sessionToken')) {
+          this.$router.push('/');
+        }
+        const variables = {
+          id: this.camp.id,
+          name: place.name,
+          distance: place.distance,
+
+        };
+        const client = new GraphQLClient('/graphql', {
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+          },
+        });
+        client.request(addPlacesOfInterest, variables).then(() => {
+        }).catch(() => {
+          EventBus.$emit('show-info-notification-short', 'Failed to update Places of Interests');
+        });
+      });
     },
 
     deleteImageFromAWS(imageName) {
