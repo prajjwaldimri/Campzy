@@ -60,7 +60,7 @@ import { getUserActiveBookings } from '../../queries/queries';
 
 export default {
   metaInfo: {
-    title: 'Active Bookings',
+    title: 'Active Bookings - Campzy',
   },
   data() {
     return {
