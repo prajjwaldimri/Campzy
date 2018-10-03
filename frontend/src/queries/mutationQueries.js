@@ -90,7 +90,7 @@ const addAmenities = `mutation saveAmenities($id: String!,$washRoomAttached: Boo
   }
 }`;
 
-const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name:String, $distance: String){
+const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name:String, $distance: Float){
   savePlacesOfInterest(id: $id, name: $name, distance: $distance){
     id
   }

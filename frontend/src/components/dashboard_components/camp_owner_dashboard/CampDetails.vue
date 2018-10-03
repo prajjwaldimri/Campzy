@@ -397,8 +397,7 @@ export default {
       });
       client.request(getCurrentUserCampDetails).then((data) => {
         this.camp = data.currentUserCamp;
-        console.log(this.camp.placesOfInterest);
-        // this.placesOfInterest = this.camp.placesOfInterest;
+        this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;
         this.amenities = this.camp.amenities;
         if (this.camp.campDocuments.length === 3) {
@@ -473,26 +472,7 @@ export default {
       });
     },
     savePlacesOfInterests() {
-      this.placesOfInterest = [
-
-        {
-          name: 'abc',
-          distance: '5km',
-        },
-        {
-          name: 'abc2',
-          distance: '5km',
-        },
-        {
-          name: 'abc3',
-          distance: '5km',
-        },
-
-      ];
-      console.log(this.placesOfInterest);
-      console.log(this.placesOfInterest.length);
       this.placesOfInterest.forEach((place) => {
-        console.log(place);
         if (!this.$cookie.get('sessionToken')) {
           this.$router.push('/');
         }
@@ -508,7 +488,8 @@ export default {
           },
         });
         client.request(addPlacesOfInterest, variables).then(() => {
-        }).catch(() => {
+        }).catch((err) => {
+          console.log(err);
           EventBus.$emit('show-info-notification-short', 'Failed to update Places of Interests');
         });
       });

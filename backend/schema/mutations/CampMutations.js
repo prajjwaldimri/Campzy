@@ -5,7 +5,9 @@ const CampType = require('../types/CampType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLList, GraphQLBoolean } = graphql;
+const {
+  GraphQLString, GraphQLList, GraphQLBoolean, GraphQLFloat,
+} = graphql;
 
 const addCamp = {
   type: CampType,
@@ -195,13 +197,11 @@ const savePlacesOfInterest = {
   type: CampType,
   args: {
     id: { type: GraphQLString },
-    name: { type: GraphQLString },
-    distance: { type: GraphQLString },
+    placesOfInterest: { type: new GraphQLList(GraphQLString) },
+    distance: { type: GraphQLFloat },
   },
   async resolve(parent, args, context) {
     try {
-      console.log(args.name);
-      console.log(args.distance);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       const isUserCampOwner = await auth.isUserCampOwner(userData);
@@ -212,14 +212,18 @@ const savePlacesOfInterest = {
         throw new PrivilegeError();
       }
 
-      const places = await CampModel.findByIdAndUpdate(args.id, {
-        $push: {
-          placesOfInterest: {
-            name: args.name,
-            distance: args.distance,
+      const places = await CampModel.findByIdAndUpdate(
+        args.id,
+        {
+          $push: {
+            placesOfInterest: {
+              name: args.name,
+              distance: args.distance,
+            },
           },
         },
-      });
+        { new: true },
+      );
       return places;
     } catch (err) {
       return err;
