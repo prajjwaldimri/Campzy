@@ -229,7 +229,7 @@ const getWishlist = {
   args: {},
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
-    const userData = await UserModel.findById(user.id).select('wishlist');
+    const userData = await UserModel.findById(user.id);
     if (userData === null) {
       throw new NotLoggedinError();
     }

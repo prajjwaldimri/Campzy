@@ -12,12 +12,15 @@
             .d-flex.align-self-center
               h1.display-4.camp-name.hidden-sm-and-down {{camp.name}}
               h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
-            .d-flex.align-self-start.pb-4.px-5
-              span
+
+            .d-flex.align-self-start.pb-4.px-4(style='width:100%')
+              span(style='width:100%')
                 v-icon(dark color="green") star
                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                 span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
-              v-btn( dark flat @click='addToWishList(camp.id)') Add to WishList
+              .d-flex.align-self-end
+                v-btn(v-if='!isInWishList' dark outline color='blue' @click='addToWishList(camp.id)') Add to WishList
+                v-btn(v-else dark outline color='error' @click='removeFromWishList(camp.id)' ) Remove from WishList
 
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
@@ -170,8 +173,12 @@ import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from '../search/SearchImagesDialog.vue';
 import ReviewCamp from './ReviewCamp.vue';
-import { getCampByUrl, getBestTentAvailable, getReviewsForCamp } from '../../queries/queries';
-import { bookCampCheck, bookCamp, addCampToWishlist } from '../../queries/mutationQueries';
+import {
+  getCampByUrl, getBestTentAvailable, getReviewsForCamp, getWishList,
+} from '../../queries/queries';
+import {
+  bookCampCheck, bookCamp, addCampToWishlist, removeCampFromWishlist,
+} from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -201,6 +208,8 @@ export default {
       isBookingPossible: true,
       tents: [],
       user: {},
+      userWishList: [],
+      isInWishList: false,
     };
   },
   metaInfo() {
@@ -232,8 +241,7 @@ export default {
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
         this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
-      }).catch((err) => {
-        console.log(err);
+      }).catch(() => {
         this.$router.go(-1);
         EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
       }).finally(() => {
@@ -262,7 +270,7 @@ export default {
           if (this.user.isEmailVerified === false) {
             this.isEmailVerified = false;
           }
-          // this.getUserWishList();
+          this.getUserWishList();
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
@@ -376,6 +384,7 @@ export default {
     },
 
     addToWishList(campID) {
+      EventBus.$emit('show-progress-bar');
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -387,9 +396,46 @@ export default {
 
       client.request(addCampToWishlist, variables).then(() => {
         EventBus.$emit('show-info-notification-short', 'Added to your Wishlist!');
+        this.getUserWishList();
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+      }).finally(() => { EventBus.$emit('hide-progress-bar'); });
+    },
+    getUserWishList() {
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(getWishList).then((data) => {
+        this.userWishList = data.getUserWishlist.wishlist;
+        if (this.userWishList.includes(this.camp.id)) {
+          this.isInWishList = true;
+        } else {
+          this.isInWishList = false;
+        }
       }).catch((err) => {
         EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
       });
+    },
+    removeFromWishList(campID) {
+      EventBus.$emit('show-progress-bar');
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        campId: campID,
+      };
+
+      client.request(removeCampFromWishlist, variables).then(() => {
+        EventBus.$emit('show-info-notification-short', 'Removed from Wishlist!');
+        this.getUserWishList();
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+      }).finally(() => { EventBus.$emit('hide-progress-bar'); });
     },
 
 

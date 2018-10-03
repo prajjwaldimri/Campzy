@@ -35,7 +35,7 @@
         template(slot="items" slot-scope="props" @click.stop='')
           td {{props.item.id}}
           td.font-weight-bold {{props.item.name}}
-          td {{props.item.owner.name}}
+          //- td {{props.item.owner.name}}
           td {{props.item.phoneNumber}}
           td {{props.item.location}}
           td {{props.item.creationDate}}
@@ -76,7 +76,7 @@ export default {
           text: 'Camp Name',
           value: 'name',
         },
-        { text: 'Camp Owner', value: 'owner.name' },
+        // { text: 'Camp Owner', value: 'owner.name' },
         { text: 'Phone Number', value: 'phoneNumber' },
         { text: 'Camp Location', value: 'location' },
         { text: 'Creation Date', value: 'creationDate' },
@@ -154,8 +154,10 @@ export default {
       });
       this.isTableLoading = true;
       client.request(getCampsQuery, variables).then((data) => {
+        console.log(data);
         this.camps = data.allCamps;
       }).catch((err) => {
+        console.log(err);
         EventBus.$emit('error', err.response.errors[0].message);
       }).finally(() => { this.isTableLoading = false; });
     },

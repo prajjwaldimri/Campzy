@@ -76,6 +76,7 @@ const Mutation = new GraphQLObjectType({
     resetPassword: UserMutations.resetPassword,
     updateUser: UserMutations.updateUser,
     addCampToWishlist: UserMutations.addCampToWishlist,
+    removeFromWishlist: UserMutations.removeFromWishlist,
 
     addCamp: CampMutations.addCamp,
     updateCamp: CampMutations.updateCamp,

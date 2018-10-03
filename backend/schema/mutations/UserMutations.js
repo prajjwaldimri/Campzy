@@ -192,6 +192,24 @@ const addCampToWishlist = {
   },
 };
 
+const removeFromWishlist = {
+  type: UserType,
+  args: {
+    campId: { type: GraphQLString },
+  },
+  async resolve(parent, args, context) {
+    const user = await auth.getAuthenticatedUser(context.req);
+    const userData = await UserModel.findById(user.id).select('wishlist');
+    if (userData === null) {
+      throw new NotLoggedinError();
+    }
+    if (userData.wishlist.indexOf(args.campId) > -1) {
+      userData.wishlist.splice(userData.wishlist.indexOf(args.campId));
+    }
+    await userData.save();
+  },
+};
+
 module.exports = {
   registerUser,
   resetPassword,
@@ -199,4 +217,5 @@ module.exports = {
   googleAuth,
   facebookAuth,
   addCampToWishlist,
+  removeFromWishlist,
 };

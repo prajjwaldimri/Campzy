@@ -162,7 +162,7 @@ const getCampByUrl = `query campUser($url: String!){
       river
     },
     averageRating,
-    ratingsCount
+    ratingsCount,
   }
 }`;
 

@@ -22,6 +22,12 @@ const addCampToWishlist = `mutation addCampToWishlist($campId: String!){
   }
 }`;
 
+const removeCampFromWishlist = `mutation removeFromWishlist($campId: String!){
+  removeFromWishlist(campId: $campId){
+    id
+  }
+}`;
+
 const verifyEmailToken = `mutation confirmEmailToken($tokenValue: String!) {
   confirmEmailToken(tokenValue: $tokenValue) {
     tokenValue
@@ -204,4 +210,5 @@ module.exports = {
   addCampToWishlist,
   addReview,
   closeBookingByDates,
+  removeCampFromWishlist,
 };
