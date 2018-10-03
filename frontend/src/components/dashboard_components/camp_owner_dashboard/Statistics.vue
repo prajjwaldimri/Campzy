@@ -243,50 +243,6 @@ export default {
         { text: 'Duration', value: 'duration' },
         { text: 'Status', value: 'bookingStatus' },
       ],
-      activeBookings: [
-        {
-          id: 123,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 124,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 125,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 126,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 127,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-        {
-          id: 128,
-          name: 'Ayush Bahuguna',
-          tentType: 'Gold',
-          duration: 5,
-          bookingStatus: 'active',
-        },
-      ],
     };
   },
 
@@ -295,45 +251,8 @@ export default {
   },
 
   methods: {
-    countBooked() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
 
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-
-      client.request(countBookedTent)
-        .then((data) => {
-          this.bookedTents = data.countBookedTent.bookedTentCount;
-        })
-        .catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
-    },
-    countTent() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
-
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-
-      client.request(countTents)
-        .then((data) => {
-          this.totalTents = data.countCampTents.count;
-          this.countBooked();
-        })
-        .catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        });
-    },
+    // Get User type
     getCurrentUserType() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -365,6 +284,51 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
+
+    // Count CampOwner's booked tent
+    countBooked() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countBookedTent)
+        .then((data) => {
+          this.bookedTents = data.countBookedTent.bookedTentCount;
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
+
+    // Count CampOwner's total inventory
+    countTent() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countTents)
+        .then((data) => {
+          this.totalTents = data.countCampTents.count;
+          this.countBooked();
+        })
+        .catch((err) => {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        });
+    },
+
+    // Get CampId to get its bookings
     getCampId() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -390,6 +354,8 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
+
+    // Get CampOwner's active bookings
     getBookings(campID) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -409,6 +375,8 @@ export default {
       });
     },
 
+
+    // Count CampOwner's active bookings
     countBookings(campId) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -428,6 +396,8 @@ export default {
       });
     },
 
+    // Count All users if Current user is admin
+
     countUsers() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -445,6 +415,8 @@ export default {
       });
     },
 
+
+    //  Count total camps
     countCamps() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -462,6 +434,8 @@ export default {
       });
     },
 
+
+    // Get all active bookings
     getAdminBookings() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
@@ -474,9 +448,7 @@ export default {
 
       client.request(allBookings).then((data) => {
         this.adminBookings = data.allBookings;
-        console.log(this.adminBookings);
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
