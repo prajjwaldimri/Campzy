@@ -51,8 +51,9 @@
 </template>
 
 <script>
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient, request } from 'graphql-request';
 import { EventBus } from '../../../../event-bus';
+import { isCampUrlAvailable } from '../../../../queries/queries';
 
 export default {
   $_veeValidate: {
@@ -62,6 +63,7 @@ export default {
     return {
       camp: {},
       campId: '',
+      url: '',
       searchedUsers: [],
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
@@ -196,6 +198,20 @@ export default {
       }).catch(() => {
         this.searchedUsers = [];
       }).finally(() => { this.isOwnerFieldLoading = false; });
+    },
+    // Check Url Availability
+    url(value) {
+      const variables = {
+        url: value,
+      };
+      request('/graphql', isCampUrlAvailable, variables).then(() => {
+        // this.isUrlAlreadyinUse = false;
+      }).catch((err) => {
+        if (err) {
+          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+        }
+        // this.isUrlAlreadyinUse = true;
+      });
     },
   },
 };

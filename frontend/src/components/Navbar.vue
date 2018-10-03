@@ -2,8 +2,9 @@
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" :absolute="absolute" flat
   prominent :color="color" :dark="dark" :app="app")
     v-toolbar-title.ml-0
-      span Camp
-      span.green--text zy
+      div(@click="$router.push('/')")
+        span Camp
+        span.green--text zy
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click="$router.push('/')") HOME
@@ -129,3 +130,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.link-text {
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+</style>
