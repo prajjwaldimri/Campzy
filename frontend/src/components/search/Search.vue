@@ -79,8 +79,8 @@
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
                         v-hover
-                          v-img(:src="result.heroImage" width="100%" height="17rem" cover
-                          slot-scope="{ hover }")
+                          v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/'+result.heroImage" width="100%" height="17rem" cover
+                          slot-scope="{ hover }" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/'+result.heroImage")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
                               v-progress-circular(indeterminate color="green darken-5")
                             v-expand-transition
