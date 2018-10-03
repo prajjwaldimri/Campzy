@@ -6,7 +6,8 @@
     ReviewCampDialog
 
     v-responsive(height="90vh")
-      v-img(src="https://images.pexels.com/photos/776117/pexels-photo-776117.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" height="100%" position="center center")
+      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center" v-if="camp.heroImage"
+      :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + camp.heroImage")
         v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
           .d-flex.image-flex
             .d-flex.align-self-center
@@ -33,7 +34,7 @@
         :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
           v-responsive(v-for="image in camp.images")
             v-card
-              v-img(:src="image" @click="openImageDialog")
+              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
       //- For Mobile
     v-responsive(height="40vh").hidden-md-and-up
       v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
@@ -42,7 +43,7 @@
         :autoplay="true" :autoplay-button-output="false")
           v-responsive(height="50vh" v-for="image in camp.images")
             v-card
-              v-img(:src="image" @click="openImageDialog")
+              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
 
     v-layout(row wrap style="min-height: 90vh").py-4
       v-flex(sm12 md5 offset-md1).py-4.content-flex
@@ -112,7 +113,7 @@
         .iframe-container.mt-4
           iframe(v-if="camp" :src="mapUri" allowfullscreen)
 
-        h1.headline.mt-5.px-1.font-weight-bold Places of Interest
+        h1.headline.mt-5.pt-3.px-1.font-weight-bold Places of Interest
         v-list(two-line).mt-4
           v-list-tile(v-for="place in camp.placesOfInterest")
             v-list-tile-content
@@ -290,7 +291,7 @@ export default {
       });
     },
     openImageDialog() {
-      EventBus.$emit('open-image-dialog', { campId: this.camp.id, campName: this.camp.name });
+      EventBus.$emit('open-image-dialog', { campUrl: this.$route.params.campUrl });
     },
     calculatePrice() {
       EventBus.$emit('show-progress-bar');

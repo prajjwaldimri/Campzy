@@ -13,6 +13,17 @@ faker.locale = 'en_IND';
 // Add 100 users, camps and their tents
 const userTypes = ['Camper', 'CampOwner', 'Admin'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
+const terrainTypes = ['glacier', 'forest', 'desert', 'ocean', 'hill', 'river'];
+const s3Images = [
+  '1538556993356__camp1.jpeg',
+  '1538556993388__camp2.jpeg',
+  '1538556993391__camp3.jpeg',
+  '1538556993395__camp4.jpeg',
+  '1538556993405__camp5.jpeg',
+  '1538556993407__camp6.jpeg',
+  '1538556993411__camp7.jpeg',
+  '1538556993420__camp8.jpeg',
+];
 
 async function CreateCamp(userId, phoneNumber) {
   let camp;
@@ -23,17 +34,25 @@ async function CreateCamp(userId, phoneNumber) {
       isAvailable: true,
       phoneNumber,
       email: faker.internet.email(),
+      [`terrain.${faker.random.arrayElement(terrainTypes)}`]: true,
       url: faker.random.uuid(),
       shortDescription: faker.lorem.sentence(),
       longDescription: faker.lorem.paragraph(),
       location: faker.fake('{{address.city}}, {{address.state}}'),
       'coordinates.latitude': faker.address.latitude(),
       'coordinates.longitude': faker.address.longitude(),
+      'amenities.washroomAttached': faker.random.boolean(),
+      'amenities.mealsInclude': faker.random.boolean(),
+      'amenities.bonfire': faker.random.boolean(),
+      'amenities.hotWater': faker.random.boolean(),
+      'amenities.mobileConnectivity': faker.random.boolean(),
+      'amenities.chargingPoints': faker.random.boolean(),
+      'amenities.petsAllowed': faker.random.boolean(),
       ownerId: userId,
       images: new Array(10)
         .fill(null)
-        .map(e => (e = 'https://loremflickr.com/1280/768/nature')),
-      heroImage: 'https://loremflickr.com/320/240/nature',
+        .map(e => (e = faker.random.arrayElement(s3Images))),
+      heroImage: faker.random.arrayElement(s3Images),
       averageRating: faker.random.number({ min: 1, max: 5 }),
       ratingsCount: faker.random.number({ min: 100, max: 10000 }),
       altitude: faker.random.number({ min: 100, max: 2000 }),
@@ -49,7 +68,6 @@ async function CreateCamp(userId, phoneNumber) {
             }),
           }),
       ),
-      'terrain.glacier': true,
     });
     for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
       const tent = await Tent.create({
@@ -113,6 +131,7 @@ mongoose.connection.once('open', async () => {
   await User.remove({});
   await Tent.remove({});
   await Camp.remove({});
+  await Review.remove({});
   for (let i = 0; i < 10000; i++) {
     await Promise.all(
       [CreateUser(), CreateUser(), CreateUser(), CreateUser()].map(

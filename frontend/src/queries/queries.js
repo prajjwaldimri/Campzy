@@ -156,6 +156,7 @@ const getCampByUrl = `query campUser($url: String!){
       petsAllowed,
       chargingPoints,
     },
+    heroImage,
     images,
     isAvailable,
     inventory{
@@ -177,6 +178,14 @@ const getCampByUrl = `query campUser($url: String!){
     },
     averageRating,
     ratingsCount,
+  }
+}`;
+
+const getCampImages = `query getImagesOfCamp($url: String!){
+  getImagesOfCamp(url: $url){
+    id,
+    name,
+    images,
   }
 }`;
 
@@ -372,7 +381,6 @@ const allBookings = `query allBookings{
              url,
            },
            code
-           
         }
       }`;
 const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
@@ -392,6 +400,7 @@ module.exports = {
   campSearch,
   campSearchUser,
   getCampByUrl,
+  getCampImages,
   getBestTentAvailable,
   getCurrentUserBlogsQuery,
   getBlogQuery,

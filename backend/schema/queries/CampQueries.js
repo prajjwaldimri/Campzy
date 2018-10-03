@@ -35,6 +35,22 @@ const getCamp = {
   },
 };
 
+const getImagesOfCamp = {
+  type: CampType,
+  args: {
+    url: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    try {
+      return await CampModel.findOne({ url: `${args.url}` }).select(
+        'id name images',
+      );
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 const getCurrentUserCamp = {
   type: CampType,
   async resolve(parent, args, context) {
@@ -48,7 +64,10 @@ const getCurrentUserCamp = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      return await CampModel.findById(userData.ownedCampId).populate('ownerId', 'id');
+      return await CampModel.findById(userData.ownedCampId).populate(
+        'ownerId',
+        'id',
+      );
     } catch (err) {
       return err;
     }
@@ -230,8 +249,6 @@ const getCampUser = {
   type: CampType,
   args: {
     url: { type: GraphQLString },
-    tentCount: { type: GraphQLInt },
-    personCount: { type: GraphQLInt },
   },
   async resolve(parent, args) {
     try {
@@ -268,5 +285,6 @@ module.exports = {
   searchParticularCamp,
   campSearchUser,
   getCampUser,
+  getImagesOfCamp,
   isCampUrlAvailable,
 };

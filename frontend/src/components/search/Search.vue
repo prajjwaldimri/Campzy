@@ -79,14 +79,14 @@
                     v-layout(row wrap).hidden-sm-and-down
                       v-flex(md4).image-wrapper
                         v-hover
-                          v-img(:src="result.heroImage" width="100%" height="17rem" cover
-                          slot-scope="{ hover }")
+                          v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/'+result.heroImage" width="100%" height="17rem" cover
+                          slot-scope="{ hover }" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/'+result.heroImage")
                             v-layout(slot="placeholder" fill-height align-center justify-center)
                               v-progress-circular(indeterminate color="green darken-5")
                             v-expand-transition
                               .d-flex(v-if="hover" style="height: 100%"
                               class="transition-fast-in-fast-out green darken-2 v-card--reveal display-3 white--text")
-                                v-btn(dark @click.prevent="openImageDialog(result.name, result.name)")
+                                v-btn(dark @click.prevent="openImageDialog(result.url)")
                                   | View All Images
 
                       v-flex(md4).result-column.pl-3.pt-3
@@ -118,7 +118,7 @@
                           v-icon.mr-3(color="brown") terrain
                           span.increase-letter-spacing-1 Hill Terrain
                         .row.feature-row(v-if="result.terrain.desert")
-                          v-icon.mr-3(color="green") nature
+                          v-icon.mr-3(color="yellow darken-3") waves
                           span.increase-letter-spacing-1 Desert Terrain
                         .row.feature-row(v-if="result.terrain.ocean")
                           v-icon.mr-3(color="blue") waves
@@ -152,8 +152,8 @@
                   //- Mobile layout for search cards
                   v-layout(column).hidden-md-and-up.pt-2
                     v-flex.image-wrapper
-                      v-img(:src="result.heroImage" contain
-                      @click="openImageDialog(result.name, result.name)")
+                      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/'+result.heroImage" contain :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/'+result.heroImage"
+                      @click="openImageDialog(result.url)")
                         v-layout(slot="placeholder" fill-height align-center justify-center)
                           v-progress-circular(indeterminate color="grey lighten-5")
 
@@ -248,6 +248,7 @@
 </template>
 
 <script>
+/* eslint no-param-reassign: ["error", { "props": false }] */
 import InfiniteLoading from 'vue-infinite-loading';
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
@@ -339,18 +340,23 @@ export default {
         EventBus.$emit('hide-progress-bar');
       });
     },
-    openImageDialog(campId, campName) {
-      EventBus.$emit('open-image-dialog', { campId, campName });
+    openImageDialog(campUrl, campName) {
+      EventBus.$emit('open-image-dialog', { campUrl, campName });
     },
     calculatePrice() {
-      for (let i = 0; i < this.searchResults.length; i += 1) {
-        let minPrice = 0;
-        console.log(this.searchResults[i].name, this.searchResults[i].inventory.length);
-        this.searchResults[i].inventory.forEach((tent) => {
-          minPrice += tent.bookingPrice;
-        });
-        this.searchResults[i].minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
-      }
+      this.searchResults.forEach((searchResult) => {
+        // If the backend search provides more tents than needed then sort the tents and remove additional ones
+        let { inventory } = searchResult;
+        if (inventory.length > this.tentCount) {
+          const tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
+          inventory = tents.slice(0, this.tentCount);
+        }
+        searchResult.inventory = inventory;
+
+        // Calculate the minimum price for each Camp.
+        const minPrice = searchResult.inventory.reduce((price, tent) => price + tent.bookingPrice, 0);
+        searchResult.minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
+      });
     },
     sort(option) {
       this.sortDialog = false;
