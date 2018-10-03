@@ -120,7 +120,7 @@
                   v-layout(column).align-center
                     h3.font-weight-normal.text-uppercase Total Users
                     span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
+                      ICountUp(:startVal="0" :endVal="totalUsers" :duration="2")
                       |  Users
         v-flex(xs12 md4)
           v-card
@@ -138,7 +138,7 @@
                   v-layout(column).align-center
                     h3.font-weight-normal.text-uppercase Total Camps
                     span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
+                      ICountUp(:startVal="0" :endVal="totalCamps" :duration="2")
                       |  Tents
         v-flex(xs12 md4)
           v-card
@@ -178,7 +178,7 @@ import ICountUp from 'vue-countup-v2';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
 import {
-  campBookings, countTents, countBookedTent, countCampActiveBooking,
+  campBookings, countTents, countBookedTent, countCampActiveBooking, countAllUsers, countAllCamps,
 } from '../../../queries/queries';
 
 export default {
@@ -200,6 +200,8 @@ export default {
       totalTents: 0,
       bookedTents: 0,
       campRating: 0,
+      totalUsers: 0,
+      totalCamps: 0,
       activeCampBooking: 0,
       headers: [
         {
@@ -325,6 +327,8 @@ export default {
           }
           if (data.currentUser.type === 'Admin') {
             this.isTypeAdmin = true;
+            this.countUsers();
+            this.countCamps();
           }
         })
         .catch((err) => {
@@ -389,6 +393,40 @@ export default {
       };
       client.request(countCampActiveBooking, variables).then((data) => {
         this.activeCampBooking = data.countCampActiveBookings.countActiveBooking;
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    countUsers() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countAllUsers).then((data) => {
+        this.totalUsers = data.countUsers.count;
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
+    countCamps() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countAllCamps).then((data) => {
+        this.totalCamps = data.countCamps.count;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
