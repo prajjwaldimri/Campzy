@@ -14,14 +14,17 @@
               h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
 
             .d-flex.align-self-start.pb-4.px-4(style='width:100%')
-              span(style='width:100%')
+              span.pt-1(style='width:100%')
                 v-icon(dark color="green") star
                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                 span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
               .d-flex.align-self-end
-                v-btn(v-if='!isInWishList' dark small outline color='blue' @click='addToWishList(camp.id)') Add to WishList
-                v-btn(v-else dark small outline color='error' @click='removeFromWishList(camp.id)' ) Remove from WishList
-
+                v-btn(v-if='!isInWishList' small  @click='addToWishList(camp.id)')
+                  span Add to WishList
+                  v-icon.pl-1 bookmarks
+                v-btn(v-else small @click='removeFromWishList(camp.id)')
+                  span Remove From WishList
+                  v-icon.pl-1 close
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
       style="align-items: center; display: flex")
