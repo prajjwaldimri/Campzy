@@ -10,6 +10,7 @@
       v-btn(flat @click='snackbarWarning = false') close
     transition(name="fade-transition" mode="out-in")
       router-view
+
 </template>
 
 <script>
@@ -17,6 +18,7 @@ import { EventBus } from './event-bus';
 
 export default {
   name: 'app',
+
   data() {
     return {
       snackbarSuccess: false,

@@ -167,7 +167,7 @@
               | @ {{ $n(price, 'currency', 'en-IN') }}
           v-flex(sm2)
             v-btn(color="green" block @click="bookCamp" :loading="bookButtonLoading" :disabled="!isBookingPossible").btn-huge.pa-2.white--text Book Your Camp
-
+    Footer
 </template>
 
 <script>
@@ -177,6 +177,7 @@ import { GraphQLClient, request } from 'graphql-request';
 import navbar from '../Navbar.vue';
 import SearchImagesDialog from '../search/SearchImagesDialog.vue';
 import ReviewCamp from './ReviewCamp.vue';
+import Footer from '../Footer.vue';
 import {
   getCampByUrl, getBestTentAvailable, getReviewsForCamp, getWishList,
 } from '../../queries/queries';
@@ -191,6 +192,7 @@ export default {
     'tiny-slider': VueTinySlider,
     SearchImagesDialog,
     ReviewCampDialog: ReviewCamp,
+    Footer,
   },
   data() {
     return {
@@ -484,7 +486,7 @@ export default {
 .camp-view {
   padding-bottom: 5rem;
   @media screen and (max-width: 960px) {
-    padding-bottom: 8rem;
+    padding-bottom: 17rem;
   }
 }
 
@@ -501,6 +503,7 @@ export default {
   left: 0;
   box-shadow: 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   justify-content: center;
+  z-index: 99999;
 }
 
 .btn-huge {
