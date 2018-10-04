@@ -2,7 +2,7 @@
   .home-flex
     .search-flex
       .campzy-logo.pb-4.pt-4
-        img(src="/vectors/Campzy-logo.svg")
+        img(src="/vectors/Campzy-logo-black.svg")
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick"
