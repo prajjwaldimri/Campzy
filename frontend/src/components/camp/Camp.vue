@@ -20,12 +20,12 @@
                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                 span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
               .d-flex.align-self-end
-                v-btn(v-if='!isInWishList' small  @click='addToWishList(camp.id)')
-                  span Add to WishList
-                  v-icon.pl-1 bookmarks
-                v-btn(v-else small @click='removeFromWishList(camp.id)')
-                  span Remove From WishList
-                  v-icon.pl-1 close
+                v-btn(v-if='!isInWishList' dark @click='addToWishList(camp.id)')
+                  span Add To Wishlist
+                  v-icon(color='green').pl-1 bookmarks
+                v-btn(v-else dark @click='removeFromWishList(camp.id)')
+                  span Remove from Wishlist
+                  v-icon(color='error').pl-1 close
     v-responsive(height="40vh").hidden-sm-and-down
       v-card(color="grey darken-4" flat height="100%" tile
       style="align-items: center; display: flex")
@@ -403,8 +403,9 @@ export default {
       client.request(addCampToWishlist, variables).then(() => {
         EventBus.$emit('show-info-notification-short', 'Added to your Wishlist!');
         this.getUserWishList();
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Please Login first!');
+        this.$router.push('/login');
       }).finally(() => { EventBus.$emit('hide-progress-bar'); });
     },
     getUserWishList() {
