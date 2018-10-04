@@ -1,18 +1,17 @@
 <template lang="pug">
   v-dialog(v-model="showDialog" fullscreen hide-overlay transition="dialog-bottom-transition")
     v-card(dark)
-      v-toolbar(dark color="green darken-2")
-        v-toolbar-title Images of {{campName}}
+      v-toolbar(color="transparent" app flat)
         v-spacer
         v-btn(dark large @click.native="showDialog=false")
           span Close
           v-icon close
-      v-carousel(dark style="height: 90vh" v-if="imagesLoaded")
-        v-carousel-item(v-for="(image,i) in images" :key="i" )
-          .d-flex
-            v-responsive
-              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
-              :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+      v-carousel(dark style="height: 100vh" v-if="imagesLoaded")
+        v-carousel-item(v-for="(image,i) in images" :key="i" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image")
+          //- .d-flex
+          //-   v-responsive
+          //-     v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+          //-     :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
 
 </template>
 

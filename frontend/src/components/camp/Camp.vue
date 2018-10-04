@@ -503,7 +503,7 @@ export default {
   left: 0;
   box-shadow: 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   justify-content: center;
-  z-index: 99999;
+  z-index: 50;
 }
 
 .btn-huge {

@@ -29,9 +29,9 @@
                   v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
                     hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
 
-                v-flex
-                  v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
-                  multiple hint="Tent types")
+                //- v-flex
+                //-   v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
+                //-   multiple hint="Tent types")
 
                 v-flex
                   v-layout(row)
@@ -198,10 +198,10 @@
                           hint="Price Range" persistent-hint color="green"
                           thumb-label :thumb-size="48")
 
-                      v-flex
-                        v-select(v-model="tentType" :items="tentTypes" attach
-                          chips persistent-hint
-                        multiple hint="Tent types")
+                      //- v-flex
+                      //-   v-select(v-model="tentType" :items="tentTypes" attach
+                      //-     chips persistent-hint
+                      //-   multiple hint="Tent types")
 
                       v-flex
                         v-layout(row)
@@ -284,7 +284,7 @@ export default {
       tentType: ['Dome', 'Swiss'],
       tentTypes: ['Dome', 'Swiss'],
       amenitiesSelected: [],
-      amenities: ['Amenity-1', 'Amenity-2', 'Amenity-3', 'Amenity-4', 'Amenity-5', 'Amenity-6'],
+      amenities: ['Attached Washroom', 'Charging Points', 'Meals Included', 'Mobile Connectivity', 'Bonfire', 'Pets Allowed', 'Meals Included'],
       tentCount: 1,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
@@ -480,5 +480,9 @@ export default {
   opacity: 0.9;
   position: absolute;
   width: 100%;
+}
+
+.v-menu__content .menuable__content__active {
+  top: -5rem !important;
 }
 </style>
