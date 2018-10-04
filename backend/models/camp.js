@@ -32,6 +32,7 @@ const CampSchema = new Schema({
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },
   longDescription: String,
+  gst: { type: String, required: true },
   tags: {
     type: [String],
     validate: [val => val.length <= 10, 'Only 10 tags are allowed'],
