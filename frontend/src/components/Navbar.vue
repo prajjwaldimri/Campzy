@@ -137,7 +137,8 @@ export default {
   text-decoration: none;
 }
 
-.campzy-logo{
-  font-family: 'GlacialIndifferenceRegular' !important;
+.campzy-logo {
+  font-family: "GlacialIndifferenceRegular" !important;
+  cursor: pointer;
 }
 </style>

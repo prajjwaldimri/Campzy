@@ -10,7 +10,7 @@
               img(src="/vectors/instagram.svg" height="18")
             v-btn(icon small)
               img(src="/vectors/twitter.svg" height="18")
-          
+
 
         v-flex(sm12 md10).text-xs-center
           v-btn(flat dark) About
@@ -35,12 +35,13 @@ export default {
 </script>
 
 <style lang="scss">
-footer{
+footer {
   background: #212121;
 }
 
-.campzy-logo{
-  font-family: 'GlacialIndifferenceRegular' !important;
+.campzy-logo {
+  font-family: "GlacialIndifferenceRegular" !important;
   font-size: 2rem;
+  cursor: pointer;
 }
 </style>
