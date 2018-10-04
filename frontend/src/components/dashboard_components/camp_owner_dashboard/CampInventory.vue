@@ -5,10 +5,10 @@
     v-layout(row)
       h1.font-weight-light.pl-2.pb-3 Inventory
     v-layout(row)
-      v-flex(xs12 md5)
+      v-flex(xs12 md6)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(xs12 md3 offset-sm4 align-content-start justify-center).d-flex
+      v-flex(xs12 md2 offset-xs4 align-content-end justify-center).d-flex
         v-switch(v-model='campAvailable.isAvailable' color='green'
         @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
         :label='campSwitchLabel'
@@ -33,7 +33,7 @@
             v-btn(icon flat @click='openDatePicker(props.item.id)')
               v-icon date_range
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
-      v-btn(color="green" slot="activator" fab dark bottom right fixed).elevation-19
+      v-btn(color="green" slot="activator" fab dark bottom right fixed style='bottom:5.5rem').elevation-19
         v-icon add
       addTent
 </template>
@@ -168,9 +168,9 @@ export default {
       client.request(campStatus).then((data) => {
         this.campAvailable = data.currentUserCamp;
         if (this.campAvailable.isAvailable === false) {
-          this.campSwitchLabel = 'Open Camp Bookings';
+          this.campSwitchLabel = 'Bookings: Close';
         } else {
-          this.campSwitchLabel = 'Close Camp Bookings';
+          this.campSwitchLabel = 'Bookings: Open';
         }
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);

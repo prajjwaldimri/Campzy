@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container.camp-display(fluid)
-    v-tabs.tabs-detail(height='60%' dark grow)
+    v-tabs.tabs-detail(height='60%' dark grow show-arrows)
       v-tabs-slider(color='green')
       v-tab(href='#basic') Basic Details
       v-tab(href='#bankdetails') Bank Details
@@ -25,13 +25,21 @@
                       v-text-field(label='Phone Number' v-model='camp.phoneNumber' readonly)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Camp Url' v-model='camp.url' readonly)
-                    v-flex.flex-spacing(xs12)
-                      v-dialog(v-model='loc' width='500')
-                        v-btn(slot='activator' @click='getLocation' fab dark)
-                          v-icon my_location
-                        v-card
-                          .iframe-container.mt-4
-                            iframe(:src="campLocation" allowfullscreen)
+                    v-layout(row wrap)
+                      v-flex(xs12 md8)
+                        v-text-field(label='Location' v-model='location' readonly)
+                      v-flex.flex-spacing(xs12 md3)
+                        v-dialog(v-model='loc' width='500')
+                          v-btn(slot='activator' @click='getLocation' dark)
+                            span My Location
+                            v-icon.ml-2 my_location
+                          v-card
+                            .iframe-container.mt-4
+                              iframe(:src="campLocation" allowfullscreen)
+                            v-card-actions
+                              v-spacer
+                              v-btn(flat small @click='loc= false') cancel
+                              v-btn(flat small @click='loc= false') ok
 
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
@@ -146,10 +154,10 @@
                       v-flex(xs12 md6)
                         v-layout(column)
                           v-flex(xs12 md6)
-                          //-   v-combobox(v-model='placesOfInterest' attach chips
-                          //-   label='Places of Interest' multiple clearable)
-                          //- v-flex.mt-4(xs12 md6)
-                          //-     v-combobox(v-model='tags' attach chips
+                            //- v-combobox(v-model='placesOfInterest' attach chips
+                            //-  label='Places of Interest' multiple clearable)
+                          v-flex.mt-4(xs12 md6)
+                            v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Short Description about Camp'
@@ -199,6 +207,9 @@ export default {
   },
   metaInfo: {
     title: 'Dashboard | Camp Details',
+    script: [
+      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation' },
+    ],
   },
 
   data() {
@@ -230,7 +241,7 @@ export default {
       uploadingImages: false,
       viewDocument: false,
       isDocument: false,
-      currentLocation: '',
+      location: '',
       loc: false,
       campLocation: '',
       coordinates: {},
@@ -535,6 +546,7 @@ export default {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           };
+          this.location = latlon;
         }, msg => new Error(`Please enable your GPS position future.${msg}`), { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
       } else {
         return new Error('Geolocation is not supported by this browser.');
