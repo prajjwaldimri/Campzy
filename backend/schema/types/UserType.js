@@ -33,6 +33,7 @@ const LocalWishlistType = new GraphQLObjectType({
     location: { type: GraphQLString },
     shortDescription: { type: GraphQLString },
     averageRating: { type: GraphQLInt },
+    email: { type: GraphQLString },
   }),
 });
 

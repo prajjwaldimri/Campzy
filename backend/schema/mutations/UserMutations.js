@@ -204,7 +204,7 @@ const removeFromWishlist = {
       throw new NotLoggedinError();
     }
     if (userData.wishlist.indexOf(args.campId) > -1) {
-      userData.wishlist.splice(userData.wishlist.indexOf(args.campId));
+      userData.wishlist.splice(userData.wishlist.indexOf(args.campId), 1);
     }
     await userData.save();
   },
