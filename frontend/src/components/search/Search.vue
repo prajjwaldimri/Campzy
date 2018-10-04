@@ -244,6 +244,7 @@
                   span Sort
                   v-icon poll
 
+    Footer
 
 </template>
 
@@ -252,6 +253,7 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import { request } from 'graphql-request';
 import navbar from '../Navbar.vue';
+import Footer from '../Footer.vue';
 import SearchImagesDialog from './SearchImagesDialog.vue';
 import { EventBus } from '../../event-bus';
 import { campSearchUser } from '../../queries/queries';
@@ -261,6 +263,7 @@ export default {
     navbar,
     InfiniteLoading,
     SearchImagesDialog,
+    Footer,
   },
   metaInfo() {
     return {
