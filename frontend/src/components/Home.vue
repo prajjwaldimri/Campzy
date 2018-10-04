@@ -2,7 +2,9 @@
   .home-flex
     .search-flex
       .campzy-logo.pb-4.pt-4
-        img(src="/vectors/Campzy-logo-black.svg")
+        //- img(src="/vectors/Campzy-logo-black.svg")
+        span.display-3 Camp
+        span.display-3.green--text zy
       v-text-field( append-icon="search"
       @click:append="searchClick" autofocus color="green" solo single-line required ticks
       v-model="searchInput" @keyup.enter="searchClick"
@@ -147,6 +149,11 @@ export default {
       }
       text-align: center;
       user-select: none;
+      
+      .display-3{
+      font-family: 'GlacialIndifferenceRegular' !important;
+      font-size: 5rem !important;
+      }
 
       img {
         height: 4.2rem;

@@ -20,8 +20,9 @@
 
         v-flex(sm12 md1).text-xs-center
           .d-flex.align-center.justify-center.fill-height
-            img(src="/vectors/Campzy-logo-white.svg" height="32").hidden-sm-and-down
-            img(src="/vectors/Campzy-logo-white.svg" height="32").hidden-md-and-up.mt-2
+            .campzy-logo(@click="$router.push('/')")
+              span.white--text Camp
+              span.green--text zy
 
 </template>
 
@@ -36,5 +37,10 @@ export default {
 <style lang="scss">
 footer{
   background: #212121;
+}
+
+.campzy-logo{
+  font-family: 'GlacialIndifferenceRegular' !important;
+  font-size: 2rem;
 }
 </style>

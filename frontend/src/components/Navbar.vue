@@ -2,7 +2,7 @@
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" :absolute="absolute" flat
   prominent :color="color" :dark="dark" :app="app")
     v-toolbar-title.ml-0
-      div(@click="$router.push('/')")
+      .campzy-logo(@click="$router.push('/')")
         span Camp
         span.green--text zy
     v-spacer
@@ -135,5 +135,9 @@ export default {
 .link-text {
   font-size: 1.5rem;
   text-decoration: none;
+}
+
+.campzy-logo{
+  font-family: 'GlacialIndifferenceRegular' !important;
 }
 </style>
