@@ -13,7 +13,7 @@
       v-tab(href="#tab-3")
         | Past Bookings
         v-icon receipt
-      v-tab(href="#tab-4" @click="$router.push('/profile/billing')")
+      v-tab(href="#tab-4" @click="$router.push('/profile/wishlist')")
         | Wishlist
         v-icon shopping_cart
 
@@ -29,7 +29,7 @@
         v-icon event
       v-btn(dark)
         v-icon receipt
-      v-btn(dark @click="$router.push('/profile/billing')")
+      v-btn(dark @click="$router.push('/profile/wishlist')")
         v-icon shopping_cart
 
 </template>
