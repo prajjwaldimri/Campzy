@@ -39,7 +39,7 @@
                 h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
 
 
-          v-divider(vertical).pr-3.hidden-sm-and-down
+          v-divider(vertical).mr-3.hidden-sm-and-down
           v-flex(md3 sm12)
             .d-flex.justify-center(style="height: 100%; flex-direction: column")
               v-btn(color="primary" @click="showChat(booking.code)").white--text

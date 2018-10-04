@@ -141,7 +141,6 @@ const allBookings = {
         newCampBooking.amount = booking.amount.toString();
         adminBookings.push(newCampBooking);
       });
-      console.log(adminBookings);
       return adminBookings;
     } catch (err) {
       return err;
