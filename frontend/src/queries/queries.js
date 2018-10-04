@@ -102,6 +102,7 @@ const getWishlistInProfile = `query getWishlistInProfile{
         url,location,
         shortDescription,
         averageRating,
+        email,
       }
     }
   }`;

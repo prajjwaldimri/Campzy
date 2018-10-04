@@ -11,7 +11,7 @@ const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
 const Settings = () => import('../components/user/Settings.vue');
 const ActiveBooking = () => import('../components/user/ActiveBooking.vue');
-const Billing = () => import('../components/user/Billing.vue');
+const Wishlist = () => import('../components/user/Wishlist.vue');
 const PasswordReset = () => import('../components/user/PasswordReset.vue');
 const Dashboard = () => import('../components/Dashboard.vue');
 const UserManagement = () => import('../components/dashboard_components/admin-dashboard/UserManagement.vue');
@@ -84,9 +84,9 @@ const router = new Router({
           component: ActiveBooking,
         },
         {
-          name: 'billing',
-          path: 'billing',
-          component: Billing,
+          name: 'wishlist',
+          path: 'wishlist',
+          component: Wishlist,
         },
       ],
     },
