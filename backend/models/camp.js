@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validate = require('mongoose-validator');
+const en = require('nanoid-good/locale/en');
+const nanoid = require('nanoid-good')(en);
 
 const { Schema } = mongoose;
 
@@ -32,7 +34,12 @@ const CampSchema = new Schema({
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },
   longDescription: String,
-  gst: { type: String, required: true },
+  gst: {
+    type: String,
+    unique: true,
+    default: () => nanoid(20),
+    required: true,
+  },
   tags: {
     type: [String],
     validate: [val => val.length <= 10, 'Only 10 tags are allowed'],
