@@ -42,17 +42,13 @@ const bookCheck = {
       preBookPeriod: { $gte: preBookPeriod },
     });
 
-    // console.log(tents);
-
     if (!tents || tents.length < args.tentIds.length) {
       throw new TentNotAvailableError();
     }
 
     // Calculates the payable amount
-    let amount = 0;
-    for (let i = 0; i < tents.length; i += 1) {
-      amount += tents[i].bookingPrice;
-    }
+    let amount = tents.reduce((price, tent) => price + tent.bookingPrice, 0);
+
     // Multiply by trip duration
     amount *= moment(args.toDate).diff(args.fromDate, 'days');
     return { amount };

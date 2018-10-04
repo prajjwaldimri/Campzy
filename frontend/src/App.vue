@@ -1,12 +1,12 @@
 <template lang="pug">
   v-app
-    v-snackbar(v-model='snackbarSuccess' bottom right color='green' :timeout='timeout') {{message}}
+    v-snackbar(v-model='snackbarSuccess' top right color='green' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarSuccess = false') close
-    v-snackbar(v-model='snackbarFail' bottom right color='red' :timeout='timeout') {{message}}
+    v-snackbar(v-model='snackbarFail' top right color='red' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarFail = false') close
-    v-snackbar(v-model='snackbarInfo' bottom right color='blue' :timeout='timeout') {{message}}
+    v-snackbar(v-model='snackbarInfo' top right dark :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarInfo = false') close
-    v-snackbar(v-model='snackbarWarning' bottom right color='yellow' :timeout='timeout') {{message}}
+    v-snackbar(v-model='snackbarWarning' top right color='yellow' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarWarning = false') close
     transition(name="fade-transition" mode="out-in")
       router-view
