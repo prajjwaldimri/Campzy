@@ -64,7 +64,6 @@ const updateCamp = {
     email: { type: GraphQLString },
     gst: { type: GraphQLString },
     location: { type: GraphQLString },
-    url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     ownerId: { type: GraphQLString },
   },
@@ -93,7 +92,6 @@ const updateCamp = {
         email: args.email,
         gst: args.gst,
         location: args.location,
-        url: args.url,
         tags: args.tags,
         ownerId: args.ownerId,
       });
@@ -116,7 +114,6 @@ const updateUserCamp = {
     phoneNumber: { type: GraphQLString },
     email: { type: GraphQLString },
     location: { type: GraphQLString },
-    url: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
     shortDescription: { type: GraphQLString },
     longDescription: { type: GraphQLString },
@@ -143,7 +140,6 @@ const updateUserCamp = {
         shortDescription: args.shortDescription,
         longDescription: args.longDescription,
         location: args.location,
-        url: args.url,
         tags: args.tags,
         placesOfInterest: {
           name: args.placeName,

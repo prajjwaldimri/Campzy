@@ -12,7 +12,7 @@
       v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
 
       v-text-field(v-model="url" label="Url" prepend-icon="link" clearable
-       data-vv-name="url" v-validate="'min:4|required|alpha_dash'"
+       data-vv-name="url" v-validate="'required|alpha_dash'"
       :error-messages="errors.collect('url')")
 
       v-text-field(v-model="camp.gst" label="GST Number" prepend-icon="link" clearable

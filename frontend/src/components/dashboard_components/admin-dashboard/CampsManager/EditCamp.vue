@@ -12,10 +12,6 @@
         prepend-icon="edit_location" clearable  data-vv-name="campLocation"
         v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
 
-        v-text-field(v-model="camp.url" label="Url" prepend-icon="link" clearable
-        data-vv-name="campUrl" v-validate="'min:4|required|alpha_dash'"
-        :error-messages="errors.collect('campUrl')")
-
         v-text-field(v-model="camp.gst" label="GST Number" prepend-icon="link" clearable
        data-vv-name="gst" v-validate="'required|alpha_dash'"
       :error-messages="errors.collect('gst')")
@@ -67,7 +63,6 @@ export default {
     return {
       camp: {},
       campId: '',
-      url: '',
       searchedUsers: [],
       isOwnerFieldLoading: false,
       isOwnerSelected: false,
@@ -102,7 +97,6 @@ export default {
             phoneNumber,
             email,
             location,
-            url,
             gst,
             owner {
               id,
@@ -137,9 +131,9 @@ export default {
             return;
           }
           this.isOwnerFieldLoading = true;
-          const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $gst: String!, $location: String!, $url: String!, $ownerId: String!){
+          const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $gst: String!, $location: String!, $ownerId: String!){
           updateCamp(id: $id, tags: $tags, name: $name, phoneNumber: $phoneNumber,
-          email: $email, gst: $gst, location: $location, url: $url, ownerId: $ownerId){
+          email: $email, gst: $gst, location: $location, ownerId: $ownerId){
             id,
           }
         }`;
@@ -150,7 +144,6 @@ export default {
             phoneNumber: this.camp.phoneNumber,
             email: this.camp.email,
             location: this.camp.location,
-            url: this.camp.url,
             ownerId: this.camp.owner,
             gst: this.camp.gst,
           };
