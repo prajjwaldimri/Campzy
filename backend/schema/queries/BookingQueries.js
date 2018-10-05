@@ -6,12 +6,15 @@ const auth = require('../../config/auth');
 
 const { NotLoggedinError } = require('../graphqlErrors');
 
-const { GraphQLList, GraphQLString } = graphql;
+const { GraphQLList, GraphQLString, GraphQLBoolean } = graphql;
 const { PrivilegeError } = require('../graphqlErrors');
 
-const getUserActiveBookings = {
+const getUserBookings = {
   type: new GraphQLList(BookingType),
-  args: {},
+  args: {
+    active: { type: GraphQLBoolean },
+    past: { type: GraphQLBoolean },
+  },
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
@@ -21,10 +24,23 @@ const getUserActiveBookings = {
         throw new NotLoggedinError();
       }
 
-      const bookings = await BookingModel.find({
-        // eslint-disable-next-line
-        user: userData._id,
-      }).populate('user camp tent');
+      const currentDate = new Date();
+
+      let bookings = [];
+
+      if (args.active) {
+        bookings = await BookingModel.find({
+          // eslint-disable-next-line
+          user: userData._id,
+          endDate: { $gte: currentDate },
+        }).populate('user camp tent');
+      } else {
+        bookings = await BookingModel.find({
+          // eslint-disable-next-line
+          user: userData._id,
+          endDate: { $lt: currentDate },
+        }).populate('user camp tent');
+      }
 
       const finalBookings = [];
 
@@ -149,7 +165,7 @@ const allBookings = {
 };
 
 module.exports = {
-  getUserActiveBookings,
+  getUserBookings,
   getUserPastBookings,
   getCampBookings,
   countCampActiveBookings,

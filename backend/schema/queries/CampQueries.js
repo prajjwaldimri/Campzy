@@ -202,9 +202,6 @@ const campSearchUser = {
           return !isDisableDateInBetween;
         });
 
-        const tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
-        inventory = tents.slice(0, args.tentCount);
-
         inventory = await filter(inventory, async (tent) => {
           // Get all bookings of tents
           // Check whether the provided clashes with other bookings
