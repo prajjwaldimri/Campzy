@@ -139,6 +139,7 @@ export default {
 
 .campzy-logo {
   font-family: "GlacialIndifferenceRegular" !important;
+  font-size: 1.6rem;
   cursor: pointer;
 }
 </style>
