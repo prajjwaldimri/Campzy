@@ -26,15 +26,14 @@
                     v-flex.flex-spacing(xs12)
                       v-text-field(label='Camp Url' v-model='camp.url' readonly)
                     v-layout(row wrap)
-                      v-flex(xs12 md8)
+                      v-flex(xs12 md5)
                         v-text-field(label='Location' v-model='location' readonly)
-                      v-flex.flex-spacing(xs12 md3)
-                        v-card
-                          #map
-                          v-card-actions
-                            v-spacer
-                            v-btn(flat small @click='loc= false') cancel
-                            v-btn(flat small @click='loc= false') ok
+                      v-flex.flex-spacing(xs12 md6)
+                        v-dialog(v-model='loc' height='500' width='500')
+                          v-btn(dark slot="activator")
+                            span My Location
+                            v-icon.ml-2 location_searching
+                          v-card#map(height='500' width='500')
 
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
@@ -207,29 +206,32 @@ export default {
         innerHTML: `function getCurrentLocation() {
       var map; 
       var infoWindow;
-       map = new google.maps.Map(document.getElementById('map'));
-       infoWindow = new google.maps.InfoWindow;
+       map = new google.maps.Map(document.getElementById('map'),{
+         zoom: 20
+       });
+       marker = new google.maps.Marker({
+         draggable: true
+       });
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          infoWindow.setPosition(pos);
-          infoWindow.setContent('Location found.');
-          infoWindow.open(map);
+          marker.setPosition(pos);
           map.setCenter(pos);
+          marker.setMap(map);
         }, () => {
-          handleLocationError(true, infoWindow, map.getCenter());
+          handleLocationError(true, marker, map.getCenter());
         });
       } else {
         // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, marker, map.getCenter());
       }
     };
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      infoWindow.setPosition(pos);
-      infoWindow.setContent(browserHasGeolocation
+    function handleLocationError(browserHasGeolocation, marker, pos) {
+      marker.setPosition(pos);
+      marker.setContent(browserHasGeolocation
         ? 'Error: The Geolocation service failed.'
         : 'Error: Your browser does not support geolocation.');
     };`,
