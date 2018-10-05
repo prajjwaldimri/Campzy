@@ -79,7 +79,7 @@ export default {
           const variables = {
             tentType: this.tent.type,
             capacity: this.tent.capacity,
-            bookingPrice: this.tent.price,
+            bookingPrice: parseInt(this.tent.price, 10),
             preBookTime: this.tent.preBooking,
             surgePrice: parseInt(this.tent.surgePrice, 10),
           };

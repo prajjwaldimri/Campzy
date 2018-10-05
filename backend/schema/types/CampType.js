@@ -66,6 +66,7 @@ const CampType = new GraphQLObjectType({
     isBlacklisted: { type: GraphQLBoolean },
     location: { type: GraphQLString },
     url: { type: GraphQLString },
+    gst: { type: GraphQLString },
     owner: {
       type: UserType,
     },

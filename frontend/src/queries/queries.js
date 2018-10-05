@@ -83,7 +83,8 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           tags,
           images,
           isAvailable,
-          campDocuments
+          campDocuments,
+          location
         }
 
       }`;

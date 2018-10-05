@@ -110,7 +110,7 @@ export default {
             id: this.tent.id,
             tentType: this.tent.type,
             capacity: this.tent.capacity,
-            bookingPrice: this.tent.bookingPrice,
+            bookingPrice: parseInt(this.tent.bookingPrice, 10),
             preBookTime: this.tent.preBookPeriod,
             surgePrice: parseInt(this.tent.surgePrice, 10),
           };

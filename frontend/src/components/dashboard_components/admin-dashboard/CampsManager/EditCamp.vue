@@ -16,6 +16,10 @@
         data-vv-name="campUrl" v-validate="'min:4|required|alpha_dash'"
         :error-messages="errors.collect('campUrl')")
 
+        v-text-field(v-model="camp.gst" label="GST Number" prepend-icon="link" clearable
+       data-vv-name="gst" v-validate="'required|alpha_dash'"
+      :error-messages="errors.collect('gst')")
+
         v-text-field(v-model="camp.phoneNumber" label="Phone Number" prepend-icon="phone"
         clearable  data-vv-name="campPhone" v-validate="'digits:10|required'" type="number"
         :error-messages="errors.collect('campPhone')")
@@ -99,6 +103,7 @@ export default {
             email,
             location,
             url,
+            gst,
             owner {
               id,
               name,
@@ -132,9 +137,9 @@ export default {
             return;
           }
           this.isOwnerFieldLoading = true;
-          const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $location: String!, $url: String!, $ownerId: String!){
+          const updateCampsQuery = `mutation updateCamp($id: String!, $tags: [String]!, $name: String!, $phoneNumber: String!, $email: String!, $gst: String!, $location: String!, $url: String!, $ownerId: String!){
           updateCamp(id: $id, tags: $tags, name: $name, phoneNumber: $phoneNumber,
-          email: $email, location: $location, url: $url, ownerId: $ownerId){
+          email: $email, gst: $gst, location: $location, url: $url, ownerId: $ownerId){
             id,
           }
         }`;
@@ -147,6 +152,7 @@ export default {
             location: this.camp.location,
             url: this.camp.url,
             ownerId: this.camp.owner,
+            gst: this.camp.gst,
           };
           const client = new GraphQLClient('/graphql', {
             headers: {
