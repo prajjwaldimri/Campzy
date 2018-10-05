@@ -149,9 +149,9 @@ export default {
       }
       text-align: center;
       user-select: none;
-      
+
       .display-3{
-      font-family: 'GlacialIndifferenceRegular' !important;
+      font-family: 'GlacialIndifferenceRegular', sans-serif !important;
       font-size: 5rem !important;
       }
 

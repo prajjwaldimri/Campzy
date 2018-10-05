@@ -358,14 +358,13 @@ export default {
               fromDate: that.fromDate,
               toDate: that.toDate,
             };
+            that.bookButtonLoading = true;
             client.request(bookCamp, variables).then(() => {
               EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
               that.$router.push('/profile/activeBookings');
-            }).catch((err) => {
-              console.log(err);
-              EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-            }).finally(() => {
               that.bookButtonLoading = false;
+            }).catch((err) => {
+              EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
             });
           },
           prefill: {
@@ -377,6 +376,7 @@ export default {
 
         const rzpl = new Razorpay(razorOptions);
         rzpl.open();
+        this.bookButtonLoading = false;
       }).catch((err) => {
         if (err.response.errors[0].message === 'NotLoggedInError') {
           EventBus.$emit('show-info-notification-short', 'Please Login First!');
@@ -384,8 +384,6 @@ export default {
         } else {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         }
-      }).finally(() => {
-        this.bookButtonLoading = false;
       });
     },
 
