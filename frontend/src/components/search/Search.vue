@@ -31,8 +31,8 @@
 
                 v-flex
                   v-select(v-model="amenitiesSelected" :items="amenities" attach
-                  chips persistent-hint menu-props="{auto, 'offset-y'}" hide-details
-                  multiple hint="Amenities" label="Amenities")
+                  chips persistent-hint menu-props="{auto, 'offset-y'}"
+                  multiple hint="Amenities")
                     template(slot="selection" slot-scope="{item, index}")
                       v-chip(v-if="index <= 2")
                         span {{item}}
