@@ -82,6 +82,7 @@ const sendSuccessBookingEmail = async (booking, user, camp, amount) => {
           Variables: {
             userName: user.name,
             campName: camp.name,
+            campPhone: camp.phoneNumber,
             bookingId: booking.code,
             fromDate: moment(booking.startDate).format('dddd, MMMM Do YYYY'),
             toDate: moment(booking.endDate).format('dddd, MMMM Do YYYY'),
