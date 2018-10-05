@@ -10,7 +10,7 @@
       v-tab(href="#tab-2" @click="$router.push('/profile/activeBookings')")
         | Active Bookings
         v-icon event
-      v-tab(href="#tab-3")
+      v-tab(href="#tab-3" @click="$router.push('/profile/pastBookings')")
         | Past Bookings
         v-icon receipt
       v-tab(href="#tab-4" @click="$router.push('/profile/wishlist')")
@@ -27,7 +27,7 @@
         v-icon settings
       v-btn(dark @click="$router.push('/profile/activeBookings')")
         v-icon event
-      v-btn(dark)
+      v-btn(dark @click="$router.push('/profile/pastBookings')")
         v-icon receipt
       v-btn(dark @click="$router.push('/profile/wishlist')")
         v-icon shopping_cart

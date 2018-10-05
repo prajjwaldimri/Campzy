@@ -2,12 +2,12 @@
   v-container
     v-layout(column)
 
-      v-card(v-for="booking in bookings").py-5
+      v-card(v-for="booking in bookings" v-if="bookings").py-5
         v-layout(row wrap)
           v-flex(md2 sm12).pl-5
             v-flex
-              h5.headline.font-weight-medium {{booking.user.name}}
-              router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
+              h5.headline.font-weight-medium(v-if="booking.user") {{booking.user.name}}
+              router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none" v-if="booking.camp")
                 h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
               h6.subheading.mt-3 Booking Id: {{booking.code}}
           v-divider(vertical).pr-5.hidden-sm-and-down
@@ -24,7 +24,7 @@
 
               v-flex(md3)
                 h5.caption.grey--text LOCATION
-                h3.mt-1.subheading {{booking.camp.location}}
+                h3.mt-1.subheading(v-if="booking.camp") {{booking.camp.location}}
 
               v-flex(md3).mt-4
                 h5.caption.grey--text AMOUNT
@@ -56,7 +56,7 @@
 /* global LC_API */
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../event-bus';
-import { getUserActiveBookings } from '../../queries/queries';
+import { getUserBookings } from '../../queries/queries';
 
 export default {
   metaInfo: {
@@ -65,7 +65,6 @@ export default {
   data() {
     return {
       bookings: [],
-      phoneNumber: '',
     };
   },
   mounted() {
@@ -74,7 +73,6 @@ export default {
     } else {
       this.getActiveBookings();
     }
-    this.getUser();
   },
   methods: {
     getActiveBookings() {
@@ -86,9 +84,14 @@ export default {
         },
       });
 
-      client.request(getUserActiveBookings)
+      const variables = {
+        active: false,
+        past: true,
+      };
+
+      client.request(getUserBookings, variables)
         .then((data) => {
-          this.bookings = data.getUserActiveBookings;
+          this.bookings = data.getUserBookings;
         })
         .catch((err) => {
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
@@ -96,40 +99,6 @@ export default {
         .finally(() => {
           NProgress.done();
         });
-    },
-    getUser() {
-      const query = `{currentUser {
-            name,
-            email,
-            phoneNumber,
-          }}`;
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-
-      client.request(query)
-        .then((data) => {
-          // eslint-disable-next-line
-          window.__lc.visitor = {
-            name: data.currentUser.name,
-            email: data.currentUser.email,
-          };
-
-          this.phoneNumber = data.currentUser.phoneNumber;
-        })
-        .catch((err) => {
-          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-        });
-    },
-    showChat(bookingCode) {
-      // eslint-disable-next-line
-      window.__lc.params = [
-        { name: 'Phone', value: this.phoneNumber },
-        { name: 'Booking Code', value: bookingCode },
-      ];
-      LC_API.open_chat_window();
     },
   },
 };

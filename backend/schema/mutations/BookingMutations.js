@@ -10,6 +10,7 @@ const TentModel = require('../../models/tent');
 const BookingModel = require('../../models/booking');
 const auth = require('../../config/auth');
 const sms = require('../../communication/sms');
+const emailer = require('../../communication/email');
 
 const {
   NotLoggedinError,
@@ -128,12 +129,11 @@ const book = {
       });
 
       const userData = await UserModel.findById(user.id).select(
-        'name phoneNumber',
+        'name phoneNumber email',
       );
       const campData = await CampModel.findById(tents[0].camp).select(
-        'name phoneNumber',
+        'name phoneNumber email',
       );
-      // TODO: Send sms and emails to the user with their booking tickets
       // Send sms to user
       await sms.sendSMS(
         userData.phoneNumber,
@@ -144,6 +144,14 @@ const book = {
         )} and ends on ${moment(args.toDate).format(
           'dddd, MMMM Do YYYY',
         )}. You can see your bookings @ https://campzy.in/profile/activeBookings. Enjoy!`,
+      );
+
+      // Send email to user
+      await emailer.sendSuccessBookingEmail(
+        booking,
+        userData,
+        campData,
+        amount,
       );
 
       // Send sms to camp owner
@@ -160,9 +168,7 @@ const book = {
         )} for ₹ ${amount}. Congrats!`,
       );
 
-      // TODO: Send an email to user and camp owner
-
-      // TODO: Send sms alerts to camp owner and user
+      // TODO: Send an email to camp owner
 
       // Return the booking token's id
       return booking;

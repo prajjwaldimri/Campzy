@@ -312,8 +312,8 @@ const isEmailAvailable = `query isEmailAvailable($email: String!){
   }
 }`;
 
-const getUserActiveBookings = `query getUserActiveBookings {
-  getUserActiveBookings{
+const getUserBookings = `query getUserBookings($active: Boolean, $past: Boolean) {
+  getUserBookings(active: $active, past: $past){
     code,
     user{
       name
@@ -408,7 +408,7 @@ module.exports = {
   getBlogQuery,
   getBlogById,
   isEmailAvailable,
-  getUserActiveBookings,
+  getUserBookings,
   campBookings,
   countTents,
   countBookedTent,

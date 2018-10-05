@@ -1,11 +1,8 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const mailjet = require('node-mailjet').connect(
-  process.env.MAILJET_PUBLIC,
-  process.env.MAILJET_PRIVATE,
-);
 
 const sms = require('../communication/sms');
+const emailer = require('../communication/email');
 
 const {
   EmailSendError,
@@ -85,28 +82,7 @@ const sendResetPasswordToken = async (userId, email) => {
       });
       await token.save();
     }
-    // TODO: Switch to main domain
-    return await mailjet.post('send', { version: 'v3.1' }).request({
-      Messages: [
-        {
-          From: {
-            Email: 'support@campzy.in',
-            Name: 'Campzy',
-          },
-          To: [
-            {
-              Email: email,
-            },
-          ],
-          TemplateID: 514379,
-          TemplateLanguage: true,
-          Subject: 'Password Reset Request at Campzy',
-          Variables: {
-            resetToken: token.tokenValue,
-          },
-        },
-      ],
-    });
+    return await emailer.sendResetPasswordToken(email, token.tokenValue);
   } catch (err) {
     throw new EmailSendError();
   }
@@ -122,27 +98,7 @@ const sendEmailVerificationToken = async (userId, email) => {
       });
       await token.save();
     }
-    return await mailjet.post('send', { version: 'v3.1' }).request({
-      Messages: [
-        {
-          From: {
-            Email: 'support@campzy.in',
-            Name: 'Campzy',
-          },
-          To: [
-            {
-              Email: email,
-            },
-          ],
-          TemplateID: 541428,
-          TemplateLanguage: true,
-          Subject: 'Email Verification Link',
-          Variables: {
-            verificationToken: token.tokenValue,
-          },
-        },
-      ],
-    });
+    return await emailer.sendEmailVerificationToken(email, token.tokenValue);
   } catch (err) {
     throw new EmailSendError();
   }
