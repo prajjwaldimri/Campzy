@@ -17,13 +17,13 @@
         v-validate="'required'" :error-messages="errors.collect('tentCapacity')")
         v-layout(row)
           v-flex(xs12 md5)
-            v-text-field(v-model="tent.bookingPrice" label="Booking Price" prepend-icon="money" clearable
-            data-vv-name="bookingPrice" v-validate="'required'"
-            :error-messages="errors.collect('bookingPrice')" @change='calculatePrice(tent.bookingPrice)')
+            v-text-field(v-model="bookingPrice" label="Booking Price" prepend-icon="money" clearable
+            data-vv-name="bookingPrice" v-validate="'required'" hint='*Including all Taxes' persistent-hint
+            :error-messages="errors.collect('bookingPrice')")
           v-spacer
           v-flex(xs12 md6)
             v-text-field(v-model="calculatedPrice" label="Final Price" prepend-icon="account_balance_wallet"
-            data-vv-name="finalPrice"  hint='*Including all Taxes' persistent-hint
+            data-vv-name="finalPrice"
              readonly)
 
         v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
@@ -64,6 +64,7 @@ export default {
       disabledDates: [],
       tentId: '',
       updating: false,
+      bookingPrice: '',
     };
   },
   mounted() {
@@ -88,12 +89,10 @@ export default {
       client.request(getTentById, variables).then((data) => {
         this.tent = data.tent;
         this.disabledDates = this.tent.disabledDates;
+        this.bookingPrice = this.tent.bookingPrice;
       }).catch((err) => {
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
-    },
-    calculatePrice(tentPrice) {
-      this.calculatedPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
     },
 
     updateTent() {
@@ -110,7 +109,7 @@ export default {
             id: this.tent.id,
             tentType: this.tent.type,
             capacity: this.tent.capacity,
-            bookingPrice: parseInt(this.tent.bookingPrice, 10),
+            bookingPrice: parseInt(this.bookingPrice, 10),
             preBookTime: this.tent.preBookPeriod,
             surgePrice: parseInt(this.tent.surgePrice, 10),
           };
@@ -162,6 +161,14 @@ export default {
       EventBus.$emit('close-edit-tent-dialog');
     },
 
+  },
+
+  watch: {
+    bookingPrice(tentPrice) {
+      const price = parseInt(tentPrice, 10);
+      const commisionPrice = Math.round(price * 10 / 100);
+      this.calculatedPrice = price - commisionPrice - Math.round(commisionPrice * 18 / 100);
+    },
   },
 
 };

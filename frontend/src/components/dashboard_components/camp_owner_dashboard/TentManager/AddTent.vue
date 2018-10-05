@@ -17,13 +17,13 @@
       v-validate="'required'" :error-messages="errors.collect('tentCapacity')")
       v-layout(row)
         v-flex(xs12 md5)
-          v-text-field(v-model="tent.price" label="Booking Price" prepend-icon="money" clearable
-          data-vv-name="bookingPrice" v-validate="'required'"
-          :error-messages="errors.collect('bookingPrice')" @change='calculatePrice(tent.price)')
+          v-text-field(v-model="bookingPrice" label="Booking Price" prepend-icon="money" clearable
+          data-vv-name="bookingPrice" v-validate="'required'" hint='*Including all Taxes' persistent-hint
+          :error-messages="errors.collect('bookingPrice')")
         v-spacer
         v-flex(xs12 md6)
           v-text-field(v-model="calculatedPrice" label="Final Price" prepend-icon="account_balance_wallet"
-          data-vv-name="finalPrice" v-validate="'required'" hint='*Including all Taxes' persistent-hint
+          data-vv-name="finalPrice" v-validate="'required'"
           :error-messages="errors.collect('finalPrice')" readonly)
 
       v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
@@ -58,12 +58,10 @@ export default {
       tent: {},
       totalTents: '',
       calculatedPrice: '',
+      bookingPrice: '',
     };
   },
   methods: {
-    calculatePrice(tentPrice) {
-      this.calculatedPrice = parseInt(tentPrice, 10) + (parseInt(tentPrice, 10) * 15 / 100) + (parseInt(tentPrice, 10) * 18 / 100);
-    },
     closeDialog() {
       EventBus.$emit('campowner-close-add-tent-dialog');
     },
@@ -79,7 +77,7 @@ export default {
           const variables = {
             tentType: this.tent.type,
             capacity: this.tent.capacity,
-            bookingPrice: parseInt(this.tent.price, 10),
+            bookingPrice: parseInt(this.bookingPrice, 10),
             preBookTime: this.tent.preBooking,
             surgePrice: parseInt(this.tent.surgePrice, 10),
           };
@@ -100,6 +98,13 @@ export default {
         }
       });
       this.closeDialog();
+    },
+  },
+  watch: {
+    bookingPrice(tentPrice) {
+      const price = parseInt(tentPrice, 10);
+      const commisionPrice = Math.round(price * 10 / 100);
+      this.calculatedPrice = price - commisionPrice - Math.round(commisionPrice * 18 / 100);
     },
   },
 
