@@ -27,7 +27,7 @@ export default {
       images: [],
       campName: '',
       campUrl: '',
-      imagesLoaded: true,
+      imagesLoaded: false,
     };
   },
   mounted() {

@@ -137,7 +137,7 @@ export default {
         flex-direction: column;
 
         > .subheading {
-          letter-spacing: 1px;
+          letter-spacing: 0.0625em;
         }
       }
     }
@@ -150,9 +150,9 @@ export default {
       text-align: center;
       user-select: none;
 
-      .display-3{
-      font-family: 'GlacialIndifferenceRegular', sans-serif !important;
-      font-size: 5rem !important;
+      .display-3 {
+        font-family: "GlacialIndifferenceRegular", sans-serif !important;
+        font-size: 5rem !important;
       }
 
       img {
