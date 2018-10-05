@@ -583,37 +583,6 @@ export default {
     //   }
     //   return true;
     // },
-    // getCurrentLocation() {
-    //   const infoWindow = '';
-    //   const map = new google.maps.Map(document.getElementById('map'), {
-    //     center: { lat: -34.397, lng: 150.644 },
-    //     zoom: 6,
-    //   });
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition((position) => {
-    //       const pos = {
-    //         lat: position.coords.latitude,
-    //         lng: position.coords.longitude,
-    //       };
-
-    //       infoWindow.setPosition(pos);
-    //       infoWindow.setContent('Location found.');
-    //       infoWindow.open(map);
-    //       map.setCenter(pos);
-    //     }, () => {
-    //       this.handleLocationError(true, infoWindow, map.getCenter());
-    //     });
-    //   } else {
-    //     // Browser doesn't support Geolocation
-    //     this.handleLocationError(false, infoWindow, map.getCenter());
-    //   }
-    // },
-    // handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    //   infoWindow.setPosition(pos);
-    //   infoWindow.setContent(browserHasGeolocation
-    //     ? 'Error: The Geolocation service failed.'
-    //     : 'Error: Your browser doesn\'t support geolocation.');
-    // },
 
   },
 };
