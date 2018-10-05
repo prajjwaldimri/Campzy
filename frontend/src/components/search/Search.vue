@@ -29,9 +29,15 @@
                   v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
                     hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
 
-                //- v-flex
-                //-   v-select(v-model="tentType" :items="tentTypes" attach chips persistent-hint
-                //-   multiple hint="Tent types")
+                v-flex
+                  v-select(v-model="amenitiesSelected" :items="amenities" attach
+                  chips persistent-hint menu-props="{auto, 'offset-y'}"
+                  multiple hint="Amenities")
+                    template(slot="selection" slot-scope="{item, index}")
+                      v-chip(v-if="index <= 2")
+                        span {{item}}
+                      v-chip(v-if="index === 3").grey--text.caption
+                        | (+ {{amenitiesSelected.length - 3}} others)
 
                 v-flex
                   v-layout(row)
@@ -42,15 +48,6 @@
                       v-select(hint="People per tent" persistent-hint
                       v-model="personCount" :items="personNumbers")
 
-                v-flex
-                  v-select(v-model="amenitiesSelected" :items="amenities" attach
-                  chips persistent-hint menu-props="{auto, 'offset-y'}" hide-details
-                  multiple hint="Amenities")
-                    template(slot="selection" slot-scope="{item, index}")
-                      v-chip(v-if="index <= 2")
-                        span {{item}}
-                      v-chip(v-if="index === 3").grey--text.caption
-                        | (+ {{amenitiesSelected.length - 3}} others)
 
             v-card-actions
               v-btn(color="green" block @click="search").white--text Apply Filters
@@ -198,10 +195,15 @@
                           hint="Price Range" persistent-hint color="green"
                           thumb-label :thumb-size="48")
 
-                      //- v-flex
-                      //-   v-select(v-model="tentType" :items="tentTypes" attach
-                      //-     chips persistent-hint
-                      //-   multiple hint="Tent types")
+                      v-flex
+                        v-select(v-model="amenitiesSelected" :items="amenities" attach
+                        chips persistent-hint label="Amenities"
+                        multiple hint="Amenities")
+                          template(slot="selection" slot-scope="{item, index}")
+                            v-chip(v-if="index <= 2")
+                              span {{item}}
+                            v-chip(v-if="index === 3").grey--text.caption
+                              | (+ {{amenitiesSelected.length - 3}} others)
 
                       v-flex
                         v-layout(row)
@@ -212,15 +214,6 @@
                             v-select(hint="People per tent" persistent-hint
                             v-model="personCount" :items="personNumbers")
 
-                      v-flex
-                        v-select(v-model="amenitiesSelected" :items="amenities" attach
-                        chips persistent-hint
-                        multiple hint="Amenities")
-                          template(slot="selection" slot-scope="{item, index}")
-                            v-chip(v-if="index <= 2")
-                              span {{item}}
-                            v-chip(v-if="index === 3").grey--text.caption
-                              | (+ {{amenitiesSelected.length - 3}} others)
                 v-btn(fixed dark fab bottom right color="primary"
                 @click.native="search")
                   v-icon done_all
@@ -332,6 +325,7 @@ export default {
         tentCount: this.tentCount,
         personCount: this.personCount,
         tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
+        amenities: this.amenitiesSelected,
       };
       request('/graphql', campSearchUser, variables).then((data) => {
         this.searchResults = data.campSearchUser;

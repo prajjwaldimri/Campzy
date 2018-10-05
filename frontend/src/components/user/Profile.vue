@@ -92,7 +92,11 @@ export default {
         this.selectedTab = 'tab-2';
         break;
 
-      case 'billing':
+      case 'pastBookings':
+        this.selectedTab = 'tab-3';
+        break;
+
+      case 'wishlist':
         this.selectedTab = 'tab-4';
         break;
 

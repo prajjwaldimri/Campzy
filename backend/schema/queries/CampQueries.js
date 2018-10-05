@@ -1,7 +1,8 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* eslint no-param-reassign: ["error", { "props": false }] */
 const graphql = require('graphql');
 const moment = require('moment');
-const { filter } = require('p-iteration');
+const { filter, forEach } = require('p-iteration');
 const { GraphQLDate } = require('graphql-iso-date');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
@@ -163,6 +164,7 @@ const campSearchUser = {
     page: { type: GraphQLInt },
     tentCount: { type: GraphQLInt },
     personCount: { type: GraphQLInt },
+    amenities: { type: new GraphQLList(GraphQLString) },
   },
   async resolve(parent, args) {
     try {
@@ -232,6 +234,52 @@ const campSearchUser = {
           && inventory.length >= args.tentCount
           && availableCapacity >= requiredCapacity
         );
+      });
+
+      // Remove unnecessary tents
+      await forEach(results, async (result) => {
+        result.inventory = result.inventory.sort(
+          (a, b) => a.bookingPrice - b.bookingPrice,
+        );
+        result.inventory = result.inventory.slice(0, args.tentCount);
+      });
+
+      // Check for amenities
+      results = await filter(results, async (result) => {
+        if (
+          args.amenities.includes('Attached Washroom')
+          && !result.amenities.washRoomAttached
+        ) {
+          return false;
+        }
+        if (
+          args.amenities.includes('Charging Points')
+          && !result.amenities.chargingPoints
+        ) {
+          return false;
+        }
+        if (
+          args.amenities.includes('Meals Included')
+          && !result.amenities.mealsInclude
+        ) {
+          return false;
+        }
+        if (
+          args.amenities.includes('Mobile Connectivity')
+          && !result.amenities.mobileConnectivity
+        ) {
+          return false;
+        }
+        if (args.amenities.includes('Bonfire') && !result.amenities.bonfire) {
+          return false;
+        }
+        if (
+          args.amenities.includes('Pets Allowed')
+          && !result.amenities.petsAllowed
+        ) {
+          return false;
+        }
+        return true;
       });
 
       return results;
