@@ -8,7 +8,7 @@
     v-spacer
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click="$router.push('/')") HOME
-      v-btn(flat @click="$router.push('/profile/billing')") WISH LIST
+      v-btn(flat @click="$router.push('/profile/wishlist')") WISH LIST
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")

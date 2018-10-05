@@ -29,17 +29,12 @@
                       v-flex(xs12 md8)
                         v-text-field(label='Location' v-model='location' readonly)
                       v-flex.flex-spacing(xs12 md3)
-                        v-dialog(v-model='loc' width='500')
-                          v-btn(slot='activator' @click='getLocation' dark)
-                            span My Location
-                            v-icon.ml-2 my_location
-                          v-card
-                            .iframe-container.mt-4
-                              iframe(:src="campLocation" allowfullscreen)
-                            v-card-actions
-                              v-spacer
-                              v-btn(flat small @click='loc= false') cancel
-                              v-btn(flat small @click='loc= false') ok
+                        v-card
+                          #map
+                          v-card-actions
+                            v-spacer
+                            v-btn(flat small @click='loc= false') cancel
+                            v-btn(flat small @click='loc= false') ok
 
         v-tab-item(id='bankdetails')
           v-flex(xs12 md6 style='max-width:100%')
@@ -208,7 +203,40 @@ export default {
   metaInfo: {
     title: 'Dashboard | Camp Details',
     script: [
-      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation' },
+      {
+        innerHTML: `function getCurrentLocation() {
+      var map; 
+      var infoWindow;
+       map = new google.maps.Map(document.getElementById('map'));
+       infoWindow = new google.maps.InfoWindow;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          infoWindow.setPosition(pos);
+          infoWindow.setContent('Location found.');
+          infoWindow.open(map);
+          map.setCenter(pos);
+        }, () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+    };
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation
+        ? 'Error: The Geolocation service failed.'
+        : 'Error: Your browser does not support geolocation.');
+    };`,
+        type: 'text/javascript',
+        body: true,
+      },
+      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation', body: true },
     ],
   },
 
@@ -537,22 +565,53 @@ export default {
       }).finally(() => { });
     },
 
-    getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const latlon = `${position.coords.latitude},${position.coords.longitude}`;
-          this.campLocation = `https://www.google.com/maps/embed/v1/place?q=${latlon}&key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=16`;
-          this.coordinates = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          this.location = latlon;
-        }, msg => new Error(`Please enable your GPS position future.${msg}`), { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
-      } else {
-        return new Error('Geolocation is not supported by this browser.');
-      }
-      return true;
-    },
+    // getLocation() {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition((position) => {
+    //       const latlon = `${position.coords.latitude},${position.coords.longitude}`;
+    //       this.campLocation = `https://www.google.com/maps/embed/v1/place?q=${latlon}&key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=16`;
+    //       this.coordinates = {
+    //         latitude: position.coords.latitude,
+    //         longitude: position.coords.longitude,
+    //       };
+    //       this.location = latlon;
+    //     }, msg => new Error(`Please enable your GPS position future.${msg}`), { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
+    //   } else {
+    //     return new Error('Geolocation is not supported by this browser.');
+    //   }
+    //   return true;
+    // },
+    // getCurrentLocation() {
+    //   const infoWindow = '';
+    //   const map = new google.maps.Map(document.getElementById('map'), {
+    //     center: { lat: -34.397, lng: 150.644 },
+    //     zoom: 6,
+    //   });
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition((position) => {
+    //       const pos = {
+    //         lat: position.coords.latitude,
+    //         lng: position.coords.longitude,
+    //       };
+
+    //       infoWindow.setPosition(pos);
+    //       infoWindow.setContent('Location found.');
+    //       infoWindow.open(map);
+    //       map.setCenter(pos);
+    //     }, () => {
+    //       this.handleLocationError(true, infoWindow, map.getCenter());
+    //     });
+    //   } else {
+    //     // Browser doesn't support Geolocation
+    //     this.handleLocationError(false, infoWindow, map.getCenter());
+    //   }
+    // },
+    // handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    //   infoWindow.setPosition(pos);
+    //   infoWindow.setContent(browserHasGeolocation
+    //     ? 'Error: The Geolocation service failed.'
+    //     : 'Error: Your browser doesn\'t support geolocation.');
+    // },
 
   },
 };
