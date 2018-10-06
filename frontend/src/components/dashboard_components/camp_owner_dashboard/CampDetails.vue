@@ -205,7 +205,6 @@ export default {
       {
         innerHTML: ` document.getElementById('open__map').addEventListener('click', getCurrentLocation);
         function getCurrentLocation() {
-          console.log('hi');
           var map; 
           var infoWindow;
           map = new google.maps.Map(document.getElementById('map'),{
