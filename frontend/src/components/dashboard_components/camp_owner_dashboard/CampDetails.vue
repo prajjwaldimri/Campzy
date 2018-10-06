@@ -27,7 +27,7 @@
                       v-text-field(label='Camp Url' v-model='camp.url' readonly)
                     v-layout(row wrap)
                       v-flex(xs12 md5)
-                        v-text-field(label='Location' v-model='location' readonly)
+                        v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
                         v-dialog(v-model='loc' height='500' width='500')
                           v-btn(dark slot="activator")
@@ -218,11 +218,22 @@ export default {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          this.coordinates = pos;
           marker.setPosition(pos);
           map.setCenter(pos);
           marker.setMap(map);
         }, () => {
           handleLocationError(true, marker, map.getCenter());
+        });
+        google.maps.event.addListener(marker, 'dragend', function(){
+            pos = {
+            lat: marker.position.lat(),
+            lng: marker.position.lng(),
+          };
+          console.log(pos);
+          map.setCenter(pos);
+          marker.setMap(map);
+          this.coordinates = pos;
         });
       } else {
         // Browser doesn't support Geolocation
@@ -236,9 +247,9 @@ export default {
         : 'Error: Your browser does not support geolocation.');
     };`,
         type: 'text/javascript',
-        body: true,
+
       },
-      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation', body: true },
+      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation' },
     ],
   },
 
@@ -584,6 +595,14 @@ export default {
     //   return true;
     // },
 
+  },
+
+  watch: {
+    location(loc) {
+      console.log(loc);
+      const localLoc = `${this.coordinates.lat}, ${this.coordinates.lng}`;
+      this.location = localLoc;
+    },
   },
 };
 </script>
