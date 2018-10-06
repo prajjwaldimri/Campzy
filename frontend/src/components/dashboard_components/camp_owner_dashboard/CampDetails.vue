@@ -30,7 +30,7 @@
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
                         v-dialog(v-model='loc' height='500' width='500')
-                          v-btn(dark slot="activator")
+                          v-btn#open__map(dark slot="activator")
                             span My Location
                             v-icon.ml-2 location_searching
                           v-card#map(height='500' width='500')
@@ -203,53 +203,56 @@ export default {
     title: 'Dashboard | Camp Details',
     script: [
       {
-        innerHTML: `function getCurrentLocation() {
-      var map; 
-      var infoWindow;
-       map = new google.maps.Map(document.getElementById('map'),{
-         zoom: 20
-       });
-       marker = new google.maps.Marker({
-         draggable: true
-       });
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          this.coordinates = pos;
+        innerHTML: ` document.getElementById('open__map').addEventListener('click', getCurrentLocation);
+        function getCurrentLocation() {
+          console.log('hi');
+          var map; 
+          var infoWindow;
+          map = new google.maps.Map(document.getElementById('map'),{
+            zoom: 20
+          });
+          marker = new google.maps.Marker({
+            draggable: true
+          });
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+              this.coordinates = pos;
+              marker.setPosition(pos);
+              map.setCenter(pos);
+              marker.setMap(map);
+            }, () => {
+              handleLocationError(true, marker, map.getCenter());
+            });
+            google.maps.event.addListener(marker, 'dragend', function(){
+                pos = {
+                lat: marker.position.lat(),
+                lng: marker.position.lng(),
+              };
+              console.log(pos);
+              map.setCenter(pos);
+              marker.setMap(map);
+              this.coordinates = pos;
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, marker, map.getCenter());
+          }
+        };
+        function handleLocationError(browserHasGeolocation, marker, pos) {
           marker.setPosition(pos);
-          map.setCenter(pos);
-          marker.setMap(map);
-        }, () => {
-          handleLocationError(true, marker, map.getCenter());
-        });
-        google.maps.event.addListener(marker, 'dragend', function(){
-            pos = {
-            lat: marker.position.lat(),
-            lng: marker.position.lng(),
-          };
-          console.log(pos);
-          map.setCenter(pos);
-          marker.setMap(map);
-          this.coordinates = pos;
-        });
-      } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, marker, map.getCenter());
-      }
-    };
-    function handleLocationError(browserHasGeolocation, marker, pos) {
-      marker.setPosition(pos);
-      marker.setContent(browserHasGeolocation
-        ? 'Error: The Geolocation service failed.'
-        : 'Error: Your browser does not support geolocation.');
-    };`,
+          marker.setContent(browserHasGeolocation
+            ? 'Error: The Geolocation service failed.'
+            : 'Error: Your browser does not support geolocation.');
+        };`,
         type: 'text/javascript',
+        body: true,
 
       },
-      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&callback=getCurrentLocation' },
+      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g' },
     ],
   },
 
