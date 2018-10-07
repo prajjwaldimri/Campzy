@@ -232,7 +232,6 @@ export default {
             : 'Error: Your browser does not support geolocation.');
         };`,
         type: 'text/javascript',
-        body: true,
 
       },
       { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g' },
@@ -340,7 +339,7 @@ export default {
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
         this.updateImagesToCamp();
       }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        EventBus.$emit('show-error-notification-long', 'Failed to Upload');
       }).finally(() => { this.uploadingImages = false; });
     },
 

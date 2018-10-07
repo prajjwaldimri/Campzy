@@ -49,7 +49,10 @@ const uploadCampImages = (req, res) => {
                           Body: buffer2,
                           ACL: 'public-read',
                         },
-                        () => {
+                        (err3) => {
+                          if (err3) {
+                            throw new Error(err3);
+                          }
                           if (filesLength === req.files.length) {
                             res.json(filesArray);
                           }
@@ -63,7 +66,7 @@ const uploadCampImages = (req, res) => {
       );
     });
   } else {
-    res.json('Error');
+    throw new Error('Failed to Update!');
   }
 };
 
@@ -101,7 +104,7 @@ const deleteDocuments = (req, res) => {
 const deleteImage = (req, res) => {
   try {
     if (!req.body) {
-      throw new Error('Cannot send Empty Key');
+      return new Error('Cannot send Empty Key');
     }
     if (req.body) {
       let imageDelete = '';
@@ -140,7 +143,7 @@ const deleteImage = (req, res) => {
         },
       );
     } else {
-      throw new Error('Cannot Delete');
+      return new Error('Cannot Delete');
     }
   } catch (err) {
     return err;
