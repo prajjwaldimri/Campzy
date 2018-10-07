@@ -3,7 +3,7 @@
     closeByDate
     editTent
     v-layout(row)
-      h1.font-weight-light.pl-2.pb-3 Inventory
+      h1.font-weight-bold.headline.text-uppercase.pl-2.pb-3 Inventory
     v-layout(row)
       v-flex(xs12 md6)
         v-text-field(solo label="Search" append-icon="search")

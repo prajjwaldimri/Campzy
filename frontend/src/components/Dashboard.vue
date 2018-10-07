@@ -40,6 +40,10 @@
               v-list-tile-action
                 img(src="/vectors/campfire.svg" height="24" width="24")
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Camp Details
+            v-list-tile.pt-3(@click="$router.push('/dashboard/bankDetails')" v-show='isCampOwner')
+              v-list-tile-action
+                v-icon account_balance
+              v-list-tile-content.increase-letter-spacing-1 Bank Details
             v-list-tile.pt-3(@click="$router.push('/dashboard/addBlog')" v-show='isBlogger')
               v-list-tile-action
                 v-icon note_add
@@ -71,7 +75,7 @@
           v-tour(name='adminTour' :steps='adminSteps')
     router-view.router-display
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
-    fixed shift).hidden-md-and-up
+   fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
       id='v-step-0' v-show='isAdmin || isCampOwner')
         span Statistics
@@ -92,6 +96,10 @@
       v-show='isCampOwner' id='v-step-1')
         span Camp Details
         v-icon details
+      v-btn(dark @click="$router.push('/dashboard/bankDetails')"
+      v-show='isCampOwner')
+        span Bank Details
+        v-icon account_balance
       v-btn(dark @click="$router.push('/dashboard/campManagement')"
       v-show='isAdmin' id='v-step-2')
         span Camp Management
@@ -236,6 +244,7 @@ export default {
   width: 100%;
   padding: 2rem;
   margin: 0px;
+  height: 100% !important;
 }
 .side-drawer {
   border-right: 1px sloid;

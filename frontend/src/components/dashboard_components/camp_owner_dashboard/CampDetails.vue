@@ -1,9 +1,8 @@
 <template lang="pug">
   v-container.camp-display(fluid)
-    v-tabs.tabs-detail(height='60%' dark grow show-arrows)
+    v-tabs(height='60%' dark grow show-arrows)
       v-tabs-slider(color='green')
       v-tab(href='#basic') Basic Details
-      v-tab(href='#bankdetails') Bank Details
       v-tab(href='#documents') Documents
       v-tab(href='#campdetail') Camp Details
       v-tab(href='#images') Camp Images
@@ -29,27 +28,12 @@
                       v-flex(xs12 md5)
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
-                        v-dialog(v-model='loc' height='500' width='500')
+                        v-dialog(v-model='loc' height='500' width='700')
                           v-btn#open__map(dark slot="activator")
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card#map(height='500' width='500')
+                          v-card#map(height='500' width='700')
 
-        v-tab-item(id='bankdetails')
-          v-flex(xs12 md6 style='max-width:100%')
-            v-card.body-card(flat)
-              v-card-title.title(primary-title)
-                h2.font-weight-bold.headline BANK DETAILS
-              v-form(ref='form' lazy-validation)
-                  v-layout.layout(row wrap)
-                    v-flex(xs12)
-                      v-text-field(label='Bank Name' )
-                    v-flex.flex-spacing(xs12)
-                      v-text-field(label='Branch' )
-                    v-flex.flex-spacing(xs12)
-                      v-text-field(label='Account Number')
-                    v-flex.flex-spacing(xs12)
-                      v-text-field(label='IFSC Code')
         v-tab-item(id='documents')
           v-layout(row wrap)
             v-flex(xs12 md8)
@@ -208,7 +192,7 @@ export default {
           var map; 
           var infoWindow;
           map = new google.maps.Map(document.getElementById('map'),{
-            zoom: 20
+            zoom: 15
           });
           marker = new google.maps.Marker({
             draggable: true
@@ -580,46 +564,19 @@ export default {
       }).finally(() => { });
     },
 
-    // getLocation() {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition((position) => {
-    //       const latlon = `${position.coords.latitude},${position.coords.longitude}`;
-    //       this.campLocation = `https://www.google.com/maps/embed/v1/place?q=${latlon}&key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${latlon}&zoom=16`;
-    //       this.coordinates = {
-    //         latitude: position.coords.latitude,
-    //         longitude: position.coords.longitude,
-    //       };
-    //       this.location = latlon;
-    //     }, msg => new Error(`Please enable your GPS position future.${msg}`), { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
-    //   } else {
-    //     return new Error('Geolocation is not supported by this browser.');
-    //   }
-    //   return true;
-    // },
-
   },
 
-  watch: {
-    location(loc) {
-      console.log(loc);
-      const localLoc = `${this.coordinates.lat}, ${this.coordinates.lng}`;
-      this.location = localLoc;
-    },
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 .camp-display {
-  margin: 0px 0px 0px 0px;
   padding: 0px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .tabs-detail {
   width: 100%;
+  padding: 0px;
 }
 
 .body-card {

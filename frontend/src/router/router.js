@@ -18,6 +18,7 @@ const Dashboard = () => import('../components/Dashboard.vue');
 const UserManagement = () => import('../components/dashboard_components/admin-dashboard/UserManagement.vue');
 const Statistics = () => import('../components/dashboard_components/camp_owner_dashboard/Statistics.vue');
 const CampDetails = () => import('../components/dashboard_components/camp_owner_dashboard/CampDetails.vue');
+const BankDetails = () => import('../components/dashboard_components/camp_owner_dashboard/BankDetails.vue');
 const CampInventory = () => import('../components/dashboard_components/camp_owner_dashboard/CampInventory.vue');
 const ManageCamps = () => import('../components/dashboard_components/admin-dashboard/CampsManager.vue');
 const ViewCamp = () => import('../components/dashboard_components/admin-dashboard/ViewCamp.vue');
@@ -109,6 +110,11 @@ const router = new Router({
           name: 'campDetails',
           path: 'campDetails',
           component: CampDetails,
+        },
+        {
+          name: 'bankDetails',
+          path: 'bankDetails',
+          component: BankDetails,
         },
         {
           name: 'campInventory',
