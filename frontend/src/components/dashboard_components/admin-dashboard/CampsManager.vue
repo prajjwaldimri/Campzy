@@ -230,8 +230,8 @@ export default {
           this.camps = data.searchCamp;
           this.pageLength = Math.ceil((data.searchCamp.length) / 8);
         }
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'No camp found!');
       }).finally(() => { this.isTableLoading = false; });
     },
   },
