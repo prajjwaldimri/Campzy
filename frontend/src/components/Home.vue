@@ -1,52 +1,55 @@
 <template lang="pug">
-  .home-flex
-    .search-flex
-      .campzy-logo.pb-4.pt-4
-        //- img(src="/vectors/Campzy-logo-black.svg")
-        span.display-3 Camp
-        span.display-3.green--text zy
-      v-text-field( append-icon="search"
-      @click:append="searchClick" autofocus color="green" solo single-line required ticks
-      v-model="searchInput" @keyup.enter="searchClick"
-      hint="You can search for Nature, Leh, Mountains, etc.").mb-0
+  div
+    .home-flex
+      .search-flex
+        .campzy-logo.pb-4.pt-4
+          //- img(src="/vectors/Campzy-logo-black.svg")
+          span.display-3 Camp
+          span.display-3.green--text zy
+        v-text-field( append-icon="search"
+        @click:append="searchClick" autofocus color="green" solo single-line required ticks
+        v-model="searchInput" @keyup.enter="searchClick"
+        hint="You can search for Nature, Leh, Mountains, etc.").mb-0
 
-      .d-flex.actions-flex.py-2
-        v-layout(row).hidden-sm-and-down
-          v-flex(justify-center align-center md4).button-flex
-            v-btn(outline color="blue" fab @click="login")
-              v-icon account_box
-            h3.subheading Account
-          v-flex(justify-center align-center md4).button-flex
-            v-btn(color="orange darken-2" fab outline)
-              v-icon trending_up
-            h3.subheading Trending
-          v-flex(justify-center align-center md4).button-flex
-            v-btn(color="blue-grey" fab outline)
-              v-icon chrome_reader_mode
-            h3.subheading Blogs
+        .d-flex.actions-flex.py-2
+          v-layout(row).hidden-sm-and-down
+            v-flex(justify-center align-center md4).button-flex
+              v-btn(outline color="blue" fab @click="login")
+                v-icon account_box
+              h3.subheading Account
+            v-flex(justify-center align-center md4).button-flex
+              v-btn(color="orange darken-2" fab outline)
+                v-icon trending_up
+              h3.subheading Trending
+            v-flex(justify-center align-center md4).button-flex
+              v-btn(color="blue-grey" fab outline)
+                v-icon chrome_reader_mode
+              h3.subheading Blogs
 
-        //- Mobile Layout
-        v-layout(row).hidden-md-and-up
-          v-flex(justify-center align-center sm4).button-flex
-            v-btn(outline color="blue" fab @click="login" small)
-              v-icon account_box
-            h3.body-2 Account
-          v-flex(justify-center align-center sm4).button-flex
-            v-btn(color="orange darken-2" fab outline small)
-              v-icon trending_up
-            h3.body-2 Trending
-          v-flex(justify-center align-center sm4).button-flex
-            v-btn(color="blue-grey" fab outline small)
-              v-icon chrome_reader_mode
-            h3.body-2 Blogs
+          //- Mobile Layout
+          v-layout(row).hidden-md-and-up
+            v-flex(justify-center align-center sm4).button-flex
+              v-btn(outline color="blue" fab @click="login" small)
+                v-icon account_box
+              h3.body-2 Account
+            v-flex(justify-center align-center sm4).button-flex
+              v-btn(color="orange darken-2" fab outline small)
+                v-icon trending_up
+              h3.body-2 Trending
+            v-flex(justify-center align-center sm4).button-flex
+              v-btn(color="blue-grey" fab outline small)
+                v-icon chrome_reader_mode
+              h3.body-2 Blogs
 
 
+    Footer
 </template>
 
 <script>
 
 import anime from 'animejs';
 import ICountUp from 'vue-countup-v2';
+import Footer from './Footer.vue';
 
 export default {
   name: 'Home',
@@ -55,6 +58,7 @@ export default {
   },
   components: {
     ICountUp,
+    Footer,
   },
   data() {
     return {

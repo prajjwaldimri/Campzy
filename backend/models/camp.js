@@ -53,6 +53,7 @@ const CampSchema = new Schema({
     petsAllowed: { type: Boolean, default: false },
     chargingPoints: { type: Boolean, default: false },
   },
+  razorpayAccountId: String,
   services: { type: [String] },
   placesOfInterest: [{ name: String, distance: String }],
   temperature: { type: String },
