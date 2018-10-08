@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container.camp-display(fluid)
+  .camp-display
     v-tabs(height='60%' dark grow show-arrows)
       v-tabs-slider(color='green')
       v-tab(href='#basic') Basic Details
@@ -102,7 +102,6 @@
                         :loading='uploadingImages') Upload Images
 
         v-tab-item(id='campdetail')
-          v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.headline CAMP DETAILS
@@ -335,12 +334,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-        this.getImages = res.data;
-        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-        this.updateImagesToCamp();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Upload');
-      }).finally(() => { this.uploadingImages = false; });
+          this.getImages = res.data;
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+          this.updateImagesToCamp();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Upload');
+        }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -388,14 +387,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-          res.data.forEach((item) => {
-            this.getOwnerDocuments.push(item.key);
-          });
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveDocumentsToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingDocuments = false; });
+            res.data.forEach((item) => {
+              this.getOwnerDocuments.push(item.key);
+            });
+            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+            this.saveDocumentsToCamp();
+          }).catch(() => {
+            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+          }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -570,7 +569,10 @@ export default {
 
 <style lang="scss" scoped>
 .camp-display {
-  padding: 0px;
+  width: 100%;
+  padding: 2rem;
+  margin: 0px;
+  height: 100% !important;
 }
 
 .tabs-detail {

@@ -91,6 +91,7 @@ export default {
 
             client.request(addTentQuery, variables).then(() => {
               this.tent = {};
+              EventBus.$emit('show-success-notification-short', 'Successfully added!');
             }).catch((err) => {
               EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
             });

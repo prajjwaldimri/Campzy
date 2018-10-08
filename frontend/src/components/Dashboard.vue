@@ -73,7 +73,7 @@
                 v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
                   v-icon chevron_right
           v-tour(name='adminTour' :steps='adminSteps')
-    router-view.router-display
+    router-view
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
    fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"

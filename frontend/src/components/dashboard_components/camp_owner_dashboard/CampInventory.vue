@@ -8,14 +8,14 @@
       v-flex(xs12 md6)
         v-text-field(solo label="Search" append-icon="search")
 
-      v-flex(xs12 md2 offset-xs4 align-content-end justify-center).d-flex
+      v-flex(xs12 md2 offset-xs1 align-content-end justify-center).d-flex
         v-switch(v-model='campAvailable.isAvailable' color='green'
         @change='campBookingStatus(campAvailable.isAvailable,campAvailable.id)'
         :label='campSwitchLabel'
         )
 
     v-layout(row)
-      v-data-table(:headers="headers" :items="tents" style="width: 100%" hide-actions
+      v-data-table.hidden-sm-and-down(:headers="headers" :items="tents" style="width: 100%" hide-actions
       must-sort :loading="isTableLoading" ).elevation-1
         template(slot="items" slot-scope="props")
           td.font-weight-bold {{props.item.type}}
@@ -32,6 +32,40 @@
           td.align-centers
             v-btn(icon flat @click='openDatePicker(props.item.id)')
               v-icon date_range
+      v-flex.hidden-md-and-up(xs12)
+        v-card.my-2(v-for='tent in tents')
+          v-layout(row)
+            v-flex(xs12 md8).d-flex
+              v-card-title.title {{tent.type}}
+            v-spacer
+            v-flex(xs12 md3 offset-xs1)
+              v-switch(v-model='tent.isAvailable' label='Tent Booking' color='green' @change='openTentBooking(tent.isAvailable,tent.id)')
+          v-divider
+          v-layout.pa-3(row wrap)
+            v-flex(md3 xs3)
+              h5.caption.grey--text Capacity
+              h3.mt-1.subheading {{tent.capacity}} Person(s)
+
+            v-flex.ml-2(md5 xs5 offset-md4)
+              h5.caption.grey--text Booking Price
+              h3.mt-1.subheading {{tent.bookingPrice}}
+
+            v-flex(md3 xs3)
+              h5.caption.grey--text Surged Price
+              h3.mt-1.subheading {{tent.surgePrice}}
+
+            v-flex(md3 xs3).mt-4
+              h5.caption.grey--text Pre Book Time
+              h3.mt-1.subheading {{tent.preBookPeriod}} Day(s)
+          v-divider
+          v-card-actions
+            v-spacer
+            v-btn(icon flat @click='openDatePicker(tent.id)')
+              v-icon date_range
+            v-btn(flat icon @click='editTent(tent.id)' )
+              v-icon edit
+
+
     v-dialog(v-model="addTentDialog" persistent max-width="500px")
       v-btn(color="green" slot="activator" fab dark bottom right fixed style='bottom:5.5rem').elevation-19
         v-icon add
@@ -83,6 +117,7 @@ export default {
       isTentBooked: '',
       campAvailable: [],
       campSwitchLabel: '',
+      tentStatus: false,
     };
   },
   mounted() {
