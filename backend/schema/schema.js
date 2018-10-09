@@ -18,6 +18,7 @@ const OTPMutations = require('./mutations/OTPMutations');
 const BlogMutations = require('./mutations/BlogMutations');
 const BookingMutations = require('./mutations/BookingMutations');
 const ReviewMutations = require('./mutations/ReviewMutations');
+const BankMutations = require('./mutations/BankMutations');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
@@ -110,6 +111,8 @@ const Mutation = new GraphQLObjectType({
     bookCamp: BookingMutations.book,
 
     addReview: ReviewMutations.addReview,
+
+    addBank: BankMutations.addBank,
   },
 });
 

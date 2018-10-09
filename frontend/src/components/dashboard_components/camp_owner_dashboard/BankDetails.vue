@@ -6,22 +6,65 @@
         v-form(ref='form' lazy-validation)
             v-layout.layout(row wrap)
               v-flex(xs12)
-                v-text-field(label='Bank Name' )
+                v-text-field(label='Beneficiary Name' v-model='beneficiaryName')
               v-flex.flex-spacing(xs12)
-                v-text-field(label='Branch' )
+                v-text-field(label='Account Type' v-model='accountType' )
               v-flex.flex-spacing(xs12)
-                v-text-field(label='Account Number')
+                v-text-field(label='Account Number' v-model='accountNumber')
               v-flex.flex-spacing(xs12)
-                v-text-field(label='IFSC Code')
-              v-flex.flex-spacing(xs12)
-                v-text-field(label='GST Number')
-              v-flex.flex-spacing(xs12)
-                v-text-field(label='PAN Number')
+                v-text-field(label='IFSC Code' v-model='IFSCCode')
         v-card-actions
           v-spacer
           v-btn(dark) Clear
-          v-btn(color='green' dark) Save
+          v-btn(color='green' dark @click='saveBankDetails') Save
 </template>
+
+<script>
+import { GraphQLClient } from 'graphql-request';
+// import { EventBus } from '../../../event-bus';
+import {
+  addBank,
+} from '../../../queries/mutationQueries';
+
+export default {
+  data() {
+    return {
+      accountNumber: '',
+      accountType: '',
+      beneficiaryName: '',
+      IFSCCode: '',
+    };
+  },
+
+  methods: {
+    saveBankDetails() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      const variables = {
+        beneficiaryName: this.beneficiaryName,
+        accountType: this.accountType,
+        accountNumber: this.accountNumber,
+        IFSCCode: this.IFSCCode,
+      };
+      console.log(variables);
+
+      client.request(addBank, variables).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+  },
+};
+</script>
+
 
 <style lang="scss" scoped>
 .bank-container {
