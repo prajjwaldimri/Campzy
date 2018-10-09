@@ -6,12 +6,18 @@
       h2.subheading.mt-2.grey--text.text--darken-2 Articles from your fellow Campzy members
 
       .blogs-grid.mt-4(v-if="blogs")
-        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
+        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark).wide-card
           .card-container
-            v-toolbar
+            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
+            v-toolbar.hidden-sm-and-down
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
               v-spacer
-              v-btn(light) Read the story
+              v-btn(light :href="'/blog/' + blog.url") Read the story
+            v-card-title(primary-title).hidden-md-and-up
+              h1.title(style="line-height: 1.5 !important") {{blog.title}}
+            v-card-actions.hidden-md-and-up
+              v-spacer
+              v-btn(light :href="'/blog/' + blog.url") Read the story
 
         v-card(v-else raised color="grey darken-4" dark).tall-card
           .card-container
@@ -20,7 +26,7 @@
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions
               v-spacer
-              v-btn(light) Read the story
+              v-btn(light :href="'/blog/' + blog.url") Read the story
 
 </template>
 
