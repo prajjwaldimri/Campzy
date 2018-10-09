@@ -16,7 +16,7 @@
         v-card-actions
           v-spacer
           v-btn(dark) Clear
-          v-btn(color='green' dark @click='saveBankDetails') Save
+          v-btn(color='green' dark @click='saveBankDetails'  :loading='saveDetails') Save
 </template>
 
 <script>
@@ -33,6 +33,8 @@ export default {
       accountType: '',
       beneficiaryName: '',
       IFSCCode: '',
+      saveDetails: false,
+
     };
   },
 
@@ -46,6 +48,7 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
+      this.saveDetails = true;
 
       const variables = {
         beneficiaryName: this.beneficiaryName,
@@ -53,13 +56,11 @@ export default {
         accountNumber: this.accountNumber,
         IFSCCode: this.IFSCCode,
       };
-      console.log(variables);
-
       client.request(addBank, variables).then((data) => {
         console.log(data);
       }).catch((err) => {
         console.log(err);
-      });
+      }).finally(() => { this.saveDetails = false; });
     },
   },
 };

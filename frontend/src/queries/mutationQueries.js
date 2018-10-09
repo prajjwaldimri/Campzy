@@ -190,7 +190,7 @@ const closeBookingByDates = `mutation closeBookingByDates($id: String!, $disable
 
 const addBank = `mutation addBank($accountNumber: String!, $IFSCCode: String!, $beneficiaryName: String!, $accountType: String!){
     addBank(accountNumber: $accountNumber,IFSCCode: $IFSCCode, beneficiaryName: $beneficiaryName, accountType: $accountType ){
-      id
+      name
 
     }
   }`;
