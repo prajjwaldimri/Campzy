@@ -16,7 +16,6 @@
             v-card-title(primary-title).hidden-md-and-up
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.hidden-md-and-up
-              v-spacer
               v-btn(light :href="'/blog/' + blog.url") Read the story
 
         v-card(v-else raised color="grey darken-4" dark).tall-card
@@ -24,8 +23,7 @@
             v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
             v-card-title(primary-title)
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
-            v-card-actions
-              v-spacer
+            v-card-actions.justify-center
               v-btn(light :href="'/blog/' + blog.url") Read the story
 
 </template>
