@@ -2,6 +2,14 @@
 // Mutations for Bank On-boarding of Camp Owners
 const graphql = require('graphql');
 const axios = require('axios');
+
+const authKey = Buffer.from(
+  `${process.env.RAZORPAY_API_KEY}:${process.env.RAZORPAY_API_SECRET}`,
+).toString('base64');
+
+axios.defaults.headers.common.Authorization = `Basic ${authKey}`;
+
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 const UserModel = require('../../models/user.js');
 const CampModel = require('../../models/camp');
 
@@ -39,35 +47,30 @@ const addBank = {
         throw new PrivilegeError();
       }
 
-      const instance = axios.create({
-        baseURL: 'https://api.razorpay.com/v1/',
-        headers: {
-          Authorization: `${process.env.RAZORPAY_API_KEY}:${
-            process.env.RAZORPAY_API_SECRET
-          }`,
+      const response = await axios.post(
+        'https://api.razorpay.com/v1/beta/accounts',
+        {
+          name: userData.name,
+          email: userData.email,
+          tnc_accepted: true,
+          account_details: {
+            mobile: userData.phoneNumber,
+            landline: campData.phoneNumber,
+            business_name: campData.name,
+            business_type: 'individual',
+          },
+          bank_account: {
+            ifsc_code: args.IFSCCode,
+            beneficiary_name: args.beneficiaryName,
+            account_type: args.accountType,
+            account_number: args.accountNumber,
+          },
         },
-      });
-
-      const response = await instance.post('/beta/accounts', {
-        name: userData.name,
-        email: userData.email,
-        tnc_accepted: true,
-        account_details: {
-          mobile: userData.phoneNumber,
-          landline: campData.phoneNumber,
-          business_name: campData.name,
-          business_type: 'individual',
-        },
-        bank_account: {
-          ifsc_code: args.IFSCCode,
-          beneficiary_name: args.beneficiaryName,
-          account_type: args.accountType,
-          account_number: args.accountNumber,
-        },
-      });
+      );
       console.log(response);
       return response;
     } catch (err) {
+      console.log(err);
       return err;
     }
   },
