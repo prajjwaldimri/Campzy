@@ -6,28 +6,34 @@
       h2.subheading.mt-2.grey--text.text--darken-2 Articles from your fellow Campzy members
 
       .blogs-grid.mt-4(v-if="blogs")
-        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised).wide-card
+        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
           .card-container
-            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
             v-card-title(primary-title)
-              h1.title(style="line-height: 1.5 !important") {{blog.title}}
+              h1(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
-              v-btn(light :href="'/blog/' + blog.url" color="green") Read the story
+              v-spacer
+              v-btn(light :href="'/blog/' + blog.url" dark)
+                span Read the story
+                v-icon chevron_right
 
-        v-card(v-else raised).tall-card
+        v-card(v-else raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").tall-card
           .card-container
-            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
             v-card-title(primary-title)
-              h1.title(style="line-height: 1.5 !important") {{blog.title}}
+              h1(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
-              v-btn(light :href="'/blog/' + blog.url" color="green") Read the story
+              v-spacer
+              v-btn(light :href="'/blog/' + blog.url" dark)
+                span Read the story
+                v-icon chevron_right
 
+    Footer
 </template>
 
 <script>
 import { request } from 'graphql-request';
 import { getAllBlogs } from '../../queries/queries';
 import Navbar from '../Navbar.vue';
+import Footer from '../Footer.vue';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -36,6 +42,7 @@ export default {
   },
   components: {
     Navbar,
+    Footer,
   },
   data() {
     return {
@@ -89,6 +96,6 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 </style>
