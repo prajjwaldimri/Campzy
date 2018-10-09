@@ -44,12 +44,19 @@ export default {
 <style lang="scss" scoped>
 .blogs-grid {
   display: grid;
+  @media screen and (max-width: 960px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
   grid-template-columns: repeat(8, 10%);
   grid-template-rows: repeat(4, 20%);
   grid-gap: 2rem;
 }
 
 .wide-card {
+  @media screen and (max-width: 960px) {
+    grid-column-end: span 2;
+    grid-row-end: span 12;
+  }
   grid-column-end: span 4;
   grid-row-end: span 10;
 }
