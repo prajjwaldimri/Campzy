@@ -575,7 +575,7 @@ export default {
   margin: 0px;
   height: 100% !important;
   @media screen and (max-width: 960px) {
-    padding-bottom: 17rem;
+    padding-bottom: 10rem;
   }
 }
 

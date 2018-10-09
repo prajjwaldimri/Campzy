@@ -34,46 +34,44 @@
                     hover readonly)
       v-layout(row wrap)
         v-flex(xs12)
-          v-card(flat)
-            v-card-title.justify-center
+          v-container
+            v-layout(column)
               h3.font-weight-black.text-uppercase Active bookings
-            v-container
-              v-layout(column)
-                v-card(v-for="booking in campBookings").py-5
-                  v-layout(row wrap)
-                    v-flex(md2).pl-5
-                      v-flex
-                        h5.headline.font-weight-medium {{booking.user.name}}
-                    v-divider(vertical).pr-5
+              v-card(v-for="booking in campBookings").py-4.px-2.my-2
+                v-layout(row wrap)
+                  v-flex(md2).pl-5
+                    v-flex
+                      h5.headline.font-weight-medium {{booking.user.name}}
+                  v-divider(vertical).pr-5.hidden-sm-and-down
 
-                    v-flex(md6).pl-5
-                      v-layout(row wrap)
-                        v-flex(md3)
-                          h5.caption.grey--text OCCUPANCY
-                          h3.mt-1.subheading {{booking.tentCount}} Tents
+                  v-flex(md6).pl-5
+                    v-layout(row wrap)
+                      v-flex(md3)
+                        h5.caption.grey--text OCCUPANCY
+                        h3.mt-1.subheading {{booking.tentCount}} Tents
 
-                        v-flex(md5 offset-md1)
-                          h5.caption.grey--text CAPACITY
-                          h3.mt-1.subheading {{booking.personCount}} Person / Tent
+                      v-flex(md5 offset-md1)
+                        h5.caption.grey--text CAPACITY
+                        h3.mt-1.subheading {{booking.personCount}} Person / Tent
 
-                        v-flex(md3)
-                          h5.caption.grey--text AMOUNT
-                          h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
+                      v-flex(md3)
+                        h5.caption.grey--text AMOUNT
+                        h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
 
-                        v-flex(md3).mt-4
-                          h5.caption.grey--text TRIP DURATION
-                          h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
+                      v-flex(md3)
+                        h5.caption.grey--text TRIP DURATION
+                        h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
 
-                        v-flex(md5).mt-4
-                          h5.caption.grey--text TRIP STARTS
-                          h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
+                      v-flex(md5 offset-md1)
+                        h5.caption.grey--text TRIP STARTS
+                        h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
 
 
-                    v-divider(vertical).pr-3
-                    v-flex(md3).pl-5
-                      .d-flex.justify-center.align-center(style="height: 100%")
-                        v-btn(color="success").white--text
-                          span Check In
+                  v-divider(vertical).mr-3.hidden-sm-and-down
+                  v-flex(md3 xs12)
+                    .d-flex.justify-center.align-center(style="height: 100%")
+                      v-btn(color="success").white--text
+                        span Check In
 
 
     //- Show if user is Admin
@@ -96,43 +94,41 @@
                 apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
       v-layout(row wrap)
         v-flex(xs12)
-          v-card
-            v-card-title.justify-center
+          v-container
+            v-layout(column)
               h3.font-weight-black.text-uppercase Active bookings
-            v-container
-              v-layout(column)
-                v-card(v-for="booking in adminBookings").py-5
-                  v-layout(row wrap)
-                    v-flex(md2).pl-5
-                      v-flex
-                        h5.headline.font-weight-medium {{booking.user.name}}
-                        router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
-                          h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
-                          h6.subheading.mt-3 Booking Id: {{booking.code}}
+              v-card(v-for="booking in adminBookings").py-5
+                v-layout(row wrap)
+                  v-flex(md2).pl-5
+                    v-flex
+                      h5.headline.font-weight-medium {{booking.user.name}}
+                      router-link(:to="'/camp/' + booking.camp.url" style="text-decoration: none")
+                        h6.subheading.mt-1.green--text.text--darken-2.font-weight-bold {{booking.camp.name}}
+                        h6.subheading.mt-3 Booking Id: {{booking.code}}
 
-                    v-divider(vertical).px-5
+                  v-divider(vertical).px-5.hidden-sm-and-down
 
-                    v-flex(md8).pl-5
-                      v-layout(row wrap)
-                        v-flex(md3)
-                          h5.caption.grey--text OCCUPANCY
-                          h3.mt-1.subheading {{booking.tentCount}} Tents
+                  v-flex(md8).pl-5
+                    v-layout(row wrap)
+                      v-flex(md3)
+                        h5.caption.grey--text OCCUPANCY
+                        h3.mt-1.subheading {{booking.tentCount}} Tents
 
-                        v-flex(md5)
-                          h5.caption.grey--text CAPACITY
-                          h3.mt-1.subheading {{booking.personCount}} Person / Tent
+                      v-flex(md5)
+                        h5.caption.grey--text CAPACITY
+                        h3.mt-1.subheading {{booking.personCount}} Person / Tent
 
-                        v-flex(md3)
-                          h5.caption.grey--text AMOUNT
-                          h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
+                      v-flex(md3)
+                        h5.caption.grey--text AMOUNT
+                        h3.mt-1.subheading {{ $n(booking.amount, 'currency', 'en-IN') }}
 
-                        v-flex(md3).mt-4
-                          h5.caption.grey--text TRIP DURATION
-                          h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
+                      v-flex(md3)
+                        h5.caption.grey--text TRIP DURATION
+                        h3.mt-1.subheading {{booking.endDate | moment('from', booking.startDate, true)}}
 
-                        v-flex(md5).mt-4
-                          h5.caption.grey--text TRIP STARTS
-                          h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
+                      v-flex(md5)
+                        h5.caption.grey--text TRIP STARTS
+                        h3.mt-1.subheading {{booking.startDate | moment('Do MMMM YYYY')}}
 
 </template>
 
@@ -415,7 +411,7 @@ export default {
 .camps-container {
   @media screen and (max-width: 960px) {
     padding: 2rem;
-    padding-bottom: 17rem;
+    padding-bottom: 12rem;
   }
   height: 100%;
 }
