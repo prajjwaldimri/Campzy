@@ -12,7 +12,7 @@ const auth = require('../../config/auth');
 const BankType = new GraphQLObjectType({
   name: 'Bank',
   fields: () => ({
-    RazorpayID: { type: GraphQLString },
+    razorpayId: { type: GraphQLString },
   }),
 });
 
@@ -26,6 +26,7 @@ const addBank = {
   },
   async resolve(parent, args, context) {
     try {
+      console.log(args);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       if (userData === null) {
