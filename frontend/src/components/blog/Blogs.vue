@@ -15,7 +15,7 @@
               v-btn(light :href="'/blog/' + blog.url") Read the story
             v-card-title(primary-title).hidden-md-and-up
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
-            v-card-actions.hidden-md-and-up
+            v-card-actions.hidden-md-and-up.justify-center
               v-btn(light :href="'/blog/' + blog.url") Read the story
 
         v-card(v-else raised color="grey darken-4" dark).tall-card
