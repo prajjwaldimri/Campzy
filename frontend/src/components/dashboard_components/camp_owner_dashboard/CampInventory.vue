@@ -243,8 +243,8 @@ export default {
 
 <style lang="scss" scoped>
 .inventory-container {
-  @media screen and (min-width: 960px) {
-    padding: 1rem;
+  @media screen and (max-width: 960px) {
+    padding-bottom: 17rem;
   }
   height: 100%;
 }
