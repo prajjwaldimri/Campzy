@@ -22,7 +22,7 @@
                 v-icon trending_up
               h3.subheading Trending
             v-flex(justify-center align-center md4).button-flex
-              v-btn(color="blue-grey" fab outline)
+              v-btn(color="blue-grey" fab outline @click="$router.push('blogs')")
                 v-icon chrome_reader_mode
               h3.subheading Blogs
 
@@ -37,7 +37,7 @@
                 v-icon trending_up
               h3.body-2 Trending
             v-flex(justify-center align-center sm4).button-flex
-              v-btn(color="blue-grey" fab outline small)
+              v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
                 v-icon chrome_reader_mode
               h3.body-2 Blogs
 

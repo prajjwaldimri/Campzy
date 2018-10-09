@@ -53,7 +53,6 @@
               v-btn(color="green" block @click="search").white--text Apply Filters
                 v-icon(right) filter_list
 
-
         //- Sort Button
         v-menu(top offset-y transition="slide-y-reverse-transition")
           v-btn(color="red" dark fab fixed bottom right
