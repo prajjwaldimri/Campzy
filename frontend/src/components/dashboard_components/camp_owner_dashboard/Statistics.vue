@@ -5,22 +5,22 @@
       v-layout(row wrap)
         v-flex(xs12 md4)
           v-card
-            v-card-title.justify-center
-              h3.font-weight-black.text-uppercase Bookings
-            v-container(fluid)
-              v-layout(row wrap)
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Active Bookings
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="activeCampBooking" :duration="2")
-                      |  Bookings
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Total Bookings
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
-                      |  Bookings
+            v-container(fluid style='padding:1rem')
+              v-flex(xs12 md12 style='padding:0rem')
+                apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
+              //- v-layout(row wrap)
+              //-   v-flex(xs12 md6)
+              //-     v-layout(column).align-center
+              //-       h3.font-weight-normal.text-uppercase Active Bookings
+              //-       span.title.grey--text.text--darken-1.mt-4
+              //-         ICountUp(:startVal="0" :endVal="activeCampBooking" :duration="2")
+              //-         |  Bookings
+              //-   v-flex(xs12 md6)
+              //-     v-layout(column).align-center
+              //-       h3.font-weight-normal.text-uppercase Total Bookings
+              //-       span.title.grey--text.text--darken-1.mt-4
+              //-         ICountUp(:startVal="0" :endVal="10000" :duration="2")
+              //-         |  Bookings
         v-flex(xs12 md4)
           v-card
             v-card-title.justify-center
@@ -202,6 +202,7 @@
 </template>
 
 <script>
+import VueApexCharts from 'vue-apexcharts';
 import ICountUp from 'vue-countup-v2';
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
@@ -213,6 +214,7 @@ export default {
   name: 'defaultDash',
   components: {
     ICountUp,
+    apexcharts: VueApexCharts,
   },
   metaInfo: {
     title: 'Dashboard | Statistics',
@@ -232,17 +234,28 @@ export default {
       totalCamps: 0,
       adminBookings: [],
       activeCampBooking: 0,
-      headers: [
-        {
-          text: 'Customer Id',
-          sortable: false,
-          value: 'id',
+      chartOptions: {
+        chart: {
+          id: 'vuechart-example',
         },
-        { text: 'Customer Name', value: 'name' },
-        { text: 'Tent Booked', value: 'tentType' },
-        { text: 'Duration', value: 'duration' },
-        { text: 'Status', value: 'bookingStatus' },
-      ],
+        xaxis: {
+          categories: ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'],
+        },
+        title: {
+          text: 'Bookings',
+          floating: true,
+          offsetY: 320,
+          align: 'center',
+          style: {
+            color: '#444',
+          },
+        },
+
+      },
+      series: [{
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91],
+      }],
     };
   },
 

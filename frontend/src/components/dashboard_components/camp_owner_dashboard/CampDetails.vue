@@ -473,11 +473,12 @@ export default {
       });
       this.isDataUpdating = true;
       this.saveAmenity();
-      this.savePlacesOfInterests();
+      // this.savePlacesOfInterests();
       client.request(saveCampDetails, variables).then(() => {
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
         this.getCampDetails();
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', 'Failed to update');
       }).finally(() => { this.isDataUpdating = false; });
     },
