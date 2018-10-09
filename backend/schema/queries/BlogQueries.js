@@ -6,23 +6,19 @@ const BlogType = require('../types/BlogType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString } = graphql;
+const { GraphQLString, GraphQLInt, GraphQLList } = graphql;
 
 const getAllBlogs = {
-  type: BlogType,
-  args: {},
-  async resolve(parent, args, context) {
+  type: new GraphQLList(BlogType),
+  args: {
+    page: { type: GraphQLInt },
+  },
+  async resolve(parent, args) {
     try {
-      const user = await auth.getAuthenticatedUser(context.req);
-      const userData = await UserModel.findById(user.id);
-      const isUserBlogger = await auth.isUserBlogger(userData);
-      if (userData === null) {
-        throw new NotLoggedinError();
-      }
-      if (!isUserBlogger) {
-        throw new PrivilegeError();
-      }
-      return await BlogModel.find({});
+      return BlogModel.find({})
+        .limit(12)
+        .skip(args.page * 12)
+        .sort('-createdAt');
     } catch (err) {
       return err;
     }
@@ -59,7 +55,10 @@ const getBlog = {
   },
   async resolve(parent, args) {
     try {
-      const blog = await BlogModel.findOne({ url: args.url }).populate('authorId', 'name');
+      const blog = await BlogModel.findOne({ url: args.url }).populate(
+        'authorId',
+        'name',
+      );
       if (blog) {
         blog.content = markdown.toHTML(blog.content);
       }

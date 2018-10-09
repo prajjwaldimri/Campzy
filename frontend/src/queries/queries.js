@@ -297,6 +297,14 @@ const getBlogQuery = `query getBlog($url: String!){
   }
 }`;
 
+const getAllBlogs = `query getAllBlogs($page: Int!){
+  getAllBlogs(page: $page){
+    title,
+    heroImage,
+    url
+  }
+}`;
+
 const getBlogById = `query getUpdateBlog($id: String!){
   getUpdateBlog(id: $id){
     title,
@@ -386,6 +394,7 @@ const allBookings = `query allBookings{
            code
         }
       }`;
+
 const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
   isCampUrlAvailable(url: $url){
     id
@@ -408,6 +417,7 @@ module.exports = {
   getCurrentUserBlogsQuery,
   getBlogQuery,
   getBlogById,
+  getAllBlogs,
   isEmailAvailable,
   getUserBookings,
   campBookings,
