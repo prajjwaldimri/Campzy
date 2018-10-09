@@ -39,7 +39,7 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click.native="saveTent").white--text Save
+      v-btn(color="green" @click.native="saveTent"  :loading='addingTent').white--text Save
 
 </template>
 
@@ -59,6 +59,7 @@ export default {
       totalTents: '',
       calculatedPrice: '',
       bookingPrice: '',
+      addingTent: false,
     };
   },
   methods: {
@@ -74,6 +75,7 @@ export default {
           if (!this.tent || !isValid) {
             return;
           }
+          this.addingTent = true;
           const variables = {
             tentType: this.tent.type,
             capacity: this.tent.capacity,
@@ -92,13 +94,15 @@ export default {
             client.request(addTentQuery, variables).then(() => {
               this.tent = {};
               EventBus.$emit('show-success-notification-short', 'Successfully added!');
-            }).catch((err) => {
-              EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+            }).catch(() => {
+              EventBus.$emit('show-error-notification-short', 'Failed to add!');
+            }).finally(() => {
+              this.addingTent = false;
+              this.closeDialog();
             });
           }
         }
       });
-      this.closeDialog();
     },
   },
   watch: {
