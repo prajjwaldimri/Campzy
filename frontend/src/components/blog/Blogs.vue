@@ -12,7 +12,7 @@
             v-card-title(primary-title)
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
-              v-btn(light :href="'/blog/' + blog.url" color="info") Read the story
+              v-btn(light :href="'/blog/' + blog.url" color="green") Read the story
 
         v-card(v-else raised).tall-card
           .card-container
@@ -20,7 +20,7 @@
             v-card-title(primary-title)
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
-              v-btn(light :href="'/blog/' + blog.url" color="info") Read the story
+              v-btn(light :href="'/blog/' + blog.url" color="green") Read the story
 
 </template>
 
