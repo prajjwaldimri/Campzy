@@ -5,25 +5,28 @@
       h1.display-1 Campzy Talks
       h2.subheading.mt-2.grey--text.text--darken-2 Articles from your fellow Campzy members
 
-      .blogs-grid.mt-4
-        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark img="https://images.pexels.com/photos/1289363/pexels-photo-1289363.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260").wide-card
+      .blogs-grid.mt-4(v-if="blogs")
+        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
           .card-container
             v-card-title(primary-title)
-              h1 Title
+              h1.main-title {{blog.title}}
             v-card-actions
               v-btn(light) Read the story
 
-        v-card(v-else raised dark img="https://images.pexels.com/photos/1464616/pexels-photo-1464616.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260").tall-card
+        v-card(v-else raised dark :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").tall-card
           .card-container
             v-card-title(primary-title)
-              h1 Title
+              h1.main-title {{blog.title}}
             v-card-actions
               v-btn(light) Read the story
 
 </template>
 
 <script>
+import { request } from 'graphql-request';
+import { getAllBlogs } from '../../queries/queries';
 import Navbar from '../Navbar.vue';
+import { EventBus } from '../../event-bus';
 
 export default {
   metaInfo: {
@@ -34,10 +37,24 @@ export default {
   },
   data() {
     return {
-      blogs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+      blogs: [],
     };
   },
-
+  mounted() {
+    this.getBlogs();
+  },
+  methods: {
+    getBlogs() {
+      const variables = {
+        page: 0,
+      };
+      request('/graphql', getAllBlogs, variables).then((data) => {
+        this.blogs = data.getAllBlogs;
+      }).catch(() => {
+        EventBus.$emit('show-info-notification-short', 'Cannot get blogs at this time. Please try again.');
+      });
+    },
+  },
 };
 </script>
 
@@ -72,5 +89,9 @@ export default {
   height: 100%;
   padding: 0 1rem 1rem 1rem;
   justify-content: space-between;
+}
+
+.main-title {
+  mix-blend-mode: difference;
 }
 </style>

@@ -56,6 +56,7 @@ const RootQuery = new GraphQLObjectType({
     getBlog: BlogQueries.getBlog,
     getUpdateBlog: BlogQueries.getUpdateBlog,
     getUserBookings: BookingQueries.getUserBookings,
+    getAllBlogs: BlogQueries.getAllBlogs,
 
     campBookings: BookingQueries.getCampBookings,
     countCampActiveBookings: BookingQueries.countCampActiveBookings,
