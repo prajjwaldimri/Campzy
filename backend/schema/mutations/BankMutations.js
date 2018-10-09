@@ -34,14 +34,13 @@ const addBank = {
   },
   async resolve(parent, args, context) {
     try {
-      console.log(args);
       const user = await auth.getAuthenticatedUser(context.req);
       const userData = await UserModel.findById(user.id);
       if (userData === null) {
         throw new NotLoggedinError();
       }
 
-      const campData = await CampModel.find({ owner: userData._id });
+      const campData = await CampModel.findOne({ ownerId: userData._id });
 
       if (!auth.isUserCampOwner(userData)) {
         throw new PrivilegeError();
@@ -54,8 +53,6 @@ const addBank = {
           email: userData.email,
           tnc_accepted: true,
           account_details: {
-            mobile: userData.phoneNumber,
-            landline: campData.phoneNumber,
             business_name: campData.name,
             business_type: 'individual',
           },
@@ -67,10 +64,8 @@ const addBank = {
           },
         },
       );
-      console.log(response);
-      return response;
+      return response.data.id;
     } catch (err) {
-      console.log(err);
       return err;
     }
   },
