@@ -301,7 +301,8 @@ const getAllBlogs = `query getAllBlogs($page: Int!){
   getAllBlogs(page: $page){
     title,
     heroImage,
-    url
+    url,
+    darkTheme
   }
 }`;
 

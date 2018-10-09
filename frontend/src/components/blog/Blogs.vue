@@ -6,20 +6,20 @@
       h2.subheading.mt-2.grey--text.text--darken-2 Articles from your fellow Campzy members
 
       .blogs-grid.mt-4(v-if="blogs")
-        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
+        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised :dark="blog.darkTheme" :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
           .card-container
             v-card-title(primary-title)
-              h1(style="line-height: 1.5 !important") {{blog.title}}
+              h1.main-card-title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
               v-spacer
               v-btn(light :href="'/blog/' + blog.url" dark)
                 span Read the story
                 v-icon chevron_right
 
-        v-card(v-else raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").tall-card
+        v-card(v-else raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage" :dark="blog.darkTheme").tall-card
           .card-container
             v-card-title(primary-title)
-              h1(style="line-height: 1.5 !important") {{blog.title}}
+              h1.main-card-title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
               v-spacer
               v-btn(light :href="'/blog/' + blog.url" dark)
@@ -97,5 +97,9 @@ export default {
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+}
+
+.main-card-title {
+  text-shadow: 0px 0px 20px grey;
 }
 </style>
