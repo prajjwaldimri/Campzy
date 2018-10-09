@@ -8,16 +8,18 @@
       .blogs-grid.mt-4(v-if="blogs")
         v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").wide-card
           .card-container
-            v-card-title(primary-title)
-              h1.main-title {{blog.title}}
-            v-card-actions
+            v-toolbar
+              h1.title(style="line-height: 1.5 !important") {{blog.title}}
+              v-spacer
               v-btn(light) Read the story
 
-        v-card(v-else raised dark :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage").tall-card
+        v-card(v-else raised color="grey darken-4" dark).tall-card
           .card-container
+            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
             v-card-title(primary-title)
-              h1.main-title {{blog.title}}
+              h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions
+              v-spacer
               v-btn(light) Read the story
 
 </template>
@@ -75,23 +77,18 @@ export default {
     grid-row-end: span 12;
   }
   grid-column-end: span 4;
-  grid-row-end: span 10;
+  grid-row-end: span 14;
 }
 
 .tall-card {
   grid-column-end: span 2;
-  grid-row-end: span 12;
+  grid-row-end: span 16;
 }
 
 .card-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0 1rem 1rem 1rem;
-  justify-content: space-between;
-}
-
-.main-title {
-  mix-blend-mode: difference;
+  justify-content: flex-end;
 }
 </style>
