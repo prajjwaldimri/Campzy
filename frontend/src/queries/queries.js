@@ -220,7 +220,7 @@ const userSearch = `query searchUniqueUser($searchTerm: String, $page: Int!){
   }
 }`;
 
-const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
+const campSearch = `query searchCamp($searchTerm: String!, $page: Int!){
   searchCamp(searchTerm : $searchTerm, page: $page){
       id,
       tags,
@@ -229,7 +229,8 @@ const campSearch = `query searchCamp($searchTerm: String, $page: Int!){
       email,
       location,
       url,
-      owner {
+      ownerId {
+        id
         name
       },
   }

@@ -6,21 +6,25 @@ const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const {
-  GraphQLString, GraphQLList, GraphQLBoolean, GraphQLFloat,
+  GraphQLString,
+  GraphQLList,
+  GraphQLBoolean,
+  GraphQLFloat,
+  GraphQLNonNull,
 } = graphql;
 
 const addCamp = {
   type: CampType,
   args: {
-    name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    email: { type: GraphQLString },
-    gst: { type: GraphQLString },
-    location: { type: GraphQLString },
-    url: { type: GraphQLString },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    gst: { type: new GraphQLNonNull(GraphQLString) },
+    location: { type: new GraphQLNonNull(GraphQLString) },
+    url: { type: new GraphQLNonNull(GraphQLString) },
     tags: { type: new GraphQLList(GraphQLString) },
-    ownerId: { type: GraphQLString },
-    ownedCampId: { type: GraphQLString },
+    ownerId: { type: new GraphQLNonNull(GraphQLString) },
+    ownedCampId: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -58,7 +62,7 @@ const addCamp = {
 const updateCamp = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
     name: { type: GraphQLString },
     phoneNumber: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -109,17 +113,18 @@ const updateCamp = {
 const updateUserCamp = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    email: { type: GraphQLString },
-    location: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    location: { type: new GraphQLNonNull(GraphQLString) },
+    url: { type: new GraphQLNonNull(GraphQLString) },
     tags: { type: new GraphQLList(GraphQLString) },
-    shortDescription: { type: GraphQLString },
-    longDescription: { type: GraphQLString },
+    shortDescription: { type: new GraphQLNonNull(GraphQLString) },
+    longDescription: { type: new GraphQLNonNull(GraphQLString) },
     placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    placeName: { type: GraphQLString },
-    distance: { type: GraphQLString },
+    placeName: { type: new GraphQLNonNull(GraphQLString) },
+    distance: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -141,6 +146,7 @@ const updateUserCamp = {
         longDescription: args.longDescription,
         location: args.location,
         tags: args.tags,
+        url: args.url,
         placesOfInterest: {
           name: args.placeName,
           distance: args.distance,
@@ -155,14 +161,14 @@ const updateUserCamp = {
 const saveAmenities = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    washRoomAttached: { type: GraphQLBoolean },
-    bonfire: { type: GraphQLBoolean },
-    hotWater: { type: GraphQLBoolean },
-    mobileConnectivity: { type: GraphQLBoolean },
-    mealsInclude: { type: GraphQLBoolean },
-    petsAllowed: { type: GraphQLBoolean },
-    chargingPoints: { type: GraphQLBoolean },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    washRoomAttached: { type: new GraphQLNonNull(GraphQLBoolean) },
+    bonfire: { type: new GraphQLNonNull(GraphQLBoolean) },
+    hotWater: { type: new GraphQLNonNull(GraphQLBoolean) },
+    mobileConnectivity: { type: new GraphQLNonNull(GraphQLBoolean) },
+    mealsInclude: { type: new GraphQLNonNull(GraphQLBoolean) },
+    petsAllowed: { type: new GraphQLNonNull(GraphQLBoolean) },
+    chargingPoints: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   async resolve(parent, args, context) {
     try {
@@ -234,8 +240,8 @@ const savePlacesOfInterest = {
 const updateCampImages = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    images: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    images: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -264,8 +270,8 @@ const updateCampImages = {
 const updateCampDocuments = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    campDocuments: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    campDocuments: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -294,8 +300,8 @@ const updateCampDocuments = {
 const deleteCampImage = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    imageName: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    imageName: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -320,8 +326,8 @@ const deleteCampImage = {
 const deleteCampDocument = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    documentName: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    documentName: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -345,7 +351,7 @@ const deleteCampDocument = {
 const deleteCamp = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -370,8 +376,8 @@ const deleteCamp = {
 const campBookingStatus = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    isAvailable: { type: GraphQLBoolean },
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    isAvailable: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {

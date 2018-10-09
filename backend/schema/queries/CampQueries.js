@@ -11,7 +11,9 @@ const CampType = require('../types/CampType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString, GraphQLList, GraphQLInt } = graphql;
+const {
+  GraphQLString, GraphQLList, GraphQLInt, GraphQLNonNull,
+} = graphql;
 
 const getCamp = {
   type: CampType,
@@ -127,7 +129,7 @@ const countTotalCamps = {
 const searchParticularCamp = {
   type: new GraphQLList(CampType),
   args: {
-    searchTerm: { type: GraphQLString },
+    searchTerm: { type: new GraphQLNonNull(GraphQLString) },
     page: { type: GraphQLInt },
   },
   async resolve(parent, args, context) {
@@ -143,7 +145,7 @@ const searchParticularCamp = {
       }
       return await CampModel.find({ $text: { $search: args.searchTerm } })
         .limit(8)
-        .skip((args.page - 1) * 8);
+        .skip((args.page - 1) * 8).populate('ownerId', 'id name');
     } catch (err) {
       return err;
     }

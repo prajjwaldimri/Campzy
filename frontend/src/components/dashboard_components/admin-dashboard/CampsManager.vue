@@ -222,6 +222,7 @@ export default {
       });
       this.isTableLoading = true;
       client.request(campSearch, variables).then((data) => {
+        console.log(data);
         if (data.searchCamp.length === 0) {
           this.getAllCamps();
           this.getAllCampsLength();
