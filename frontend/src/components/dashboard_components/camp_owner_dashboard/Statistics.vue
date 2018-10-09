@@ -8,37 +8,11 @@
             v-container(fluid style='padding:1rem')
               v-flex(xs12 md12 style='padding:0rem')
                 apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
-              //- v-layout(row wrap)
-              //-   v-flex(xs12 md6)
-              //-     v-layout(column).align-center
-              //-       h3.font-weight-normal.text-uppercase Active Bookings
-              //-       span.title.grey--text.text--darken-1.mt-4
-              //-         ICountUp(:startVal="0" :endVal="activeCampBooking" :duration="2")
-              //-         |  Bookings
-              //-   v-flex(xs12 md6)
-              //-     v-layout(column).align-center
-              //-       h3.font-weight-normal.text-uppercase Total Bookings
-              //-       span.title.grey--text.text--darken-1.mt-4
-              //-         ICountUp(:startVal="0" :endVal="10000" :duration="2")
-              //-         |  Bookings
         v-flex(xs12 md4)
           v-card
-            v-card-title.justify-center
-              h3.font-weight-black.text-uppercase Inventory
-            v-container(fluid)
-              v-layout(row wrap)
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Total Tents
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="totalTents" :duration="2")
-                      |  Tents
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Booked Tents
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="bookedTents" :duration="2")
-                      |  Tents
+            v-container(fluid style='padding:1rem')
+              v-flex(xs12 md12 style='padding:0rem')
+                apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
         v-flex(xs12 md4)
           v-card
             v-card-title.justify-center
@@ -107,58 +81,19 @@
       v-layout(row wrap)
         v-flex(xs12 md4)
           v-card
-            v-card-title.justify-center
-              h3.font-weight-black.text-uppercase Users
-            v-container(fluid)
-              v-layout(row wrap)
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Active users
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
-                      |  Users
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Total Users
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="totalUsers" :duration="2")
-                      |  Users
+            v-container(fluid style='padding:1rem')
+              v-flex(xs12 md12 style='padding:0rem')
+                apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
         v-flex(xs12 md4)
           v-card
-            v-card-title.justify-center
-              h3.font-weight-black.text-uppercase Camp
-            v-container(fluid)
-              v-layout(row wrap)
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Booked Camps
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
-                      |  Tents
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Total Camps
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="totalCamps" :duration="2")
-                      |  Tents
+            v-container(fluid style='padding:1rem')
+              v-flex(xs12 md12 style='padding:0rem')
+                apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
         v-flex(xs12 md4)
           v-card
-            v-card-title.justify-center
-              h3.font-weight-black.text-uppercase Everyday Statistics
-            v-container(fluid)
-              v-layout(row wrap)
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Users
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
-                      |  Active
-                v-flex(xs12 md6)
-                  v-layout(column).align-center
-                    h3.font-weight-normal.text-uppercase Camps
-                    span.title.grey--text.text--darken-1.mt-4
-                      ICountUp(:startVal="0" :endVal="10000" :duration="2")
-                      |  Booked
+            v-container(fluid style='padding:1rem')
+              v-flex(xs12 md12 style='padding:0rem')
+                apexcharts(width='300' type='bar' :options='chartOptions' :series='series')
       v-layout(row wrap)
         v-flex(xs12)
           v-card
