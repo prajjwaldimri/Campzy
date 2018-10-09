@@ -465,8 +465,9 @@ export default {
 
 <style lang="scss" scoped>
 .camps-container {
-  @media screen and (min-width: 960px) {
+  @media screen and (max-width: 960px) {
     padding: 2rem;
+    padding-bottom: 17rem;
   }
   height: 100%;
 }
