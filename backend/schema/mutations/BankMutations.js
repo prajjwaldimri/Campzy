@@ -49,6 +49,8 @@ const addBank = {
         email: userData.email,
         tnc_accepted: true,
         account_details: {
+          mobile: userData.phoneNumber,
+          landline: campData.phoneNumber,
           business_name: campData.name,
           business_type: 'individual',
         },
