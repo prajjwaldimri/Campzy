@@ -334,12 +334,12 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         }).then((res) => {
-          this.getImages = res.data;
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-          this.updateImagesToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Upload');
-        }).finally(() => { this.uploadingImages = false; });
+        this.getImages = res.data;
+        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+        this.updateImagesToCamp();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-long', 'Failed to Upload');
+      }).finally(() => { this.uploadingImages = false; });
     },
 
     updateImagesToCamp() {
@@ -387,14 +387,14 @@ export default {
               'Content-Type': 'multipart/form-data',
             },
           }).then((res) => {
-            res.data.forEach((item) => {
-              this.getOwnerDocuments.push(item.key);
-            });
-            EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-            this.saveDocumentsToCamp();
-          }).catch(() => {
-            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-          }).finally(() => { this.uploadingDocuments = false; });
+          res.data.forEach((item) => {
+            this.getOwnerDocuments.push(item.key);
+          });
+          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
+          this.saveDocumentsToCamp();
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
+        }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
