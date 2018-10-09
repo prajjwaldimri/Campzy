@@ -7,6 +7,7 @@ const Home = () => import('../components/Home.vue');
 const Search = () => import('../components/search/Search.vue');
 const Camp = () => import('../components/camp/Camp.vue');
 const Blog = () => import('../components/blog/Blog.vue');
+const Blogs = () => import('../components/blog/Blogs.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
 const Profile = () => import('../components/user/Profile.vue');
 const Settings = () => import('../components/user/Settings.vue');
@@ -55,6 +56,11 @@ const router = new Router({
       path: '/blog/:blogUrl',
       name: 'blog',
       component: Blog,
+    },
+    {
+      path: '/blogs',
+      name: 'blogs',
+      component: Blogs,
     },
     {
       path: '/login',
