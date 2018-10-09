@@ -18,6 +18,7 @@ const BlogSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    darkTheme: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

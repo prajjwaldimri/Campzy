@@ -312,7 +312,8 @@ const getBlogById = `query getUpdateBlog($id: String!){
     description,
     url,
     heroImageCaption,
-    heroImage
+    heroImage,
+    darkTheme,
 }}`;
 
 const isEmailAvailable = `query isEmailAvailable($email: String!){

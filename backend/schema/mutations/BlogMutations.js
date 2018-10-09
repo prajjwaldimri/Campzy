@@ -6,7 +6,7 @@ const BlogType = require('../types/BlogType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const { GraphQLString } = graphql;
+const { GraphQLString, GraphQLBoolean, GraphQLNonNull } = graphql;
 
 const addBlogger = {
   type: BlogType,
@@ -35,13 +35,13 @@ const addBlogger = {
 const addBlog = {
   type: BlogType,
   args: {
-    title: { type: GraphQLString },
-    url: { type: GraphQLString },
-    content: { type: GraphQLString },
-    heroImage: { type: GraphQLString },
-    authorId: { type: GraphQLString },
-    description: { type: GraphQLString },
-    heroImageCaption: { type: GraphQLString },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    url: { type: new GraphQLNonNull(GraphQLString) },
+    content: { type: new GraphQLNonNull(GraphQLString) },
+    heroImage: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: new GraphQLNonNull(GraphQLString) },
+    heroImageCaption: { type: new GraphQLNonNull(GraphQLString) },
+    darkTheme: { type: GraphQLBoolean },
   },
   async resolve(parent, args, context) {
     try {
@@ -62,6 +62,7 @@ const addBlog = {
         description: args.description,
         heroImageCaption: args.heroImageCaption,
         authorId: user.id,
+        darkTheme: args.darkTheme,
       });
       const createBlog = await blog.save();
       return await UserModel.findByIdAndUpdate(
@@ -85,6 +86,7 @@ const updateBlog = {
     heroImage: { type: GraphQLString },
     description: { type: GraphQLString },
     heroImageCaption: { type: GraphQLString },
+    darkTheme: { type: GraphQLBoolean },
   },
   async resolve(parent, args, context) {
     try {
@@ -106,6 +108,7 @@ const updateBlog = {
           heroImage: args.heroImage,
           description: args.description,
           heroImageCaption: args.heroImageCaption,
+          darkTheme: args.darkTheme,
         },
         { new: true },
       );

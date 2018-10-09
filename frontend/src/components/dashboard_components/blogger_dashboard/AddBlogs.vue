@@ -8,11 +8,14 @@
           v-layout(column)
             v-flex(xs12)
               v-layout(row wrap)
-                v-flex(xs12)
+                v-flex(xs12 md8)
                   v-text-field( label='Title' v-model='blogTitle'
                   data-vv-name="blogTitle" v-validate="'min:4|required'"
                   :error-messages="errors.collect('blogTitle')"
                   hint='Add Title of Blog')
+                v-spacer
+                v-flex(xs12 md2 offset-md-1)
+                  v-switch(v-model='darkTheme' label='Dark Theme' color='green')
                 v-flex(xs12)
                   v-layout(column)
                     span Choose Hero Image
@@ -64,6 +67,7 @@ export default {
       blogContent: '',
       blogUrl: '',
       heroImage: '',
+      darkTheme: false,
       storeHeroImages: [],
       files: [],
       blogDescription: '',
@@ -114,6 +118,7 @@ export default {
         heroImage: imageHero,
         description: this.blogDescription,
         heroImageCaption: this.imageCaption,
+        darkTheme: this.darkTheme,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
