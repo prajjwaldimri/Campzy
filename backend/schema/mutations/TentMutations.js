@@ -9,17 +9,21 @@ const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const {
-  GraphQLString, GraphQLBoolean, GraphQLInt, GraphQLList,
+  GraphQLString,
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 
 const addTent = {
   type: TentType,
   args: {
-    capacity: { type: GraphQLString },
-    type: { type: GraphQLString },
-    bookingPrice: { type: GraphQLInt },
-    preBookPeriod: { type: GraphQLString },
-    surgePrice: { type: GraphQLInt },
+    capacity: { type: new GraphQLNonNull(GraphQLString) },
+    type: { type: new GraphQLNonNull(GraphQLString) },
+    bookingPrice: { type: new GraphQLNonNull(GraphQLInt) },
+    preBookPeriod: { type: new GraphQLNonNull(GraphQLString) },
+    surgePrice: { type: new GraphQLNonNull(GraphQLInt) },
   },
   async resolve(parent, args, context) {
     try {
