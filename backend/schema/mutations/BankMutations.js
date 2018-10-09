@@ -5,13 +5,16 @@ const axios = require('axios');
 const UserModel = require('../../models/user.js');
 const CampModel = require('../../models/camp');
 
-const { GraphQLString, GraphQLNonNull } = graphql;
+const { GraphQLString, GraphQLNonNull, GraphQLObjectType } = graphql;
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
-const BankType = {
-  RazorpayID: { type: GraphQLString },
-};
+const BankType = new GraphQLObjectType({
+  name: 'Bank',
+  fields: () => ({
+    RazorpayID: { type: GraphQLString },
+  }),
+});
 
 const addBank = {
   type: BankType,
