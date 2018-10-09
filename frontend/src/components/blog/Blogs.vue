@@ -6,25 +6,21 @@
       h2.subheading.mt-2.grey--text.text--darken-2 Articles from your fellow Campzy members
 
       .blogs-grid.mt-4(v-if="blogs")
-        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised dark).wide-card
-          .card-container
-            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
-            v-toolbar.hidden-sm-and-down
-              h1.title(style="line-height: 1.5 !important") {{blog.title}}
-              v-spacer
-              v-btn(light :href="'/blog/' + blog.url") Read the story
-            v-card-title(primary-title).hidden-md-and-up
-              h1.title(style="line-height: 1.5 !important") {{blog.title}}
-            v-card-actions.hidden-md-and-up.justify-center
-              v-btn(light :href="'/blog/' + blog.url") Read the story
-
-        v-card(v-else raised color="grey darken-4" dark).tall-card
+        v-card(v-for="(blog,index) in blogs" v-if="index % 5 === 0" raised).wide-card
           .card-container
             v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
             v-card-title(primary-title)
               h1.title(style="line-height: 1.5 !important") {{blog.title}}
             v-card-actions.justify-center
-              v-btn(light :href="'/blog/' + blog.url") Read the story
+              v-btn(light :href="'/blog/' + blog.url" color="info") Read the story
+
+        v-card(v-else raised).tall-card
+          .card-container
+            v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + blog.heroImage")
+            v-card-title(primary-title)
+              h1.title(style="line-height: 1.5 !important") {{blog.title}}
+            v-card-actions.justify-center
+              v-btn(light :href="'/blog/' + blog.url" color="info") Read the story
 
 </template>
 
