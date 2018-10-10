@@ -279,6 +279,9 @@ export default {
           this.getUserWishList();
         })
         .catch((err) => {
+          if (err.response.errors[0].message.includes('session')) {
+            this.$cookie.delete('sessionToken');
+          }
           EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
         });
     },
