@@ -54,6 +54,7 @@ const CampSchema = new Schema({
     chargingPoints: { type: Boolean, default: false },
   },
   razorpayAccountId: String,
+  razorpayCustomerId: String,
   services: { type: [String] },
   placesOfInterest: [{ name: String, distance: String }],
   temperature: { type: String },
