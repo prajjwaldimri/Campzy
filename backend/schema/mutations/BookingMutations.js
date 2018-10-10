@@ -192,7 +192,7 @@ const book = {
       );
 
       // Send Camp Owner the bill for booking
-      await emailer.sendSuccessBookingEmail(booking, campData, amount);
+      await emailer.sendCampOwnerBill(booking, campData, amount);
 
       if (campData.razorpayAccountId) {
         // Send Money to Camp Owner's Account
