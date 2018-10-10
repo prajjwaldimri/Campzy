@@ -20,7 +20,11 @@ const {
   GraphQLObjectType,
   GraphQLBoolean,
 } = graphql;
-const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
+const {
+  NotLoggedinError,
+  PrivilegeError,
+  BankAccountExistsError,
+} = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const BankType = new GraphQLObjectType({
@@ -64,6 +68,10 @@ const addBank = {
       }
 
       const campData = await CampModel.findOne({ ownerId: userData._id });
+
+      if (campData.razorpayAccountId) {
+        throw new BankAccountExistsError();
+      }
 
       if (!auth.isUserCampOwner(userData)) {
         throw new PrivilegeError();

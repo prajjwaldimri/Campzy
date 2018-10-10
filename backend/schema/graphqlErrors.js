@@ -71,6 +71,11 @@ const AmountNotCapturedError = ApolloError.createError(
   },
 );
 
+const BankAccountExistsError = ApolloError.createError(
+  'BankAccountExistsError',
+  { message: 'A bank account is already linked with your camp!' },
+);
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message:
     'An unknown error has occurred. We have logged the error and are working on it.',
@@ -93,4 +98,5 @@ module.exports = {
   TentNotAvailableError,
   CampNotAvailableError,
   AmountNotCapturedError,
+  BankAccountExistsError,
 };
