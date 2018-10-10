@@ -9,7 +9,7 @@
                 v-flex(xs12)
                   v-text-field(label='Beneficiary Name' v-model='beneficiaryName')
                 v-flex.flex-spacing(xs12)
-                  v-text-field(label='Account Type' v-model='accountType' )
+                  v-select(label='Account Type'  :items='accountTypeItems' v-model='accountType' )
                 v-flex.flex-spacing(xs12)
                   v-text-field(label='Account Number' v-model='accountNumber')
                 v-layout(row wrap)
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       accountNumber: '',
+      accountTypeItems: ['Savings', 'Current'],
       accountType: '',
       beneficiaryName: '',
       IFSCCode: '',
@@ -87,7 +88,8 @@ export default {
       client.request(addBank, variables).then((data) => {
         console.log(data);
         EventBus.$emit('show-success-notification-short', 'Successfully Updated');
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err);
         EventBus.$emit('show-error-notification-short', 'Failed to Update');
       }).finally(() => { this.saveDetails = false; });
     },
