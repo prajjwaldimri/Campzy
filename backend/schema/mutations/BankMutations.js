@@ -89,6 +89,8 @@ const addBank = {
           },
         },
       );
+      campData.razorpayAccountId = response.data.id;
+      await campData.save();
       return response.data.id;
     } catch (err) {
       return err;
@@ -98,6 +100,28 @@ const addBank = {
 
 const getBank = {
   type: BankType,
+  args: {},
+  async resolve(parent, args, context) {
+    const user = await auth.getAuthenticatedUser(context.req);
+    const userData = await UserModel.findById(user.id);
+    if (userData === null) {
+      throw new NotLoggedinError();
+    }
+
+    const campData = await CampModel.findOne({ ownerId: userData._id }).select(
+      'razorpayAccountId',
+    );
+
+    if (!auth.isUserCampOwner(userData)) {
+      throw new PrivilegeError();
+    }
+
+    const response = await axios.get(
+      `https://api.razorpay.com/v1/beta/accounts/${campData.razorpayAccountId}`,
+    );
+
+    return response.data;
+  },
 };
 
 const isIFSCValid = {
