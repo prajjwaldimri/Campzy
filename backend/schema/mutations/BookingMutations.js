@@ -230,6 +230,7 @@ const book = {
       // Return the booking token's id
       return booking;
     } catch (err) {
+      console.log(err);
       return err;
     }
   },
