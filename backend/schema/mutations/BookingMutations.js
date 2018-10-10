@@ -191,9 +191,6 @@ const book = {
         )} for ₹ ${amount}. Congrats!`,
       );
 
-      // Send Camp Owner the bill for booking
-      await emailer.sendCampOwnerBill(booking, campData, amount);
-
       if (campData.razorpayAccountId) {
         // Send Money to Camp Owner's Account
         await instance.transfers.create({
@@ -201,6 +198,8 @@ const book = {
           amount: parseInt(calculateTransferAmount(amount).returnAmount, 10),
           currency: 'INR',
         });
+        // Send Camp Owner the bill for booking
+        await emailer.sendCampOwnerBill(booking, campData, amount);
 
         if (!campData.razorpayCustomerId) {
           // If no customer Id exists for the camp-owner create one
@@ -216,7 +215,7 @@ const book = {
         }
       } else {
         // Add Credits to the Camp Owner's Account if the account is not present.
-        campData.credits += amount;
+        campData.credits += calculateTransferAmount(amount).returnAmount;
         await campData.save();
       }
 

@@ -108,6 +108,7 @@ const sendCampOwnerBill = async (booking, camp, transferAmount) => {
           To: [
             {
               Email: camp.email,
+              Name: camp.ownerId.name,
             },
           ],
           TemplateID: 559117,
