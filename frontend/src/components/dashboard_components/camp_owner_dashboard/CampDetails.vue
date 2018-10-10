@@ -336,6 +336,7 @@ export default {
         }).then((res) => {
         this.getImages = res.data;
         EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
+        this.storeImages = [];
         this.updateImagesToCamp();
       }).catch(() => {
         EventBus.$emit('show-error-notification-long', 'Failed to Upload');
@@ -478,7 +479,6 @@ export default {
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
         this.getCampDetails();
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', 'Failed to update');
       }).finally(() => { this.isDataUpdating = false; });
     },

@@ -1,5 +1,7 @@
 const aws = require('aws-sdk');
 const sharp = require('sharp');
+const multerS3 = require('multer-s3');
+const multer = require('multer');
 
 aws.config.update({
   secretAccessKey: process.env.aws_secret_access_key,
@@ -9,6 +11,11 @@ aws.config.update({
 
 // Upload file to AWS
 const aws3 = new aws.S3();
+const imageStorage = multer.memoryStorage({
+  destination(req, file, callback) {
+    callback(null, '');
+  },
+});
 
 const uploadCampImages = (req, res) => {
   if (req.files.length !== 0) {
@@ -16,7 +23,6 @@ const uploadCampImages = (req, res) => {
     const filesArray = [];
     req.files.forEach((file) => {
       const fileName = `${Date.now()}__${file.originalname}`;
-      filesLength += 1;
       filesArray.push(fileName);
       aws3.putObject(
         {
@@ -49,10 +55,11 @@ const uploadCampImages = (req, res) => {
                           Body: buffer2,
                           ACL: 'public-read',
                         },
-                        (err3) => {
-                          if (err3) {
-                            throw new Error(err3);
+                        (err4) => {
+                          if (err4) {
+                            throw new Error(err4);
                           }
+                          filesLength += 1;
                           if (filesLength === req.files.length) {
                             res.json(filesArray);
                           }
@@ -66,9 +73,24 @@ const uploadCampImages = (req, res) => {
       );
     });
   } else {
-    throw new Error('Failed to Update!');
+    throw new Error('Failed to Update');
   }
 };
+
+const uploadDocument = multer({
+  storage: multerS3({
+    s3: aws3,
+    bucket: 'campzy-documents',
+    acl: 'public-read',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata(req, file, cb) {
+      cb(null, { fieldName: file.originalname });
+    },
+    key(req, file, cb) {
+      cb(null, `${Date.now()}__${file.originalname}`);
+    },
+  }),
+});
 
 const uploadCampDocuments = (req, res) => {
   if (!req.files) {
@@ -156,4 +178,6 @@ module.exports = {
   uploadCampDocuments,
   deleteImage,
   deleteDocuments,
+  uploadDocument,
+  imageStorage,
 };

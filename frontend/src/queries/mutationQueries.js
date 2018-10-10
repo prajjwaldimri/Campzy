@@ -102,7 +102,7 @@ const updateCampImages = `mutation updateCampImages($id: String!, $images: Strin
   }
 }`;
 
-const deleteCampImage = `mutation deleteCampImage($id: String, $imageName: String!){
+const deleteCampImage = `mutation deleteCampImage($id: String!, $imageName: String!){
   deleteCampImage(id: $id, imageName: $imageName){
     id
 

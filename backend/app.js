@@ -13,9 +13,7 @@ const webpack = require('webpack');
 const path = require('path');
 const history = require('connect-history-api-fallback');
 const https = require('https');
-const aws = require('aws-sdk');
 const multer = require('multer');
-const multerS3 = require('multer-s3');
 const bodyParser = require('body-parser');
 const Sentry = require('@sentry/node');
 
@@ -30,13 +28,9 @@ const {
   deleteDocuments,
   uploadCampDocuments,
   uploadCampImages,
+  uploadDocument,
+  imageStorage,
 } = require('./aws.js');
-
-aws.config.update({
-  secretAccessKey: process.env.aws_secret_access_key,
-  accessKeyId: process.env.aws_access_key_id,
-  region: 'us-east-1',
-});
 
 const webpackConfig = require('../webpack.config.js');
 const schema = require('./schema/schema.js');
@@ -47,28 +41,10 @@ app.use(Sentry.Handlers.requestHandler());
 app.use(compression());
 app.use(cors());
 
-// Upload file to AWS
-const aws3 = new aws.S3();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Upload CampOwner's Documents
-const uploadDocument = multer({
-  storage: multerS3({
-    s3: aws3,
-    bucket: 'campzy-documents',
-    acl: 'public-read',
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    metadata(req, file, cb) {
-      cb(null, { fieldName: file.originalname });
-    },
-    key(req, file, cb) {
-      cb(null, `${Date.now()}__${file.originalname}`);
-    },
-  }),
-});
-
 app.post(
   '/uploadCampOwnerDocuments',
   uploadDocument.array('document', 5),
@@ -79,12 +55,6 @@ app.post(
 
 app.delete('/deleteDocuments', deleteDocuments);
 // Image uploads
-
-const imageStorage = multer.memoryStorage({
-  destination(req, file, callback) {
-    callback(null, '');
-  },
-});
 
 app.post(
   '/uploadImages',
