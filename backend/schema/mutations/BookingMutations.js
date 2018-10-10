@@ -196,7 +196,7 @@ const book = {
           currency: 'INR',
         });
 
-        // Generate Invoice For Camp Owner
+        // TODO: Generate Invoice For Camp Owner
         if (!campData.razorpayCustomerId) {
           // If no customer Id exists for the camp-owner create one
           // Remove commas from name (if any)
@@ -209,29 +209,6 @@ const book = {
           campData.razorpayCustomerId = customer.id;
           await campData.save();
         }
-
-        await instance.invoices.create({
-          type: 'invoice',
-          customer_id: campData.razorpayCustomerId,
-          currency: 'INR',
-          line_items: [
-            {
-              name: 'Campzy Service Charge',
-              amount: parseInt(
-                calculateTransferAmount(amount).commissionAmount,
-                10,
-              ),
-              currency: 'INR',
-              type: 'invoice',
-            },
-            {
-              name: 'G.S.T. (18%)',
-              amount: parseInt(calculateTransferAmount(amount).tax, 10),
-              currency: 'INR',
-              type: 'invoice',
-            },
-          ],
-        });
       } else {
         // Add Credits to the Camp Owner's Account if the account is not present.
         campData.credits += amount;
