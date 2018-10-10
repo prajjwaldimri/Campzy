@@ -404,8 +404,18 @@ const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
 }`;
 
 const isIFSCValid = `query isIFSCValid($IFSCCode: String!){
-  isIFSCValid(IFSCCode: $IFSCCode){
-    Boolean
+  isIFSCValid(IFSCCode: $IFSCCode)
+
+}`;
+
+const getBankDetails = `query getIFSCDetails($IFSCCode: String!){
+  getIFSCDetails(IFSCCode: $IFSCCode){
+    BRANCH,
+    BANK,
+    ADDRESS,
+    CITY,
+    DISTRICT,
+    STATE
   }
 }`;
 module.exports = {
@@ -440,4 +450,5 @@ module.exports = {
   allBookings,
   isCampUrlAvailable,
   isIFSCValid,
+  getBankDetails,
 };

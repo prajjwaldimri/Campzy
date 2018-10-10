@@ -40,13 +40,13 @@ const BankType = new GraphQLObjectType({
 const IFSCType = new GraphQLObjectType({
   name: 'IFSC',
   fields: () => ({
-    branch: { type: GraphQLString },
-    address: { type: GraphQLString },
-    city: { type: GraphQLString },
-    district: { type: GraphQLString },
-    state: { type: GraphQLString },
-    bank: { type: GraphQLString },
-    bankCode: { type: GraphQLString },
+    BRANCH: { type: GraphQLString },
+    ADDRESS: { type: GraphQLString },
+    CITY: { type: GraphQLString },
+    DISTRICT: { type: GraphQLString },
+    STATE: { type: GraphQLString },
+    BANK: { type: GraphQLString },
+    BRANCHCODE: { type: GraphQLString },
     IFSC: { type: GraphQLString },
   }),
 });

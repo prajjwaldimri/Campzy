@@ -1,34 +1,56 @@
 <template lang="pug">
   .bank-container
-    h2.font-weight-bold.headline.text-uppercase Bank Details
-    v-flex.mt-2(xs12 md6 style='max-width:100%')
-      v-card.body-card(flat)
-        v-form(ref='form' lazy-validation)
-            v-layout.layout(row wrap)
-              v-flex(xs12)
-                v-text-field(label='Beneficiary Name' v-model='beneficiaryName')
-              v-flex.flex-spacing(xs12)
-                v-text-field(label='Account Type' v-model='accountType' )
-              v-flex.flex-spacing(xs12)
-                v-text-field(label='Account Number' v-model='accountNumber')
-              v-layout(row wrap)
-                v-flex.flex-spacing(xs12 md6)
-                  v-text-field(label='IFSC Code' v-model='IFSCCode')
-                v-flex.flex-spacing(xs12 md4)
-                  v-btn(dark @click='validateIFSC') Validate IFSC
-        v-card-actions
-          v-spacer
-          v-btn(dark) Clear
-          v-btn(color='green' dark @click='saveBankDetails'  :loading='saveDetails') Save
+    h2.font-weight-bold.headline.text-uppercase Link Bank Details
+    v-layout(row wrap)
+      v-flex.mt-2(xs12 md7 style='max-width:100%')
+        v-card.body-card(flat)
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(row wrap)
+                v-flex(xs12)
+                  v-text-field(label='Beneficiary Name' v-model='beneficiaryName')
+                v-flex.flex-spacing(xs12)
+                  v-text-field(label='Account Type' v-model='accountType' )
+                v-flex.flex-spacing(xs12)
+                  v-text-field(label='Account Number' v-model='accountNumber')
+                v-layout(row wrap)
+                  v-flex.flex-spacing(xs12 md6)
+                    v-text-field(label='IFSC Code' v-model='IFSCCode')
+                  v-flex.flex-spacing(xs12 md4)
+                    v-btn(dark icon v-show='!isIFSCVerified')
+                      v-icon(color='red' ) error
+                    v-btn(dark icon v-show='isIFSCVerified')
+                      v-icon(color='green' ) check
+          v-card-actions
+            v-spacer
+            v-btn(dark) Clear
+            v-btn(color='green' dark @click='linkBankDetails'  :loading='saveDetails') Save
+      v-flex.mt-2.ml-5(xs12 md4 style='max-width:100%' v-show='isIFSCVerified')
+        v-card.body-card(flat)
+          v-card-title.headline.font-weight-bold.pa-0 Bank Details
+          v-form(ref='form' lazy-validation)
+              v-layout.layout(row wrap)
+                v-flex(xs12)
+                  v-text-field(label='Bank Name' v-model='ifscDetails.BANK' readonly)
+                v-flex.flex-spacing(xs12)
+                  v-text-field(label='Branch' v-model='ifscDetails.BRANCH'  readonly)
+                v-flex.flex-spacing(xs12)
+                  v-text-field(label='Branch' v-model='ifscDetails.ADDRESS'  readonly)
+                v-flex.flex-spacing(xs12)
+                  v-text-field(label='City' v-model='ifscDetails.CITY' readonly)
+                v-layout(row wrap)
+                  v-flex.flex-spacing(xs12 md5)
+                    v-text-field(label='District' v-model='ifscDetails.DISTRICT' readonly)
+                  v-flex.flex-spacing.ml-5(xs12 md5)
+                    v-text-field(label='State' v-model='ifscDetails.STATE' readonly)
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
-// import { EventBus } from '../../../event-bus';
+import { EventBus } from '../../../event-bus';
 import {
   addBank,
 } from '../../../queries/mutationQueries';
-import { isIFSCValid } from '../../../queries/queries';
+import { isIFSCValid, getBankDetails } from '../../../queries/queries';
 
 export default {
   data() {
@@ -38,12 +60,14 @@ export default {
       beneficiaryName: '',
       IFSCCode: '',
       saveDetails: false,
+      isIFSCVerified: false,
+      ifscDetails: {},
 
     };
   },
 
   methods: {
-    saveBankDetails() {
+    linkBankDetails() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
       }
@@ -62,12 +86,13 @@ export default {
       };
       client.request(addBank, variables).then((data) => {
         console.log(data);
-      }).catch((err) => {
-        console.log(err);
+        EventBus.$emit('show-success-notification-short', 'Successfully Updated');
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to Update');
       }).finally(() => { this.saveDetails = false; });
     },
 
-    validateIFSC() {
+    getBankDetails() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
       }
@@ -76,15 +101,44 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-
       const variables = {
         IFSCCode: this.IFSCCode,
       };
-      client.request(isIFSCValid, variables).then((data) => {
-        console.log(data);
-      }).catch((err) => {
-        console.log(err);
+
+      client.request(getBankDetails, variables).then((data) => {
+        this.ifscDetails = data.getIFSCDetails;
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Failed to get Bank Details');
       });
+    },
+
+  },
+  watch: {
+    IFSCCode(ifsc) {
+      if (ifsc.length >= 5) {
+        if (!this.$cookie.get('sessionToken')) {
+          this.$router.push('/login');
+        }
+        const client = new GraphQLClient('/graphql', {
+          headers: {
+            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+          },
+        });
+        this.validatingIFSC = true;
+        const variables = {
+          IFSCCode: ifsc,
+        };
+        client.request(isIFSCValid, variables).then((data) => {
+          if (data.isIFSCValid === true) {
+            this.isIFSCVerified = true;
+            this.getBankDetails();
+          } else {
+            this.isIFSCVerified = false;
+          }
+        }).catch(() => {
+          EventBus.$emit('show-error-notification-short', 'Failed to Check IFSC code');
+        }).finally(() => { this.validatingIFSC = false; });
+      }
     },
   },
 };
@@ -93,6 +147,7 @@ export default {
 
 <style lang="scss" scoped>
 .bank-container {
+  width: 100%;
   padding: 2rem;
   @media screen and (max-width: 960px) {
     padding: 1rem;
