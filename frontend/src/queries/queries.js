@@ -421,8 +421,13 @@ const getIFSCDetails = `query getIFSCDetails($IFSCCode: String!){
 
 const getBankDetails = `query getBankDetails{
   getBankDetails{
-    id,
-    name
+    razorpayAccountId,
+    bank{
+      beneficiary,
+      accountNumber,
+      IFSCCode,
+      accountType,
+    }   
   }
 }`;
 

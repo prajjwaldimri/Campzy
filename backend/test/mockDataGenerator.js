@@ -85,7 +85,6 @@ async function CreateCamp(userId, phoneNumber) {
         camp: camp._id,
         user: userId,
       });
-      camp.inventory.push(tent._id);
     }
     await camp.save();
     return camp._id;

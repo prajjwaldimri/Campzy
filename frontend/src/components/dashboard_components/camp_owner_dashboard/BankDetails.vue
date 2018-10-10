@@ -7,27 +7,27 @@
           v-form(ref='form' lazy-validation)
               v-layout.layout(row wrap)
                 v-flex(xs12)
-                  v-text-field(label='Beneficiary Name' v-model='beneficiaryName' data-vv-name="beneficiaryName" v-validate="'required'"
-                  :error-messages="errors.collect('beneficiaryName')")
+                  v-text-field(label='Beneficiary Name' v-model='bankDetails.beneficiary' data-vv-name="beneficiaryName" v-validate="'required'"
+                  :error-messages="errors.collect('beneficiaryName')" :readonly='details')
                 v-flex.flex-spacing(xs12)
-                  v-select(label='Account Type'  :items='accountTypeItems' v-model='accountType' data-vv-name="accountType" v-validate="'required'"
-                  :error-messages="errors.collect('accountType')")
+                  v-select(label='Account Type'  :items='accountTypeItems' v-model='bankDetails.accountType' data-vv-name="accountType" v-validate="'required'"
+                  :error-messages="errors.collect('accountType')" :readonly='details')
                 v-flex.flex-spacing(xs12)
-                  v-text-field(label='Account Number' v-model='accountNumber' data-vv-name="accountNumber" v-validate="'required'"
-                  :error-messages="errors.collect('accountNumber')")
+                  v-text-field(label='Account Number' v-model='bankDetails.accountNumber' data-vv-name="accountNumber" v-validate="'required'"
+                  :error-messages="errors.collect('accountNumber')" :readonly='details')
                 v-layout(row wrap)
                   v-flex.flex-spacing(xs12 md6)
                     v-text-field(label='IFSC Code' v-model='IFSCCode' data-vv-name="IFSCCode" v-validate="'required'"
-                  :error-messages="errors.collect('IFSCCode')")
-                  v-flex.flex-spacing(xs12 md4)
-                    v-btn(dark icon v-show='!isIFSCVerified')
+                  :error-messages="errors.collect('IFSCCode')" :readonly='details')
+                  v-flex.flex-spacing(xs12 md4 )
+                    v-btn(dark icon v-show='!isIFSCVerified' :disabled='details')
                       v-icon(color='red' ) error
                     v-btn(dark icon v-show='isIFSCVerified')
                       v-icon(color='green' ) check
           v-card-actions
             v-spacer
             v-btn(dark) Clear
-            v-btn(color='green' dark @click='linkBankDetails'  :loading='saveDetails') Save
+            v-btn(color='green' @click='linkBankDetails' :disabled='details'  :loading='saveDetails') Save
       v-flex.mt-2.ml-5(xs12 md4 style='max-width:100%' v-show='isIFSCVerified')
         v-card.body-card(flat)
           v-card-title.headline.font-weight-bold.pa-0 Bank Details
@@ -63,14 +63,13 @@ export default {
   },
   data() {
     return {
-      accountNumber: '',
       accountTypeItems: ['Savings', 'Current'],
-      accountType: '',
-      beneficiaryName: '',
       IFSCCode: '',
       saveDetails: false,
       isIFSCVerified: false,
       ifscDetails: {},
+      bankDetails: [],
+      details: false,
 
     };
   },
@@ -80,7 +79,6 @@ export default {
   },
 
   methods: {
-
     getBankDetails() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -92,9 +90,12 @@ export default {
       });
 
       client.request(getBankDetails).then((data) => {
-        console.log(data);
-      }).catch((err) => {
-        console.log(err);
+        this.bankDetails = data.getBankDetails.bank;
+        this.IFSCCode = this.bankDetails.IFSCCode;
+        if (data.getBankDetails.razorpayAccountId) {
+          this.details = true;
+        }
+      }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Failed to get Bank Details');
       });
     },
@@ -102,27 +103,31 @@ export default {
     linkBankDetails() {
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
-          if (!this.$cookie.get('sessionToken')) {
-            this.$router.push('/login');
-          }
-          const client = new GraphQLClient('/graphql', {
-            headers: {
-              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-            },
-          });
-          this.saveDetails = true;
+          if (this.isIFSCVerified === true) {
+            if (!this.$cookie.get('sessionToken')) {
+              this.$router.push('/login');
+            }
+            const client = new GraphQLClient('/graphql', {
+              headers: {
+                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+              },
+            });
+            this.saveDetails = true;
 
-          const variables = {
-            beneficiaryName: this.beneficiaryName,
-            accountType: this.accountType,
-            accountNumber: this.accountNumber,
-            IFSCCode: this.IFSCCode,
-          };
-          client.request(addBank, variables).then(() => {
-            EventBus.$emit('show-success-notification-short', 'Successfully Updated');
-          }).catch(() => {
-            EventBus.$emit('show-error-notification-short', 'Failed to Update');
-          }).finally(() => { this.saveDetails = false; });
+            const variables = {
+              beneficiaryName: this.bankDetails.beneficiary,
+              accountType: this.bankDetails.accountType,
+              accountNumber: this.bankDetails.accountNumber,
+              IFSCCode: this.IFSCCode,
+            };
+            client.request(addBank, variables).then(() => {
+              EventBus.$emit('show-success-notification-short', 'Successfully Updated');
+            }).catch(() => {
+              EventBus.$emit('show-error-notification-short', 'Failed to Update');
+            }).finally(() => { this.saveDetails = false; });
+          } else {
+            EventBus.$emit('show-error-notification-short', 'Invalid IFSC code');
+          }
         }
       });
     },
@@ -150,29 +155,30 @@ export default {
   },
   watch: {
     IFSCCode(ifsc) {
-      if (ifsc.length >= 5) {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/login');
-        }
-        const client = new GraphQLClient('/graphql', {
-          headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
-        });
-        this.validatingIFSC = true;
-        const variables = {
-          IFSCCode: ifsc,
-        };
-        client.request(isIFSCValid, variables).then((data) => {
-          if (data.isIFSCValid === true) {
-            this.isIFSCVerified = true;
-            this.getIFSCDetails();
-          } else {
-            this.isIFSCVerified = false;
+      if (ifsc) {
+        if (ifsc.length >= 5) {
+          if (!this.$cookie.get('sessionToken')) {
+            this.$router.push('/login');
           }
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-short', 'Failed to Check IFSC code');
-        }).finally(() => { this.validatingIFSC = false; });
+          const client = new GraphQLClient('/graphql', {
+            headers: {
+              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+            },
+          });
+          const variables = {
+            IFSCCode: ifsc,
+          };
+          client.request(isIFSCValid, variables).then((data) => {
+            if (data.isIFSCValid === true) {
+              this.isIFSCVerified = true;
+              this.getIFSCDetails();
+            } else {
+              this.isIFSCVerified = false;
+            }
+          }).catch(() => {
+            EventBus.$emit('show-error-notification-short', 'Failed to Check IFSC code');
+          });
+        }
       }
     },
   },

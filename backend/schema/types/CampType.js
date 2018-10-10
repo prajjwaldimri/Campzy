@@ -41,6 +41,16 @@ const PlacesOfInterestType = new GraphQLObjectType({
   }),
 });
 
+const BankType = new GraphQLObjectType({
+  name: 'BankDetails',
+  fields: () => ({
+    beneficiary: { type: GraphQLString },
+    accountNumber: { type: GraphQLString },
+    IFSCCode: { type: GraphQLString },
+    accountType: { type: GraphQLString },
+  }),
+});
+
 const TerrainType = new GraphQLObjectType({
   name: 'Terrain',
   fields: () => ({
@@ -89,6 +99,8 @@ const CampType = new GraphQLObjectType({
     campDocuments: { type: new GraphQLList(GraphQLString) },
     averageRating: { type: GraphQLFloat },
     ratingsCount: { type: GraphQLInt },
+    razorpayAccountId: { type: GraphQLString },
+    bank: { type: BankType },
   }),
 });
 

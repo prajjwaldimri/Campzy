@@ -14,6 +14,7 @@ axios.defaults.headers.common.Authorization = `Basic ${authKey}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 const UserModel = require('../../models/user.js');
 const CampModel = require('../../models/camp');
+const CampType = require('../types/CampType.js');
 
 const {
   GraphQLString,
@@ -128,7 +129,7 @@ const addBank = {
 };
 
 const getBank = {
-  type: BankType,
+  type: CampType,
   args: {},
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
@@ -138,18 +139,14 @@ const getBank = {
     }
 
     const campData = await CampModel.findOne({ ownerId: userData._id }).select(
-      'razorpayAccountId',
+      'razorpayAccountId bank',
     );
 
     if (!auth.isUserCampOwner(userData)) {
       throw new PrivilegeError();
     }
 
-    const response = await axios.get(
-      `https://api.razorpay.com/v1/beta/accounts/${campData.razorpayAccountId}`,
-    );
-    console.log(response.data);
-    return response.data;
+    return campData;
   },
 };
 
