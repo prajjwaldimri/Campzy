@@ -118,9 +118,11 @@ const sendCampOwnerBill = async (booking, camp, transferAmount) => {
             date: moment().format('dddd, MMMM Do YYYY'),
             ownerName: camp.ownerId.name,
             campName: camp.name,
-            serviceCharge: transferAmount.commissionAmount,
-            gst: transferAmount.tax,
-            totalAmount: transferAmount.commissionAmount + transferAmount.tax,
+            // Divide by 100 as the amount is in paise and we need it in INR
+            serviceCharge: transferAmount.commissionAmount / 100,
+            gst: transferAmount.tax / 100,
+            totalAmount:
+              transferAmount.commissionAmount / 100 + transferAmount.tax / 100,
           },
         },
       ],
