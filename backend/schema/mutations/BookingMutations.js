@@ -56,6 +56,26 @@ const bookCheck = {
   },
 };
 
+/*
+Calculates the GST and Commission on any given amount
+Takes amount parameter in Rupees.
+Returns the amount, commission and tax in paise.
+*/
+function calculateTransferAmount(amount) {
+  let returnAmount = 0;
+  const commissionPercent = 12;
+  const commissionAmount = (amount * commissionPercent) / 100;
+  // GST on Commission (Rate 18% constant)
+  const GST = (commissionAmount * 18) / 100;
+  returnAmount = amount - commissionAmount - GST;
+  // Convert Rupees to Paise
+  return {
+    returnAmount: returnAmount * 100,
+    tax: GST * 100,
+    commissionAmount: commissionAmount * 100,
+  };
+}
+
 const book = {
   type: BookingType,
   args: {
@@ -132,7 +152,7 @@ const book = {
         'name phoneNumber email',
       );
       const campData = await CampModel.findById(tents[0].camp).select(
-        'name phoneNumber email',
+        'name phoneNumber email credits',
       );
       // Send sms to user
       await sms.sendSMS(
@@ -168,7 +188,44 @@ const book = {
         )} for ₹ ${amount}. Congrats!`,
       );
 
-      // TODO: Send an email to camp owner
+      if (campData.razorpayAccountId) {
+        // Send Money to Camp Owner's Account
+        await instance.payments.transfer(payment.id, {
+          account: campData.razorpayAccountId,
+          amount: calculateTransferAmount(amount).returnAmount,
+          currency: 'INR',
+        });
+
+        // Generate Invoice For Camp Owner
+        if (!campData.razorpayCustomerId) {
+          // If no customer Id exists for the camp-owner create one
+          const customer = await instance.customer.create({
+            name: campData.name,
+            email: campData.email,
+            contact: campData.phoneNumber,
+          });
+          campData.razorpayCustomerId = customer.id;
+          await campData.save();
+        }
+
+        await instance.invoices.create({
+          type: 'invoice',
+          customer_id: campData.razorpayCustomerId,
+          currency: 'INR',
+          line_items: [
+            {
+              name: 'Campzy Service Charge',
+              amount: calculateTransferAmount(amount).commissionAmount,
+              currency: 'INR',
+              tax: calculateTransferAmount(amount).tax,
+            },
+          ],
+        });
+      } else {
+        // Add Credits to the Camp Owner's Account if the account is not present.
+        campData.credits += amount;
+        await campData.save();
+      }
 
       // Return the booking token's id
       return booking;
@@ -177,22 +234,6 @@ const book = {
     }
   },
 };
-
-// function AddComissionandTaxes(amount) {
-//   return Promise((resolve, reject) => {
-//     if (parseFloat(amount) === undefined) {
-//       reject('Amount is not valid');
-//     }
-//     const commission = math.fraction(0);
-//     const gst = math.fraction(0);
-//     if (amount < 1000) {
-//     } else if (amount < 2500) {
-//     } else if (amount < 7500) {
-//     } else {
-//     }
-//     resolve(amount + gst);
-//   });
-// }
 
 const cancelBooking = {
   type: BookingType,
