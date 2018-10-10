@@ -81,6 +81,7 @@ const CampSchema = new Schema({
   campDocuments: [String],
   averageRating: { type: Number, default: 0 },
   ratingsCount: { type: Number, default: 0 },
+  credits: { type: Number, default: 0 },
 });
 
 CampSchema.index(
