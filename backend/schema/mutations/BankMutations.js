@@ -108,7 +108,7 @@ const addBank = {
           key_secret: process.env.RAZORPAY_API_SECRET,
         });
         // If no customer Id exists for the camp-owner create one
-        const customer = await instance.customer.create({
+        const customer = await instance.customers.create({
           name: campData.name,
           email: campData.email,
           contact: campData.phoneNumber,
