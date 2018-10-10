@@ -199,18 +199,18 @@ const book = {
         // Generate Invoice For Camp Owner
         if (!campData.razorpayCustomerId) {
           // If no customer Id exists for the camp-owner create one
+          // Remove commas from name (if any)
+          campData.name = campData.name.replace(',', '');
           const customer = await instance.customers.create({
             name: campData.name,
             email: campData.email,
             contact: campData.phoneNumber,
           });
-          console.log('Camp', campData);
-          console.log('Customer', customer);
           campData.razorpayCustomerId = customer.id;
           await campData.save();
         }
 
-        const invoice = await instance.invoices.create({
+        await instance.invoices.create({
           type: 'invoice',
           customer_id: campData.razorpayCustomerId,
           currency: 'INR',
@@ -223,11 +223,15 @@ const book = {
               ),
               currency: 'INR',
               type: 'invoice',
-              tax: parseInt(calculateTransferAmount(amount).tax, 10),
+            },
+            {
+              name: 'G.S.T. (18%)',
+              amount: parseInt(calculateTransferAmount(amount).tax, 10),
+              currency: 'INR',
+              type: 'invoice',
             },
           ],
         });
-        console.log('Invoice', invoice);
       } else {
         // Add Credits to the Camp Owner's Account if the account is not present.
         campData.credits += amount;
@@ -237,7 +241,6 @@ const book = {
       // Return the booking token's id
       return booking;
     } catch (err) {
-      console.log(err);
       return err;
     }
   },
