@@ -144,7 +144,7 @@ const getBank = {
     const response = await axios.get(
       `https://api.razorpay.com/v1/beta/accounts/${campData.razorpayAccountId}`,
     );
-
+    console.log(response.data);
     return response.data;
   },
 };

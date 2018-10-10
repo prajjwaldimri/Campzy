@@ -377,7 +377,7 @@ const campBookingStatus = {
   type: CampType,
   args: {
     id: { type: new GraphQLNonNull(GraphQLString) },
-    isAvailable: { type: new GraphQLNonNull(GraphQLString) },
+    isAvailable: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   async resolve(parent, args, context) {
     try {

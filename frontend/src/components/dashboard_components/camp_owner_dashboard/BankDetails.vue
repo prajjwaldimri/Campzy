@@ -7,14 +7,18 @@
           v-form(ref='form' lazy-validation)
               v-layout.layout(row wrap)
                 v-flex(xs12)
-                  v-text-field(label='Beneficiary Name' v-model='beneficiaryName')
+                  v-text-field(label='Beneficiary Name' v-model='beneficiaryName' data-vv-name="beneficiaryName" v-validate="'required'"
+                  :error-messages="errors.collect('beneficiaryName')")
                 v-flex.flex-spacing(xs12)
-                  v-select(label='Account Type'  :items='accountTypeItems' v-model='accountType' )
+                  v-select(label='Account Type'  :items='accountTypeItems' v-model='accountType' data-vv-name="accountType" v-validate="'required'"
+                  :error-messages="errors.collect('accountType')")
                 v-flex.flex-spacing(xs12)
-                  v-text-field(label='Account Number' v-model='accountNumber')
+                  v-text-field(label='Account Number' v-model='accountNumber' data-vv-name="accountNumber" v-validate="'required'"
+                  :error-messages="errors.collect('accountNumber')")
                 v-layout(row wrap)
                   v-flex.flex-spacing(xs12 md6)
-                    v-text-field(label='IFSC Code' v-model='IFSCCode')
+                    v-text-field(label='IFSC Code' v-model='IFSCCode' data-vv-name="IFSCCode" v-validate="'required'"
+                  :error-messages="errors.collect('IFSCCode')")
                   v-flex.flex-spacing(xs12 md4)
                     v-btn(dark icon v-show='!isIFSCVerified')
                       v-icon(color='red' ) error
@@ -50,9 +54,13 @@ import { EventBus } from '../../../event-bus';
 import {
   addBank,
 } from '../../../queries/mutationQueries';
-import { isIFSCValid, getBankDetails } from '../../../queries/queries';
+import { isIFSCValid, getIFSCDetails, getBankDetails } from '../../../queries/queries';
 
 export default {
+  name: 'bankDetails',
+  $_veeValidate: {
+    validator: 'new',
+  },
   data() {
     return {
       accountNumber: '',
@@ -67,32 +75,11 @@ export default {
     };
   },
 
-  methods: {
-    linkBankDetails() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
-      this.saveDetails = true;
+  mounted() {
+    this.getBankDetails();
+  },
 
-      const variables = {
-        beneficiaryName: this.beneficiaryName,
-        accountType: this.accountType,
-        accountNumber: this.accountNumber,
-        IFSCCode: this.IFSCCode,
-      };
-      client.request(addBank, variables).then((data) => {
-        console.log(data);
-        EventBus.$emit('show-success-notification-short', 'Successfully Updated');
-      }).catch((err) => {
-        console.log(err);
-        EventBus.$emit('show-error-notification-short', 'Failed to Update');
-      }).finally(() => { this.saveDetails = false; });
-    },
+  methods: {
 
     getBankDetails() {
       if (!this.$cookie.get('sessionToken')) {
@@ -103,11 +90,57 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
+
+      client.request(getBankDetails).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+        EventBus.$emit('show-error-notification-short', 'Failed to get Bank Details');
+      });
+    },
+
+    linkBankDetails() {
+      this.$validator.validateAll().then((isValid) => {
+        if (isValid) {
+          if (!this.$cookie.get('sessionToken')) {
+            this.$router.push('/login');
+          }
+          const client = new GraphQLClient('/graphql', {
+            headers: {
+              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+            },
+          });
+          this.saveDetails = true;
+
+          const variables = {
+            beneficiaryName: this.beneficiaryName,
+            accountType: this.accountType,
+            accountNumber: this.accountNumber,
+            IFSCCode: this.IFSCCode,
+          };
+          client.request(addBank, variables).then(() => {
+            EventBus.$emit('show-success-notification-short', 'Successfully Updated');
+          }).catch(() => {
+            EventBus.$emit('show-error-notification-short', 'Failed to Update');
+          }).finally(() => { this.saveDetails = false; });
+        }
+      });
+    },
+
+    getIFSCDetails() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
       const variables = {
         IFSCCode: this.IFSCCode,
       };
 
-      client.request(getBankDetails, variables).then((data) => {
+      client.request(getIFSCDetails, variables).then((data) => {
         this.ifscDetails = data.getIFSCDetails;
       }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Failed to get Bank Details');
@@ -133,7 +166,7 @@ export default {
         client.request(isIFSCValid, variables).then((data) => {
           if (data.isIFSCValid === true) {
             this.isIFSCVerified = true;
-            this.getBankDetails();
+            this.getIFSCDetails();
           } else {
             this.isIFSCVerified = false;
           }
