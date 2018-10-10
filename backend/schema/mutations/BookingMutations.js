@@ -151,9 +151,12 @@ const book = {
       const userData = await UserModel.findById(user.id).select(
         'name phoneNumber email',
       );
-      const campData = await CampModel.findById(tents[0].camp).select(
-        'name phoneNumber email credits razorpayAccountId razorpayCustomerId',
-      );
+      const campData = await CampModel.findById(tents[0].camp)
+        .select(
+          'name phoneNumber email credits razorpayAccountId razorpayCustomerId ownerId',
+        )
+        .populate({ path: 'ownerId', select: 'name' });
+
       // Send sms to user
       await sms.sendSMS(
         userData.phoneNumber,
@@ -171,7 +174,7 @@ const book = {
         booking,
         userData,
         campData,
-        amount,
+        calculateTransferAmount(amount),
       );
 
       // Send sms to camp owner
@@ -188,6 +191,9 @@ const book = {
         )} for ₹ ${amount}. Congrats!`,
       );
 
+      // Send Camp Owner the bill for booking
+      await emailer.sendSuccessBookingEmail(booking, campData, amount);
+
       if (campData.razorpayAccountId) {
         // Send Money to Camp Owner's Account
         await instance.transfers.create({
@@ -196,7 +202,6 @@ const book = {
           currency: 'INR',
         });
 
-        // TODO: Generate Invoice For Camp Owner
         if (!campData.razorpayCustomerId) {
           // If no customer Id exists for the camp-owner create one
           // Remove commas from name (if any)
