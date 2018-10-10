@@ -40,6 +40,12 @@ const CampSchema = new Schema({
     default: () => nanoid(20),
     required: true,
   },
+  bank: {
+    beneficiary: String,
+    accountType: String,
+    accountNumber: String,
+    IFSCCode: String,
+  },
   tags: {
     type: [String],
     validate: [val => val.length <= 10, 'Only 10 tags are allowed'],

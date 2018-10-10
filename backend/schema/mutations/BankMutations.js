@@ -99,6 +99,10 @@ const addBank = {
         },
       );
       campData.razorpayAccountId = response.data.id;
+      campData.bank.beneficiary = args.beneficiaryName;
+      campData.bank.IFSCCode = args.IFSCCode;
+      campData.bank.accountType = args.accountType;
+      campData.bank.accountNumber = args.accountNumber;
       await campData.save();
 
       // Create a customer ID for the camp if not present
