@@ -152,7 +152,7 @@ const book = {
         'name phoneNumber email',
       );
       const campData = await CampModel.findById(tents[0].camp).select(
-        'name phoneNumber email credits',
+        'name phoneNumber email credits razorpayAccountId razorpayCustomerId',
       );
       // Send sms to user
       await sms.sendSMS(
@@ -190,9 +190,9 @@ const book = {
 
       if (campData.razorpayAccountId) {
         // Send Money to Camp Owner's Account
-        await instance.payments.transfer(payment.id, {
+        await instance.transfers.create({
           account: campData.razorpayAccountId,
-          amount: calculateTransferAmount(amount).returnAmount,
+          amount: parseInt(calculateTransferAmount(amount).returnAmount, 10),
           currency: 'INR',
         });
 
@@ -204,23 +204,30 @@ const book = {
             email: campData.email,
             contact: campData.phoneNumber,
           });
+          console.log('Camp', campData);
+          console.log('Customer', customer);
           campData.razorpayCustomerId = customer.id;
           await campData.save();
         }
 
-        await instance.invoices.create({
+        const invoice = await instance.invoices.create({
           type: 'invoice',
           customer_id: campData.razorpayCustomerId,
           currency: 'INR',
           line_items: [
             {
               name: 'Campzy Service Charge',
-              amount: calculateTransferAmount(amount).commissionAmount,
+              amount: parseInt(
+                calculateTransferAmount(amount).commissionAmount,
+                10,
+              ),
               currency: 'INR',
-              tax: calculateTransferAmount(amount).tax,
+              type: 'invoice',
+              tax: parseInt(calculateTransferAmount(amount).tax, 10),
             },
           ],
         });
+        console.log('Invoice', invoice);
       } else {
         // Add Credits to the Camp Owner's Account if the account is not present.
         campData.credits += amount;

@@ -11,7 +11,7 @@ const Review = require('../models/review');
 faker.locale = 'en_IND';
 
 // Add 100 users, camps and their tents
-const userTypes = ['Camper', 'CampOwner', 'Admin'];
+const userTypes = ['Camper', 'CampOwner', 'Admin', 'Blogger'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
 const terrainTypes = ['glacier', 'forest', 'desert', 'ocean', 'hill', 'river'];
 const s3Images = [

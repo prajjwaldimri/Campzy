@@ -78,11 +78,16 @@ const CampSchema = new Schema({
     hill: Boolean,
     river: Boolean,
   },
-  inventory: [{ type: Schema.Types.ObjectId, ref: 'Tent' }],
   campDocuments: [String],
   averageRating: { type: Number, default: 0 },
   ratingsCount: { type: Number, default: 0 },
   credits: { type: Number, default: 0 },
+});
+
+CampSchema.virtual('inventory', {
+  ref: 'Tent',
+  localField: '_id',
+  foreignField: 'camp',
 });
 
 CampSchema.index(
