@@ -11,8 +11,11 @@
                 v-text-field(label='Account Type' v-model='accountType' )
               v-flex.flex-spacing(xs12)
                 v-text-field(label='Account Number' v-model='accountNumber')
-              v-flex.flex-spacing(xs12)
-                v-text-field(label='IFSC Code' v-model='IFSCCode')
+              v-layout(row wrap)
+                v-flex.flex-spacing(xs12 md6)
+                  v-text-field(label='IFSC Code' v-model='IFSCCode')
+                v-flex.flex-spacing(xs12 md4)
+                  v-btn(dark @click='validateIFSC') Validate IFSC
         v-card-actions
           v-spacer
           v-btn(dark) Clear
@@ -25,6 +28,7 @@ import { GraphQLClient } from 'graphql-request';
 import {
   addBank,
 } from '../../../queries/mutationQueries';
+import { isIFSCValid } from '../../../queries/queries';
 
 export default {
   data() {
@@ -61,6 +65,26 @@ export default {
       }).catch((err) => {
         console.log(err);
       }).finally(() => { this.saveDetails = false; });
+    },
+
+    validateIFSC() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/login');
+      }
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      const variables = {
+        IFSCCode: this.IFSCCode,
+      };
+      client.request(isIFSCValid, variables).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 };

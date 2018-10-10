@@ -402,6 +402,12 @@ const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
     id
   }
 }`;
+
+const isIFSCValid = `query isIFSCValid($IFSCCode: String!){
+  isIFSCValid(IFSCCode: $IFSCCode){
+    Boolean
+  }
+}`;
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -433,4 +439,5 @@ module.exports = {
   getWishlistInProfile,
   allBookings,
   isCampUrlAvailable,
+  isIFSCValid,
 };

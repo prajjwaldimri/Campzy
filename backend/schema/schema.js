@@ -65,6 +65,9 @@ const RootQuery = new GraphQLObjectType({
 
     getLatestCampForReview: ReviewQueries.getLatestCampForReview,
     getReviewsForCamp: ReviewQueries.getReviewsForCamp,
+    isIFSCValid: BankMutations.isIFSCValid,
+    getIFSCDetails: BankMutations.getIFSCDetails,
+    getBankDetails: BankMutations.getBank,
   },
 });
 
