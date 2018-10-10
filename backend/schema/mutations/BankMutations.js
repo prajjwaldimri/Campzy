@@ -3,6 +3,7 @@
 const graphql = require('graphql');
 const axios = require('axios');
 const ifsc = require('ifsc');
+const Razorpay = require('razorpay');
 
 const authKey = Buffer.from(
   `${process.env.RAZORPAY_API_KEY}:${process.env.RAZORPAY_API_SECRET}`,
@@ -99,6 +100,22 @@ const addBank = {
       );
       campData.razorpayAccountId = response.data.id;
       await campData.save();
+
+      // Create a customer ID for the camp if not present
+      if (!campData.razorpayCustomerId) {
+        const instance = new Razorpay({
+          key_id: process.env.RAZORPAY_API_KEY,
+          key_secret: process.env.RAZORPAY_API_SECRET,
+        });
+        // If no customer Id exists for the camp-owner create one
+        const customer = await instance.customer.create({
+          name: campData.name,
+          email: campData.email,
+          contact: campData.phoneNumber,
+        });
+        campData.razorpayCustomerId = customer.id;
+        await campData.save();
+      }
       return response.data.id;
     } catch (err) {
       return err;
