@@ -174,7 +174,7 @@ const book = {
         booking,
         userData,
         campData,
-        calculateTransferAmount(amount),
+        amount,
       );
 
       // Send sms to camp owner
@@ -199,7 +199,11 @@ const book = {
           currency: 'INR',
         });
         // Send Camp Owner the bill for booking
-        await emailer.sendCampOwnerBill(booking, campData, amount);
+        await emailer.sendCampOwnerBill(
+          booking,
+          campData,
+          calculateTransferAmount(amount),
+        );
 
         if (!campData.razorpayCustomerId) {
           // If no customer Id exists for the camp-owner create one
