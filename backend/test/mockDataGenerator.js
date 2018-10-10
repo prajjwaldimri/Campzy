@@ -41,7 +41,7 @@ async function CreateCamp(userId, phoneNumber) {
       location: faker.fake('{{address.city}}, {{address.state}}'),
       'coordinates.latitude': faker.address.latitude(),
       'coordinates.longitude': faker.address.longitude(),
-      'amenities.washroomAttached': faker.random.boolean(),
+      'amenities.washRoomAttached': faker.random.boolean(),
       'amenities.mealsInclude': faker.random.boolean(),
       'amenities.bonfire': faker.random.boolean(),
       'amenities.hotWater': faker.random.boolean(),
