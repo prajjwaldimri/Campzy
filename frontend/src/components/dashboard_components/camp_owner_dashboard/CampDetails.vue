@@ -478,7 +478,7 @@ export default {
       client.request(saveCampDetails, variables).then(() => {
         EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
         this.getCampDetails();
-      }).catch((err) => {
+      }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Failed to update');
       }).finally(() => { this.isDataUpdating = false; });
     },
