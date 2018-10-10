@@ -96,8 +96,45 @@ const sendSuccessBookingEmail = async (booking, user, camp, amount) => {
   }
 };
 
+const sendCampOwnerBill = async (booking, camp, transferAmount) => {
+  try {
+    return await mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: 'bookings@campzy.in',
+            Name: 'Campzy',
+          },
+          To: [
+            {
+              Email: camp.email,
+              Name: camp.ownerId.name,
+            },
+          ],
+          TemplateID: 559117,
+          TemplateLanguage: true,
+          Subject: 'New Booking in your Camp!',
+          Variables: {
+            date: moment().format('dddd, MMMM Do YYYY'),
+            ownerName: camp.ownerId.name,
+            campName: camp.name,
+            // Divide by 100 as the amount is in paise and we need it in INR
+            serviceCharge: transferAmount.commissionAmount / 100,
+            gst: transferAmount.tax / 100,
+            totalAmount:
+              transferAmount.commissionAmount / 100 + transferAmount.tax / 100,
+          },
+        },
+      ],
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   sendEmailVerificationToken,
   sendResetPasswordToken,
   sendSuccessBookingEmail,
+  sendCampOwnerBill,
 };
