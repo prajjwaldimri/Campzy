@@ -78,7 +78,7 @@ const sendOTP = `mutation sendOTP($phoneNumber: String!) {
   }
 }`;
 
-const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String, $phoneNumber: String,$email: String,$url: String, $shortDescription: String!, $longDescription: String!, $tags: [String]!){
+const saveCampDetails = `mutation updateUserCamp($id: String!,$name: String!, $phoneNumber: String!,$email: String!,$url: String!, $shortDescription: String!, $longDescription: String!, $tags: [String]!){
   updateUserCamp(id: $id,name: $name, phoneNumber: $phoneNumber, email: $email,url: $url, shortDescription: $shortDescription, longDescription: $longDescription, tags:$tags){
     id
   }
@@ -96,7 +96,7 @@ const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name:St
   }
 }`;
 
-const updateCampImages = `mutation updateCampImages($id: String!, $images: String){
+const updateCampImages = `mutation updateCampImages($id: String!, $images: String!){
   updateCampImages(id: $id, images: $images){
     id
   }

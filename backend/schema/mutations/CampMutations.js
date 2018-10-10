@@ -24,7 +24,6 @@ const addCamp = {
     url: { type: new GraphQLNonNull(GraphQLString) },
     tags: { type: new GraphQLList(GraphQLString) },
     ownerId: { type: new GraphQLNonNull(GraphQLString) },
-    ownedCampId: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -117,14 +116,10 @@ const updateUserCamp = {
     name: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: new GraphQLNonNull(GraphQLString) },
-    location: { type: new GraphQLNonNull(GraphQLString) },
     url: { type: new GraphQLNonNull(GraphQLString) },
     tags: { type: new GraphQLList(GraphQLString) },
     shortDescription: { type: new GraphQLNonNull(GraphQLString) },
     longDescription: { type: new GraphQLNonNull(GraphQLString) },
-    placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    placeName: { type: new GraphQLNonNull(GraphQLString) },
-    distance: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -144,13 +139,8 @@ const updateUserCamp = {
         email: args.email,
         shortDescription: args.shortDescription,
         longDescription: args.longDescription,
-        location: args.location,
         tags: args.tags,
         url: args.url,
-        placesOfInterest: {
-          name: args.placeName,
-          distance: args.distance,
-        },
       });
     } catch (err) {
       return err;

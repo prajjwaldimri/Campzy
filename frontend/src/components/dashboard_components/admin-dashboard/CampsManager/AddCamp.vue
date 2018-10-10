@@ -114,6 +114,7 @@ export default {
             this.camp = {};
             this.isOwnerSelected = false;
           }).catch((err) => {
+            console.log(err);
             EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           }).finally(() => {
             this.closeDialog();
