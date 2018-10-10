@@ -155,9 +155,9 @@ export default {
       };
       client.request(closeTentBooking, variables).then((data) => {
         if (data.closeTentBooking.isAvailable === false) {
-          EventBus.$emit('show-error-notification-short', 'Booking Closed for this Tent');
+          EventBus.$emit('show-info-notification-short', 'Booking Closed for this Tent');
         } else {
-          EventBus.$emit('show-success-notification-short', 'Booking Open for this Tent');
+          EventBus.$emit('show-info-notification-short', 'Booking Open for this Tent');
         }
         this.getAllTents();
       }).catch((err) => {
@@ -227,9 +227,9 @@ export default {
       };
       client.request(campBooking, variables).then((data) => {
         if (data.campAvailability.isAvailable === false) {
-          EventBus.$emit('show-error-notification-short', 'Booking Closed for this Camp');
+          EventBus.$emit('show-info-notification-short', 'Booking Closed for this Camp');
         } else {
-          EventBus.$emit('show-success-notification-short', 'Booking Open for this Camp');
+          EventBus.$emit('show-info-notification-short', 'Booking Open for this Camp');
         }
         this.getCampStatus();
       }).catch((err) => {

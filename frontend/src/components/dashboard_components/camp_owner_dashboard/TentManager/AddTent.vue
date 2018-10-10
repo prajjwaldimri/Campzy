@@ -108,7 +108,7 @@ export default {
   watch: {
     bookingPrice(tentPrice) {
       const price = parseInt(tentPrice, 10);
-      const commisionPrice = Math.round(price * 10 / 100);
+      const commisionPrice = Math.round(price * 12 / 100);
       this.calculatedPrice = price - commisionPrice - Math.round(commisionPrice * 18 / 100);
     },
   },

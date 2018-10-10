@@ -408,7 +408,7 @@ const isIFSCValid = `query isIFSCValid($IFSCCode: String!){
 
 }`;
 
-const getBankDetails = `query getIFSCDetails($IFSCCode: String!){
+const getIFSCDetails = `query getIFSCDetails($IFSCCode: String!){
   getIFSCDetails(IFSCCode: $IFSCCode){
     BRANCH,
     BANK,
@@ -418,6 +418,14 @@ const getBankDetails = `query getIFSCDetails($IFSCCode: String!){
     STATE
   }
 }`;
+
+const getBankDetails = `query getBankDetails{
+  getBankDetails{
+    id,
+    name
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -450,5 +458,6 @@ module.exports = {
   allBookings,
   isCampUrlAvailable,
   isIFSCValid,
+  getIFSCDetails,
   getBankDetails,
 };
