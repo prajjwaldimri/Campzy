@@ -62,13 +62,20 @@ Takes amount parameter in Rupees.
 Returns the amount, commission and tax in paise.
 */
 function calculateTransferAmount(amount) {
-  let returnAmount = 0;
   const commissionPercent = 12;
-  const commissionAmount = (amount * commissionPercent) / 100;
+  const GSTPercent = 18;
+
+  const cumulativePercent = commissionPercent + (commissionPercent / 100) * (GSTPercent / 100) * 100;
+
+  const returnAmount = amount / (1 + cumulativePercent / 100); // Reversing the percentage by adding 1
+
+  const commissionAmount = returnAmount * (commissionPercent / 100);
+
   // GST on Commission (Rate 18% constant)
-  const GST = (commissionAmount * 18) / 100;
-  returnAmount = amount - commissionAmount - GST;
-  // Convert Rupees to Paise
+
+  const GST = commissionAmount * (GSTPercent / 100);
+
+  // Return in Paise
   return {
     returnAmount: returnAmount * 100,
     tax: GST * 100,
@@ -107,10 +114,7 @@ const book = {
       }
 
       // Calculates the payable amount
-      let amount = 0;
-      for (let i = 0; i < tents.length; i += 1) {
-        amount += tents[i].bookingPrice;
-      }
+      let amount = tents.reduce((price, tent) => price + tent.bookingPrice, 0);
       // Multiply by trip duration
       amount *= moment(args.toDate).diff(args.fromDate, 'days');
 
@@ -231,13 +235,22 @@ const book = {
   },
 };
 
+// function RefundAmountCalculator(booking) {}
+
 const cancelBooking = {
   type: BookingType,
   args: {
     bookingCode: { type: GraphQLString },
   },
   async resolve(parent, args, context) {
-    console.log(context);
+    const user = await auth.getAuthenticatedUser(context.req);
+    if (!user) {
+      throw new NotLoggedinError();
+    }
+
+    // Reverse the Refund Amount To User
+
+    // Subtract the amount of money from credit of camp
   },
 };
 
