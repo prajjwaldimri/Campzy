@@ -16,10 +16,10 @@
                   v-text-field(label='Account Number' v-model='bankDetails.accountNumber' data-vv-name="accountNumber" v-validate="'required'"
                   :error-messages="errors.collect('accountNumber')" :readonly='details')
                 v-layout(row wrap)
-                  v-flex.flex-spacing(xs12 md6)
+                  v-flex.flex-spacing(xs10 md6)
                     v-text-field(label='IFSC Code' v-model='IFSCCode' data-vv-name="IFSCCode" v-validate="'required'"
                   :error-messages="errors.collect('IFSCCode')" :readonly='details')
-                  v-flex.flex-spacing(xs12 md4 )
+                  v-flex.flex-spacing(xs2 md4 )
                     v-btn(dark icon v-show='!isIFSCVerified' :disabled='details')
                       v-icon(color='red' ) error
                     v-btn(dark icon v-show='isIFSCVerified')
@@ -27,9 +27,9 @@
           v-card-actions
             v-spacer
             v-btn(dark) Clear
-            v-btn(color='green' @click='linkBankDetails' :disabled='details'  :loading='saveDetails') Save
-      v-flex.mt-2.ml-5(xs12 md4 style='max-width:100%' v-show='isIFSCVerified')
-        v-card.body-card(flat)
+            v-btn(color='green' dark @click='linkBankDetails' :disabled='details'  :loading='saveDetails') Save
+      v-flex(xs12 md4 style='max-width:100%' v-show='isIFSCVerified')
+        v-card.mt-2.body-card(flat)
           v-card-title.headline.font-weight-bold.pa-0 Bank Details
           v-form(ref='form' lazy-validation)
               v-layout.layout(row wrap)
@@ -122,7 +122,8 @@ export default {
             };
             client.request(addBank, variables).then(() => {
               EventBus.$emit('show-success-notification-short', 'Successfully Updated');
-            }).catch(() => {
+            }).catch((err) => {
+              console.log(err);
               EventBus.$emit('show-error-notification-short', 'Failed to Update');
             }).finally(() => { this.saveDetails = false; });
           } else {
