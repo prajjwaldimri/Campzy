@@ -2,6 +2,7 @@
 // Mutations for Bank On-boarding of Camp Owners
 const graphql = require('graphql');
 const axios = require('axios');
+const ifsc = require('ifsc');
 
 const authKey = Buffer.from(
   `${process.env.RAZORPAY_API_KEY}:${process.env.RAZORPAY_API_SECRET}`,
@@ -13,14 +14,36 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const UserModel = require('../../models/user.js');
 const CampModel = require('../../models/camp');
 
-const { GraphQLString, GraphQLNonNull, GraphQLObjectType } = graphql;
+const {
+  GraphQLString,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLBoolean,
+} = graphql;
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const BankType = new GraphQLObjectType({
   name: 'Bank',
   fields: () => ({
-    razorpayId: { type: GraphQLString },
+    id: { type: GraphQLString },
+    entity: { type: GraphQLString },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString },
+  }),
+});
+
+const IFSCType = new GraphQLObjectType({
+  name: 'IFSC',
+  fields: () => ({
+    branch: { type: GraphQLString },
+    address: { type: GraphQLString },
+    city: { type: GraphQLString },
+    district: { type: GraphQLString },
+    state: { type: GraphQLString },
+    bank: { type: GraphQLString },
+    bankCode: { type: GraphQLString },
+    IFSC: { type: GraphQLString },
   }),
 });
 
@@ -55,6 +78,8 @@ const addBank = {
           account_details: {
             business_name: campData.name,
             business_type: 'individual',
+            landline: campData.phoneNumber,
+            mobile: userData.phoneNumber,
           },
           bank_account: {
             ifsc_code: args.IFSCCode,
@@ -71,4 +96,41 @@ const addBank = {
   },
 };
 
-module.exports = { addBank };
+const getBank = {
+  type: BankType,
+};
+
+const isIFSCValid = {
+  type: GraphQLBoolean,
+  args: {
+    IFSCCode: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    try {
+      return ifsc.validate(args.IFSCCode);
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const getIFSCDetails = {
+  type: IFSCType,
+  args: {
+    IFSCCode: { type: GraphQLString },
+  },
+  async resolve(parent, args) {
+    try {
+      return ifsc.fetchDetails(args.IFSCCode);
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+module.exports = {
+  addBank,
+  getBank,
+  isIFSCValid,
+  getIFSCDetails,
+};

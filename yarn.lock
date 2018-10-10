@@ -4697,6 +4697,13 @@ iferr@^0.1.5:
   resolved "https://registry.yarnpkg.com/iferr/-/iferr-0.1.5.tgz#c60eed69e6d8fdb6b3104a1fcbca1c192dc5b501"
   integrity sha1-xg7taebY/bazEEofy8ocGS3FtQE=
 
+ifsc@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/ifsc/-/ifsc-1.2.2.tgz#806c81c643282a315d01559cf05ae45ee9cdb8ef"
+  integrity sha512-VRIJxNPt0yP1eGtyIygBXKCMr/v/S19B9X1C7cMklrMbcm3ocQQutWHtaAqHcA+64lCxg5qkivTf40iSTJxzwQ==
+  dependencies:
+    request "^2.88.0"
+
 ignore-by-default@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ignore-by-default/-/ignore-by-default-1.0.1.tgz#48ca6d72f6c6a3af00a9ad4ae6876be3889e2b09"
