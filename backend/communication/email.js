@@ -5,7 +5,7 @@ const mailjet = require('node-mailjet').connect(
 
 const moment = require('moment');
 
-const sendEmailVerificationToken = async (email, token) => {
+const sendEmailVerificationToken = async (email, token, userName) => {
   try {
     return await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
@@ -23,6 +23,7 @@ const sendEmailVerificationToken = async (email, token) => {
           TemplateLanguage: true,
           Subject: 'Email Verification Link',
           Variables: {
+            userName,
             verificationToken: token,
           },
         },

@@ -91,6 +91,7 @@ const sendResetPasswordToken = async (userId, email) => {
 const sendEmailVerificationToken = async (userId, email) => {
   try {
     let token = await TokenModel.findOne({ _userId: userId });
+    const user = await UserModel.findById(userId).select('name');
     if (!token) {
       token = new TokenModel({
         _userId: userId,
@@ -98,7 +99,11 @@ const sendEmailVerificationToken = async (userId, email) => {
       });
       await token.save();
     }
-    return await emailer.sendEmailVerificationToken(email, token.tokenValue);
+    return await emailer.sendEmailVerificationToken(
+      email,
+      token.tokenValue,
+      user.name,
+    );
   } catch (err) {
     throw new EmailSendError();
   }
