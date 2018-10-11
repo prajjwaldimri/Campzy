@@ -96,7 +96,7 @@ const sendSuccessBookingEmail = async (booking, user, camp, amount) => {
   }
 };
 
-const sendCampOwnerBill = async (booking, camp, transferAmount) => {
+const sendCampOwnerBill = async (booking, camp, transferAmount, invoice) => {
   try {
     return await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
@@ -113,11 +113,13 @@ const sendCampOwnerBill = async (booking, camp, transferAmount) => {
           ],
           TemplateID: 559117,
           TemplateLanguage: true,
-          Subject: 'New Booking in your Camp!',
+          Subject: 'Tax Invoice',
           Variables: {
             date: moment().format('dddd, MMMM Do YYYY'),
-            ownerName: camp.ownerId.name,
+            invoiceNumber: invoice.invoiceNumber,
             campName: camp.name,
+            campLocation: camp.location,
+            bookingCode: booking.code,
             // Divide by 100 as the amount is in paise and we need it in INR
             serviceCharge: transferAmount.commissionAmount / 100,
             gst: transferAmount.tax / 100,

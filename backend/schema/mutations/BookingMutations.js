@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const graphql = require('graphql');
 const { GraphQLDate } = require('graphql-iso-date');
 const moment = require('moment');
@@ -8,6 +9,7 @@ const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user');
 const TentModel = require('../../models/tent');
 const BookingModel = require('../../models/booking');
+const InvoiceModel = require('../../models/invoice');
 const auth = require('../../config/auth');
 const sms = require('../../communication/sms');
 const emailer = require('../../communication/email');
@@ -155,11 +157,9 @@ const book = {
       const userData = await UserModel.findById(user.id).select(
         'name phoneNumber email',
       );
-      const campData = await CampModel.findById(tents[0].camp)
-        .select(
-          'name phoneNumber email credits razorpayAccountId razorpayCustomerId ownerId',
-        )
-        .populate({ path: 'ownerId', select: 'name' });
+      const campData = await CampModel.findById(tents[0].camp).select(
+        'name phoneNumber email credits razorpayAccountId razorpayCustomerId location',
+      );
 
       // Send sms to user
       await sms.sendSMS(
@@ -195,18 +195,29 @@ const book = {
         )} for ₹ ${amount}. Congrats!`,
       );
 
+      const transferAmount = calculateTransferAmount(amount);
+
       if (campData.razorpayAccountId) {
         // Send Money to Camp Owner's Account
         await instance.transfers.create({
           account: campData.razorpayAccountId,
-          amount: parseInt(calculateTransferAmount(amount).returnAmount, 10),
+          amount: parseInt(transferAmount.returnAmount, 10),
           currency: 'INR',
+        });
+
+        const invoice = await InvoiceModel.create({
+          serviceCharge: transferAmount.commissionAmount,
+          tax: transferAmount.tax,
+          totalAmount: transferAmount.returnAmount,
+          booking: booking._id,
+          camp: campData._id,
         });
         // Send Camp Owner the bill for booking
         await emailer.sendCampOwnerBill(
           booking,
           campData,
-          calculateTransferAmount(amount),
+          transferAmount,
+          invoice,
         );
 
         if (!campData.razorpayCustomerId) {
@@ -223,7 +234,7 @@ const book = {
         }
       } else {
         // Add Credits to the Camp Owner's Account if the account is not present.
-        campData.credits += calculateTransferAmount(amount).returnAmount;
+        campData.credits += transferAmount.returnAmount;
         await campData.save();
       }
 
@@ -235,7 +246,13 @@ const book = {
   },
 };
 
-// function RefundAmountCalculator(booking) {}
+// Calculates User's Refund Amount
+function RefundAmountCalculator(booking) {
+  // Returns amount in paise
+  return {
+    userRefund: booking.amount,
+  };
+}
 
 const cancelBooking = {
   type: BookingType,
@@ -248,9 +265,14 @@ const cancelBooking = {
       throw new NotLoggedinError();
     }
 
-    // Reverse the Refund Amount To User
+    // Reverse the Refund Amount To User from the back-end amount
+    const booking = await BookingModel.findOne({ code: args.bookingCode });
+    if (booking === null) {
+      console.log(RefundAmountCalculator(booking));
+    }
 
     // Subtract the amount of money from credit of camp
+    // We will keep 12 % of the whole amount. Anything remaining will be transferred to camp owner.
   },
 };
 
