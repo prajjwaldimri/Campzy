@@ -145,7 +145,8 @@ const searchParticularCamp = {
       }
       return await CampModel.find({ $text: { $search: args.searchTerm } })
         .limit(8)
-        .skip((args.page - 1) * 8).populate('ownerId', 'id name');
+        .skip((args.page - 1) * 8)
+        .populate('ownerId', 'id name');
     } catch (err) {
       return err;
     }
@@ -210,18 +211,24 @@ const campSearchUser = {
           // Get all bookings of tents
           // Check whether the provided clashes with other bookings
           const bookings = await BookingModel.find({ tents: tent._id });
-          const isDisableDateInBetween = bookings.some(
-            booking => moment(args.bookingStartDate).isBetween(
-              moment(booking.startDate).subtract(1, 'day'),
-              moment(booking.endDate).add(1, 'day'),
-              'days',
-            )
-              || moment(args.bookingEndDate).isBetween(
+
+          const isDisableDateInBetween = bookings.some((booking) => {
+            if (booking.isCancelled) {
+              return false;
+            }
+            return (
+              moment(args.bookingStartDate).isBetween(
                 moment(booking.startDate).subtract(1, 'day'),
                 moment(booking.endDate).add(1, 'day'),
                 'days',
-              ),
-          );
+              )
+                || moment(args.bookingEndDate).isBetween(
+                  moment(booking.startDate).subtract(1, 'day'),
+                  moment(booking.endDate).add(1, 'day'),
+                  'days',
+                )
+            );
+          });
 
           return !isDisableDateInBetween;
         });

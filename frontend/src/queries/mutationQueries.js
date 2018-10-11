@@ -175,6 +175,12 @@ const bookCamp = `mutation bookCamp($razorpayPaymentId: String!, $tentIds: [Stri
   }
 }`;
 
+const cancelBooking = `mutation cancelBooking($bookingCode: String!){
+  cancelBooking(bookingCode: $bookingCode){
+    code
+  }
+}`;
+
 const addReview = `mutation addReview($stars: Float!, $comment: String, $campId: String!){
   addReview(stars: $stars, comment: $comment, campId: $campId){
     stars
@@ -218,6 +224,7 @@ module.exports = {
   deleteUserBlog,
   bookCampCheck,
   bookCamp,
+  cancelBooking,
   addAmenities,
   addPlacesOfInterest,
   addCampToWishlist,

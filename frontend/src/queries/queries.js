@@ -427,7 +427,7 @@ const getBankDetails = `query getBankDetails{
       accountNumber,
       IFSCCode,
       accountType,
-    }   
+    }
   }
 }`;
 

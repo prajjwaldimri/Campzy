@@ -1,4 +1,5 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+/* eslint no-param-reassign: ["error", { "props": false }] */
 const graphql = require('graphql');
 const { GraphQLDate } = require('graphql-iso-date');
 const moment = require('moment');
@@ -18,9 +19,12 @@ const {
   NotLoggedinError,
   TentNotAvailableError,
   AmountNotCapturedError,
+  BookingNotCancelled,
 } = require('../graphqlErrors');
 
-const { GraphQLString, GraphQLInt, GraphQLList } = graphql;
+const {
+  GraphQLString, GraphQLInt, GraphQLList, GraphQLNonNull,
+} = graphql;
 
 // Checks if camp can book user on provided parameters
 const bookCheck = {
@@ -248,16 +252,39 @@ const book = {
 
 // Calculates User's Refund Amount
 function RefundAmountCalculator(booking) {
-  // Returns amount in paise
+  const daysLeft = moment(booking.startDate).diff(moment(), 'days');
+  let refundPercent = 0;
+
+  if (daysLeft >= 15) {
+    refundPercent = 75;
+  } else if (daysLeft >= 7 && daysLeft < 15) {
+    refundPercent = 60;
+  } else if (daysLeft >= 2 && daysLeft < 7) {
+    refundPercent = 40;
+  } else if (daysLeft >= 0 && daysLeft < 2) {
+    refundPercent = 20;
+  } else {
+    refundPercent = 0;
+  }
+
+  const refundAmount = (parseInt(booking.amount.toString(), 10) * refundPercent) / 100;
+
+  const commissionPercent = 12;
+  const campzyCommission = (parseInt(booking.amount.toString(), 10) * commissionPercent) / 100;
+
+  const campOwnerCredit = parseInt(booking.amount.toString(), 10) - refundAmount - campzyCommission;
+
   return {
-    userRefund: booking.amount,
+    userRefund: refundAmount,
+    campzyCommission,
+    campOwnerCredit,
   };
 }
 
 const cancelBooking = {
   type: BookingType,
   args: {
-    bookingCode: { type: GraphQLString },
+    bookingCode: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
@@ -266,10 +293,36 @@ const cancelBooking = {
     }
 
     // Reverse the Refund Amount To User from the back-end amount
-    const booking = await BookingModel.findOne({ code: args.bookingCode });
+    const booking = await BookingModel.findOne({
+      code: args.bookingCode,
+    });
     if (booking === null) {
-      console.log(RefundAmountCalculator(booking));
+      throw new BookingNotCancelled();
     }
+    const refundAmount = RefundAmountCalculator(booking);
+    console.log(refundAmount);
+
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_API_KEY,
+      key_secret: process.env.RAZORPAY_API_SECRET,
+    });
+
+    const campData = CampModel.findById(booking.camp);
+    campData.credit
+      -= parseInt(booking.amount.toString(), 10) - refundAmount.campOwnerCredit;
+
+    await instance.payments.refund(booking.razorpayPaymentId, {
+      amount: refundAmount.userRefund * 100, // Razorpay takes money in paise
+    });
+
+    booking.isCancelled = true;
+    await booking.save();
+
+    console.log(booking);
+
+    // TODO: Send an email and sms to user
+
+    // TODO: Send an email and sms to camp owner
 
     // Subtract the amount of money from credit of camp
     // We will keep 12 % of the whole amount. Anything remaining will be transferred to camp owner.

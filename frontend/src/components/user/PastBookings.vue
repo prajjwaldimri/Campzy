@@ -42,18 +42,14 @@
           v-divider(vertical).mr-3.hidden-sm-and-down
           v-flex(md3 sm12)
             .d-flex.justify-center(style="height: 100%; flex-direction: column")
-              v-btn(color="primary" @click="showChat(booking.code)").white--text
-                v-icon.mr-2 live_help
-                span Need Help?
-              v-btn(color="error").white--text
-                v-icon.mr-2 cancel
-                span Cancel Booking
+              v-btn(color="Green").white--text
+                v-icon.mr-2 list_alt
+                span Download Summary
 
 
 </template>
 
 <script>
-/* global LC_API */
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../event-bus';
 import { getUserBookings } from '../../queries/queries';

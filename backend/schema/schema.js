@@ -112,6 +112,7 @@ const Mutation = new GraphQLObjectType({
 
     bookCampCheck: BookingMutations.bookCheck,
     bookCamp: BookingMutations.book,
+    cancelBooking: BookingMutations.cancelBooking,
 
     addReview: ReviewMutations.addReview,
 

@@ -1,4 +1,6 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const graphql = require('graphql');
+const { filter } = require('p-iteration');
 const BookingType = require('../types/BookingType');
 const UserModel = require('../../models/user');
 const BookingModel = require('../../models/booking');
@@ -34,11 +36,11 @@ const getUserBookings = {
           user: userData._id,
           endDate: { $gte: currentDate },
         }).populate('user camp tent');
+        bookings = await filter(bookings, booking => !booking.isCancelled);
       } else {
         bookings = await BookingModel.find({
-          // eslint-disable-next-line
           user: userData._id,
-          endDate: { $lt: currentDate },
+          $or: [{ isCancelled: true }, { endDate: { $lt: currentDate } }],
         }).populate('user camp tent');
       }
 
@@ -100,8 +102,6 @@ const getCampBookings = {
     }
   },
 };
-
-const getUserPastBookings = {};
 
 const countCampActiveBookings = {
   type: BookingType,
@@ -166,7 +166,6 @@ const allBookings = {
 
 module.exports = {
   getUserBookings,
-  getUserPastBookings,
   getCampBookings,
   countCampActiveBookings,
   allBookings,

@@ -1,5 +1,6 @@
 <template lang="pug">
   v-container
+    CancelBookingDialog
     v-layout(column)
 
       v-card(v-for="booking in bookings" v-if="bookings").py-5
@@ -45,7 +46,7 @@
               v-btn(color="primary" @click="showChat(booking.code)").white--text
                 v-icon.mr-2 live_help
                 span Need Help?
-              v-btn(color="error").white--text
+              v-btn(color="error" @click="cancelBooking(booking.code)").white--text
                 v-icon.mr-2 cancel
                 span Cancel Booking
 
@@ -57,8 +58,12 @@
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../event-bus';
 import { getUserBookings } from '../../queries/queries';
+import CancelBookingDialog from './CancelBookingDialog.vue';
 
 export default {
+  components: {
+    CancelBookingDialog,
+  },
   metaInfo: {
     title: 'Active Bookings - Campzy',
   },
@@ -135,6 +140,9 @@ export default {
         { name: 'Booking Code', value: bookingCode },
       ];
       LC_API.open_chat_window();
+    },
+    cancelBooking(bookingCode) {
+      EventBus.$emit('show-cancel-booking-dialog', bookingCode);
     },
   },
 };

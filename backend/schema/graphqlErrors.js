@@ -76,6 +76,11 @@ const BankAccountExistsError = ApolloError.createError(
   { message: 'A bank account is already linked with your camp!' },
 );
 
+const BookingNotCancelled = ApolloError.createError('BookingNotCancelled', {
+  message:
+    'This booking cannot be cancelled now. Please contact Campzy Support!',
+});
+
 const UnknownError = ApolloError.createError('UnknownError', {
   message:
     'An unknown error has occurred. We have logged the error and are working on it.',
@@ -98,5 +103,6 @@ module.exports = {
   TentNotAvailableError,
   CampNotAvailableError,
   AmountNotCapturedError,
+  BookingNotCancelled,
   BankAccountExistsError,
 };

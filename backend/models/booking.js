@@ -13,7 +13,7 @@ const BookingSchema = new Schema(
       required: true,
     },
     razorpayPaymentId: { type: String, required: true },
-    isCompleted: { type: Boolean, default: false },
+    isCancelled: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     tents: { type: [Schema.Types.ObjectId], ref: 'Tent', required: true },
     camp: { type: Schema.Types.ObjectId, ref: 'Camp', required: true },
