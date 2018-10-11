@@ -17,11 +17,12 @@ const sendEmailVerificationToken = async (email, token, userName) => {
           To: [
             {
               Email: email,
+              Name: userName,
             },
           ],
           TemplateID: 541428,
           TemplateLanguage: true,
-          Subject: 'Email Verification Link',
+          Subject: 'Welcome to Campzy.',
           Variables: {
             userName,
             verificationToken: token,
