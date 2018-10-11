@@ -17,7 +17,7 @@
                       v-model="email" clearable data-vv-name="email"
                       :error-messages="errors.collect('email')")
                     v-text-field(label="Current Password" color='green accent-4'
-                    v-model="password" clearable
+                    v-model="password" clearable @keyup.enter="login"
                     type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                       :error-messages="errors.collect('currentPassword')")
                   v-flex(justify-space-between).d-flex.mt-3
@@ -74,7 +74,7 @@
                         v-flex(md6)
                           v-text-field(label="One Time Password" color='green accent-4'
                           v-model="otp" clearable data-vv-name="OTP" v-validate="'digits:6'"
-                            :error-messages="errors.collect('OTP')" )
+                            :error-messages="errors.collect('OTP')" @keyup.enter="regUser" )
                         v-flex(md5 offset-md1)
                           v-btn(block color="green" :loading='isSignedup' @click="regUser"
                           :disabled="!isOTPSent").white--text.mt-3

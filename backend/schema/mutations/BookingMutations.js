@@ -300,7 +300,6 @@ const cancelBooking = {
       throw new BookingNotCancelled();
     }
     const refundAmount = RefundAmountCalculator(booking);
-    console.log(refundAmount);
 
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_API_KEY,
@@ -311,6 +310,8 @@ const cancelBooking = {
     campData.credit
       -= parseInt(booking.amount.toString(), 10) - refundAmount.campOwnerCredit;
 
+    const userData = UserModel.findById(booking.user);
+
     await instance.payments.refund(booking.razorpayPaymentId, {
       amount: refundAmount.userRefund * 100, // Razorpay takes money in paise
     });
@@ -318,14 +319,23 @@ const cancelBooking = {
     booking.isCancelled = true;
     await booking.save();
 
-    console.log(booking);
-
     // TODO: Send an email and sms to user
+    await sms.sendSMS(
+      userData.phoneNumber,
+      `We have cancelled your booking for ${
+        campData.name
+      }. ₹ ${refundAmount} will be refunded to your account within 48 hours.`,
+    );
 
     // TODO: Send an email and sms to camp owner
-
-    // Subtract the amount of money from credit of camp
-    // We will keep 12 % of the whole amount. Anything remaining will be transferred to camp owner.
+    await sms.sendSMS(
+      campData.phoneNumber,
+      `${userData.name} has cancelled their booking for your camp ${
+        campData.name
+      }. You will be paid ₹ ${
+        refundAmount.campOwnerCredit
+      } for your troubles by Campzy.`,
+    );
   },
 };
 
