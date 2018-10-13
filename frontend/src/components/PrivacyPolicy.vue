@@ -89,6 +89,10 @@ export default {
 <style lang="scss" scoped>
 .privacy-container {
   padding: 0px;
+  padding-top: 1rem;
+  @media screen and (max-width: 960px) {
+    padding-top: 1rem !important;
+  }
 }
 .privacy-container p {
   font-size: 1.2rem !important;
