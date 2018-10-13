@@ -13,9 +13,9 @@
 
 
         v-flex(sm12 md10).text-xs-center
-          v-btn(flat dark) About
-          v-btn(flat dark) Terms and Conditions
-          v-btn(flat dark) Privacy Policy
+          v-btn(flat dark ) About
+          v-btn(flat dark @click="$router.push('/termsAndConditions')") Terms and Conditions
+          v-btn(flat dark @click="$router.push('/privacyPolicy')") Privacy Policy
           v-btn(flat dark) Add your camp
 
         v-flex(sm12 md1).text-xs-center
