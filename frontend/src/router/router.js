@@ -6,6 +6,7 @@ const NotFoundPage = () => import('../components/404.vue');
 const Home = () => import('../components/Home.vue');
 const Search = () => import('../components/search/Search.vue');
 const Camp = () => import('../components/camp/Camp.vue');
+const AddYourCamp = () => import('../components/camp/AddYourCamp.vue');
 const Blog = () => import('../components/blog/Blog.vue');
 const Blogs = () => import('../components/blog/Blogs.vue');
 const LoginRegister = () => import('../components/user/LoginRegister.vue');
@@ -51,6 +52,11 @@ const router = new Router({
       path: '/camp/:campUrl',
       name: 'camp',
       component: Camp,
+    },
+    {
+      path: '/addYourCamp',
+      name: 'addYourCamp',
+      component: AddYourCamp,
     },
     {
       path: '/blog/:blogUrl',
