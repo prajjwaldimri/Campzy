@@ -246,7 +246,7 @@ export default {
       };
       request('/graphql', getCampByUrl, variables).then((data) => {
         this.camp = data.campUser;
-        this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}`;
+        this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}&zoom=18&maptype=satellite`;
       }).catch(() => {
         this.$router.go(-1);
         EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
