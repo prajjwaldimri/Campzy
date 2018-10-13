@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    cookie-law(theme="dark-lime")
+    cookie-law(theme="dark-lime" buttonText="ACCEPT COOKIES")
       div(slot="message")
         h3 This website uses cookies to ensure you get the best experience on our website. For more info
           router-link(to="privacyPolicy").ml-1.white--text click here
@@ -113,6 +113,6 @@ body {
 }
 
 .Cookie--dark-lime {
-  background-color: #212121 !important;
+  background-color: #424242 !important;
 }
 </style>
