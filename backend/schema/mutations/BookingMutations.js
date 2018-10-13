@@ -319,13 +319,14 @@ const cancelBooking = {
     booking.isCancelled = true;
     await booking.save();
 
-    // TODO: Send an email and sms to user
     await sms.sendSMS(
       userData.phoneNumber,
       `We have cancelled your booking for ${
         campData.name
       }. ₹ ${refundAmount} will be refunded to your account within 48 hours.`,
     );
+
+    await emailer.sendBookingCancelUser(userData);
 
     // TODO: Send an email and sms to camp owner
     await sms.sendSMS(

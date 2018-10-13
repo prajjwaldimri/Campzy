@@ -136,9 +136,39 @@ const sendCampOwnerBill = async (booking, camp, transferAmount, invoice) => {
   }
 };
 
+const sendBookingCancelUser = async (user) => {
+  try {
+    return await mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: [
+        {
+          From: {
+            Email: 'bookings@campzy.in',
+            Name: 'Campzy',
+          },
+          To: [
+            {
+              Email: user.email,
+              Name: user.name,
+            },
+          ],
+          TemplateID: 563051,
+          TemplateLanguage: true,
+          Subject: 'Tax Invoice',
+          Variables: {
+            userName: user.name,
+          },
+        },
+      ],
+    });
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   sendEmailVerificationToken,
   sendResetPasswordToken,
   sendSuccessBookingEmail,
   sendCampOwnerBill,
+  sendBookingCancelUser,
 };
