@@ -18,9 +18,9 @@
                 v-icon account_box
               h3.subheading Account
             v-flex(justify-center align-center md4).button-flex
-              v-btn(color="orange darken-2" fab outline)
-                v-icon trending_up
-              h3.subheading Trending
+              v-btn(color="green" fab outline)
+                v-icon pages
+              h3.subheading Featured Camps
             v-flex(justify-center align-center md4).button-flex
               v-btn(color="blue-grey" fab outline @click="$router.push('blogs')")
                 v-icon chrome_reader_mode
@@ -33,9 +33,9 @@
                 v-icon account_box
               h3.body-2 Account
             v-flex(justify-center align-center sm4).button-flex
-              v-btn(color="orange darken-2" fab outline small)
-                v-icon trending_up
-              h3.body-2 Trending
+              v-btn(color="green" fab outline small)
+                v-icon pages
+              h3.body-2 Featured Camps
             v-flex(justify-center align-center sm4).button-flex
               v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
                 v-icon chrome_reader_mode

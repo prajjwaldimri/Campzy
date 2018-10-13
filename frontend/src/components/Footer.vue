@@ -16,7 +16,7 @@
           v-btn(flat dark) About
           v-btn(flat dark) Terms and Conditions
           v-btn(flat dark) Privacy Policy
-          v-btn(flat dark) Add your camp
+          v-btn(flat dark @click="$router.push({name: 'addYourCamp'})") Add your camp
 
         v-flex(sm12 md1).text-xs-center
           .d-flex.align-center.justify-center.fill-height
