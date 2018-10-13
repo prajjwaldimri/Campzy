@@ -85,7 +85,7 @@ export default {
 
 <style lang="scss" scoped>
 .terms-container {
-  padding: 2rem 0rem 0rem 0rem;
+  padding: 0px;
 }
 .terms-container p {
   font-size: 1.2rem !important;

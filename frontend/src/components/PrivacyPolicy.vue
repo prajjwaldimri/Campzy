@@ -88,7 +88,7 @@ export default {
 
 <style lang="scss" scoped>
 .privacy-container {
-  padding: 2rem 0rem 0rem 0rem;
+  padding: 0px;
 }
 .privacy-container p {
   font-size: 1.2rem !important;
