@@ -83,9 +83,9 @@ function calculateTransferAmount(amount) {
 
   // Return in Paise
   return {
-    returnAmount: returnAmount * 100,
-    tax: GST * 100,
-    commissionAmount: commissionAmount * 100,
+    returnAmount: returnAmount.toPrecision(2) * 100,
+    tax: GST.toPrecision(2) * 100,
+    commissionAmount: commissionAmount.toPrecision(2) * 100,
   };
 }
 
@@ -275,9 +275,9 @@ function RefundAmountCalculator(booking) {
   const campOwnerCredit = parseInt(booking.amount.toString(), 10) - refundAmount - campzyCommission;
 
   return {
-    userRefund: refundAmount,
-    campzyCommission,
-    campOwnerCredit,
+    userRefund: refundAmount.toPrecision(2),
+    campzyCommission: campzyCommission.toPrecision(2),
+    campOwnerCredit: campOwnerCredit.toPrecision(2),
   };
 }
 
