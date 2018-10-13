@@ -9374,6 +9374,11 @@ tiny-cookie@^1.0:
   resolved "https://registry.yarnpkg.com/tiny-cookie/-/tiny-cookie-1.0.1.tgz#753786079c642a3c3d0b2accad600f8de119ac2a"
   integrity sha1-dTeGB5xkKjw9CyrMrWAPjeEZrCo=
 
+tiny-cookie@^2.1.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/tiny-cookie/-/tiny-cookie-2.1.2.tgz#3c25689a07c76438f90209648c143976b0b52bef"
+  integrity sha512-UMiHwxCgqJXFPmak9SCHQROpFZnSGAssUUmaOA6xrbWY5f/b5OsKDEg28+8EZd9RJMTuMkMJpuDWneF7JdxWrg==
+
 tiny-emitter@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
@@ -9888,6 +9893,13 @@ vue-content-loader@^0.2.1:
   integrity sha1-DrMy4qcmQ9V/sgnXLWUmVzsZH1o=
   dependencies:
     babel-helper-vue-jsx-merge-props "^2.0.3"
+
+vue-cookie-law@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/vue-cookie-law/-/vue-cookie-law-1.7.0.tgz#34b8ac9cf87dec3f9281afcbdbb5ccecb18b11d2"
+  integrity sha512-Y6pkM1unKhDxj/8zFeywpsjZVOAh5Z+HbkH1QUSjbFFEx8pQwc6V2XDa/jEtVRLPL7aBOw0MH11XiDzxKHgfTw==
+  dependencies:
+    tiny-cookie "^2.1.1"
 
 vue-cookie@^1.1.4:
   version "1.1.4"

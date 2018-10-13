@@ -1,5 +1,11 @@
 <template lang="pug">
   v-app
+    cookie-law(theme="dark-lime" buttonText="ACCEPT COOKIES")
+      div(slot="message")
+        h3 This website uses cookies to ensure you get the best experience on our website. For more info
+          router-link(to="privacyPolicy").ml-1.white--text click here
+
+
     v-snackbar(v-model='snackbarSuccess' top right color='green' :timeout='timeout') {{message}}
       v-btn(flat @click='snackbarSuccess = false') close
     v-snackbar(v-model='snackbarFail' top right color='red' :timeout='timeout') {{message}}
@@ -14,11 +20,14 @@
 </template>
 
 <script>
+import CookieLaw from 'vue-cookie-law';
 import { EventBus } from './event-bus';
 
 export default {
   name: 'app',
-
+  components: {
+    CookieLaw,
+  },
   data() {
     return {
       snackbarSuccess: false,
@@ -97,5 +106,13 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.Cookie__button {
+  background-color: #4caf50 !important;
+}
+
+.Cookie--dark-lime {
+  background-color: #424242 !important;
 }
 </style>
