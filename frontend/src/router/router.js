@@ -29,7 +29,6 @@ const AddBlog = () => import('../components/dashboard_components/blogger_dashboa
 const EditBlog = () => import('../components/dashboard_components/blogger_dashboard/EditBlog.vue');
 const EmailVerification = () => import('../components/user/EmailVerificationLink.vue');
 const PrivacyPolicy = () => import('../components/PrivacyPolicy.vue');
-const CampzyAgreement = () => import('../components/CampzyAgreement.vue');
 const TermsAndConditions = () => import('../components/TermsAndConditions.vue');
 
 Vue.use(Router);
@@ -175,11 +174,6 @@ const router = new Router({
       component: PrivacyPolicy,
     },
 
-    {
-      name: 'campzyAgreement',
-      path: '/campzyAgreement',
-      component: CampzyAgreement,
-    },
     {
       name: 'termsAndConditions',
       path: '/termsAndConditions',
