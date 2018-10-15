@@ -11,7 +11,7 @@ const depthLimit = require('graphql-depth-limit');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const path = require('path');
-const history = require('connect-history-api-fallback');
+// const history = require('connect-history-api-fallback');
 const https = require('https');
 const multer = require('multer');
 const bodyParser = require('body-parser');
@@ -75,7 +75,7 @@ mongoose.connection.once('open', () => {
 });
 
 // History mode fallback
-app.use(history({}));
+// app.use(history({}));
 
 if (process.env.ENVIRONMENT === 'development') {
   app.use(webpackMiddleware(webpack(webpackConfig)));
@@ -97,6 +97,7 @@ app.use(
     formatError: ApolloError.formatError,
     validationRules: [depthLimit(10)],
     context: { req: request, passport },
+    graphiql: true,
   })),
 );
 
