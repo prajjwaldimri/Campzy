@@ -18,11 +18,6 @@
       v-text-field(v-model="camp.gst" label="GST Number" prepend-icon="link" clearable
        data-vv-name="gst" v-validate="'required|alpha_dash'"
       :error-messages="errors.collect('gst')")
-
-      v-text-field(v-model="camp.phoneNumber" label="Phone Number" prepend-icon="phone"
-      clearable  data-vv-name="campPhone" v-validate="'digits:10|required'" type="number"
-      :error-messages="errors.collect('campPhone')")
-
       v-text-field(v-model="camp.email" label="Email" type="email" prepend-icon="email"
       clearable  data-vv-name="campEmail" v-validate="'min:4|required|email'"
       :error-messages="errors.collect('campEmail')")
@@ -32,6 +27,12 @@
         template(slot="selection" slot-scope="data")
           v-chip(close label)
             span {{data.item}}
+      v-layout(column).phone-number
+        v-flex(xs12)
+          span Phone Number
+        v-flex(xs12)
+          vue-tel-input.mobile-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
+
       v-flex.d-flex(align-center)
         v-autocomplete(label="Owner" prepend-icon="account_box"
         v-model="camp.owner" :loading="isOwnerFieldLoading" :disabled="isOwnerSelected"
@@ -72,6 +73,7 @@ export default {
       isOwnerSelected: false,
       searchUsers: null,
       isUrlAlreadyinUse: false,
+      phoneNumber: '',
     };
   },
   methods: {
@@ -98,7 +100,7 @@ export default {
           const variables = {
             tags: this.camp.tags,
             name: this.camp.name,
-            phoneNumber: this.camp.phoneNumber,
+            phoneNumber: this.phoneNumber.replace(/\s/g, ''),
             email: this.camp.email,
             location: this.camp.location,
             url: this.url,
@@ -114,7 +116,6 @@ export default {
             this.camp = {};
             this.isOwnerSelected = false;
           }).catch((err) => {
-            console.log(err);
             EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
           }).finally(() => {
             this.closeDialog();
@@ -179,3 +180,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.mobile-input {
+  border-style: none none solid none;
+}
+.phone-number {
+  margin-left: 2rem;
+}
+</style>
