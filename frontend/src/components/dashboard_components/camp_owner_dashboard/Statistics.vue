@@ -1,6 +1,5 @@
 <template lang="pug">
   v-container.camps-container(grid-list-lg)
-    CampzyAgreement
     h2.font-weight-bold.headline.text-uppercase Statistics
     v-container.camp-owner-conatiner.mt-1(fluid v-show='isTypeCampOwner')
       v-layout(row wrap)
@@ -141,14 +140,12 @@ import { EventBus } from '../../../event-bus';
 import {
   campBookings, countTents, countBookedTent, countCampActiveBooking, countAllUsers, countAllCamps, allBookings,
 } from '../../../queries/queries';
-import CampzyAgreement from '../../CampzyAgreement.vue';
 
 export default {
   name: 'defaultDash',
   components: {
     ICountUp,
     apexcharts: VueApexCharts,
-    CampzyAgreement,
   },
   metaInfo: {
     title: 'Dashboard | Statistics',
@@ -219,7 +216,6 @@ export default {
             this.isTypeCampOwner = true;
             this.getCampId();
             this.countTent();
-            EventBus.$emit('agreement-not-accepted');
           }
           if (data.currentUser.type === 'Admin') {
             this.isTypeAdmin = true;
@@ -229,7 +225,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
@@ -286,6 +281,7 @@ export default {
         currentUserCamp {
         id,
         rating,
+        agreementAccepted,
       }}`;
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -295,6 +291,9 @@ export default {
 
       client.request(getcampID)
         .then((data) => {
+          if (data.currentUserCamp.agreementAccepted === false) {
+            EventBus.$emit('agreement-not-accepted');
+          }
           this.getBookings(data.currentUserCamp.id);
           this.countBookings(data.currentUserCamp.id);
           this.campRating = data.currentUserCamp.rating;
@@ -320,7 +319,6 @@ export default {
       client.request(campBookings, variables).then((data) => {
         this.campBookings = data.campBookings;
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },

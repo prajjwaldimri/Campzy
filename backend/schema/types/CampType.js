@@ -101,6 +101,7 @@ const CampType = new GraphQLObjectType({
     ratingsCount: { type: GraphQLInt },
     razorpayAccountId: { type: GraphQLString },
     bank: { type: BankType },
+    agreementAccepted: { type: GraphQLBoolean },
   }),
 });
 

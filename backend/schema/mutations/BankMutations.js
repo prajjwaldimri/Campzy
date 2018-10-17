@@ -139,7 +139,7 @@ const getBank = {
     }
 
     const campData = await CampModel.findOne({ ownerId: userData._id }).select(
-      'razorpayAccountId bank',
+      'razorpayAccountId bank agreementAccepted',
     );
 
     if (!auth.isUserCampOwner(userData)) {

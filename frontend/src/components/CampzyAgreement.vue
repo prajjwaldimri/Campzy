@@ -107,17 +107,24 @@
               p.mt-4.font-weight-medium.grey--text.text--darken-3 By clicking the “I accept” button you hereby acknowledge the receipt and understanding of all the terms and conditions as outlined in this Campzy agreement.
       v-card-actions
         v-spacer
-        v-btn(color='blue' dark @click='closeDialog') Accept
+        v-btn(color='blue' dark @click='acceptAgreement' :loading='acceptingAgreement') Accept
 
 </template>
 
 <script>
+import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../event-bus';
+import {
+  acceptAgreement,
+} from '../queries/mutationQueries';
+
 
 export default {
   data() {
     return ({
       isAgreementAccepted: false,
+      agreementAccepted: false,
+      acceptingAgreement: false,
     });
   },
   mounted() {
@@ -128,6 +135,28 @@ export default {
   methods: {
     closeDialog() {
       this.isAgreementAccepted = false;
+    },
+
+    acceptAgreement() {
+      this.agreementAccepted = true;
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      this.acceptingAgreement = true;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      const variables = {
+        agreementAccepted: this.agreementAccepted,
+      };
+      client.request(acceptAgreement, variables).then(() => {
+        this.closeDialog();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Please try again later!');
+      }).finally(() => { this.acceptingAgreement = false; });
     },
   },
 

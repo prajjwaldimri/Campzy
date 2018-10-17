@@ -84,7 +84,8 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           images,
           isAvailable,
           campDocuments,
-          location
+          location,
+          agreementAccepted,
         }
 
       }`;
@@ -428,6 +429,7 @@ const getBankDetails = `query getBankDetails{
       IFSCCode,
       accountType,
     }
+    agreementAccepted,
   }
 }`;
 

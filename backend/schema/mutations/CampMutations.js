@@ -395,6 +395,36 @@ const campBookingStatus = {
   },
 };
 
+const acceptAgreement = {
+  type: CampType,
+  args: {
+    agreementAccepted: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      const campAgreement = await CampModel.findByIdAndUpdate(
+        { _id: userData.ownedCampId },
+        {
+          agreementAccepted: args.agreementAccepted,
+        },
+        { new: true },
+      );
+      return campAgreement;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   addCamp,
   updateCamp,
@@ -407,4 +437,5 @@ module.exports = {
   deleteCampDocument,
   saveAmenities,
   savePlacesOfInterest,
+  acceptAgreement,
 };

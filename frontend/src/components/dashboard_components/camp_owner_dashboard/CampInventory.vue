@@ -193,6 +193,7 @@ export default {
         currentUserCamp {
           id,
           isAvailable,
+          agreementAccepted,
         }
       }`;
       const client = new GraphQLClient('/graphql', {
@@ -201,6 +202,9 @@ export default {
         },
       });
       client.request(campStatus).then((data) => {
+        if (data.currentUserCamp.agreementAccepted === false) {
+          EventBus.$emit('agreement-not-accepted');
+        }
         this.campAvailable = data.currentUserCamp;
         if (this.campAvailable.isAvailable === false) {
           this.campSwitchLabel = 'Bookings: Close';

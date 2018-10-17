@@ -34,6 +34,7 @@ const CampSchema = new Schema({
   isAvailable: { type: Boolean, required: true, default: false },
   shortDescription: { type: String, required: true },
   longDescription: String,
+  agreementAccepted: { type: Boolean, required: true, default: false },
   gst: {
     type: String,
     unique: true,

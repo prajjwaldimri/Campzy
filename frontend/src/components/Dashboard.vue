@@ -74,6 +74,7 @@
                   v-icon chevron_right
           v-tour(name='adminTour' :steps='adminSteps')
     router-view
+    CampzyAgreement
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
    fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
@@ -116,9 +117,13 @@
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../event-bus';
+import CampzyAgreement from './CampzyAgreement.vue';
 
 export default {
   name: 'Dashboard',
+  components: {
+    CampzyAgreement,
+  },
   data() {
     return {
       drawer: true,

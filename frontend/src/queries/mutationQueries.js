@@ -200,6 +200,12 @@ const addBank = `mutation addBank($accountNumber: String!, $accountType: String!
   }
 }`;
 
+const acceptAgreement = `mutation acceptAgreement($agreementAccepted: Boolean!){
+  acceptAgreement(agreementAccepted: $agreementAccepted){
+    id
+  }
+}`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -232,4 +238,5 @@ module.exports = {
   closeBookingByDates,
   removeCampFromWishlist,
   addBank,
+  acceptAgreement,
 };

@@ -433,6 +433,9 @@ export default {
         },
       });
       client.request(getCurrentUserCampDetails).then((data) => {
+        if (data.currentUserCamp.agreementAccepted === false) {
+          EventBus.$emit('agreement-not-accepted');
+        }
         this.camp = data.currentUserCamp;
         this.placesOfInterest = this.camp.placesOfInterest;
         this.tags = this.camp.tags;

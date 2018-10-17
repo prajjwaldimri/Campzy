@@ -90,6 +90,9 @@ export default {
       });
 
       client.request(getBankDetails).then((data) => {
+        if (data.getBankDetails.agreementAccepted === false) {
+          EventBus.$emit('agreement-not-accepted');
+        }
         this.bankDetails = data.getBankDetails.bank;
         this.IFSCCode = this.bankDetails.IFSCCode;
         if (data.getBankDetails.razorpayAccountId) {
@@ -123,7 +126,6 @@ export default {
             client.request(addBank, variables).then(() => {
               EventBus.$emit('show-success-notification-short', 'Successfully Updated');
             }).catch((err) => {
-              console.log(err);
               EventBus.$emit('show-error-notification-short', 'Failed to Update');
             }).finally(() => { this.saveDetails = false; });
           } else {
