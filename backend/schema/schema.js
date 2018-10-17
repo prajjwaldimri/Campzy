@@ -9,6 +9,7 @@ const TokenQueries = require('./queries/TokenQueries');
 const BlogQueries = require('./queries/BlogQueries');
 const BookingQueries = require('./queries/BookingQueries');
 const ReviewQueries = require('./queries/ReviewQueries');
+const RequestsQueries = require('./queries/RequestsQueries');
 
 const UserMutations = require('./mutations/UserMutations');
 const CampMutations = require('./mutations/CampMutations');
@@ -19,6 +20,7 @@ const BlogMutations = require('./mutations/BlogMutations');
 const BookingMutations = require('./mutations/BookingMutations');
 const ReviewMutations = require('./mutations/ReviewMutations');
 const BankMutations = require('./mutations/BankMutations');
+const RequestsMutations = require('./mutations/RequestsMutation');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
@@ -68,6 +70,8 @@ const RootQuery = new GraphQLObjectType({
     isIFSCValid: BankMutations.isIFSCValid,
     getIFSCDetails: BankMutations.getIFSCDetails,
     getBankDetails: BankMutations.getBank,
+
+    getAllRequests: RequestsQueries.allRequests,
   },
 });
 
@@ -118,6 +122,9 @@ const Mutation = new GraphQLObjectType({
     addReview: ReviewMutations.addReview,
 
     addBank: BankMutations.addBank,
+
+    addRequests: RequestsMutations.addRequests,
+    deleteRequests: RequestsMutations.deleteRequests,
   },
 });
 
