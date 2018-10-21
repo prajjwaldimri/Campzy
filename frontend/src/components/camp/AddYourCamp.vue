@@ -21,16 +21,6 @@
               v-text-field(label='Phone Number' v-model='phoneNumber' outline)
             v-flex(xs12 md2).flex-margin
               v-btn(color="blue" dark @click='sendCampRequest' :loading='sendingRequest') Send
-          //- v-card.connect-card
-          //-   v-card-title(primary-title)
-          //-     div
-          //-       h3.headline.font-weight-normal.mb-0 Your Details
-          //-   v-container
-          //-     v-text-field(label='Name' v-model='name')
-          //-     v-text-field(label='Phone Number' v-model='phoneNumber')
-          //-   v-card-actions(style='padding:24px')
-          //-     v-spacer
-          //-     v-btn(color="blue" dark @click='sendCampRequest') Send
 
     Footer
 
@@ -45,6 +35,10 @@ import { sendRequest } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
 export default {
+  name: 'addRequest',
+  $_veeValidate: {
+    validator: 'new',
+  },
   components: {
     navbar,
     Footer,
@@ -76,9 +70,17 @@ export default {
         EventBus.$emit('show-success-notification-short', 'Scuccessfully Send Your Request');
       }).catch(() => {
         EventBus.$emit('show-error-notification-short', 'Please Try again!');
-      }).finally(() => { this.sendingRequest = false; });
+      }).finally(() => {
+        this.sendingRequest = false;
+        this.clearFields();
+      });
+    },
+    clearFields() {
+      this.name = '';
+      this.phoneNumber = '';
     },
   },
+
 
 };
 </script>

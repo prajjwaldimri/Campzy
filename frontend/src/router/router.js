@@ -30,6 +30,7 @@ const EditBlog = () => import('../components/dashboard_components/blogger_dashbo
 const EmailVerification = () => import('../components/user/EmailVerificationLink.vue');
 const PrivacyPolicy = () => import('../components/PrivacyPolicy.vue');
 const TermsAndConditions = () => import('../components/TermsAndConditions.vue');
+const CampRequests = () => import('../components/dashboard_components/admin-dashboard/CampRequests.vue');
 
 Vue.use(Router);
 
@@ -144,6 +145,11 @@ const router = new Router({
           name: 'userManagement',
           path: 'userManagement',
           component: UserManagement,
+        },
+        {
+          name: 'campRequests',
+          path: 'campRequests',
+          component: CampRequests,
         },
         {
           name: 'viewCamp',

@@ -433,6 +433,14 @@ const getBankDetails = `query getBankDetails{
   }
 }`;
 
+const getCampRequests = `query getAllRequests{
+  getAllRequests{
+    id,
+    name,
+    phoneNumber,
+  }
+}`;
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -467,4 +475,5 @@ module.exports = {
   isIFSCValid,
   getIFSCDetails,
   getBankDetails,
+  getCampRequests,
 };
