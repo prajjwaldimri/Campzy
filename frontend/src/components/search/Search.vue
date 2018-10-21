@@ -280,7 +280,7 @@ export default {
       tentCount: 1,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
-      personNumbers: [0, 1, 2, 3, 4],
+      personNumbers: [0, 1, 2, 3, 4, 5],
       dateLabel: 'Choose a date',
       filterDialog: false,
       sortDialog: false,

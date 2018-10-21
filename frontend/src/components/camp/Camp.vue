@@ -206,7 +206,7 @@ export default {
       tentCount: 2,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
-      personNumbers: [1, 2, 3, 4],
+      personNumbers: [1, 2, 3, 4, 5],
       dateLabel: 'Choose a date',
       images: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       mapUri: '',
