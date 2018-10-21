@@ -411,11 +411,11 @@ export default {
 
 <style lang="scss" scoped>
 .camps-container {
-  @media screen and (max-width: 960px) {
-    padding: 2rem;
-    padding-bottom: 12rem;
-  }
   height: 100%;
+  @media screen and (max-width: 959px) {
+    padding: 2rem;
+    padding-bottom: 15rem !important;
+  }
 }
 
 .camp-owner-conatiner {

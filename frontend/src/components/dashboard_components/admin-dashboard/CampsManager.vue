@@ -222,7 +222,6 @@ export default {
       });
       this.isTableLoading = true;
       client.request(campSearch, variables).then((data) => {
-        console.log(data);
         if (data.searchCamp.length === 0) {
           this.getAllCamps();
           this.getAllCampsLength();
@@ -241,10 +240,10 @@ export default {
 
 <style lang="scss" scoped>
 .camps-container {
-  @media screen and (min-width: 960px) {
-    padding: 2rem;
-  }
   height: 100%;
+  @media screen and (max-width: 959px) {
+    padding-bottom: 15rem;
+  }
 }
 
 .pagination-container {

@@ -69,7 +69,7 @@ export default {
       client.request(sendRequest, variables).then(() => {
         EventBus.$emit('show-success-notification-short', 'Scuccessfully Send Your Request');
       }).catch(() => {
-        EventBus.$emit('show-error-notification-short', 'Please Try again!');
+        EventBus.$emit('show-error-notification-long', 'Please Try again or Login First');
       }).finally(() => {
         this.sendingRequest = false;
         this.clearFields();

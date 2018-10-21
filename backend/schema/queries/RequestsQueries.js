@@ -23,9 +23,8 @@ const allRequests = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      const ContactRequests = await RequestsModel.find({});
-      console.log(ContactRequests);
-      return ContactRequests;
+      const contactRequests = await RequestsModel.find({});
+      return contactRequests;
     } catch (err) {
       return err;
     }
