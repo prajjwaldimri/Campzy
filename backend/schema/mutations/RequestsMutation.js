@@ -35,7 +35,7 @@ const addRequests = {
 const deleteRequests = {
   type: RequestsType,
   args: {
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {

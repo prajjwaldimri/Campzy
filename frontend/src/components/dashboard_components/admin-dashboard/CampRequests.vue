@@ -1,6 +1,7 @@
 <template lang="pug">
-  v-container.ma-0
-    v-layout(row wrap)
+  v-container.request-container.ma-0
+    h2.headline.font-weight-bold Camp Requests
+    v-layout.mt-4(row wrap)
       v-flex(xs12)
         v-layout(row wrap)
           v-card.request-card(v-for='request in campRequests')
@@ -14,14 +15,15 @@
                 span.font-weight-normal {{request.phoneNumber}}
             v-card-actions.mt-3
               v-spacer
-              v-btn(color='red' dark small @click='closeRequest(request.id)') Delete
+              v-btn(color='red' dark small @click='closeRequest(request.id)' flat) Close Request
 
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { getCampRequests } from '../../../queries/queries';
-// import { EventBus } from '../../../event-bus';
+import { deleteRequest } from '../../../queries/mutationQueries';
+import { EventBus } from '../../../event-bus';
 
 export default {
   data() {
@@ -38,7 +40,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
-
+      this.campRequest = true;
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -47,12 +49,29 @@ export default {
 
       client.request(getCampRequests).then((data) => {
         this.campRequests = data.getAllRequests;
-      }).catch((err) => {
-        console.log(err);
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Cannot Get Requests, Try again later');
       });
     },
     closeRequest(requestId) {
-      console.log(requestId);
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: requestId,
+      };
+      client.request(deleteRequest, variables).then(() => {
+        EventBus.$emit('show-success-notification-short', 'Successfully Closed!');
+        this.getAllRequests();
+      }).catch(() => {
+        EventBus.$emit('show-error-notification-short', 'Cannot Delete, Try again later');
+      });
     },
   },
 };
@@ -63,6 +82,13 @@ export default {
   margin: 1rem;
   @media screen and (max-width: 559px) {
     width: 100%;
+  }
+}
+
+.request-container {
+  margin: 0px;
+  @media screen and (max-width: 959px) {
+    padding-bottom: 15rem;
   }
 }
 </style>

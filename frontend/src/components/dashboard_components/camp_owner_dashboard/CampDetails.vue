@@ -13,7 +13,7 @@
               v-layout(row wrap)
                 v-flex(xs9)
                   v-card-title.title(primary-title)
-                    h2.font-weight-bold.healine BASIC DETAILS
+                    h2.font-weight-bold.headline BASIC DETAILS
               v-form(ref='form' lazy-validation)
                   v-layout.layout(row wrap)
                     v-flex(xs12)

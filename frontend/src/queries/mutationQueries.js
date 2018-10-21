@@ -211,6 +211,12 @@ const sendRequest = `mutation addRequests($name: String!, $phoneNumber: String!)
   }
 }`;
 
+const deleteRequest = `mutation deleteRequests($id: String!){
+  deleteRequests(id: $id){
+  id
+  }
+}`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -245,4 +251,5 @@ module.exports = {
   addBank,
   acceptAgreement,
   sendRequest,
+  deleteRequest,
 };
