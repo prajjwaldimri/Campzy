@@ -36,6 +36,10 @@
               v-list-tile-action
                 img(src="/vectors/tent.svg" height="24" width="24")
               v-list-tile-content.increase-letter-spacing-1(id='v-step-1') Camp Management
+            v-list-tile.pt-3(@click="$router.push('/dashboard/campRequests')"  v-show='isAdmin')
+              v-list-tile-action
+                v-icon chat
+              v-list-tile-content.increase-letter-spacing-1(id='v-step-1') Camp Requests
             v-list-tile.pt-3(@click="$router.push('/dashboard/campDetails')" v-show='isCampOwner')
               v-list-tile-action
                 img(src="/vectors/campfire.svg" height="24" width="24")
@@ -105,6 +109,10 @@
       v-show='isAdmin' id='v-step-2')
         span Camp Management
         v-icon explore
+      v-btn(dark @click="$router.push('/dashboard/campRequests')"
+      v-show='isAdmin')
+        span Camp Requests
+        v-icon chat
       v-btn(dark @click="$router.push('/dashboard/campInventory')"
       v-show='isCampOwner' id='v-step-3')
         span Camp Inventory
