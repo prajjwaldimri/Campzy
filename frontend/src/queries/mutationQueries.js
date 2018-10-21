@@ -205,6 +205,11 @@ const acceptAgreement = `mutation acceptAgreement($agreementAccepted: Boolean!){
     id
   }
 }`;
+const sendRequest = `mutation addRequests($name: String!, $phoneNumber: String!){
+  addRequests(name: $name, phoneNumber: $phoneNumber){
+    id
+  }
+}`;
 
 module.exports = {
   registerUser,
@@ -239,4 +244,5 @@ module.exports = {
   removeCampFromWishlist,
   addBank,
   acceptAgreement,
+  sendRequest,
 };

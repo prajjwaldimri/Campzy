@@ -12,7 +12,6 @@ const addRequests = {
   args: {
     name: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(parent, args, context) {
     try {
@@ -22,13 +21,10 @@ const addRequests = {
         throw new NotLoggedinError();
       }
       const requests = new RequestsModel({
-        name: args.title,
-        phoneNumber: args.url,
-        email: args.content,
-        clientId: userData.id,
+        name: args.name,
+        phoneNumber: args.phoneNumber,
       });
       const createRequests = await requests.save();
-      console.log(createRequests);
       return createRequests;
     } catch (err) {
       return err;
