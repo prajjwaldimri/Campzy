@@ -50,11 +50,13 @@ export default {
       sendingRequest: false,
     });
   },
+
   methods: {
     sendCampRequest() {
       if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+        this.$router.push('/login');
       }
+      EventBus.$emit('show-progress-bar');
       this.sendingRequest = true;
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -72,6 +74,7 @@ export default {
         EventBus.$emit('show-error-notification-long', 'Please Try again or Login First');
       }).finally(() => {
         this.sendingRequest = false;
+        EventBus.$emit('hide-progress-bar');
         this.clearFields();
       });
     },
@@ -129,7 +132,7 @@ export default {
 }
 
 .responsive-img {
-  height: 100vh;
+  height: 90vh;
   @media screen and (max-width: 959px) {
     height: 70vh;
   }
