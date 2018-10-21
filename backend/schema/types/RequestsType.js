@@ -10,9 +10,6 @@ const RequestType = new GraphQLObjectType({
     phoneNumber: {
       type: GraphQLString,
     },
-    email: {
-      type: GraphQLString,
-    },
   }),
 });
 
