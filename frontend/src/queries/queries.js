@@ -132,6 +132,15 @@ const getCampDetail = `query camp($id: String!){
         petsAllowed,
         chargingPoints,
       },
+      bank{
+        beneficiary
+        accountType
+        accountNumber
+        IFSCCode
+      }
+      gst,
+      campDocuments,
+      images,
 
   }
 }
