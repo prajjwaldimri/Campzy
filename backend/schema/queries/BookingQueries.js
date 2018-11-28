@@ -69,6 +69,8 @@ const getCampBookings = {
   type: new GraphQLList(BookingType),
   args: {
     id: { type: GraphQLString },
+    active: { type: GraphQLBoolean },
+    past: { type: GraphQLBoolean },
   },
   async resolve(parent, args, context) {
     try {
@@ -82,9 +84,21 @@ const getCampBookings = {
         throw new PrivilegeError();
       }
 
-      const getBooking = await BookingModel.find({ camp: args.id }).populate(
-        'user tent',
-      );
+      const currentDate = new Date();
+
+      let getBooking = [];
+      if (args.active) {
+        getBooking = await BookingModel.find({
+          camp: args.id,
+          endDate: { $gte: currentDate },
+        }).populate('user tent');
+      } else {
+        getBooking = await BookingModel.find({
+          camp: args.id,
+          endDate: { $lt: currentDate },
+        }).populate('user tent');
+      }
+
       const campBookings = [];
 
       getBooking.forEach((campBooking) => {
@@ -131,7 +145,10 @@ const countCampActiveBookings = {
 
 const allBookings = {
   type: new GraphQLList(BookingType),
-  args: {},
+  args: {
+    active: { type: GraphQLBoolean },
+    past: { type: GraphQLBoolean },
+  },
   async resolve(parent, args, context) {
     try {
       const user = await auth.getAuthenticatedUser(context.req);
@@ -143,9 +160,19 @@ const allBookings = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      const allBooking = await BookingModel.find({})
-        .populate('user', 'name')
-        .populate('camp', 'name url code');
+      const currentDate = new Date();
+      let allBooking = [];
+
+      if (args.active) {
+        allBooking = await BookingModel.find({ endDate: { $gte: currentDate } })
+          .populate('user', 'name')
+          .populate('camp', 'name url code');
+      } else {
+        allBooking = await BookingModel.find({ endDate: { $lt: currentDate } })
+          .populate('user', 'name')
+          .populate('camp', 'name url code');
+      }
+
       const adminBookings = [];
 
       allBooking.forEach((booking) => {

@@ -352,8 +352,8 @@ const getUserBookings = `query getUserBookings($active: Boolean, $past: Boolean)
   }
 }`;
 
-const campBookings = `query campBookings($id : String!){
-        campBookings(id : $id){
+const campBookings = `query campBookings($id : String!, $active: Boolean!, $past: Boolean!){
+        campBookings(id : $id, active: $active, past: $past){
             user {
               name
             },
@@ -389,8 +389,8 @@ const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
   }
 }`;
 
-const allBookings = `query allBookings{
-        allBookings{
+const allBookings = `query allBookings($active: Boolean!, $past: Boolean!){
+        allBookings(active: $active, past: $past){
           user {
               name
             },

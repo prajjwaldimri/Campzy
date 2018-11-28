@@ -32,7 +32,13 @@
                           v-btn#open__map(dark slot="activator")
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card#map(height='500' width='700')
+                          v-card(height='500' width='700')
+                            v-container(fluid style='padding:0px;height:90%;')
+                              v-card(style='width:100%;height:100%;')#map
+                            v-card-actions
+                              v-spacer
+                              v-btn#set__coordinates(dark) Ok
+
 
         v-tab-item(id='documents')
           v-layout(row wrap)
@@ -206,6 +212,8 @@ export default {
               marker.setPosition(pos);
               map.setCenter(pos);
               marker.setMap(map);
+              console.log(this.coordinates);
+              this.location = this.coordinates.lat;
             }, () => {
               handleLocationError(true, marker, map.getCenter());
             });
@@ -214,10 +222,10 @@ export default {
                 lat: marker.position.lat(),
                 lng: marker.position.lng(),
               };
-              console.log(pos);
               map.setCenter(pos);
               marker.setMap(map);
               this.coordinates = pos;
+              console.log(this.coordinates);
             });
           } else {
             // Browser doesn't support Geolocation
@@ -234,6 +242,15 @@ export default {
 
       },
       { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g' },
+      {
+        innerHTML: `document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
+      function setCoordinates(){
+        console.log(this.coordinates);
+        console.log('coordinates');
+      }
+      `,
+        type: 'text/javascript',
+      },
     ],
   },
 

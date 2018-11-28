@@ -5,7 +5,7 @@ const mailjet = require('node-mailjet').connect(
 
 const moment = require('moment');
 
-const sendEmailVerificationToken = async (email, token, userName) => {
+const sendEmailVerificationToken = async (email, token, name) => {
   try {
     return await mailjet.post('send', { version: 'v3.1' }).request({
       Messages: [
@@ -17,14 +17,14 @@ const sendEmailVerificationToken = async (email, token, userName) => {
           To: [
             {
               Email: email,
-              Name: userName,
+              Name: name,
             },
           ],
           TemplateID: 541428,
           TemplateLanguage: true,
           Subject: 'Welcome to Campzy.',
           Variables: {
-            userName,
+            userName: name,
             verificationToken: token,
           },
         },

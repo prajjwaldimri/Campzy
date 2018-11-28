@@ -58,7 +58,7 @@
                     v-checkbox(label='Pets Allowed' color='success' v-model='amenities.petsAllowed' readonly)
                   v-flex(xs6 md4)
                     v-checkbox(label='Charging Points' color='success' v-model='amenities.chargingPoints' readonly)
-            v-flex(xs12)
+            //- v-flex(xs12)
               //- v-combobox(v-model='campDetail.placesOfInterest' attach chips
               //- label='Places of Interest' multiple readonly)
             v-flex(xs12)

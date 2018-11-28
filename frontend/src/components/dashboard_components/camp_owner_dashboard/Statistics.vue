@@ -315,6 +315,8 @@ export default {
       });
       const variables = {
         id: campID,
+        active: true,
+        past: false,
       };
       client.request(campBookings, variables).then((data) => {
         this.campBookings = data.campBookings;
@@ -394,10 +396,14 @@ export default {
         },
       });
 
-      client.request(allBookings).then((data) => {
+      const variables = {
+        active: true,
+        past: false,
+      };
+
+      client.request(allBookings, variables).then((data) => {
         this.adminBookings = data.allBookings;
       }).catch((err) => {
-        console.log(err);
         EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
       });
     },
