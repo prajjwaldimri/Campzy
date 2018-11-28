@@ -352,8 +352,8 @@ const getUserBookings = `query getUserBookings($active: Boolean, $past: Boolean)
   }
 }`;
 
-const campBookings = `query campBookings($id : String!, $active: Boolean!, $past: Boolean!){
-        campBookings(id : $id, active: $active, past: $past){
+const campBookings = `query campBookings($id : String!, $active: Boolean!, $past: Boolean!, $page: Int){
+        campBookings(id : $id, active: $active, past: $past, page: $page){
             user {
               name
             },
@@ -389,8 +389,8 @@ const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
   }
 }`;
 
-const allBookings = `query allBookings($active: Boolean!, $past: Boolean!){
-        allBookings(active: $active, past: $past){
+const allBookings = `query allBookings($active: Boolean!, $past: Boolean!, $page: Int){
+        allBookings(active: $active, past: $past, page: $page){
           user {
               name
             },
@@ -406,6 +406,17 @@ const allBookings = `query allBookings($active: Boolean!, $past: Boolean!){
            code
         }
       }`;
+
+const countCampPastBookings = `query countCampPastBookings($id: String!){
+    countCampPastBookings(id: $id){
+      bookingCount
+    }
+  }`;
+const countAdminPastBookings = `query countAdminPastBookings{
+    countAdminPastBookings{
+      bookingCount
+    }
+  }`;
 
 const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
   isCampUrlAvailable(url: $url){
@@ -485,4 +496,6 @@ module.exports = {
   getIFSCDetails,
   getBankDetails,
   getCampRequests,
+  countAdminPastBookings,
+  countCampPastBookings,
 };

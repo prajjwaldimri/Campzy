@@ -8,7 +8,9 @@ const auth = require('../../config/auth');
 
 const { NotLoggedinError } = require('../graphqlErrors');
 
-const { GraphQLList, GraphQLString, GraphQLBoolean } = graphql;
+const {
+  GraphQLList, GraphQLString, GraphQLBoolean, GraphQLInt,
+} = graphql;
 const { PrivilegeError } = require('../graphqlErrors');
 
 const getUserBookings = {
@@ -71,6 +73,7 @@ const getCampBookings = {
     id: { type: GraphQLString },
     active: { type: GraphQLBoolean },
     past: { type: GraphQLBoolean },
+    page: { type: GraphQLInt },
   },
   async resolve(parent, args, context) {
     try {
@@ -87,7 +90,26 @@ const getCampBookings = {
       const currentDate = new Date();
 
       let getBooking = [];
-      if (args.active) {
+
+      if (args.page) {
+        if (args.active) {
+          getBooking = await BookingModel.find({
+            camp: args.id,
+            endDate: { $gte: currentDate },
+          })
+            .populate('user tent')
+            .limit(8)
+            .skip((args.page - 1) * 8);
+        } else {
+          getBooking = await BookingModel.find({
+            camp: args.id,
+            endDate: { $lt: currentDate },
+          })
+            .populate('user tent')
+            .limit(8)
+            .skip((args.page - 1) * 8);
+        }
+      } else if (args.active) {
         getBooking = await BookingModel.find({
           camp: args.id,
           endDate: { $gte: currentDate },
@@ -148,6 +170,7 @@ const allBookings = {
   args: {
     active: { type: GraphQLBoolean },
     past: { type: GraphQLBoolean },
+    page: { type: GraphQLInt },
   },
   async resolve(parent, args, context) {
     try {
@@ -162,13 +185,34 @@ const allBookings = {
       }
       const currentDate = new Date();
       let allBooking = [];
-
-      if (args.active) {
-        allBooking = await BookingModel.find({ endDate: { $gte: currentDate } })
+      if (args.page) {
+        if (args.active) {
+          allBooking = await BookingModel.find({
+            endDate: { $gte: currentDate },
+          })
+            .populate('user', 'name')
+            .populate('camp', 'name url code')
+            .limit(8)
+            .skip((args.page - 1) * 8);
+        } else {
+          allBooking = await BookingModel.find({
+            endDate: { $lt: currentDate },
+          })
+            .populate('user', 'name')
+            .populate('camp', 'name url code')
+            .limit(8)
+            .skip((args.page - 1) * 8);
+        }
+      } else if (args.active) {
+        allBooking = await BookingModel.find({
+          endDate: { $gte: currentDate },
+        })
           .populate('user', 'name')
           .populate('camp', 'name url code');
       } else {
-        allBooking = await BookingModel.find({ endDate: { $lt: currentDate } })
+        allBooking = await BookingModel.find({
+          endDate: { $lt: currentDate },
+        })
           .populate('user', 'name')
           .populate('camp', 'name url code');
       }
@@ -191,9 +235,68 @@ const allBookings = {
   },
 };
 
+const countAdminPastBookings = {
+  type: BookingType,
+  args: {},
+
+  async resolve(args, parent, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserAdmin = await auth.isUserAdmin(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserAdmin) {
+        throw new PrivilegeError();
+      }
+      const currentDate = new Date();
+      const bookingCount = await BookingModel.estimatedDocumentCount({
+        endDate: { $lt: currentDate },
+      });
+      console.log(bookingCount);
+      return { bookingCount };
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const countCampPastBookings = {
+  type: BookingType,
+  args: {
+    id: { type: GraphQLString },
+  },
+
+  async resolve(args, parent, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserAdmin(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      const currentDate = new Date();
+      const bookingCount = await BookingModel.estimatedDocumentCount({
+        id: args.id,
+        endDate: { $lt: currentDate },
+      });
+      console.log(bookingCount);
+      return { bookingCount };
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   getUserBookings,
   getCampBookings,
   countCampActiveBookings,
   allBookings,
+  countAdminPastBookings,
+  countCampPastBookings,
 };

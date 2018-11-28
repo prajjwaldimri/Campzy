@@ -75,6 +75,12 @@
                       v-flex(md3)
                         h5.caption.grey--text TRIP ENDED
                         h3.mt-1.subheading {{booking.endDate | moment('Do MMMM YYYY')}}
+    v-container.pagination-container(fluid)
+      v-pagination.hidden-xs(v-show='isTypeCampOwner' v-model='page' :length='campBookingPageLength'
+       @input='getCampOwnerPastBookings(page)')
+
+      v-pagination.hidden-xs(v-show='isTypeAdmin' v-model='page' :length='adminBookingPageLength'
+       @input='getAdminPastBookings(page)')
 
 
 </template>
@@ -83,7 +89,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../event-bus';
 import {
-  campBookings, allBookings,
+  campBookings, allBookings, countCampPastBookings, countAdminPastBookings,
 } from '../../../queries/queries';
 
 export default {
@@ -94,6 +100,9 @@ export default {
       isTypeAdmin: false,
       adminBookings: [],
       campBookings: [],
+      page: 1,
+      adminBookingPageLength: 1,
+      campBookingPageLength: 1,
 
     };
   },
@@ -103,6 +112,7 @@ export default {
   },
 
   methods: {
+
     getCurrentUserType() {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login');
@@ -124,6 +134,7 @@ export default {
           }
           if (data.currentUser.type === 'Admin') {
             this.isTypeAdmin = true;
+            this.getAdminBookingLength();
             this.getAdminPastBookings();
           }
         })
@@ -131,9 +142,26 @@ export default {
           EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
         });
     },
+    getAdminBookingLength() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      // EventBus.$emit('show-progress-bar');
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+
+      client.request(countAdminPastBookings).then((data) => {
+        this.adminBookingPageLength = Math.ceil((data.countAdminPastBookings.bookingCount) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
 
     // Get all active bookings
-    getAdminPastBookings() {
+    getAdminPastBookings(pageNumber) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
@@ -147,6 +175,7 @@ export default {
       const variables = {
         active: false,
         past: true,
+        page: pageNumber,
       };
 
       client.request(allBookings, variables).then((data) => {
@@ -177,6 +206,7 @@ export default {
           if (data.currentUserCamp.agreementAccepted === false) {
             EventBus.$emit('agreement-not-accepted');
           }
+          this.getCampBookingLength(data.currentUserCamp.id);
           this.getCampOwnerPastBookings(data.currentUserCamp.id);
         })
         .catch((err) => {
@@ -184,8 +214,28 @@ export default {
         });
     },
 
+    getCampBookingLength(campId) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      // EventBus.$emit('show-progress-bar');
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      const variables = {
+        id: campId,
+      };
+      client.request(countCampPastBookings, variables).then((data) => {
+        this.campBookingPageLength = Math.ceil((data.countCampPastBookings.bookingCount) / 8);
+      }).catch((err) => {
+        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
+      });
+    },
+
     // Get CampOwner's active bookings
-    getCampOwnerPastBookings(campID) {
+    getCampOwnerPastBookings(campID, pageNumber) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');
       }
@@ -199,6 +249,7 @@ export default {
         id: campID,
         active: false,
         past: true,
+        page: pageNumber,
       };
       client.request(campBookings, variables).then((data) => {
         this.campBookings = data.campBookings;
@@ -224,5 +275,10 @@ export default {
 .camp-owner-conatiner {
   margin: 0px;
   padding: 0px;
+}
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
