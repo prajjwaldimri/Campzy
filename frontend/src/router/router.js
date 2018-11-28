@@ -31,6 +31,7 @@ const EmailVerification = () => import('../components/user/EmailVerificationLink
 const PrivacyPolicy = () => import('../components/PrivacyPolicy.vue');
 const TermsAndConditions = () => import('../components/TermsAndConditions.vue');
 const CampRequests = () => import('../components/dashboard_components/admin-dashboard/CampRequests.vue');
+const PreviousBookings = () => import('../components/dashboard_components/camp_owner_dashboard/previousBookings.vue');
 
 Vue.use(Router);
 
@@ -170,6 +171,11 @@ const router = new Router({
           name: 'editBlog',
           path: 'editBlog/:id',
           component: EditBlog,
+        },
+        {
+          name: 'previousBookings',
+          path: 'previousBookings',
+          component: PreviousBookings,
         },
       ],
     },

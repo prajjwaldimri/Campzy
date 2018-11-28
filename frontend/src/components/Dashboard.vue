@@ -27,6 +27,10 @@
               v-list-tile-action
                 v-icon data_usage
               v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Statistics
+            v-list-tile.pt-3(@click="$router.push('/dashboard/previousBookings')" v-show='isAdmin || isCampOwner')
+              v-list-tile-action
+                v-icon alarm
+              v-list-tile-content.increase-letter-spacing-1(id='v-step-2') Past Bookings
             v-list-tile.pt-3(@click="$router.push('/dashboard/userManagement')"
               v-show='isAdmin')
               v-list-tile-action
