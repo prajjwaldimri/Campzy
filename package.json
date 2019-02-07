@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "10.10.0",
-    "yarn": "1.12.3"
+    "node": "11.x.x",
+    "yarn": "1.x.x"
   },
   "scripts": {
     "preinstall": "yarn global add pm2",
