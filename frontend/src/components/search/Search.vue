@@ -276,7 +276,15 @@ export default {
       tentType: ['Dome', 'Swiss'],
       tentTypes: ['Dome', 'Swiss'],
       amenitiesSelected: [],
-      amenities: ['Attached Washroom', 'Charging Points', 'Meals Included', 'Mobile Connectivity', 'Bonfire', 'Pets Allowed', 'Meals Included'],
+      amenities: [
+        'Attached Washroom',
+        'Charging Points',
+        'Meals Included',
+        'Mobile Connectivity',
+        'Bonfire',
+        'Pets Allowed',
+        'Meals Included',
+      ],
       tentCount: 1,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
@@ -298,12 +306,16 @@ export default {
 
     // Set the default date label
     this.fromDate = this.$moment().format('YYYY-MM-DD');
-    this.toDate = this.$moment().add(2, 'days').format('YYYY-MM-DD');
+    this.toDate = this.$moment()
+      .add(1, 'days')
+      .format('YYYY-MM-DD');
     this.search();
   },
 
   methods: {
-    allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
+    allowedDates(val) {
+      return this.$moment(val).isSameOrAfter(Date.now(), 'days');
+    },
 
     search() {
       EventBus.$emit('show-progress-bar');
@@ -312,7 +324,10 @@ export default {
       if (this.searchInput.trim() === '') {
         return;
       }
-      this.$router.push({ name: 'search', params: { searchterm: this.searchInput.trim() } });
+      this.$router.push({
+        name: 'search',
+        params: { searchterm: this.searchInput.trim() },
+      });
       const variables = {
         searchTerm: this.searchInput,
         minPrice: this.priceRange[0],
@@ -326,15 +341,18 @@ export default {
         tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
         amenities: this.amenitiesSelected,
       };
-      request('/graphql', campSearchUser, variables).then((data) => {
-        this.searchResults = data.campSearchUser;
-        this.calculatePrice();
-      }).catch(() => {
-        this.searchResults = [];
-      }).finally(() => {
-        this.searchComplete = true;
-        EventBus.$emit('hide-progress-bar');
-      });
+      request('/graphql', campSearchUser, variables)
+        .then((data) => {
+          this.searchResults = data.campSearchUser;
+          this.calculatePrice();
+        })
+        .catch(() => {
+          this.searchResults = [];
+        })
+        .finally(() => {
+          this.searchComplete = true;
+          EventBus.$emit('hide-progress-bar');
+        });
     },
     openImageDialog(campUrl, campName) {
       EventBus.$emit('open-image-dialog', { campUrl, campName });
@@ -344,14 +362,19 @@ export default {
         // If the backend search provides more tents than needed then sort the tents and remove additional ones
         let { inventory } = searchResult;
         if (inventory.length > this.tentCount) {
-          const tents = inventory.sort((a, b) => a.bookingPrice - b.bookingPrice);
+          const tents = inventory.sort(
+            (a, b) => a.bookingPrice - b.bookingPrice,
+          );
           inventory = tents.slice(0, this.tentCount);
         }
         searchResult.inventory = inventory;
 
         // Calculate the minimum price for each Camp.
-        const minPrice = searchResult.inventory.reduce((price, tent) => price + tent.bookingPrice, 0);
-        searchResult.minPrice = minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
+        const minPrice = searchResult.inventory.reduce(
+          (price, tent) => price + tent.bookingPrice,
+          0,
+        );
+        searchResult.minPrice =          minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
       });
     },
     sort(option) {
@@ -371,19 +394,27 @@ export default {
   },
   watch: {
     fromDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM',
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
 
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
-        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
+        this.toDate = this.$moment(this.fromDate)
+          .add(1, 'days')
+          .format('YYYY-MM-DD');
       }
     },
     toDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM',
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
 
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
-        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
+        this.toDate = this.$moment(this.fromDate)
+          .add(1, 'days')
+          .format('YYYY-MM-DD');
       }
     },
     tentCount() {

@@ -12,7 +12,7 @@ const sendEmailVerificationToken = async (email, token, name) => {
         {
           From: {
             Email: 'support@campzy.in',
-            Name: 'Campzy',
+            Name: 'Campzy Support',
           },
           To: [
             {
@@ -20,17 +20,18 @@ const sendEmailVerificationToken = async (email, token, name) => {
               Name: name,
             },
           ],
-          TemplateID: 541428,
+          TemplateID: 690665,
           TemplateLanguage: true,
           Subject: 'Welcome to Campzy.',
           Variables: {
             userName: name,
-            verificationToken: token,
+            confirmation_link: `https://campzy.in/emailVerification/${token}`,
           },
         },
       ],
     });
   } catch (err) {
+    console.log(err);
     return err;
   }
 };
