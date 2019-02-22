@@ -8,6 +8,7 @@ const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const BookingModel = require('../../models/booking');
 const CampType = require('../types/CampType');
+const PlaceType = require('../types/PlaceType');
 const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
@@ -222,11 +223,11 @@ const campSearchUser = {
                 moment(booking.endDate).add(1, 'day'),
                 'days',
               )
-                || moment(args.bookingEndDate).isBetween(
-                  moment(booking.startDate).subtract(1, 'day'),
-                  moment(booking.endDate).add(1, 'day'),
-                  'days',
-                )
+              || moment(args.bookingEndDate).isBetween(
+                moment(booking.startDate).subtract(1, 'day'),
+                moment(booking.endDate).add(1, 'day'),
+                'days',
+              )
             );
           });
 
@@ -331,6 +332,50 @@ const isCampUrlAvailable = {
   },
 };
 
+const getCampsInPlace = {
+  type: PlaceType,
+  args: {
+    place: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  async resolve(parent, args) {
+    try {
+      const place = {
+        luxuryCamps: [],
+        premiumCamps: [],
+        normalCamps: [],
+        cheapCamps: [],
+      };
+      const results = await CampModel.find(
+        { $text: { $search: args.place } },
+        { score: { $meta: 'textScore' } },
+      )
+        .populate({
+          path: 'inventory',
+          select: 'id bookingPrice capacity disabledDates',
+          options: { sort: { bookingPrice: -1 }, limit: 1 },
+        })
+        .limit(20)
+        .sort({ score: { $meta: 'textScore' } });
+
+      await forEach(results, async (result) => {
+        if (result.inventory[0].bookingPrice > 40000) {
+          place.luxuryCamps.push(result);
+        } else if (result.inventory[0].bookingPrice > 20000) {
+          place.premiumCamps.push(result);
+        } else if (result.inventory[0].bookingPrice > 10000) {
+          place.normalCamps.push(result);
+        } else {
+          place.cheapCamps.push(result);
+        }
+      });
+
+      return place;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
 module.exports = {
   getCamp,
   getCurrentUserCamp,
@@ -341,4 +386,5 @@ module.exports = {
   getCampUser,
   getImagesOfCamp,
   isCampUrlAvailable,
+  getCampsInPlace,
 };
