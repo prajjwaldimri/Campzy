@@ -24,7 +24,16 @@ export default {
       });
       const getCampByPlace = `query($place: String!){
         getCampsInPlace(place: $place){
+          luxuryCamps{
+            name
+          },
           premiumCamps{
+            name
+          },
+          normalCamps {
+            name
+          },
+          cheapCamps{
             name
           }
           normalCamps{
