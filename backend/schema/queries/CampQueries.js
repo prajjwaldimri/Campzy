@@ -2,29 +2,18 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const graphql = require('graphql');
 const moment = require('moment');
-const {
-  filter,
-  forEach,
-} = require('p-iteration');
-const {
-  GraphQLDate,
-} = require('graphql-iso-date');
+const { filter, forEach } = require('p-iteration');
+const { GraphQLDate } = require('graphql-iso-date');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const BookingModel = require('../../models/booking');
 const CampType = require('../types/CampType');
 const PlaceType = require('../types/PlaceType');
-const {
-  NotLoggedinError,
-  PrivilegeError,
-} = require('../graphqlErrors');
+const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const {
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLNonNull,
+  GraphQLString, GraphQLList, GraphQLInt, GraphQLNonNull,
 } = graphql;
 
 const getCamp = {
@@ -63,9 +52,7 @@ const getImagesOfCamp = {
     try {
       return await CampModel.findOne({
         url: `${args.url}`,
-      }).select(
-        'id name images',
-      );
+      }).select('id name images');
     } catch (err) {
       return err;
     }
@@ -223,15 +210,18 @@ const campSearchUser = {
   },
   async resolve(parent, args) {
     try {
-      let results = await CampModel.find({
-        $text: {
-          $search: args.searchTerm,
+      let results = await CampModel.find(
+        {
+          $text: {
+            $search: args.searchTerm,
+          },
         },
-      }, {
-        score: {
-          $meta: 'textScore',
+        {
+          score: {
+            $meta: 'textScore',
+          },
         },
-      })
+      )
         .and({
           isAvailable: {
             $eq: true,
@@ -266,9 +256,7 @@ const campSearchUser = {
 
       results = await filter(results, async (result) => {
         const requiredCapacity = args.tentCount * args.personCount;
-        let {
-          inventory,
-        } = result;
+        let { inventory } = result;
         inventory = await filter(inventory, (tent) => {
           // Check if any of the disabled dates fall between the booking start and end date
 
@@ -429,15 +417,18 @@ const getCampsInPlace = {
         normalCamps: [],
         cheapCamps: [],
       };
-      const results = await CampModel.find({
-        $text: {
-          $search: args.place,
+      const results = await CampModel.find(
+        {
+          $text: {
+            $search: args.place,
+          },
         },
-      }, {
-        score: {
-          $meta: 'textScore',
+        {
+          score: {
+            $meta: 'textScore',
+          },
         },
-      })
+      )
         .populate({
           path: 'inventory',
           select: 'id bookingPrice capacity disabledDates',
@@ -455,19 +446,19 @@ const getCampsInPlace = {
           },
         });
 
-
       await forEach(results, async (result) => {
-        console.log(result.inventory[0]);
-        if (result.inventory[0].bookingPrice > 40000) {
+        // console.log(result.inventory);
+        if (result.inventory.bookingPrice > 40000) {
           place.luxuryCamps.push(result);
-        } else if (result.inventory[0].bookingPrice > 20000) {
+        } else if (result.inventory.bookingPrice > 20000) {
           place.premiumCamps.push(result);
-        } else if (result.inventory[0].bookingPrice > 10000) {
+        } else if (result.inventory.bookingPrice > 5000) {
           place.normalCamps.push(result);
         } else {
           place.cheapCamps.push(result);
         }
       });
+      console.log(place);
       return place;
     } catch (err) {
       return err;
