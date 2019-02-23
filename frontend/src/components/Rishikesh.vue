@@ -27,6 +27,12 @@ export default {
           premiumCamps{
             name
           }
+          normalCamps{
+            name
+          }
+          cheapCamps{
+            name
+          }
         }
       }`;
       const variables = {
