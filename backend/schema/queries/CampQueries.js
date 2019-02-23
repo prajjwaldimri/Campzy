@@ -2,24 +2,37 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const graphql = require('graphql');
 const moment = require('moment');
-const { filter, forEach } = require('p-iteration');
-const { GraphQLDate } = require('graphql-iso-date');
+const {
+  filter,
+  forEach,
+} = require('p-iteration');
+const {
+  GraphQLDate,
+} = require('graphql-iso-date');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const BookingModel = require('../../models/booking');
 const CampType = require('../types/CampType');
 const PlaceType = require('../types/PlaceType');
-const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
+const {
+  NotLoggedinError,
+  PrivilegeError,
+} = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const {
-  GraphQLString, GraphQLList, GraphQLInt, GraphQLNonNull,
+  GraphQLString,
+  GraphQLList,
+  GraphQLInt,
+  GraphQLNonNull,
 } = graphql;
 
 const getCamp = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
+    id: {
+      type: GraphQLString,
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -42,11 +55,15 @@ const getCamp = {
 const getImagesOfCamp = {
   type: CampType,
   args: {
-    url: { type: GraphQLString },
+    url: {
+      type: GraphQLString,
+    },
   },
   async resolve(parent, args) {
     try {
-      return await CampModel.findOne({ url: `${args.url}` }).select(
+      return await CampModel.findOne({
+        url: `${args.url}`,
+      }).select(
         'id name images',
       );
     } catch (err) {
@@ -82,7 +99,9 @@ const getAllCamps = {
   // Returns all camps
   type: new GraphQLList(CampType),
   args: {
-    page: { type: GraphQLInt },
+    page: {
+      type: GraphQLInt,
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -120,7 +139,9 @@ const countTotalCamps = {
         throw new PrivilegeError();
       }
       const count = await CampModel.estimatedDocumentCount({});
-      return { count };
+      return {
+        count,
+      };
     } catch (err) {
       return err;
     }
@@ -130,8 +151,12 @@ const countTotalCamps = {
 const searchParticularCamp = {
   type: new GraphQLList(CampType),
   args: {
-    searchTerm: { type: new GraphQLNonNull(GraphQLString) },
-    page: { type: GraphQLInt },
+    searchTerm: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    page: {
+      type: GraphQLInt,
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -144,7 +169,11 @@ const searchParticularCamp = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await CampModel.find({ $text: { $search: args.searchTerm } })
+      return await CampModel.find({
+        $text: {
+          $search: args.searchTerm,
+        },
+      })
         .limit(8)
         .skip((args.page - 1) * 8)
         .populate('ownerId', 'id name');
@@ -158,45 +187,88 @@ const searchParticularCamp = {
 const campSearchUser = {
   type: new GraphQLList(CampType),
   args: {
-    searchTerm: { type: GraphQLString },
-    preBookPeriod: { type: GraphQLInt },
-    bookingStartDate: { type: GraphQLDate },
-    bookingEndDate: { type: GraphQLDate },
-    tripDuration: { type: GraphQLInt },
-    minPrice: { type: GraphQLInt },
-    maxPrice: { type: GraphQLInt },
-    page: { type: GraphQLInt },
-    tentCount: { type: GraphQLInt },
-    personCount: { type: GraphQLInt },
-    amenities: { type: new GraphQLList(GraphQLString) },
+    searchTerm: {
+      type: GraphQLString,
+    },
+    preBookPeriod: {
+      type: GraphQLInt,
+    },
+    bookingStartDate: {
+      type: GraphQLDate,
+    },
+    bookingEndDate: {
+      type: GraphQLDate,
+    },
+    tripDuration: {
+      type: GraphQLInt,
+    },
+    minPrice: {
+      type: GraphQLInt,
+    },
+    maxPrice: {
+      type: GraphQLInt,
+    },
+    page: {
+      type: GraphQLInt,
+    },
+    tentCount: {
+      type: GraphQLInt,
+    },
+    personCount: {
+      type: GraphQLInt,
+    },
+    amenities: {
+      type: new GraphQLList(GraphQLString),
+    },
   },
   async resolve(parent, args) {
     try {
-      let results = await CampModel.find(
-        { $text: { $search: args.searchTerm } },
-        { score: { $meta: 'textScore' } },
-      )
-        .and({ isAvailable: { $eq: true } })
+      let results = await CampModel.find({
+        $text: {
+          $search: args.searchTerm,
+        },
+      }, {
+        score: {
+          $meta: 'textScore',
+        },
+      })
+        .and({
+          isAvailable: {
+            $eq: true,
+          },
+        })
         .populate({
           path: 'inventory',
           match: {
-            isAvailable: { $eq: true },
+            isAvailable: {
+              $eq: true,
+            },
             bookingPrice: {
               $gte: parseInt(args.minPrice / args.tripDuration, 10),
               $lte: parseInt(args.maxPrice / args.tripDuration, 10),
             },
-            preBookPeriod: { $gte: args.preBookPeriod },
-            capacity: { $gte: args.personCount },
+            preBookPeriod: {
+              $gte: args.preBookPeriod,
+            },
+            capacity: {
+              $gte: args.personCount,
+            },
           },
           select: 'id bookingPrice capacity disabledDates',
         })
         .limit(20)
         .skip((args.page - 1) * 20)
-        .sort({ score: { $meta: 'textScore' } });
+        .sort({
+          score: {
+            $meta: 'textScore',
+          },
+        });
 
       results = await filter(results, async (result) => {
         const requiredCapacity = args.tentCount * args.personCount;
-        let { inventory } = result;
+        let {
+          inventory,
+        } = result;
         inventory = await filter(inventory, (tent) => {
           // Check if any of the disabled dates fall between the booking start and end date
 
@@ -211,7 +283,9 @@ const campSearchUser = {
         inventory = await filter(inventory, async (tent) => {
           // Get all bookings of tents
           // Check whether the provided clashes with other bookings
-          const bookings = await BookingModel.find({ tents: tent._id });
+          const bookings = await BookingModel.find({
+            tents: tent._id,
+          });
 
           const isDisableDateInBetween = bookings.some((booking) => {
             if (booking.isCancelled) {
@@ -303,11 +377,15 @@ const campSearchUser = {
 const getCampUser = {
   type: CampType,
   args: {
-    url: { type: GraphQLString },
+    url: {
+      type: GraphQLString,
+    },
   },
   async resolve(parent, args) {
     try {
-      return await CampModel.findOne({ url: `${args.url}` }).populate({
+      return await CampModel.findOne({
+        url: `${args.url}`,
+      }).populate({
         path: 'inventory',
         select: 'capacity',
       });
@@ -320,10 +398,14 @@ const getCampUser = {
 const isCampUrlAvailable = {
   type: CampType,
   args: {
-    url: { type: GraphQLString },
+    url: {
+      type: GraphQLString,
+    },
   },
   async resolve(parent, args) {
-    const user = await CampModel.findOne({ url: args.url });
+    const user = await CampModel.findOne({
+      url: args.url,
+    });
     if (user) {
       throw new Error('Url is already taken');
     } else {
@@ -335,7 +417,9 @@ const isCampUrlAvailable = {
 const getCampsInPlace = {
   type: PlaceType,
   args: {
-    place: { type: new GraphQLNonNull(GraphQLString) },
+    place: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args) {
     try {
@@ -345,19 +429,35 @@ const getCampsInPlace = {
         normalCamps: [],
         cheapCamps: [],
       };
-      const results = await CampModel.find(
-        { $text: { $search: args.place } },
-        { score: { $meta: 'textScore' } },
-      )
+      const results = await CampModel.find({
+        $text: {
+          $search: args.place,
+        },
+      }, {
+        score: {
+          $meta: 'textScore',
+        },
+      })
         .populate({
           path: 'inventory',
           select: 'id bookingPrice capacity disabledDates',
-          options: { sort: { bookingPrice: -1 }, limit: 1 },
+          options: {
+            sort: {
+              bookingPrice: -1,
+            },
+            limit: 1,
+          },
         })
         .limit(20)
-        .sort({ score: { $meta: 'textScore' } });
+        .sort({
+          score: {
+            $meta: 'textScore',
+          },
+        });
+
 
       await forEach(results, async (result) => {
+        console.log(result.inventory[0]);
         if (result.inventory[0].bookingPrice > 40000) {
           place.luxuryCamps.push(result);
         } else if (result.inventory[0].bookingPrice > 20000) {
@@ -368,7 +468,6 @@ const getCampsInPlace = {
           place.cheapCamps.push(result);
         }
       });
-
       return place;
     } catch (err) {
       return err;

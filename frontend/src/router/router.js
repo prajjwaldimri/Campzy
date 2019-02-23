@@ -32,165 +32,168 @@ const PrivacyPolicy = () => import('../components/PrivacyPolicy.vue');
 const TermsAndConditions = () => import('../components/TermsAndConditions.vue');
 const CampRequests = () => import('../components/dashboard_components/admin-dashboard/CampRequests.vue');
 const PreviousBookings = () => import('../components/dashboard_components/camp_owner_dashboard/previousBookings.vue');
+const Places = () => import('../components/Rishikesh.vue');
 
 Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '*',
-      component: NotFoundPage,
-    },
-    {
+  routes: [{
+    path: '*',
+    component: NotFoundPage,
+  },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/search/:searchterm',
+    name: 'search',
+    component: Search,
+  },
+  {
+    path: '/camp/:campUrl',
+    name: 'camp',
+    component: Camp,
+  },
+  {
+    path: '/addYourCamp',
+    name: 'addYourCamp',
+    component: AddYourCamp,
+  },
+  {
+    path: '/blog/:blogUrl',
+    name: 'blog',
+    component: Blog,
+  },
+  {
+    path: '/blogs',
+    name: 'blogs',
+    component: Blogs,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginRegister,
+  },
+  {
+    path: '/resetPassword/:token',
+    name: 'resetPassword',
+    component: PasswordReset,
+  },
+  {
+    path: '/emailVerification/:token',
+    name: 'emailVerification',
+    component: EmailVerification,
+  },
+  {
+    path: '/rishikesh',
+    name: 'placesInCamp',
+    component: Places,
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    children: [{
+      name: 'settings',
       path: '/',
-      name: 'home',
-      component: Home,
+      component: Settings,
     },
     {
-      path: '/search/:searchterm',
-      name: 'search',
-      component: Search,
+      name: 'activeBookings',
+      path: 'activeBookings',
+      component: ActiveBookings,
     },
     {
-      path: '/camp/:campUrl',
-      name: 'camp',
-      component: Camp,
+      name: 'pastBookings',
+      path: 'pastBookings',
+      component: PastBookings,
     },
     {
-      path: '/addYourCamp',
-      name: 'addYourCamp',
-      component: AddYourCamp,
+      name: 'wishlist',
+      path: 'wishlist',
+      component: Wishlist,
+    },
+    ],
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    children: [{
+      name: 'statistics',
+      path: '/',
+      component: Statistics,
     },
     {
-      path: '/blog/:blogUrl',
-      name: 'blog',
-      component: Blog,
+      name: 'campDetails',
+      path: 'campDetails',
+      component: CampDetails,
     },
     {
-      path: '/blogs',
-      name: 'blogs',
-      component: Blogs,
+      name: 'bankDetails',
+      path: 'bankDetails',
+      component: BankDetails,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginRegister,
+      name: 'campInventory',
+      path: 'campInventory',
+      component: CampInventory,
     },
     {
-      path: '/resetPassword/:token',
-      name: 'resetPassword',
-      component: PasswordReset,
+      name: 'campManagement',
+      path: 'campManagement',
+      component: ManageCamps,
     },
     {
-      path: '/emailVerification/:token',
-      name: 'emailVerification',
-      component: EmailVerification,
+      name: 'userManagement',
+      path: 'userManagement',
+      component: UserManagement,
     },
     {
-      path: '/profile',
-      component: Profile,
-      children: [
-        {
-          name: 'settings',
-          path: '/',
-          component: Settings,
-        },
-        {
-          name: 'activeBookings',
-          path: 'activeBookings',
-          component: ActiveBookings,
-        },
-        {
-          name: 'pastBookings',
-          path: 'pastBookings',
-          component: PastBookings,
-        },
-        {
-          name: 'wishlist',
-          path: 'wishlist',
-          component: Wishlist,
-        },
-      ],
+      name: 'campRequests',
+      path: 'campRequests',
+      component: CampRequests,
     },
     {
-      path: '/dashboard',
-      component: Dashboard,
-      children: [
-        {
-          name: 'statistics',
-          path: '/',
-          component: Statistics,
-        },
-        {
-          name: 'campDetails',
-          path: 'campDetails',
-          component: CampDetails,
-        },
-        {
-          name: 'bankDetails',
-          path: 'bankDetails',
-          component: BankDetails,
-        },
-        {
-          name: 'campInventory',
-          path: 'campInventory',
-          component: CampInventory,
-        },
-        {
-          name: 'campManagement',
-          path: 'campManagement',
-          component: ManageCamps,
-        },
-        {
-          name: 'userManagement',
-          path: 'userManagement',
-          component: UserManagement,
-        },
-        {
-          name: 'campRequests',
-          path: 'campRequests',
-          component: CampRequests,
-        },
-        {
-          name: 'viewCamp',
-          path: 'viewCamp/:id',
-          component: ViewCamp,
-        },
-        {
-          name: 'addBlog',
-          path: 'addBlog',
-          component: AddBlog,
-        },
-        {
-          name: 'allBlogs',
-          path: 'allBlogs',
-          component: AllBlogs,
-        },
-        {
-          name: 'editBlog',
-          path: 'editBlog/:id',
-          component: EditBlog,
-        },
-        {
-          name: 'previousBookings',
-          path: 'previousBookings',
-          component: PreviousBookings,
-        },
-      ],
+      name: 'viewCamp',
+      path: 'viewCamp/:id',
+      component: ViewCamp,
     },
+    {
+      name: 'addBlog',
+      path: 'addBlog',
+      component: AddBlog,
+    },
+    {
+      name: 'allBlogs',
+      path: 'allBlogs',
+      component: AllBlogs,
+    },
+    {
+      name: 'editBlog',
+      path: 'editBlog/:id',
+      component: EditBlog,
+    },
+    {
+      name: 'previousBookings',
+      path: 'previousBookings',
+      component: PreviousBookings,
+    },
+    ],
+  },
 
-    {
-      name: 'privacyPolicy',
-      path: '/privacyPolicy',
-      component: PrivacyPolicy,
-    },
+  {
+    name: 'privacyPolicy',
+    path: '/privacyPolicy',
+    component: PrivacyPolicy,
+  },
 
-    {
-      name: 'termsAndConditions',
-      path: '/termsAndConditions',
-      component: TermsAndConditions,
-    },
+  {
+    name: 'termsAndConditions',
+    path: '/termsAndConditions',
+    component: TermsAndConditions,
+  },
   ],
 });
 
