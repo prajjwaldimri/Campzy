@@ -14,14 +14,7 @@ export default {
 
   methods: {
     getCampByPlaces() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
-      const client = new GraphQLClient('/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
-      });
+      const client = new GraphQLClient('/graphql');
       const getCampByPlace = `query($place: String!){
         getCampsInPlace(place: $place){
           luxuryCamps{
