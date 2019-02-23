@@ -447,7 +447,6 @@ const getCampsInPlace = {
         });
 
       await forEach(results, async (result) => {
-        // console.log(result.inventory);
         if (result.inventory.bookingPrice > 40000) {
           place.luxuryCamps.push(result);
         } else if (result.inventory.bookingPrice > 20000) {
@@ -458,7 +457,6 @@ const getCampsInPlace = {
           place.cheapCamps.push(result);
         }
       });
-      console.log(place);
       return place;
     } catch (err) {
       return err;
