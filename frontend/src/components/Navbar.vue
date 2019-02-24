@@ -9,6 +9,15 @@
     v-toolbar-items.hidden-sm-and-down
       v-btn(flat @click="$router.push('/')") HOME
       v-btn(flat @click="$router.push('/profile/wishlist')") WISH LIST
+      v-menu(offset-y  :close-on-content-click="false" :nudge-width="100")
+        v-btn(flat slot="activator")
+          | Places
+        v-card
+          v-list
+            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/rishikesh/' + place)`)
+              v-list-tile-content
+                v-list-tile-title {{place}}
+
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")
@@ -72,6 +81,7 @@ export default {
     isBlogger: false,
     isAdmin: false,
     isCampOwner: false,
+    places: ['Delhi', 'Chamoli'],
   }),
   props: {
     color: String,
@@ -96,7 +106,8 @@ export default {
       },
     });
 
-    client.request(query)
+    client
+      .request(query)
       .then((data) => {
         this.user = data.currentUser;
         if (this.user.type === 'Admin') {
@@ -114,7 +125,8 @@ export default {
         }
       })
       .catch(() => {
-        this.user = {}; this.isLoggedIn = false;
+        this.user = {};
+        this.isLoggedIn = false;
       });
   },
   methods: {

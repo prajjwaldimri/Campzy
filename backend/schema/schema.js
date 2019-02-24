@@ -22,7 +22,10 @@ const ReviewMutations = require('./mutations/ReviewMutations');
 const BankMutations = require('./mutations/BankMutations');
 const RequestsMutations = require('./mutations/RequestsMutation');
 
-const { GraphQLObjectType, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLSchema,
+} = graphql;
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',

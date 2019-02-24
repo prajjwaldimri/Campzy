@@ -3,10 +3,13 @@
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
+import { EventBus } from '../event-bus';
 
 export default {
   data() {
-    return {};
+    return {
+      allCamps: [],
+    };
   },
   mounted() {
     this.getCampByPlaces();
@@ -14,9 +17,6 @@ export default {
 
   methods: {
     getCampByPlaces() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/login');
-      }
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
@@ -39,16 +39,19 @@ export default {
         }
       }`;
       const variables = {
-        place: 'Delhi',
+        place: this.$route.params.place,
       };
 
       client
         .request(getCampByPlace, variables)
         .then((data) => {
-          console.log(data);
+          this.allCamps = data.getCampsInPlace;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            'Unable to get Camps rigth now!',
+          );
         });
     },
   },

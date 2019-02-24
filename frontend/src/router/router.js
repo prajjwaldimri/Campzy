@@ -32,7 +32,7 @@ const PrivacyPolicy = () => import('../components/PrivacyPolicy.vue');
 const TermsAndConditions = () => import('../components/TermsAndConditions.vue');
 const CampRequests = () => import('../components/dashboard_components/admin-dashboard/CampRequests.vue');
 const PreviousBookings = () => import('../components/dashboard_components/camp_owner_dashboard/previousBookings.vue');
-const Places = () => import('../components/Rishikesh.vue');
+const Places = () => import('../components/Places.vue');
 
 Vue.use(Router);
 
@@ -88,7 +88,7 @@ const router = new Router({
     component: EmailVerification,
   },
   {
-    path: '/rishikesh',
+    path: '/places/:place',
     name: 'placesInCamp',
     component: Places,
   },
