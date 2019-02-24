@@ -14,7 +14,7 @@
           | Places
         v-card
           v-list
-            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/rishikesh/' + place)`)
+            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
               v-list-tile-content
                 v-list-tile-title {{place}}
 
@@ -69,8 +69,8 @@
 
 </template>
 <script>
-import { GraphQLClient } from 'graphql-request';
-import { EventBus } from '../event-bus';
+import { GraphQLClient } from "graphql-request";
+import { EventBus } from "../event-bus";
 
 export default {
   data: () => ({
@@ -81,16 +81,16 @@ export default {
     isBlogger: false,
     isAdmin: false,
     isCampOwner: false,
-    places: ['Delhi', 'Chamoli'],
+    places: ["Delhi", "Chamoli"]
   }),
   props: {
     color: String,
     app: Boolean,
     absolute: Boolean,
-    dark: Boolean,
+    dark: Boolean
   },
   mounted() {
-    if (!this.$cookie.get('sessionToken')) {
+    if (!this.$cookie.get("sessionToken")) {
       this.isLoggedIn = false;
       return;
     }
@@ -100,28 +100,28 @@ export default {
         dateOfBirth,
         type,
       }}`;
-    const client = new GraphQLClient('/graphql', {
+    const client = new GraphQLClient("/graphql", {
       headers: {
-        Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-      },
+        Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+      }
     });
 
     client
       .request(query)
-      .then((data) => {
+      .then(data => {
         this.user = data.currentUser;
-        if (this.user.type === 'Admin') {
+        if (this.user.type === "Admin") {
           this.isAdmin = true;
         }
-        if (this.user.type === 'CampOwner') {
+        if (this.user.type === "CampOwner") {
           this.isCampOwner = true;
         }
-        if (this.user.type === 'Blogger') {
+        if (this.user.type === "Blogger") {
           this.isBlogger = true;
         }
         this.isLoggedIn = true;
         if (this.user.name === null) {
-          this.user.name = 'Unnamed User';
+          this.user.name = "Unnamed User";
         }
       })
       .catch(() => {
@@ -131,15 +131,15 @@ export default {
   },
   methods: {
     signOut() {
-      this.$cookie.delete('sessionToken');
-      if (this.$cookie.get('sessionToken') == null) {
-        EventBus.$emit('show-success-notification-short', 'Logout Successful');
-        this.$router.push('/login');
+      this.$cookie.delete("sessionToken");
+      if (this.$cookie.get("sessionToken") == null) {
+        EventBus.$emit("show-success-notification-short", "Logout Successful");
+        this.$router.push("/login");
       } else {
-        EventBus.$emit('show-error-notification-short', 'Failed to Logout');
+        EventBus.$emit("show-error-notification-short", "Failed to Logout");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
