@@ -92,6 +92,7 @@ const router = new Router({
     name: 'placesInCamp',
     component: Places,
   },
+
   {
     path: '/profile',
     component: Profile,

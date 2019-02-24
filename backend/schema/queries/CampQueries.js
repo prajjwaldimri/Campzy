@@ -438,7 +438,7 @@ const getCampsInPlace = {
       })
         .populate({
           path: 'inventory',
-          select: 'id bookingPrice capacity disabledDates',
+          select: 'id bookingPrice',
           options: {
             sort: {
               bookingPrice: -1,
@@ -454,14 +454,16 @@ const getCampsInPlace = {
         });
 
       await forEach(results, async (result) => {
-        if (result.inventory.bookingPrice > 40000) {
-          place.luxuryCamps.push(result);
-        } else if (result.inventory.bookingPrice > 20000) {
-          place.premiumCamps.push(result);
-        } else if (result.inventory.bookingPrice > 5000) {
-          place.normalCamps.push(result);
-        } else {
-          place.cheapCamps.push(result);
+        if (result.inventory[0]) {
+          if (result.inventory[0].bookingPrice > 40000) {
+            place.luxuryCamps.push(result);
+          } else if (result.inventory[0].bookingPrice > 20000) {
+            place.premiumCamps.push(result);
+          } else if (result.inventory[0].bookingPrice > 5000) {
+            place.normalCamps.push(result);
+          } else {
+            place.cheapCamps.push(result);
+          }
         }
       });
       return place;
