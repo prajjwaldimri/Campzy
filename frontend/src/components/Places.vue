@@ -1,11 +1,20 @@
 <template lang="pug">
-  h1 hi
+  .page-div
+    navbar
+    Footer
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../event-bus';
 
+import Navbar from './Navbar.vue';
+import Footer from './Footer.vue';
+
 export default {
+  components: {
+    navbar: Navbar,
+    Footer,
+  },
   data() {
     return {
       allCamps: [],
@@ -57,3 +66,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.page-div {
+  min-height: 100vh;
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+</style>
