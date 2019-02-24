@@ -12,7 +12,7 @@
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="100")
         v-btn(flat slot="activator")
           | Places
-        v-card
+        v-card(height="700" style="overflow:scroll;")
           v-list
             v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
               v-list-tile-content
@@ -69,8 +69,8 @@
 
 </template>
 <script>
-import { GraphQLClient } from "graphql-request";
-import { EventBus } from "../event-bus";
+import { GraphQLClient } from 'graphql-request';
+import { EventBus } from '../event-bus';
 
 export default {
   data: () => ({
@@ -81,65 +81,98 @@ export default {
     isBlogger: false,
     isAdmin: false,
     isCampOwner: false,
-    places: ["Delhi", "Chamoli"]
+    places: [],
   }),
   props: {
     color: String,
     app: Boolean,
     absolute: Boolean,
-    dark: Boolean
+    dark: Boolean,
   },
   mounted() {
-    if (!this.$cookie.get("sessionToken")) {
-      this.isLoggedIn = false;
-      return;
-    }
-    const query = `{currentUser {
+    this.getCurrentUser();
+    this.getCampsLocation();
+  },
+  methods: {
+    getCurrentUser() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.isLoggedIn = false;
+        return;
+      }
+      const query = `{currentUser {
         name,
         email,
         dateOfBirth,
         type,
       }}`;
-    const client = new GraphQLClient("/graphql", {
-      headers: {
-        Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
-      }
-    });
-
-    client
-      .request(query)
-      .then(data => {
-        this.user = data.currentUser;
-        if (this.user.type === "Admin") {
-          this.isAdmin = true;
-        }
-        if (this.user.type === "CampOwner") {
-          this.isCampOwner = true;
-        }
-        if (this.user.type === "Blogger") {
-          this.isBlogger = true;
-        }
-        this.isLoggedIn = true;
-        if (this.user.name === null) {
-          this.user.name = "Unnamed User";
-        }
-      })
-      .catch(() => {
-        this.user = {};
-        this.isLoggedIn = false;
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
       });
-  },
-  methods: {
+
+      client
+        .request(query)
+        .then((data) => {
+          this.user = data.currentUser;
+          if (this.user.type === 'Admin') {
+            this.isAdmin = true;
+          }
+          if (this.user.type === 'CampOwner') {
+            this.isCampOwner = true;
+          }
+          if (this.user.type === 'Blogger') {
+            this.isBlogger = true;
+          }
+          this.isLoggedIn = true;
+          if (this.user.name === null) {
+            this.user.name = 'Unnamed User';
+          }
+        })
+        .catch(() => {
+          this.user = {};
+          this.isLoggedIn = false;
+        });
+    },
+
+    getCampsLocation() {
+      const locationQuery = `query{
+        getCampsLocation{
+          location
+        }
+      }`;
+
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client
+        .request(locationQuery)
+        .then((data) => {
+          const temp = [];
+          data.getCampsLocation.forEach((camp) => {
+            temp.push(camp.location);
+          });
+          this.places = [...new Set(temp)];
+        })
+        .catch(() => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            'Failed to get Location',
+          );
+        });
+    },
     signOut() {
-      this.$cookie.delete("sessionToken");
-      if (this.$cookie.get("sessionToken") == null) {
-        EventBus.$emit("show-success-notification-short", "Logout Successful");
-        this.$router.push("/login");
+      this.$cookie.delete('sessionToken');
+      if (this.$cookie.get('sessionToken') == null) {
+        EventBus.$emit('show-success-notification-short', 'Logout Successful');
+        this.$router.push('/login');
       } else {
-        EventBus.$emit("show-error-notification-short", "Failed to Logout");
+        EventBus.$emit('show-error-notification-short', 'Failed to Logout');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

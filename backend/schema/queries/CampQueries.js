@@ -121,6 +121,18 @@ const getAllCamps = {
     }
   },
 };
+const getCampsLocation = {
+  type: new GraphQLList(CampType),
+  args: {},
+
+  async resolve() {
+    try {
+      return await CampModel.find({}).select('location');
+    } catch (err) {
+      return err;
+    }
+  },
+};
 
 const countTotalCamps = {
   // Return total camps length
@@ -484,4 +496,5 @@ module.exports = {
   getImagesOfCamp,
   isCampUrlAvailable,
   getCampsInPlace,
+  getCampsLocation,
 };

@@ -55,6 +55,7 @@ export default {
         .request(getCampByPlace, variables)
         .then((data) => {
           this.allCamps = data.getCampsInPlace;
+          console.log(this.allCamps);
         })
         .catch(() => {
           EventBus.$emit(

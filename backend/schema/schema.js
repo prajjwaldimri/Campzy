@@ -40,6 +40,7 @@ const RootQuery = new GraphQLObjectType({
     campSearchUser: CampQueries.campSearchUser,
     isCampUrlAvailable: CampQueries.isCampUrlAvailable,
     getCampsInPlace: CampQueries.getCampsInPlace,
+    getCampsLocation: CampQueries.getCampsLocation,
 
     tent: TentQueries.getTent,
     allTents: TentQueries.getAllTents,
