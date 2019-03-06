@@ -12,14 +12,14 @@
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="100")
         v-btn(flat slot="activator")
           | Places
-        v-card(height="700" style="overflow:scroll;")
+        v-card.places-card
           v-list
             v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
               v-list-tile-content
                 v-list-tile-title {{place}}
 
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
-      v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
+      v-menu(offset-y  :close-on-content-click="true" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")
           | Hey, &nbsp; {{user.name}}
         v-card
@@ -43,6 +43,14 @@
     v-toolbar-items.hidden-md-and-up
       v-btn(icon @click="$router.push('/')")
         v-icon home
+      v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
+        v-btn(icon slot='activator')
+          v-icon room
+        v-card.places-card
+          v-list
+            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
+              v-list-tile-content
+                v-list-tile-title {{place}}
       v-btn(icon flat v-show="!isLoggedIn" to='/login')
           v-icon account_circle
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
@@ -186,5 +194,13 @@ export default {
   font-family: "GlacialIndifferenceRegular" !important;
   font-size: 1.6rem;
   cursor: pointer;
+}
+
+.places-card {
+  height: 700px;
+  overflow: scroll;
+  @media screen and (max-width: 966px) {
+    height: 450px;
+  }
 }
 </style>
