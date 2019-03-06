@@ -122,10 +122,8 @@ export default {
         .request(getCampByPlace, variables)
         .then((data) => {
           this.allCamps = data.getCampsInPlace;
-          console.log(this.allCamps);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           EventBus.$emit(
             'show-error-notification-short',
             'Unable to get Camps rigth now!',
