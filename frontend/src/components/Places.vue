@@ -2,7 +2,7 @@
   .place
     Navbar
     v-container
-      h1.display-1 Value for Money Camps
+      h1.display-1 Camps in {{this.$route.params.place}}
 
       .camps.mt-4
         v-layout(row wrap)
@@ -16,7 +16,6 @@
                   v-btn(@click="$router.push('/camp/' + premiumCamp.url)")
                     span View Camp
                     v-icon chevron_right
-        h1.display-1.mt-4(v-if="allCamps.luxuryCamps") Luxury Camps
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(luxuryCamp, index) in allCamps.luxuryCamps")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + luxuryCamp.heroImage")
@@ -28,7 +27,6 @@
                   v-btn(@click="$router.push('/camp/' + luxuryCamp.url)")
                     span View Camp
                     v-icon chevron_right
-        h1.display-1.mt-4(v-if="allCamps.normalCamps") Mid-Range Camps
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(normalCamp, index) in allCamps.normalCamps")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + normalCamp.heroImage")
@@ -40,7 +38,6 @@
                   v-btn(@click="$router.push('/camp/' + normalCamp.url)")
                     span View Camp
                     v-icon chevron_right
-        h1.display-1.mt-4(v-if="allCamps.cheapCamps") Low-Price Camps
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(cheapCamp, index) in allCamps.cheapCamps")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + cheapCamp.heroImage")
