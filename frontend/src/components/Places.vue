@@ -88,25 +88,37 @@ export default {
           luxuryCamps{
             name
             url
-            shortDescription
+            inventory {
+              id,
+              bookingPrice
+            }
             heroImage
           },
           premiumCamps{
             name
             url
-            shortDescription
+            inventory {
+              id,
+              bookingPrice
+            }
             heroImage
           },
           normalCamps{
             name
             url
-            shortDescription
+            inventory {
+              id,
+              bookingPrice
+            }
             heroImage
           }
           cheapCamps{
             name
             url
-            shortDescription
+            inventory {
+              id,
+              bookingPrice
+            }
             heroImage
           }
         }
@@ -164,6 +176,6 @@ export default {
 }
 
 .main-card-title {
-  text-shadow: 0px 0px 20px grey;
+  text-shadow: 0px 0px 30px white;
 }
 </style>
