@@ -2,7 +2,7 @@
   .place
     Navbar
     v-container
-      h1.display-1 Camps in {{this.$route.params.place}}
+      h1.ma-4.display-1 Camps in {{this.$route.params.place}}
 
       .camps.mt-4
         v-layout(row wrap)
