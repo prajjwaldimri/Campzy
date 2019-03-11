@@ -1,5 +1,6 @@
 <template lang="pug">
   .terms-container
+    Navbar
     v-container
       v-layout(column)
         .content.pt-4
@@ -74,13 +75,14 @@
 </template>
 
 <script>
+import Navbar from './Navbar.vue';
 import Footer from './Footer.vue';
 
 export default {
   components: {
+    Navbar,
     Footer,
   },
-
 };
 </script>
 
