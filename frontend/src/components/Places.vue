@@ -10,8 +10,10 @@
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + premiumCamp.heroImage")
               .card-container
                 v-card-title(primary-title)
-                  h1.main-card-title(style="line-height: 1.5 !important") {{premiumCamp.name}}
+                  .card-div
+                    h1.main-card-title(style="line-height: 1.5 !important") {{premiumCamp.name}}
                 v-card-actions.justify-center
+                  span.main-card-title.headline starting @ {{ $n(premiumCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + premiumCamp.url)")
                     span View Camp
@@ -23,6 +25,7 @@
                 v-card-title(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{luxuryCamp.name}}
                 v-card-actions.justify-center
+                  span.main-card-title.headline starting @ {{ $n(luxuryCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + luxuryCamp.url)")
                     span View Camp
@@ -34,6 +37,7 @@
                 v-card-title(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{normalCamp.name}}
                 v-card-actions.justify-center
+                  span.main-card-title.headline starting @ {{ $n(normalCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + normalCamp.url)")
                     span View Camp
@@ -45,6 +49,7 @@
                 v-card-title(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{cheapCamp.name}}
                 v-card-actions.justify-center
+                  span.main-card-title.headline starting @ {{ $n(cheapCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + cheapCamp.url)")
                     span View Camp
@@ -177,5 +182,9 @@ export default {
 
 .main-card-title {
   text-shadow: 0px 0px 30px white;
+}
+
+.v-card__actions {
+  background-color: rgba(128, 128, 128, 0.6);
 }
 </style>
