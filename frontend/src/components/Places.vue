@@ -7,49 +7,49 @@
       .camps.mt-4
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(premiumCamp, index) in allCamps.premiumCamps")
-            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + premiumCamp.heroImage")
+            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + premiumCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + premiumCamp.heroImage")
               .card-container
-                v-card-title(primary-title)
+                v-card-title.grey-background(primary-title)
                   .card-div
                     h1.main-card-title(style="line-height: 1.5 !important") {{premiumCamp.name}}
-                v-card-actions.justify-center
-                  span.main-card-title.headline starting @ {{ $n(premiumCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
+                v-card-actions.grey-background.justify-center
+                  span.main-card-title.title starting @ {{ $n(premiumCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + premiumCamp.url)")
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(luxuryCamp, index) in allCamps.luxuryCamps")
-            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + luxuryCamp.heroImage")
+            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + luxuryCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + luxuryCamp.heroImage")
               .card-container
-                v-card-title(primary-title)
+                v-card-title.grey-background(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{luxuryCamp.name}}
-                v-card-actions.justify-center
-                  span.main-card-title.headline starting @ {{ $n(luxuryCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
+                v-card-actions.grey-background.justify-center
+                  span.main-card-title.title starting @ {{ $n(luxuryCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + luxuryCamp.url)")
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(normalCamp, index) in allCamps.normalCamps")
-            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + normalCamp.heroImage")
+            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + normalCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + normalCamp.heroImage")
               .card-container
-                v-card-title(primary-title)
+                v-card-title.grey-background(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{normalCamp.name}}
-                v-card-actions.justify-center
-                  span.main-card-title.headline starting @ {{ $n(normalCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
+                v-card-actions.grey-background.justify-center
+                  span.main-card-title.title starting @ {{ $n(normalCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + normalCamp.url)")
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
           v-flex(xs12 md4 v-for="(cheapCamp, index) in allCamps.cheapCamps")
-            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + cheapCamp.heroImage")
+            v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + cheapCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + cheapCamp.heroImage")
               .card-container
-                v-card-title(primary-title)
+                v-card-title.grey-background(primary-title)
                   h1.main-card-title(style="line-height: 1.5 !important") {{cheapCamp.name}}
-                v-card-actions.justify-center
-                  span.main-card-title.headline starting @ {{ $n(cheapCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
+                v-card-actions.grey-background.justify-center
+                  span.main-card-title.title starting @ {{ $n(cheapCamp.inventory[0].bookingPrice, 'currency', 'en-IN') }}
                   v-spacer
                   v-btn(@click="$router.push('/camp/' + cheapCamp.url)")
                     span View Camp
@@ -184,7 +184,7 @@ export default {
   text-shadow: 0px 0px 30px white;
 }
 
-.v-card__actions {
+.grey-background {
   background-color: rgba(128, 128, 128, 0.6);
 }
 </style>
