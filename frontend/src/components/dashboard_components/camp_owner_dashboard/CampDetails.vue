@@ -92,12 +92,7 @@
                     v-layout.layout(row wrap)
                       v-flex.mt-3(xs12)
                         v-layout(column)
-                          span Main Image for Camp
-                          input.mt-2(type='file' name='hero_image' ref='panCard'
-                          v-on:change="storeImage"  accept='image/png, image/jpeg' disabled )
-                      v-flex.mt-3(xs12)
-                        v-layout(column)
-                          span Other camp photos
+                          span Upload camp photos
                           input.mt-2(type='file' name='other_photos'
                           @change='storeImage' accept='image/png, image/jpeg'  multiple)
                       v-flex.mt-3(xs12)
