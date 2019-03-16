@@ -153,17 +153,18 @@
                     :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image"
                     :aspect-ratio='16/9' )
                       v-expand-transition
-                        div.d-flex.transition-fast-in-fast-out.black.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
-                          v-tooltip(bottom)
-                            template(v-slot:activator="{ on }")
-                              v-btn(flat dark icon v-on="on" large)
-                                v-icon(color='red' @click='deleteImageFromAWS(image)') delete
-                            span Delete Photo
-                          v-tooltip(bottom)
-                            template(v-slot:activator="{ on }" large)
-                              v-btn(flat dark icon v-on="on")
-                                v-icon(color='red' @click='setImageAsHero(image)') wallpaper
-                            span Set as Hero Image
+                        div.d-flex.transition-fast-in-fast-out.black.darken-2.v-card--reveal.display-3.white--text(v-if="hover" style="height: 100%;" )
+                          v-flex(xs12 style="text-align: center;")
+                            v-tooltip(bottom)
+                              template(v-slot:activator="{ on }")
+                                v-btn(flat dark icon v-on="on" large)
+                                  v-icon(color='red' @click='deleteImageFromAWS(image)') delete
+                              span Delete Photo
+                            v-tooltip(bottom)
+                              template(v-slot:activator="{ on }" large)
+                                v-btn(flat dark icon v-on="on")
+                                  v-icon(color='red' @click='setImageAsHero(image)') wallpaper
+                              span Set as Hero Image
                     v-card-actions.justify-center
                       span {{image}}
 
