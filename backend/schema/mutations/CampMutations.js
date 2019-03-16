@@ -2,7 +2,10 @@ const graphql = require('graphql');
 const CampModel = require('../../models/camp.js');
 const UserModel = require('../../models/user.js');
 const CampType = require('../types/CampType');
-const { NotLoggedinError, PrivilegeError } = require('../graphqlErrors');
+const {
+  NotLoggedinError,
+  PrivilegeError,
+} = require('../graphqlErrors');
 const auth = require('../../config/auth');
 
 const {
@@ -16,14 +19,30 @@ const {
 const addCamp = {
   type: CampType,
   args: {
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
-    gst: { type: new GraphQLNonNull(GraphQLString) },
-    location: { type: new GraphQLNonNull(GraphQLString) },
-    url: { type: new GraphQLNonNull(GraphQLString) },
-    tags: { type: new GraphQLList(GraphQLString) },
-    ownerId: { type: new GraphQLNonNull(GraphQLString) },
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    phoneNumber: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    gst: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    location: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    url: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    ownerId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -61,14 +80,30 @@ const addCamp = {
 const updateCamp = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    name: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    email: { type: GraphQLString },
-    gst: { type: GraphQLString },
-    location: { type: GraphQLString },
-    tags: { type: new GraphQLList(GraphQLString) },
-    ownerId: { type: GraphQLString },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    name: {
+      type: GraphQLString,
+    },
+    phoneNumber: {
+      type: GraphQLString,
+    },
+    email: {
+      type: GraphQLString,
+    },
+    gst: {
+      type: GraphQLString,
+    },
+    location: {
+      type: GraphQLString,
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    ownerId: {
+      type: GraphQLString,
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -112,14 +147,30 @@ const updateCamp = {
 const updateUserCamp = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
-    url: { type: new GraphQLNonNull(GraphQLString) },
-    tags: { type: new GraphQLList(GraphQLString) },
-    shortDescription: { type: new GraphQLNonNull(GraphQLString) },
-    longDescription: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    phoneNumber: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    url: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    shortDescription: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    longDescription: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -151,14 +202,30 @@ const updateUserCamp = {
 const saveAmenities = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    washRoomAttached: { type: new GraphQLNonNull(GraphQLBoolean) },
-    bonfire: { type: new GraphQLNonNull(GraphQLBoolean) },
-    hotWater: { type: new GraphQLNonNull(GraphQLBoolean) },
-    mobileConnectivity: { type: new GraphQLNonNull(GraphQLBoolean) },
-    mealsInclude: { type: new GraphQLNonNull(GraphQLBoolean) },
-    petsAllowed: { type: new GraphQLNonNull(GraphQLBoolean) },
-    chargingPoints: { type: new GraphQLNonNull(GraphQLBoolean) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    washRoomAttached: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    bonfire: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    hotWater: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    mobileConnectivity: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    mealsInclude: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    petsAllowed: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    chargingPoints: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -192,9 +259,15 @@ const saveAmenities = {
 const savePlacesOfInterest = {
   type: CampType,
   args: {
-    id: { type: GraphQLString },
-    placesOfInterest: { type: new GraphQLList(GraphQLString) },
-    distance: { type: GraphQLFloat },
+    id: {
+      type: GraphQLString,
+    },
+    placesOfInterest: {
+      type: new GraphQLList(GraphQLString),
+    },
+    distance: {
+      type: GraphQLFloat,
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -209,16 +282,16 @@ const savePlacesOfInterest = {
       }
 
       const places = await CampModel.findByIdAndUpdate(
-        args.id,
-        {
+        args.id, {
           $push: {
             placesOfInterest: {
               name: args.name,
               distance: args.distance,
             },
           },
+        }, {
+          new: true,
         },
-        { new: true },
       );
       return places;
     } catch (err) {
@@ -230,8 +303,12 @@ const savePlacesOfInterest = {
 const updateCampImages = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    images: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    images: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -245,11 +322,13 @@ const updateCampImages = {
         throw new PrivilegeError();
       }
       return await CampModel.findByIdAndUpdate(
-        args.id,
-        {
-          $push: { images: args.images },
+        args.id, {
+          $push: {
+            images: args.images,
+          },
+        }, {
+          new: true,
         },
-        { new: true },
       );
     } catch (err) {
       return err;
@@ -260,8 +339,12 @@ const updateCampImages = {
 const updateCampDocuments = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    campDocuments: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    campDocuments: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -275,11 +358,13 @@ const updateCampDocuments = {
         throw new PrivilegeError();
       }
       return await CampModel.findByIdAndUpdate(
-        args.id,
-        {
-          $push: { campDocuments: args.campDocuments },
+        args.id, {
+          $push: {
+            campDocuments: args.campDocuments,
+          },
+        }, {
+          new: true,
         },
-        { new: true },
       );
     } catch (err) {
       return err;
@@ -290,8 +375,12 @@ const updateCampDocuments = {
 const deleteCampImage = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    imageName: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    imageName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -305,7 +394,9 @@ const deleteCampImage = {
         throw new PrivilegeError();
       }
       return await CampModel.findByIdAndUpdate(args.id, {
-        $pull: { images: args.imageName },
+        $pull: {
+          images: args.imageName,
+        },
       });
     } catch (err) {
       return err;
@@ -316,8 +407,12 @@ const deleteCampImage = {
 const deleteCampDocument = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    documentName: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    documentName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -331,7 +426,9 @@ const deleteCampDocument = {
         throw new PrivilegeError();
       }
       return await CampModel.findByIdAndUpdate(args.id, {
-        $pull: { campDocuments: args.documentName },
+        $pull: {
+          campDocuments: args.documentName,
+        },
       });
     } catch (err) {
       return err;
@@ -341,7 +438,9 @@ const deleteCampDocument = {
 const deleteCamp = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -366,8 +465,12 @@ const deleteCamp = {
 const campBookingStatus = {
   type: CampType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLString) },
-    isAvailable: { type: new GraphQLNonNull(GraphQLBoolean) },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    isAvailable: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -382,11 +485,11 @@ const campBookingStatus = {
       }
 
       const campStatus = await CampModel.findByIdAndUpdate(
-        args.id,
-        {
+        args.id, {
           isAvailable: args.isAvailable,
+        }, {
+          new: true,
         },
-        { new: true },
       );
       return campStatus;
     } catch (err) {
@@ -398,7 +501,9 @@ const campBookingStatus = {
 const acceptAgreement = {
   type: CampType,
   args: {
-    agreementAccepted: { type: new GraphQLNonNull(GraphQLBoolean) },
+    agreementAccepted: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -411,14 +516,46 @@ const acceptAgreement = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      const campAgreement = await CampModel.findByIdAndUpdate(
-        { _id: userData.ownedCampId },
-        {
-          agreementAccepted: args.agreementAccepted,
-        },
-        { new: true },
-      );
+      const campAgreement = await CampModel.findByIdAndUpdate({
+        _id: userData.ownedCampId,
+      }, {
+        agreementAccepted: args.agreementAccepted,
+      }, {
+        new: true,
+      });
       return campAgreement;
+    } catch (err) {
+      return err;
+    }
+  },
+};
+
+const setHeroImage = {
+  type: CampType,
+  args: {
+    heroImage: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      return await CampModel.findByIdAndUpdate(args.id, {
+        heroImage: args.heroImage,
+      }, {
+        new: true,
+      });
     } catch (err) {
       return err;
     }
@@ -438,4 +575,5 @@ module.exports = {
   saveAmenities,
   savePlacesOfInterest,
   acceptAgreement,
+  setHeroImage,
 };

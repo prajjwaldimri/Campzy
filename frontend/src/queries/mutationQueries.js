@@ -217,6 +217,12 @@ const deleteRequest = `mutation deleteRequests($id: String!){
   }
 }`;
 
+const setHeroImage = `mutation setHeroImage($id: String!, $heroImage: String!){
+  setHeroImage(id: $id, heroImage: $heroImage){
+    id
+  }
+}`;
+
 module.exports = {
   registerUser,
   googleAuth,
@@ -252,4 +258,5 @@ module.exports = {
   acceptAgreement,
   sendRequest,
   deleteRequest,
+  setHeroImage,
 };

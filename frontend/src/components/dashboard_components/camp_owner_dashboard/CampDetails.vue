@@ -37,7 +37,7 @@
                               v-card(style='width:100%;height:100%;')#map
                             v-card-actions
                               v-spacer
-                              v-btn#set__coordinates(dark) Ok
+                              v-btn#set__coordinates(dark @click='loc=!loc') Ok
 
 
         v-tab-item(id='documents')
@@ -158,9 +158,17 @@
                     :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image"
                     :aspect-ratio='16/9' )
                       v-expand-transition
-                        div.d-flex.transition-fast-in-fast-out.red.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
-                          v-btn(flat dark icon small)
-                            v-icon(color='white' @click='deleteImageFromAWS(image)') delete
+                        div.d-flex.transition-fast-in-fast-out.black.darken-2.v-card--reveal.display-3.white--text(v-if='hover' style="height: 100%;" )
+                          v-tooltip(bottom)
+                            template(v-slot:activator="{ on }")
+                              v-btn(flat dark icon v-on="on" large)
+                                v-icon(color='red' @click='deleteImageFromAWS(image)') delete
+                            span Delete Photo
+                          v-tooltip(bottom)
+                            template(v-slot:activator="{ on }" large)
+                              v-btn(flat dark icon v-on="on")
+                                v-icon(color='red' @click='setImageAsHero(image)') wallpaper
+                            span Set as Hero Image
                     v-card-actions.justify-center
                       span {{image}}
 
@@ -179,10 +187,16 @@ import { GraphQLClient } from 'graphql-request';
 import axios from 'axios';
 import { getCurrentUserCampDetails } from '../../../queries/queries';
 import {
-  saveCampDetails, updateCampImages, deleteCampImage, updateCampDocuments, deleteCampDocument, addAmenities, addPlacesOfInterest,
+  saveCampDetails,
+  updateCampImages,
+  deleteCampImage,
+  updateCampDocuments,
+  deleteCampDocument,
+  addAmenities,
+  addPlacesOfInterest,
+  setHeroImage,
 } from '../../../queries/mutationQueries';
 import { EventBus } from '../../../event-bus';
-
 
 export default {
   components: {
@@ -212,7 +226,6 @@ export default {
               marker.setPosition(pos);
               map.setCenter(pos);
               marker.setMap(map);
-              console.log(this.coordinates);
               this.location = this.coordinates.lat;
             }, () => {
               handleLocationError(true, marker, map.getCenter());
@@ -225,8 +238,12 @@ export default {
               map.setCenter(pos);
               marker.setMap(map);
               this.coordinates = pos;
-              console.log(this.coordinates);
             });
+
+            document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
+              function setCoordinates(){
+                console.log(this.coordinates);
+          }
           } else {
             // Browser doesn't support Geolocation
             handleLocationError(false, marker, map.getCenter());
@@ -237,19 +254,12 @@ export default {
           marker.setContent(browserHasGeolocation
             ? 'Error: The Geolocation service failed.'
             : 'Error: Your browser does not support geolocation.');
-        };`,
+        }; `,
         type: 'text/javascript',
-
       },
-      { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g' },
       {
-        innerHTML: `document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
-      function setCoordinates(){
-        console.log(this.coordinates);
-        console.log('coordinates');
-      }
-      `,
-        type: 'text/javascript',
+        src:
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g',
       },
     ],
   },
@@ -287,9 +297,13 @@ export default {
       loc: false,
       campLocation: '',
       coordinates: {},
-
-
     };
+  },
+  props: {
+    coordinate: {
+      lat: String,
+      lon: String,
+    },
   },
 
   mounted() {
@@ -297,6 +311,34 @@ export default {
   },
 
   methods: {
+    setImageAsHero(img) {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/');
+      }
+      const variables = {
+        id: this.camp.id,
+        heroImage: img,
+      };
+      const client = new GraphQLClient('/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
+        },
+      });
+      client
+        .request(setHeroImage, variables)
+        .then(() => {
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Added as Hero Image',
+          );
+        })
+        .catch(() => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            'Cannot Add right now, Please try later!',
+          );
+        });
+    },
     showFile(event) {
       this.storeDocuments.push(event.target.files[0]);
     },
@@ -305,13 +347,19 @@ export default {
       this.storeImages = event.target.files;
     },
     deleteDocumentFromAws(documentName) {
-      axios.delete('/deleteDocuments', {
-        data: { documentName },
-      }).then((res) => {
-        this.deleteDocumentFromCamp(res.data);
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-      });
+      axios
+        .delete('/deleteDocuments', {
+          data: { documentName },
+        })
+        .then((res) => {
+          this.deleteDocumentFromCamp(res.data);
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-long',
+            err.response.errors[0].message,
+          );
+        });
     },
     deleteDocumentFromCamp(docName) {
       if (!this.$cookie.get('sessionToken')) {
@@ -326,12 +374,22 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(deleteCampDocument, variables).then(() => {
-        this.getCampDetails();
-        EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      }).finally(() => { });
+      client
+        .request(deleteCampDocument, variables)
+        .then(() => {
+          this.getCampDetails();
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Deleted ',
+          );
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            err.response.errors[0].message,
+          );
+        })
+        .finally(() => {});
     },
 
     uploadImages() {
@@ -345,19 +403,27 @@ export default {
         const file = this.files[i];
         formData.append('images', file);
       }
-      axios.post('/uploadImages', formData,
-        {
+      axios
+        .post('/uploadImages', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        }).then((res) => {
-        this.getImages = res.data;
-        EventBus.$emit('show-success-notification-long', 'Successfully Uploaded to AWS');
-        this.storeImages = [];
-        this.updateImagesToCamp();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Upload');
-      }).finally(() => { this.uploadingImages = false; });
+        })
+        .then((res) => {
+          this.getImages = res.data;
+          EventBus.$emit(
+            'show-success-notification-long',
+            'Successfully Uploaded to AWS',
+          );
+          this.storeImages = [];
+          this.updateImagesToCamp();
+        })
+        .catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Upload');
+        })
+        .finally(() => {
+          this.uploadingImages = false;
+        });
     },
 
     updateImagesToCamp() {
@@ -374,20 +440,32 @@ export default {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
           },
         });
-        client.request(updateCampImages, variables).then(() => {
-          this.getCampDetails();
-          EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
-        }).catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        }).finally(() => { });
+        client
+          .request(updateCampImages, variables)
+          .then(() => {
+            this.getCampDetails();
+            EventBus.$emit(
+              'show-success-notification-short',
+              'Successfully Updated ',
+            );
+          })
+          .catch((err) => {
+            EventBus.$emit(
+              'show-error-notification-short',
+              err.response.errors[0].message,
+            );
+          })
+          .finally(() => {});
       });
     },
-
 
     // Uploads CampOwner Documents
     uploadDocuments() {
       if (this.storeDocuments.length < 0) {
-        EventBus.$emit('show-error-notification-short', 'Please select all files!');
+        EventBus.$emit(
+          'show-error-notification-short',
+          'Please select all files!',
+        );
       } else {
         this.uploadingDocuments = true;
         const updateFile = this.storeDocuments;
@@ -399,20 +477,31 @@ export default {
           const file = this.files[i];
           formData.append('document', file);
         }
-        axios.post('/uploadCampOwnerDocuments', formData,
-          {
+        axios
+          .post('/uploadCampOwnerDocuments', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
-          }).then((res) => {
-          res.data.forEach((item) => {
-            this.getOwnerDocuments.push(item.key);
+          })
+          .then((res) => {
+            res.data.forEach((item) => {
+              this.getOwnerDocuments.push(item.key);
+            });
+            EventBus.$emit(
+              'show-success-notification-long',
+              'Successfully Uploaded',
+            );
+            this.saveDocumentsToCamp();
+          })
+          .catch(() => {
+            EventBus.$emit(
+              'show-error-notification-long',
+              'Failed to Uploaded',
+            );
+          })
+          .finally(() => {
+            this.uploadingDocuments = false;
           });
-          EventBus.$emit('show-success-notification-long', 'Successfully Uploaded');
-          this.saveDocumentsToCamp();
-        }).catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Uploaded');
-        }).finally(() => { this.uploadingDocuments = false; });
       }
     },
 
@@ -430,12 +519,22 @@ export default {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
           },
         });
-        client.request(updateCampDocuments, variables).then(() => {
-          this.getCampDetails();
-          EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
-        }).catch((err) => {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        }).finally(() => { });
+        client
+          .request(updateCampDocuments, variables)
+          .then(() => {
+            this.getCampDetails();
+            EventBus.$emit(
+              'show-success-notification-short',
+              'Successfully Updated ',
+            );
+          })
+          .catch((err) => {
+            EventBus.$emit(
+              'show-error-notification-short',
+              err.response.errors[0].message,
+            );
+          })
+          .finally(() => {});
       });
     },
 
@@ -449,27 +548,36 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(getCurrentUserCampDetails).then((data) => {
-        if (data.currentUserCamp.agreementAccepted === false) {
-          EventBus.$emit('agreement-not-accepted');
-        }
-        this.camp = data.currentUserCamp;
-        this.placesOfInterest = this.camp.placesOfInterest;
-        this.tags = this.camp.tags;
-        this.amenities = this.camp.amenities;
-        if (this.camp.campDocuments.length === 3) {
-          this.isDocument = true;
-        } else {
-          this.isDocument = false;
-        }
-        if (this.camp.campDocuments.length === 0 || this.camp.campDocuments.length > 3) {
-          this.viewDocument = false;
-        } else {
-          this.viewDocument = true;
-        }
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      });
+      client
+        .request(getCurrentUserCampDetails)
+        .then((data) => {
+          if (data.currentUserCamp.agreementAccepted === false) {
+            EventBus.$emit('agreement-not-accepted');
+          }
+          this.camp = data.currentUserCamp;
+          this.placesOfInterest = this.camp.placesOfInterest;
+          this.tags = this.camp.tags;
+          this.amenities = this.camp.amenities;
+          if (this.camp.campDocuments.length === 3) {
+            this.isDocument = true;
+          } else {
+            this.isDocument = false;
+          }
+          if (
+            this.camp.campDocuments.length === 0
+            || this.camp.campDocuments.length > 3
+          ) {
+            this.viewDocument = false;
+          } else {
+            this.viewDocument = true;
+          }
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            err.response.errors[0].message,
+          );
+        });
     },
     // Save updated vlaues of camp
     saveCampDetails() {
@@ -495,12 +603,21 @@ export default {
       this.isDataUpdating = true;
       this.saveAmenity();
       // this.savePlacesOfInterests();
-      client.request(saveCampDetails, variables).then(() => {
-        EventBus.$emit('show-success-notification-short', 'Successfully Updated ');
-        this.getCampDetails();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-short', 'Failed to update');
-      }).finally(() => { this.isDataUpdating = false; });
+      client
+        .request(saveCampDetails, variables)
+        .then(() => {
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Updated ',
+          );
+          this.getCampDetails();
+        })
+        .catch(() => {
+          EventBus.$emit('show-error-notification-short', 'Failed to update');
+        })
+        .finally(() => {
+          this.isDataUpdating = false;
+        });
     },
 
     saveAmenity() {
@@ -516,17 +633,21 @@ export default {
         mealsInclude: this.amenities.mealsInclude,
         petsAllowed: this.amenities.petsAllowed,
         chargingPoints: this.amenities.chargingPoints,
-
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(addAmenities, variables).then(() => {
-      }).catch(() => {
-        EventBus.$emit('show-info-notification-short', 'Failed to Update Amenities');
-      });
+      client
+        .request(addAmenities, variables)
+        .then(() => {})
+        .catch(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Failed to Update Amenities',
+          );
+        });
     },
     savePlacesOfInterests() {
       this.placesOfInterest.forEach((place) => {
@@ -537,30 +658,39 @@ export default {
           id: this.camp.id,
           name: place.name,
           distance: place.distance,
-
         };
         const client = new GraphQLClient('/graphql', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
           },
         });
-        client.request(addPlacesOfInterest, variables).then(() => {
-        }).catch((err) => {
-          console.log(err);
-          EventBus.$emit('show-info-notification-short', 'Failed to update Places of Interests');
-        });
+        client
+          .request(addPlacesOfInterest, variables)
+          .then(() => {})
+          .catch((err) => {
+            console.log(err);
+            EventBus.$emit(
+              'show-info-notification-short',
+              'Failed to update Places of Interests',
+            );
+          });
       });
     },
 
     deleteImageFromAWS(imageName) {
-      axios.delete('/deleteImages', { data: { imageName } }).then((res) => {
-        EventBus.$emit('show-success-notification-short', 'Successfully Deleted');
-        this.deleteImage(res.data);
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-short', 'Failed to delete');
-      });
+      axios
+        .delete('/deleteImages', { data: { imageName } })
+        .then((res) => {
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Deleted',
+          );
+          this.deleteImage(res.data);
+        })
+        .catch(() => {
+          EventBus.$emit('show-error-notification-short', 'Failed to delete');
+        });
     },
-
 
     deleteImage(imgName) {
       if (!this.$cookie.get('sessionToken')) {
@@ -575,16 +705,24 @@ export default {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
         },
       });
-      client.request(deleteCampImage, variables).then(() => {
-        this.getCampDetails();
-        EventBus.$emit('show-success-notification-short', 'Successfully Deleted ');
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      }).finally(() => { });
+      client
+        .request(deleteCampImage, variables)
+        .then(() => {
+          this.getCampDetails();
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Deleted ',
+          );
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            err.response.errors[0].message,
+          );
+        })
+        .finally(() => {});
     },
-
   },
-
 };
 </script>
 
