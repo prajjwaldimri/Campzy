@@ -301,8 +301,8 @@ export default {
     }
     this.searchInput = this.$route.params.searchterm;
 
-    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 2;
-    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
+    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1;
+    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2;
 
     // Set the default date label
     this.fromDate = this.$moment().format('YYYY-MM-DD');

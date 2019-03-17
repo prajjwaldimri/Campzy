@@ -179,10 +179,16 @@ import SearchImagesDialog from '../search/SearchImagesDialog.vue';
 import ReviewCamp from './ReviewCamp.vue';
 import Footer from '../Footer.vue';
 import {
-  getCampByUrl, getBestTentAvailable, getReviewsForCamp, getWishList,
+  getCampByUrl,
+  getBestTentAvailable,
+  getReviewsForCamp,
+  getWishList,
 } from '../../queries/queries';
 import {
-  bookCampCheck, bookCamp, addCampToWishlist, removeCampFromWishlist,
+  bookCampCheck,
+  bookCamp,
+  addCampToWishlist,
+  removeCampFromWishlist,
 } from '../../queries/mutationQueries';
 import { EventBus } from '../../event-bus';
 
@@ -222,21 +228,21 @@ export default {
     return {
       title: this.camp.name,
       titleTemplate: 'Campzy - %s',
-      script: [
-        { src: 'https://checkout.razorpay.com/v1/checkout.js' },
-      ],
+      script: [{ src: 'https://checkout.razorpay.com/v1/checkout.js' }],
     };
   },
   mounted() {
     this.getCamp();
-    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 2;
-    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 1;
+    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1;
+    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2;
     this.fromDate = sessionStorage.getItem('fromDate');
     this.toDate = sessionStorage.getItem('toDate');
     this.getUser();
   },
   methods: {
-    allowedDates(val) { return this.$moment(val).isSameOrAfter(Date.now(), 'days'); },
+    allowedDates(val) {
+      return this.$moment(val).isSameOrAfter(Date.now(), 'days');
+    },
     getCamp() {
       EventBus.$emit('show-progress-bar');
       const variables = {
@@ -244,16 +250,24 @@ export default {
         tentCount: this.tentCount,
         personCount: this.personCount,
       };
-      request('/graphql', getCampByUrl, variables).then((data) => {
-        this.camp = data.campUser;
-        this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.latitude},${this.camp.coordinates.longitude}&zoom=18&maptype=satellite`;
-      }).catch(() => {
-        this.$router.go(-1);
-        EventBus.$emit('show-error-notification-short', 'We can\'t find what you were looking for!');
-      }).finally(() => {
-        EventBus.$emit('hide-progress-bar');
-        this.getReviews();
-      });
+      request('/graphql', getCampByUrl, variables)
+        .then((data) => {
+          this.camp = data.campUser;
+          this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${
+            this.camp.coordinates.latitude
+          },${this.camp.coordinates.longitude}&zoom=18&maptype=satellite`;
+        })
+        .catch(() => {
+          this.$router.go(-1);
+          EventBus.$emit(
+            'show-error-notification-short',
+            "We can't find what you were looking for!",
+          );
+        })
+        .finally(() => {
+          EventBus.$emit('hide-progress-bar');
+          this.getReviews();
+        });
     },
     getUser() {
       if (!this.$cookie.get('sessionToken')) {
@@ -270,7 +284,8 @@ export default {
         },
       });
 
-      client.request(query)
+      client
+        .request(query)
         .then((data) => {
           this.user = data.currentUser;
           if (this.user.isEmailVerified === false) {
@@ -282,21 +297,31 @@ export default {
           if (err.response.errors[0].message.includes('session')) {
             this.$cookie.delete('sessionToken');
           }
-          EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
+          EventBus.$emit(
+            'show-error-notification-long',
+            err.response.errors[0].message,
+          );
         });
     },
     getReviews() {
       const variables = {
         campId: this.camp.id,
       };
-      request('/graphql', getReviewsForCamp, variables).then((data) => {
-        this.reviews = data.getReviewsForCamp;
-      }).catch(() => {
-        EventBus.$emit('show-info-notification-short', 'No Reviews for this camp.');
-      });
+      request('/graphql', getReviewsForCamp, variables)
+        .then((data) => {
+          this.reviews = data.getReviewsForCamp;
+        })
+        .catch(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'No Reviews for this camp.',
+          );
+        });
     },
     openImageDialog() {
-      EventBus.$emit('open-image-dialog', { campUrl: this.$route.params.campUrl });
+      EventBus.$emit('open-image-dialog', {
+        campUrl: this.$route.params.campUrl,
+      });
     },
     calculatePrice() {
       EventBus.$emit('show-progress-bar');
@@ -308,27 +333,36 @@ export default {
         bookingEndDate: this.toDate,
         personCount: parseInt(this.personCount, 10),
       };
-      request('/graphql', getBestTentAvailable, variables).then((data) => {
-        if (!data.bestTentInCamp || data.bestTentInCamp.length <= 0) {
-          EventBus.$emit('show-error-notification-long', 'We don\'t have the required amount of tents available. ');
+      request('/graphql', getBestTentAvailable, variables)
+        .then((data) => {
+          if (!data.bestTentInCamp || data.bestTentInCamp.length <= 0) {
+            EventBus.$emit(
+              'show-error-notification-long',
+              "We don't have the required amount of tents available. ",
+            );
+            this.isBookingPossible = false;
+            return;
+          }
+          let price = 0;
+          this.tents = [];
+          for (let i = 0; i < data.bestTentInCamp.length; i += 1) {
+            this.tents.push(data.bestTentInCamp[i].id);
+            price += data.bestTentInCamp[i].bookingPrice;
+          }
+          // Add the number of days of trip criteria to price
+          this.price =            price * this.$moment(this.toDate).diff(this.fromDate, 'days');
+          this.isBookingPossible = true;
+        })
+        .catch(() => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            'Error getting prices for the camp',
+          );
           this.isBookingPossible = false;
-          return;
-        }
-        let price = 0;
-        this.tents = [];
-        for (let i = 0; i < data.bestTentInCamp.length; i += 1) {
-          this.tents.push(data.bestTentInCamp[i].id);
-          price += data.bestTentInCamp[i].bookingPrice;
-        }
-        // Add the number of days of trip criteria to price
-        this.price = price * this.$moment(this.toDate).diff(this.fromDate, 'days');
-        this.isBookingPossible = true;
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-short', 'Error getting prices for the camp');
-        this.isBookingPossible = false;
-      }).finally(() => {
-        EventBus.$emit('hide-progress-bar');
-      });
+        })
+        .finally(() => {
+          EventBus.$emit('hide-progress-bar');
+        });
     },
     bookCamp() {
       this.bookButtonLoading = true;
@@ -342,52 +376,70 @@ export default {
         fromDate: this.fromDate,
         toDate: this.toDate,
       };
-      client.request(bookCampCheck, variables).then((data) => {
-        const that = this;
-        that.bookButtonLoading = true;
-        // Implement razorpay API
-        const razorOptions = {
-          key: 'rzp_test_7nPC922fL6RkVG',
-          amount: data.bookCampCheck.amount * 100, // Razorpay counts money in paise
-          name: 'Campzy',
-          description: 'Purchase Description',
-          handler(response) {
-            // Use data.bookCampCheck.amount to get the amount from user
-            variables = {
-              razorpayPaymentId: response.razorpay_payment_id,
-              tentIds: that.tents,
-              personCount: that.personCount,
-              tentCount: that.tentCount,
-              fromDate: that.fromDate,
-              toDate: that.toDate,
-            };
-            that.bookButtonLoading = true;
-            client.request(bookCamp, variables).then(() => {
-              EventBus.$emit('show-success-notification-long', 'Tent Successfully Booked!');
-              that.$router.push('/profile/activeBookings');
-              that.bookButtonLoading = false;
-            }).catch((err) => {
-              EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-            });
-          },
-          prefill: {
-            name: this.user.name,
-            email: this.user.email,
-            contact: this.user.phoneNumber,
-          },
-        };
+      client
+        .request(bookCampCheck, variables)
+        .then((data) => {
+          const that = this;
+          that.bookButtonLoading = true;
+          // Implement razorpay API
+          const razorOptions = {
+            key: 'rzp_test_7nPC922fL6RkVG',
+            amount: data.bookCampCheck.amount * 100, // Razorpay counts money in paise
+            name: 'Campzy',
+            description: 'Purchase Description',
+            handler(response) {
+              // Use data.bookCampCheck.amount to get the amount from user
+              variables = {
+                razorpayPaymentId: response.razorpay_payment_id,
+                tentIds: that.tents,
+                personCount: that.personCount,
+                tentCount: that.tentCount,
+                fromDate: that.fromDate,
+                toDate: that.toDate,
+              };
+              that.bookButtonLoading = true;
+              client
+                .request(bookCamp, variables)
+                .then(() => {
+                  EventBus.$emit(
+                    'show-success-notification-long',
+                    'Tent Successfully Booked!',
+                  );
+                  that.$router.push('/profile/activeBookings');
+                  that.bookButtonLoading = false;
+                })
+                .catch((err) => {
+                  EventBus.$emit(
+                    'show-error-notification-short',
+                    err.response.errors[0].message,
+                  );
+                });
+            },
+            prefill: {
+              name: this.user.name,
+              email: this.user.email,
+              contact: this.user.phoneNumber,
+            },
+          };
 
-        const rzpl = new Razorpay(razorOptions);
-        rzpl.open();
-        this.bookButtonLoading = false;
-      }).catch((err) => {
-        if (err.response.errors[0].message === 'NotLoggedInError') {
-          EventBus.$emit('show-info-notification-short', 'Please Login First!');
-          this.$router.push('/login');
-        } else {
-          EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-        }
-      });
+          const rzpl = new Razorpay(razorOptions);
+          rzpl.open();
+          this.bookButtonLoading = false;
+        })
+        .catch((err) => {
+          if (err.response.errors[0].message === 'NotLoggedInError') {
+            EventBus.$emit(
+              'show-info-notification-short',
+              'Please Login First!',
+            );
+            this.$router.push('/login');
+          } else {
+            EventBus.$emit(
+              'show-error-notification-short',
+              err.response.errors[0].message,
+            );
+          }
+        });
     },
 
     addToWishList(campID) {
@@ -401,13 +453,22 @@ export default {
         campId: campID,
       };
 
-      client.request(addCampToWishlist, variables).then(() => {
-        EventBus.$emit('show-info-notification-short', 'Added to your Wishlist!');
-        this.getUserWishList();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Please Login first!');
-        this.$router.push('/login');
-      }).finally(() => { EventBus.$emit('hide-progress-bar'); });
+      client
+        .request(addCampToWishlist, variables)
+        .then(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Added to your Wishlist!',
+          );
+          this.getUserWishList();
+        })
+        .catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Please Login first!');
+          this.$router.push('/login');
+        })
+        .finally(() => {
+          EventBus.$emit('hide-progress-bar');
+        });
     },
     getUserWishList() {
       const client = new GraphQLClient('/graphql', {
@@ -416,16 +477,22 @@ export default {
         },
       });
 
-      client.request(getWishList).then((data) => {
-        this.userWishList = data.getUserWishlist.wishlist;
-        if (this.userWishList.includes(this.camp.id)) {
-          this.isInWishList = true;
-        } else {
-          this.isInWishList = false;
-        }
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-      });
+      client
+        .request(getWishList)
+        .then((data) => {
+          this.userWishList = data.getUserWishlist.wishlist;
+          if (this.userWishList.includes(this.camp.id)) {
+            this.isInWishList = true;
+          } else {
+            this.isInWishList = false;
+          }
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-long',
+            err.response.errors[0].message,
+          );
+        });
     },
     removeFromWishList(campID) {
       EventBus.$emit('show-progress-bar');
@@ -438,33 +505,51 @@ export default {
         campId: campID,
       };
 
-      client.request(removeCampFromWishlist, variables).then(() => {
-        EventBus.$emit('show-info-notification-short', 'Removed from Wishlist!');
-        this.getUserWishList();
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-      }).finally(() => { EventBus.$emit('hide-progress-bar'); });
+      client
+        .request(removeCampFromWishlist, variables)
+        .then(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Removed from Wishlist!',
+          );
+          this.getUserWishList();
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-long',
+            err.response.errors[0].message,
+          );
+        })
+        .finally(() => {
+          EventBus.$emit('hide-progress-bar');
+        });
     },
-
-
   },
 
   watch: {
     fromDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM',
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('fromDate', this.fromDate);
 
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
-        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
+        this.toDate = this.$moment(this.fromDate)
+          .add(1, 'days')
+          .format('YYYY-MM-DD');
       }
       this.calculatePrice();
     },
     toDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format('DD MMMM')} - ${this.$moment(this.toDate).format('DD MMMM')}`;
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM',
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
       sessionStorage.setItem('toDate', this.toDate);
 
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
-        this.toDate = this.$moment(this.fromDate).add(1, 'days').format('YYYY-MM-DD');
+        this.toDate = this.$moment(this.fromDate)
+          .add(1, 'days')
+          .format('YYYY-MM-DD');
       }
       this.calculatePrice();
     },
