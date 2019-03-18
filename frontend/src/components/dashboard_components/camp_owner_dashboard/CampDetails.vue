@@ -54,13 +54,13 @@
                             v-layout(column)
                               span PAN DETAILS
                               input.mt-2(type='file' name='pan_card' ref='panCard'
-                              v-on:change="showFile" accept='application/pdf'
+                              v-on:change="showFile"
                               required :disabled='isDocument')
                           v-flex.mt-3(xs12)
                             v-layout(column)
                               span GST DETAILS
                               input.mt-2(type='file' name='gst_number'
-                              v-on:change="showFile" accept='application/pdf' required :disabled='isDocument')
+                              v-on:change="showFile" required :disabled='isDocument')
                           v-flex.mt-3(xs12)
                             v-layout(column)
                               span * Only pdf files
