@@ -128,7 +128,7 @@
                         v-layout(column)
                           v-flex(xs12 md6)
                             v-combobox(v-model='placesOfInterest' attach chips
-                             label='Places of Interest' multiple clearable)
+                             label='Places of Interest' multiple clearable hint='Wirte distance in km, separated with a comma')
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
@@ -166,7 +166,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='savePlacesOfInterests'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
@@ -649,14 +649,16 @@ export default {
         });
     },
     savePlacesOfInterests() {
-      this.placesOfInterest.forEach((place) => {
+      this.placesOfInterest.forEach((places) => {
         if (!this.$cookie.get('sessionToken')) {
           this.$router.push('/');
         }
+        const temp = {};
+        [temp.name, temp.distance] = places.split(',');
         const variables = {
           id: this.camp.id,
-          name: place.name,
-          distance: place.distance,
+          name: temp.name,
+          distance: parseFloat(temp.distance),
         };
         const client = new GraphQLClient('/graphql', {
           headers: {

@@ -262,8 +262,8 @@ const savePlacesOfInterest = {
     id: {
       type: GraphQLString,
     },
-    placesOfInterest: {
-      type: new GraphQLList(GraphQLString),
+    name: {
+      type: GraphQLString,
     },
     distance: {
       type: GraphQLFloat,
