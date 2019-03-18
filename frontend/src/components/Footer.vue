@@ -4,10 +4,10 @@
       v-layout(row wrap)
         v-flex(sm12 md1).text-xs-center
           .d-flex.align-center.justify-center.fill-height
-            v-btn(icon small)
+            v-btn(icon small href="https://www.facebook.com/campzy1/" target="_blank" )
               img(src="/vectors/facebook-white.svg" height="18")
-            v-btn(icon small)
-              img(src="/vectors/instagram.svg" height="18")
+            v-btn(icon small href="https://www.instagram.com/campzy.in/" target="_blank")
+              img(src="/vectors/instagram.svg" height="18" )
             v-btn(icon small)
               img(src="/vectors/twitter.svg" height="18")
 
