@@ -127,8 +127,8 @@
                       v-flex(xs12 md6)
                         v-layout(column)
                           v-flex(xs12 md6)
-                            //- v-combobox(v-model='placesOfInterest' attach chips
-                            //-  label='Places of Interest' multiple clearable)
+                            v-combobox(v-model='placesOfInterest' attach chips
+                             label='Places of Interest' multiple clearable)
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
@@ -270,7 +270,7 @@ export default {
         { name: 'Charging points', value: true },
       ],
       amenities: {},
-      placesOfInterest: {},
+      placesOfInterest: [],
       tags: [],
       panNumber: null,
       tinNumber: null,
@@ -546,7 +546,8 @@ export default {
             EventBus.$emit('agreement-not-accepted');
           }
           this.camp = data.currentUserCamp;
-          this.placesOfInterest = this.camp.placesOfInterest;
+          this.createPlacesOfInterest();
+
           this.tags = this.camp.tags;
           this.amenities = this.camp.amenities;
           if (this.camp.campDocuments.length === 3) {
@@ -609,6 +610,13 @@ export default {
         .finally(() => {
           this.isDataUpdating = false;
         });
+    },
+
+    createPlacesOfInterest() {
+      this.camp.placesOfInterest.forEach((places) => {
+        const tempPlace = Object.values(places).join();
+        this.placesOfInterest.push(tempPlace);
+      });
     },
 
     saveAmenity() {
