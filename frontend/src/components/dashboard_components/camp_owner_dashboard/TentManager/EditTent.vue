@@ -28,7 +28,7 @@
 
         v-text-field(v-model="tent.surgePrice" label="Surge Price" prepend-icon="money" clearable
         data-vv-name="surgePrice"
-        :error-messages="errors.collect('surgePrice')")
+        :error-messages="errors.collect('surgePrice')" disabled)
 
         v-text-field(v-model="tent.preBookPeriod" label="Pre Booking Time" prepend-icon="payment"
         clearable  data-vv-name="preBooking" v-validate="'required'" type="number"
@@ -48,7 +48,10 @@
 import { GraphQLClient } from 'graphql-request';
 import { EventBus } from '../../../../event-bus';
 import { getTentById } from '../../../../queries/queries';
-import { updateTentQuery, closeBookingByDates } from '../../../../queries/mutationQueries';
+import {
+  updateTentQuery,
+  closeBookingByDates,
+} from '../../../../queries/mutationQueries';
 
 export default {
   name: 'addTent',
@@ -86,13 +89,19 @@ export default {
       const variables = {
         id: tentID,
       };
-      client.request(getTentById, variables).then((data) => {
-        this.tent = data.tent;
-        this.disabledDates = this.tent.disabledDates;
-        this.bookingPrice = this.tent.bookingPrice;
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-      });
+      client
+        .request(getTentById, variables)
+        .then((data) => {
+          this.tent = data.tent;
+          this.disabledDates = this.tent.disabledDates;
+          this.bookingPrice = this.tent.bookingPrice;
+        })
+        .catch((err) => {
+          EventBus.$emit(
+            'show-error-notification-short',
+            err.response.errors[0].message,
+          );
+        });
     },
 
     updateTent() {
@@ -120,11 +129,17 @@ export default {
             },
           });
 
-          client.request(updateTentQuery, variables).then(() => {
-            this.closeBookingByDate();
-          }).catch((err) => {
-            EventBus.$emit('show-error-notification-short', err.response.errors[0].message);
-          });
+          client
+            .request(updateTentQuery, variables)
+            .then(() => {
+              this.closeBookingByDate();
+            })
+            .catch((err) => {
+              EventBus.$emit(
+                'show-error-notification-short',
+                err.response.errors[0].message,
+              );
+            });
         }
       });
     },
@@ -142,16 +157,22 @@ export default {
         id: this.tent.id,
         disabledDates: this.disabledDates,
       };
-      client.request(closeBookingByDates, variables).then(() => {
-        this.tent = {};
-        this.disabledDates = [];
-        EventBus.$emit('show-success-notification-short', 'Successfully Update');
-      }).catch(() => {
-        this.tent = {};
-        this.disabledDates = [];
+      client
+        .request(closeBookingByDates, variables)
+        .then(() => {
+          this.tent = {};
+          this.disabledDates = [];
+          EventBus.$emit(
+            'show-success-notification-short',
+            'Successfully Update',
+          );
+        })
+        .catch(() => {
+          this.tent = {};
+          this.disabledDates = [];
 
-        EventBus.$emit('show-error-notification-short', 'Failed to Update');
-      });
+          EventBus.$emit('show-error-notification-short', 'Failed to Update');
+        });
       this.closeDialog();
     },
     closeDialog() {
@@ -160,16 +181,14 @@ export default {
       this.editTentDialog = false;
       EventBus.$emit('close-edit-tent-dialog');
     },
-
   },
 
   watch: {
     bookingPrice(tentPrice) {
       const price = parseInt(tentPrice, 10);
-      const commisionPrice = Math.round(price * 12 / 100);
-      this.calculatedPrice = price - commisionPrice - Math.round(commisionPrice * 18 / 100);
+      const commisionPrice = Math.round((price * 12) / 100);
+      this.calculatedPrice =        price - commisionPrice - Math.round((commisionPrice * 18) / 100);
     },
   },
-
 };
 </script>
