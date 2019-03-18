@@ -63,11 +63,6 @@
                               v-on:change="showFile" accept='application/pdf' required :disabled='isDocument')
                           v-flex.mt-3(xs12)
                             v-layout(column)
-                              span TIN NUMBER
-                              input.mt-2(type='file' name='tin' v-on:change="showFile"
-                              accept='application/pdf' required :disabled='isDocument' )
-                          v-flex.mt-3(xs12)
-                            v-layout(column)
                               span * Only pdf files
                           v-flex.mt-4(xs12)
                             v-btn.white--text(@click='uploadDocuments' color='green'
