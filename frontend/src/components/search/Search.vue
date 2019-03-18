@@ -28,6 +28,7 @@
                 v-flex
                   v-range-slider(v-model="priceRange" :max="80000" :min="1000" :step="500"
                     hint="Price Range" persistent-hint color="green" thumb-label :thumb-size="48")
+                  span {{ $n(priceRange[0], 'currency', 'en-IN') }} - {{ $n(priceRange[1], 'currency', 'en-IN') }}
 
                 v-flex
                   v-select(v-model="amenitiesSelected" :items="amenities" attach
