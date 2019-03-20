@@ -280,7 +280,6 @@ const savePlacesOfInterest = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-
       const places = await CampModel.findByIdAndUpdate(
         args.id, {
           $push: {

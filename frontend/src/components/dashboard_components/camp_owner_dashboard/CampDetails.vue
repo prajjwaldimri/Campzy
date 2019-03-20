@@ -166,7 +166,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='savePlacesOfInterests'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
@@ -594,7 +594,7 @@ export default {
       });
       this.isDataUpdating = true;
       this.saveAmenity();
-      // this.savePlacesOfInterests();
+      this.savePlacesOfInterests();
       client
         .request(saveCampDetails, variables)
         .then(() => {
@@ -668,8 +668,7 @@ export default {
         client
           .request(addPlacesOfInterest, variables)
           .then(() => {})
-          .catch((err) => {
-            console.log(err);
+          .catch(() => {
             EventBus.$emit(
               'show-info-notification-short',
               'Failed to update Places of Interests',
