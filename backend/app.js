@@ -16,7 +16,7 @@ const https = require('https');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const Sentry = require('@sentry/node');
-const SiteMapGenerator = require('sitemap-generator');
+const { sitemap } = require('./sitemapGen');
 
 if (process.env.ENVIRONMENT === 'production') {
   Sentry.init({
@@ -44,6 +44,18 @@ app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Sitemap generator
+app.get('/sitemap.xml', (req, res) => {
+  // eslint-disable-next-line consistent-return
+  sitemap.toXML((err, xml) => {
+    if (err) {
+      return res.status(500).end();
+    }
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  });
+});
 
 // Upload CampOwner's Documents
 app.post(
@@ -88,7 +100,6 @@ if (process.env.ENVIRONMENT === 'development') {
 // Public static directories
 app.use(express.static(path.join(__dirname, '../frontend/static')));
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.use(express.static(path.join(__dirname, '/static')));
 
 app.use(
   '/graphql',
@@ -112,13 +123,6 @@ if (process.env.ENVIRONMENT === 'development') {
     cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt')),
   };
   https.createServer(certOptions, app).listen(443);
-
-  // Sitemap Config
-  const generator = SiteMapGenerator('https://campzy.in', {
-    stringQuerystring: false,
-    filepath: './backend/static/sitemap.xml',
-  });
-  generator.start();
 } else {
   app.listen(process.env.PORT || 4444);
 }
