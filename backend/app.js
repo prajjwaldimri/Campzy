@@ -16,6 +16,7 @@ const https = require('https');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const Sentry = require('@sentry/node');
+const SiteMapGenerator = require('sitemap-generator');
 
 if (process.env.ENVIRONMENT === 'production') {
   Sentry.init({
@@ -66,10 +67,7 @@ app.post(
 app.delete('/deleteImages', deleteImage);
 
 // Connect to MLab Database
-mongoose.connect(
-  process.env.MONGODB_URI,
-  { useNewUrlParser: true },
-);
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 mongoose.connection.once('open', () => {
   console.log('Database connected');
 });
@@ -87,8 +85,10 @@ if (process.env.ENVIRONMENT === 'development') {
   });
 }
 
+// Public static directories
 app.use(express.static(path.join(__dirname, '../frontend/static')));
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, '/static')));
 
 app.use(
   '/graphql',
@@ -112,6 +112,13 @@ if (process.env.ENVIRONMENT === 'development') {
     cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt')),
   };
   https.createServer(certOptions, app).listen(443);
+
+  // Sitemap Config
+  const generator = SiteMapGenerator('https://campzy.in', {
+    stringQuerystring: false,
+    filepath: './backend/static/sitemap.xml',
+  });
+  generator.start();
 } else {
   app.listen(process.env.PORT || 4444);
 }
