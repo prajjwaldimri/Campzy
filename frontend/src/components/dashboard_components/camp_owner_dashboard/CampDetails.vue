@@ -128,7 +128,7 @@
                         v-layout(column)
                           v-flex(xs12 md6)
                             v-combobox(v-model='placesOfInterest' attach chips
-                             label='Places of Interest' multiple clearable hint='Wirte distance in km, separated with a comma')
+                             label='Places of Interest' multiple clearable hint='Write distance in km, separated with a comma')
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
