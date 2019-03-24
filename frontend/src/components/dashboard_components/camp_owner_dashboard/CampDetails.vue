@@ -154,7 +154,7 @@
                               template(v-slot:activator="{ on }")
                                 v-btn(flat dark icon v-on="on" large)
                                   v-icon(color='red' @click='deleteImageFromAWS(image)') delete
-                              span Delete Photo
+                              span Delete Image
                             v-tooltip(bottom)
                               template(v-slot:activator="{ on }" large)
                                 v-btn(flat dark icon v-on="on")
