@@ -29,15 +29,21 @@
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
                         v-dialog(v-model='loc' height='500' width='700')
-                          v-btn#open__map(dark slot="activator")
+                          v-btn(dark slot="activator" @click='geolocate')
                             span My Location
                             v-icon.ml-2 location_searching
                           v-card(height='500' width='700')
                             v-container(fluid style='padding:0px;height:90%;')
-                              v-card(style='width:100%;height:100%;')#map
+                              v-card-title
+                                h2 Search your Place
+                                label
+                                  gmap-autocomplete(@place_changed='setPlace')
+                                  v-btn(@click='addMarker' color='success') Add
+                                gmap-map(:center='center' :zoom='15' style='width:100%;  height: 400px;')
+                                  gmap-marker(:key='index' v-for='(m, index) in markers' :position='m.position' @click='center=m.position')
                             v-card-actions
                               v-spacer
-                              v-btn#set__coordinates(dark @click='loc=!loc') Ok
+                              v-btn(dark) Ok
 
 
         v-tab-item(id='documents')
@@ -195,64 +201,64 @@ export default {
   },
   metaInfo: {
     title: 'Dashboard | Camp Details',
-    script: [
-      {
-        innerHTML: ` document.getElementById('open__map').addEventListener('click', getCurrentLocation);
-        function getCurrentLocation() {
-          var map; 
-          var infoWindow;
-          map = new google.maps.Map(document.getElementById('map'),{
-            zoom: 15
-          });
-          marker = new google.maps.Marker({
-            draggable: true
-          });
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-              this.coordinates = pos;
-              marker.setPosition(pos);
-              map.setCenter(pos);
-              marker.setMap(map);
-              this.location = this.coordinates.lat;
-            }, () => {
-              handleLocationError(true, marker, map.getCenter());
-            });
-            google.maps.event.addListener(marker, 'dragend', function(){
-                pos = {
-                lat: marker.position.lat(),
-                lng: marker.position.lng(),
-              };
-              map.setCenter(pos);
-              marker.setMap(map);
-              this.coordinates = pos;
-            });
+    // script: [
+    //   {
+    //     innerHTML: ` document.getElementById('open__map').addEventListener('click', getCurrentLocation);
+    //     function getCurrentLocation() {
+    //       var map;
+    //       var infoWindow;
+    //       map = new google.maps.Map(document.getElementById('map'),{
+    //         zoom: 15
+    //       });
+    //       marker = new google.maps.Marker({
+    //         draggable: true
+    //       });
+    //       if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition((position) => {
+    //           const pos = {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude,
+    //           };
+    //           this.coordinates = pos;
+    //           marker.setPosition(pos);
+    //           map.setCenter(pos);
+    //           marker.setMap(map);
+    //           this.location = this.coordinates.lat;
+    //         }, () => {
+    //           handleLocationError(true, marker, map.getCenter());
+    //         });
+    //         google.maps.event.addListener(marker, 'dragend', function(){
+    //             pos = {
+    //             lat: marker.position.lat(),
+    //             lng: marker.position.lng(),
+    //           };
+    //           map.setCenter(pos);
+    //           marker.setMap(map);
+    //           this.coordinates = pos;
+    //         });
 
-            document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
-              function setCoordinates(){
-                console.log(this.coordinates);
-          }
-          } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, marker, map.getCenter());
-          }
-        };
-        function handleLocationError(browserHasGeolocation, marker, pos) {
-          marker.setPosition(pos);
-          marker.setContent(browserHasGeolocation
-            ? 'Error: The Geolocation service failed.'
-            : 'Error: Your browser does not support geolocation.');
-        }; `,
-        type: 'text/javascript',
-      },
-      {
-        src:
-          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g',
-      },
-    ],
+    //         document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
+    //           function setCoordinates(){
+    //             console.log(this.coordinates);
+    //       }
+    //       } else {
+    //         // Browser doesn't support Geolocation
+    //         handleLocationError(false, marker, map.getCenter());
+    //       }
+    //     };
+    //     function handleLocationError(browserHasGeolocation, marker, pos) {
+    //       marker.setPosition(pos);
+    //       marker.setContent(browserHasGeolocation
+    //         ? 'Error: The Geolocation service failed.'
+    //         : 'Error: Your browser does not support geolocation.');
+    //     }; `,
+    //     type: 'text/javascript',
+    //   },
+    //   {
+    //     src:
+    //       'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g',
+    //   },
+    // ],
   },
 
   data() {
@@ -288,20 +294,42 @@ export default {
       loc: false,
       campLocation: '',
       coordinates: {},
+      center: {},
+      markers: [],
+      places: [],
+      currentPlace: null,
     };
-  },
-  props: {
-    coordinate: {
-      lat: String,
-      lon: String,
-    },
   },
 
   mounted() {
     this.getCampDetails();
+    // this.geolocate();
   },
 
   methods: {
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng(),
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+      });
+    },
     setImageAsHero(img) {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/');

@@ -15,14 +15,13 @@ const userTypes = ['Camper', 'CampOwner', 'Admin', 'Blogger'];
 const campTypes = ['Dome', 'Triangle', 'Hexagonal'];
 const terrainTypes = ['glacier', 'forest', 'desert', 'ocean', 'hill', 'river'];
 const s3Images = [
-  '1538556993356__camp1.jpeg',
-  '1538556993388__camp2.jpeg',
-  '1538556993391__camp3.jpeg',
-  '1538556993395__camp4.jpeg',
-  '1538556993405__camp5.jpeg',
-  '1538556993407__camp6.jpeg',
-  '1538556993411__camp7.jpeg',
-  '1538556993420__camp8.jpeg',
+  '1553493372874__Camp1.jpg',
+  '1553493372935__Camp2.jpg',
+  '1553493372943__Camp3.jpg',
+  '1553493372956__Camp4.jpg',
+  '1553493372958__Camp5.jpg',
+  '1553493372964__Camp6.jpg',
+  '1553493372973__Camp7.jpg',
 ];
 
 async function CreateCamp(userId, phoneNumber) {
@@ -53,34 +52,61 @@ async function CreateCamp(userId, phoneNumber) {
         .fill(null)
         .map(e => (e = faker.random.arrayElement(s3Images))),
       heroImage: faker.random.arrayElement(s3Images),
-      averageRating: faker.random.number({ min: 1, max: 5 }),
-      ratingsCount: faker.random.number({ min: 100, max: 10000 }),
-      altitude: faker.random.number({ min: 100, max: 2000 }),
+      averageRating: faker.random.number({
+        min: 1,
+        max: 5
+      }),
+      ratingsCount: faker.random.number({
+        min: 100,
+        max: 10000
+      }),
+      altitude: faker.random.number({
+        min: 100,
+        max: 2000
+      }),
       tags: new Array(8).fill(null).map(e => (e = faker.random.word())),
       placesOfInterest: new Array(4).fill(null).map(
         e =>
-          (e = {
-            name: faker.hacker.noun(),
-            distance: faker.random.number({
-              min: 0,
-              max: 10,
-              precision: 0.1,
-            }),
+        (e = {
+          name: faker.hacker.noun(),
+          distance: faker.random.number({
+            min: 0,
+            max: 10,
+            precision: 0.1,
           }),
+        }),
       ),
     });
-    for (let i = 0; i < faker.random.number({ min: 1, max: 10 }); i++) {
+    for (let i = 0; i < faker.random.number({
+        min: 1,
+        max: 10
+      }); i++) {
       const tent = await Tent.create({
-        capacity: faker.random.number({ min: 1, max: 4 }),
+        capacity: faker.random.number({
+          min: 1,
+          max: 4
+        }),
         isAvailable: true,
         type: faker.random.arrayElement(campTypes),
-        bookingPrice: faker.random.number({ min: 1000, max: 80000 }),
-        surgePrice: faker.random.number({ min: 1000, max: 80000 }),
-        preBookPeriod: faker.random.number({ min: 2, max: 15 }),
+        bookingPrice: faker.random.number({
+          min: 1000,
+          max: 80000
+        }),
+        surgePrice: faker.random.number({
+          min: 1000,
+          max: 80000
+        }),
+        preBookPeriod: faker.random.number({
+          min: 2,
+          max: 15
+        }),
         camp: camp._id,
       });
       await Review.create({
-        stars: faker.random.number({ min: 1, max: 5 }),
+        stars: faker.random.number({
+          min: 1,
+          max: 5
+        }),
         comment: faker.lorem.sentences(),
         camp: camp._id,
         user: userId,
@@ -118,12 +144,15 @@ async function CreateUser() {
 }
 
 mongoose.connect(
-  process.env.MONGODB_URI,
-  { useNewUrlParser: true },
+  process.env.MONGODB_URI, {
+    useNewUrlParser: true
+  },
 );
 
 function handleRejection(p) {
-  return p.catch(err => ({ error: err }));
+  return p.catch(err => ({
+    error: err
+  }));
 }
 mongoose.connection.once('open', async () => {
   // Remove all data

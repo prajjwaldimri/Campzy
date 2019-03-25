@@ -195,6 +195,7 @@ const router = new Router({
     path: '/termsAndConditions',
     component: TermsAndConditions,
   },
+
   ],
 });
 

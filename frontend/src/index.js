@@ -10,6 +10,7 @@ import 'vue-loaders/dist/vue-loaders.css';
 import * as VueLoaders from 'vue-loaders';
 import VueTelInput from 'vue-tel-input';
 import VueI18n from 'vue-i18n';
+import * as VueGoogleMaps from 'vue2-google-maps';
 import App from './App.vue';
 import router from './router/router';
 import './stylus/main.styl';
@@ -31,6 +32,14 @@ Vue.use(VueLoaders);
 
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
+
+// Use google map in Vue
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: process.env.GOOGLE_MAP,
+    libraries: 'places',
+  },
+});
 // Tell Vue to use the plugin
 Vue.use(VueCookie);
 Vue.use(VueTour);
