@@ -36,7 +36,7 @@ Vue.use(VeeValidate);
 // Use google map in Vue
 Vue.use(VueGoogleMaps, {
   load: {
-    key: process.env.GOOGLE_MAP,
+    key: `${process.env.GOOGLE_MAP}`,
     libraries: 'places',
   },
 });

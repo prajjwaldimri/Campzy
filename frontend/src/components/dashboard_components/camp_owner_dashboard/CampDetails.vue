@@ -28,22 +28,23 @@
                       v-flex(xs12 md5)
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
-                        v-dialog(v-model='loc' height='500' width='700')
+                        v-dialog(v-model='loc' height='700' width='700')
                           v-btn(dark slot="activator" @click='geolocate')
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card(height='500' width='700')
+                          v-card(height='700' width='700')
                             v-container(fluid style='padding:0px;height:90%;')
                               v-card-title
                                 h2 Search your Place
+                                v-spacer
                                 label
                                   gmap-autocomplete(@place_changed='setPlace')
                                   v-btn(@click='addMarker' color='success') Add
-                                gmap-map(:center='center' :zoom='15' style='width:100%;  height: 400px;')
-                                  gmap-marker(:key='index' v-for='(m, index) in markers' :position='m.position' @click='center=m.position')
-                            v-card-actions
-                              v-spacer
-                              v-btn(dark) Ok
+                              gmap-map(:center='center' :zoom='15' style='width:100%;  height: 100%;')
+                                gmap-marker(:key='index' v-for='(m, index) in markers' :position='m.position' @click='center=m.position')
+                              v-card-actions
+                                v-spacer
+                                v-btn(dark) Ok
 
 
         v-tab-item(id='documents')
@@ -201,64 +202,6 @@ export default {
   },
   metaInfo: {
     title: 'Dashboard | Camp Details',
-    // script: [
-    //   {
-    //     innerHTML: ` document.getElementById('open__map').addEventListener('click', getCurrentLocation);
-    //     function getCurrentLocation() {
-    //       var map;
-    //       var infoWindow;
-    //       map = new google.maps.Map(document.getElementById('map'),{
-    //         zoom: 15
-    //       });
-    //       marker = new google.maps.Marker({
-    //         draggable: true
-    //       });
-    //       if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition((position) => {
-    //           const pos = {
-    //             lat: position.coords.latitude,
-    //             lng: position.coords.longitude,
-    //           };
-    //           this.coordinates = pos;
-    //           marker.setPosition(pos);
-    //           map.setCenter(pos);
-    //           marker.setMap(map);
-    //           this.location = this.coordinates.lat;
-    //         }, () => {
-    //           handleLocationError(true, marker, map.getCenter());
-    //         });
-    //         google.maps.event.addListener(marker, 'dragend', function(){
-    //             pos = {
-    //             lat: marker.position.lat(),
-    //             lng: marker.position.lng(),
-    //           };
-    //           map.setCenter(pos);
-    //           marker.setMap(map);
-    //           this.coordinates = pos;
-    //         });
-
-    //         document.getElementById('set__coordinates').addEventListener('click', setCoordinates);
-    //           function setCoordinates(){
-    //             console.log(this.coordinates);
-    //       }
-    //       } else {
-    //         // Browser doesn't support Geolocation
-    //         handleLocationError(false, marker, map.getCenter());
-    //       }
-    //     };
-    //     function handleLocationError(browserHasGeolocation, marker, pos) {
-    //       marker.setPosition(pos);
-    //       marker.setContent(browserHasGeolocation
-    //         ? 'Error: The Geolocation service failed.'
-    //         : 'Error: Your browser does not support geolocation.');
-    //     }; `,
-    //     type: 'text/javascript',
-    //   },
-    //   {
-    //     src:
-    //       'https://maps.googleapis.com/maps/api/js?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g',
-    //   },
-    // ],
   },
 
   data() {
@@ -303,7 +246,6 @@ export default {
 
   mounted() {
     this.getCampDetails();
-    // this.geolocate();
   },
 
   methods: {
@@ -328,6 +270,7 @@ export default {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+        console.log(this.center);
       });
     },
     setImageAsHero(img) {
