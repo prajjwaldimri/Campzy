@@ -28,11 +28,11 @@
                       v-flex(xs12 md5)
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
-                        v-dialog(v-model='loc' height='700' width='700')
+                        v-dialog(v-model='loc' height='700' width='900')
                           v-btn(dark slot="activator" @click='geolocate')
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card(height='700' width='700')
+                          v-card(height='500' width='700')
                             v-container(fluid style='padding:0px;height:90%;')
                               v-card-title
                                 h2 Search your Place
@@ -44,7 +44,7 @@
                                 gmap-marker(:key='index' v-for='(m, index) in markers' :position='m.position' @click='center=m.position')
                               v-card-actions
                                 v-spacer
-                                v-btn(dark) Ok
+                                v-btn(dark @click='closeMapDialog') Ok
 
 
         v-tab-item(id='documents')
@@ -235,12 +235,11 @@ export default {
       isDocument: false,
       location: '',
       loc: false,
-      campLocation: '',
-      coordinates: {},
       center: {},
       markers: [],
       places: [],
       currentPlace: null,
+      coordinates: {},
     };
   },
 
@@ -270,8 +269,16 @@ export default {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        console.log(this.center);
+        this.coordinates = {
+          lat: this.center.lat.toString(),
+          lng: this.center.lng.toString(),
+        };
       });
+    },
+
+    closeMapDialog() {
+      this.location = `${this.coordinates.lat},${this.coordinates.lng}`;
+      this.loc = !this.loc;
     },
     setImageAsHero(img) {
       if (!this.$cookie.get('sessionToken')) {
@@ -517,8 +524,9 @@ export default {
             EventBus.$emit('agreement-not-accepted');
           }
           this.camp = data.currentUserCamp;
-          this.createPlacesOfInterest();
+          this.coordinates = this.camp.coordinates;
 
+          this.location = `${this.coordinates.lat},${this.coordinates.lng}`;
           this.tags = this.camp.tags;
           this.amenities = this.camp.amenities;
           if (this.camp.campDocuments.length === 3) {
@@ -534,6 +542,7 @@ export default {
           } else {
             this.viewDocument = true;
           }
+          // this.createPlacesOfInterest();
         })
         .catch((err) => {
           EventBus.$emit(
@@ -557,6 +566,8 @@ export default {
         longDescription: this.camp.longDescription,
         tags: this.tags,
         campDocuments: this.getOwnerDocuments,
+        latitude: this.coordinates.lat,
+        longitude: this.coordinates.lng,
       };
       const client = new GraphQLClient('/graphql', {
         headers: {
@@ -565,7 +576,7 @@ export default {
       });
       this.isDataUpdating = true;
       this.saveAmenity();
-      this.savePlacesOfInterests();
+      // this.savePlacesOfInterests();
       client
         .request(saveCampDetails, variables)
         .then(() => {

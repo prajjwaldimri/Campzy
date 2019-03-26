@@ -3,10 +3,15 @@ const validate = require('mongoose-validator');
 const en = require('nanoid-good/locale/en');
 const nanoid = require('nanoid-good')(en);
 
-const { Schema } = mongoose;
+const {
+  Schema,
+} = mongoose;
 
 const CampSchema = new Schema({
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+  },
   phoneNumber: {
     type: String,
     validate: [
@@ -24,17 +29,36 @@ const CampSchema = new Schema({
     unique: true,
     sparse: true,
     validate: [
-      validate({ validator: 'isEmail', message: 'Not a valid email' }),
+      validate({
+        validator: 'isEmail',
+        message: 'Not a valid email',
+      }),
     ],
   },
   images: [String],
   heroImage: String,
-  url: { type: String, unique: true },
-  location: { type: String },
-  isAvailable: { type: Boolean, required: true, default: false },
-  shortDescription: { type: String, required: true },
+  url: {
+    type: String,
+    unique: true,
+  },
+  location: {
+    type: String,
+  },
+  isAvailable: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  shortDescription: {
+    type: String,
+    required: true,
+  },
   longDescription: String,
-  agreementAccepted: { type: Boolean, required: true, default: false },
+  agreementAccepted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   gst: {
     type: String,
     unique: true,
@@ -52,25 +76,63 @@ const CampSchema = new Schema({
     validate: [val => val.length <= 10, 'Only 10 tags are allowed'],
   },
   amenities: {
-    washRoomAttached: { type: Boolean, default: false },
-    bonfire: { type: Boolean, default: false },
-    hotWater: { type: Boolean, default: false },
-    mobileConnectivity: { type: Boolean, default: false },
-    mealsInclude: { type: Boolean, default: false },
-    petsAllowed: { type: Boolean, default: false },
-    chargingPoints: { type: Boolean, default: false },
+    washRoomAttached: {
+      type: Boolean,
+      default: false,
+    },
+    bonfire: {
+      type: Boolean,
+      default: false,
+    },
+    hotWater: {
+      type: Boolean,
+      default: false,
+    },
+    mobileConnectivity: {
+      type: Boolean,
+      default: false,
+    },
+    mealsInclude: {
+      type: Boolean,
+      default: false,
+    },
+    petsAllowed: {
+      type: Boolean,
+      default: false,
+    },
+    chargingPoints: {
+      type: Boolean,
+      default: false,
+    },
   },
   razorpayAccountId: String,
   razorpayCustomerId: String,
-  services: { type: [String] },
-  placesOfInterest: [{ name: String, distance: String }],
-  temperature: { type: String },
-  temperatureSummary: { type: String },
-  altitude: { type: String },
-  hourDriveFromDelhi: { type: Date },
+  services: {
+    type: [String],
+  },
+  placesOfInterest: [{
+    name: String,
+    distance: String,
+  }],
+  temperature: {
+    type: String,
+  },
+  temperatureSummary: {
+    type: String,
+  },
+  altitude: {
+    type: String,
+  },
+  hourDriveFromDelhi: {
+    type: Date,
+  },
   coordinates: {
-    latitude: { type: String },
-    longitude: { type: String },
+    lat: {
+      type: String,
+    },
+    lng: {
+      type: String,
+    },
   },
   ownerId: {
     type: Schema.Types.ObjectId,
@@ -86,9 +148,18 @@ const CampSchema = new Schema({
     river: Boolean,
   },
   campDocuments: [String],
-  averageRating: { type: Number, default: 0 },
-  ratingsCount: { type: Number, default: 0 },
-  credits: { type: Number, default: 0 },
+  averageRating: {
+    type: Number,
+    default: 0,
+  },
+  ratingsCount: {
+    type: Number,
+    default: 0,
+  },
+  credits: {
+    type: Number,
+    default: 0,
+  },
 });
 
 CampSchema.virtual('inventory', {
@@ -97,23 +168,20 @@ CampSchema.virtual('inventory', {
   foreignField: 'camp',
 });
 
-CampSchema.index(
-  {
-    name: 'text',
-    tags: 'text',
-    location: 'text',
-    shortDescription: 'text',
-    terrain: 'text',
+CampSchema.index({
+  name: 'text',
+  tags: 'text',
+  location: 'text',
+  shortDescription: 'text',
+  terrain: 'text',
+}, {
+  weights: {
+    name: 7,
+    location: 6,
+    tags: 3,
+    terrain: 2,
+    shortDescription: 1,
   },
-  {
-    weights: {
-      name: 7,
-      location: 6,
-      tags: 3,
-      terrain: 2,
-      shortDescription: 1,
-    },
-  },
-);
+});
 
 module.exports = mongoose.model('Camp', CampSchema);

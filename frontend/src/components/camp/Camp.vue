@@ -233,6 +233,7 @@ export default {
   },
   mounted() {
     this.getCamp();
+
     this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1;
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2;
     this.fromDate = sessionStorage.getItem('fromDate');
@@ -254,8 +255,8 @@ export default {
         .then((data) => {
           this.camp = data.campUser;
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${
-            this.camp.coordinates.latitude
-          },${this.camp.coordinates.longitude}&zoom=18&maptype=satellite`;
+            this.camp.coordinates.lat
+          },${this.camp.coordinates.lng}&zoom=18&maptype=satellite`;
         })
         .catch(() => {
           this.$router.go(-1);

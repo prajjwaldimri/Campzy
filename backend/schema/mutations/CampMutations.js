@@ -171,6 +171,12 @@ const updateUserCamp = {
     longDescription: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    latitude: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    longitude: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -192,6 +198,10 @@ const updateUserCamp = {
         longDescription: args.longDescription,
         tags: args.tags,
         url: args.url,
+        coordinates: {
+          lat: args.latitude,
+          lng: args.longitude,
+        },
       });
     } catch (err) {
       return err;

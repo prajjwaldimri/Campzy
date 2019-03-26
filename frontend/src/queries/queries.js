@@ -86,6 +86,10 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           campDocuments,
           location,
           agreementAccepted,
+          coordinates{
+            lat
+            lng
+          }
         }
 
       }`;
@@ -177,8 +181,8 @@ const getCampByUrl = `query campUser($url: String!){
     temperature,
     temperatureSummary,
     coordinates {
-      latitude,
-      longitude
+      lat,
+      lng
     },
     terrain {
       glacier,
