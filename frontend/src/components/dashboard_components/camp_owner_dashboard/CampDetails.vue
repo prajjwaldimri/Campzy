@@ -28,23 +28,28 @@
                       v-flex(xs12 md5)
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
-                        v-dialog(v-model='loc' height='700' width='900')
-                          v-btn(dark slot="activator" @click='geolocate')
+                        v-dialog(v-model='loc' height='700' width='900' persistent)
+                          v-btn(dark slot="activator" @click='setMapCoordinates')
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card(height='500' width='700')
+                          v-card(height='600' width='900')
                             v-container(fluid style='padding:0px;height:90%;')
                               v-card-title
                                 h2 Search your Place
-                                v-spacer
-                                label
-                                  gmap-autocomplete(@place_changed='setPlace')
-                                  v-btn(@click='addMarker' color='success') Add
+                                v-flex(xs12 md9)
+                                  v-layout(row wrap style='margin:0;')
+                                    v-flex(xs12 md8)
+                                      label
+                                        gmap-autocomplete(@place_changed='searchPlace' style='width:100%;margin: 1rem;border-style:double;' )
+                                    v-flex.ml-3(xs12 md2)
+                                      v-btn(flat icon @click='geolocate')
+                                        v-icon my_location
                               gmap-map(:center='center' :zoom='15' style='width:100%;  height: 100%;')
-                                gmap-marker(:key='index' v-for='(m, index) in markers' :position='m.position' @click='center=m.position')
-                              v-card-actions
+                                gmap-marker(:position='markerPosition' @click='center=markerPosition')
+                              v-card-actions(dark)
                                 v-spacer
-                                v-btn(dark @click='closeMapDialog') Ok
+                                v-btn(dark @click='loc=!loc') Cancel
+                                v-btn(dark @click='closeMapDialog' color='success') Ok
 
 
         v-tab-item(id='documents')
@@ -236,9 +241,7 @@ export default {
       location: '',
       loc: false,
       center: {},
-      markers: [],
-      places: [],
-      currentPlace: null,
+      markerPosition: {},
       coordinates: {},
     };
   },
@@ -248,31 +251,56 @@ export default {
   },
 
   methods: {
-    setPlace(place) {
-      this.currentPlace = place;
-    },
-    addMarker() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng(),
+    setMapCoordinates() {
+      if (this.coordinates) {
+        this.center = {
+          lat: parseFloat(this.coordinates.lat),
+          lng: parseFloat(this.coordinates.lng),
         };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
+        this.markerPosition = {
+          lat: this.center.lat,
+          lng: this.center.lng,
+        };
+        this.center = this.markerPosition;
+      } else {
+        this.geolocate();
       }
     },
+    searchPlace(place) {
+      this.center = place;
+      if (this.center) {
+        this.markerPosition = {
+          lat: this.center.geometry.location.lat(),
+          lng: this.center.geometry.location.lng(),
+        };
+        this.center = this.markerPosition;
+        this.coordinates = {
+          lat: this.center.lat.toString(),
+          lng: this.center.lng.toString(),
+        };
+      }
+    },
+
     geolocate() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+        if (this.center) {
+          this.markerPosition = {
+            lat: this.center.lat,
+            lng: this.center.lng,
+          };
+          this.center = this.markerPosition;
+        }
+
         this.coordinates = {
           lat: this.center.lat.toString(),
           lng: this.center.lng.toString(),
         };
+
+        this.addMarker();
       });
     },
 
@@ -763,20 +791,5 @@ export default {
 .document-link {
   color: black;
   font-size: 1rem;
-}
-
-.iframe-container {
-  overflow: hidden;
-  padding-top: 56.25%;
-  position: relative;
-
-  iframe {
-    border: 0;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
 }
 </style>
