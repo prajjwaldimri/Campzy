@@ -59,11 +59,17 @@ export default {
         },
       });
 
-      client.request(getWishlistInProfile).then((data) => {
-        this.wishList = data.getWishlistInProfile.localWishlist;
-      }).catch((err) => {
-        EventBus.$emit('show-error-notification-long', err.response.errors[0].message);
-      });
+      client
+        .request(getWishlistInProfile)
+        .then((data) => {
+          this.wishList = data.getWishlistInProfile.localWishlist;
+        })
+        .catch(() => {
+          EventBus.$emit(
+            'show-error-notification-long',
+            'Unable to get Wishlist or Login first',
+          );
+        });
     },
 
     removeFromWishlist(campID) {
@@ -77,12 +83,21 @@ export default {
         campId: campID,
       };
 
-      client.request(removeCampFromWishlist, variables).then(() => {
-        EventBus.$emit('show-info-notification-short', 'Removed from Wishlist!');
-        this.getUserWishList();
-      }).catch(() => {
-        EventBus.$emit('show-error-notification-long', 'Failed to Remove');
-      }).finally(() => { EventBus.$emit('hide-progress-bar'); });
+      client
+        .request(removeCampFromWishlist, variables)
+        .then(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Removed from Wishlist!',
+          );
+          this.getUserWishList();
+        })
+        .catch(() => {
+          EventBus.$emit('show-error-notification-long', 'Failed to Remove');
+        })
+        .finally(() => {
+          EventBus.$emit('hide-progress-bar');
+        });
     },
   },
 };

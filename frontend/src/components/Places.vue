@@ -6,7 +6,7 @@
 
       .camps.mt-4
         v-layout(row wrap)
-          v-flex(xs12 md4 v-for="(premiumCamp, index) in allCamps.premiumCamps")
+          v-flex(xs12 md4 v-for="(premiumCamp, index) in allCamps.premiumCamps" :key="premiumCamp.name")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + premiumCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + premiumCamp.heroImage")
               .card-container
                 v-card-title.grey-background(primary-title)
@@ -19,7 +19,7 @@
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
-          v-flex(xs12 md4 v-for="(luxuryCamp, index) in allCamps.luxuryCamps")
+          v-flex(xs12 md4 v-for="(luxuryCamp, index) in allCamps.luxuryCamps" :key="luxuryCamp.name")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + luxuryCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + luxuryCamp.heroImage")
               .card-container
                 v-card-title.grey-background(primary-title)
@@ -31,7 +31,7 @@
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
-          v-flex(xs12 md4 v-for="(normalCamp, index) in allCamps.normalCamps")
+          v-flex(xs12 md4 v-for="(normalCamp, index) in allCamps.normalCamps" :key="normalCamp.name")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + normalCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + normalCamp.heroImage")
               .card-container
                 v-card-title.grey-background(primary-title)
@@ -43,7 +43,7 @@
                     span View Camp
                     v-icon chevron_right
         v-layout(row wrap)
-          v-flex(xs12 md4 v-for="(cheapCamp, index) in allCamps.cheapCamps")
+          v-flex(xs12 md4 v-for="(cheapCamp, index) in allCamps.cheapCamps" :key="cheapCamp.name")
             v-card.ma-4(height="400" raised :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + cheapCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/low-res/' + cheapCamp.heroImage")
               .card-container
                 v-card-title.grey-background(primary-title)
@@ -72,12 +72,18 @@ export default {
     Navbar,
     Footer,
   },
+  metaInfo: {
+    title: 'Places',
+  },
   data() {
     return {
       allCamps: [],
     };
   },
   mounted() {
+    EventBus.$on('reload-place', () => {
+      this.getCampByPlaces();
+    });
     this.getCampByPlaces();
   },
 

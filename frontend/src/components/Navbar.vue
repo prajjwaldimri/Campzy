@@ -14,7 +14,7 @@
           | Places
         v-card.places-card
           v-list
-            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
+            v-list-tile(v-for="(place, index) in places" @click='sendPlaces(place)')
               v-list-tile-content
                 v-list-tile-title {{place}}
 
@@ -179,6 +179,10 @@ export default {
       } else {
         EventBus.$emit('show-error-notification-short', 'Failed to Logout');
       }
+    },
+    sendPlaces(placeName) {
+      this.$router.push(`/places/${placeName}`);
+      EventBus.$emit('reload-place');
     },
   },
 };
