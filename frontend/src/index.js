@@ -18,6 +18,7 @@ import './stylus/main.styl';
 // Vue Telephone input
 import 'vue-tel-input/dist/vue-tel-input.css';
 
+
 require('vue-tour/dist/vue-tour.css');
 
 const VueCookie = require('vue-cookie');
@@ -36,7 +37,7 @@ Vue.use(VeeValidate);
 // Use google map in Vue
 Vue.use(VueGoogleMaps, {
   load: {
-    key: `${process.env.GOOGLE_MAP_KEY}`,
+    key: 'AIzaSyDjRF58Tf3QFRdzhfG7tAxeUXNdarGS8Kg',
     libraries: 'places',
   },
 });

@@ -16,7 +16,9 @@ const https = require('https');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const Sentry = require('@sentry/node');
-const { sitemap } = require('./sitemapGen');
+const {
+  sitemap,
+} = require('./sitemapGen');
 
 if (process.env.ENVIRONMENT === 'production') {
   Sentry.init({
@@ -43,7 +45,9 @@ app.use(compression());
 app.use(cors());
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
 
 // Sitemap generator
 app.get('/sitemap.xml', (req, res) => {
@@ -71,7 +75,9 @@ app.delete('/deleteDocuments', deleteDocuments);
 
 app.post(
   '/uploadImages',
-  multer({ storage: imageStorage }).array('images', 10),
+  multer({
+    storage: imageStorage,
+  }).array('images', 10),
   uploadCampImages,
 );
 
@@ -79,7 +85,9 @@ app.post(
 app.delete('/deleteImages', deleteImage);
 
 // Connect to MLab Database
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+});
 mongoose.connection.once('open', () => {
   console.log('Database connected');
 });
@@ -107,7 +115,10 @@ app.use(
     schema,
     formatError: ApolloError.formatError,
     validationRules: [depthLimit(10)],
-    context: { req: request, passport },
+    context: {
+      req: request,
+      passport,
+    },
   })),
 );
 
