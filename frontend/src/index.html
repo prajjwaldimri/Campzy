@@ -1,44 +1,61 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Campzy: The complete camping solution</title>
+    <meta
+      name="description"
+      content="Search for the best camping experience "
+    />
+    <meta
+      name="keywords"
+      content="Camping, Camping in Uttarakhand, Camping in Rishikesh, Camping in Chopta"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="https://fontlibrary.org/face/glacial-indifference"
+      type="text/css"
+    />
+    <link href="/styles/nprogress.css" rel="stylesheet" />
+    <script defer src="https://apis.google.com/js/api:client.js"></script>
+    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
 
-  <title>Campzy: The complete camping solution</title>
-  <meta name="description" content="Search for the best camping experience ">
-  <meta name="keywords" content="Camping, Camping in Uttarakhand, Camping in Rishikesh, Camping in Chopta">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/glacial-indifference" type="text/css" />
-  <link href="/styles/nprogress.css" rel="stylesheet" />
-  <script defer src="https://apis.google.com/js/api:client.js"></script>
-  <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+  <body>
+    <div id="app"></div>
 
-</head>
-
-<body>
-  <div id="app"></div>
-
-  <script>
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: '483173925498762',
-        cookie: true,  // enable cookies to allow the server to access the session
-        xfbml: true,  // parse social plugins on this page
-        version: 'v2.8' // use graph api version 2.8
-      });
-    };
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.1';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
-
-</body>
-
-
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: "483173925498762",
+          cookie: true, // enable cookies to allow the server to access the session
+          xfbml: true, // parse social plugins on this page
+          version: "v2.8" // use graph api version 2.8
+        });
+      };
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src =
+          "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.1";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script>
+  </body>
 </html>
