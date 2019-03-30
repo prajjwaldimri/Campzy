@@ -81,6 +81,7 @@
                             v-btn(block color="green" :loading='isSignedup' @click="regUser"
                             :disabled="!isOTPSent").white--text.mt-3
                               | Verify
+    Footer 
 
 
 </template>
@@ -90,6 +91,7 @@
 import { request } from 'graphql-request';
 import { setTimeout } from 'timers';
 import navbar from '../Navbar.vue';
+import Footer from '../Footer.vue';
 import { EventBus } from '../../event-bus';
 import { sendUserCredentials, isEmailAvailable } from '../../queries/queries';
 import {
@@ -117,6 +119,7 @@ export default {
   },
   components: {
     navbar,
+    Footer,
   },
   data() {
     return {
