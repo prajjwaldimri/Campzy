@@ -1,15 +1,17 @@
 module.exports = {
-  plugins: ["security"],
-  extends: [
-    "airbnb-base",
-    "plugin:vue/essential",
-    "plugin:security/recommended"
-  ],
-  parserOptions: {
-    parser: "babel-eslint",
-    allowImportExportEverywhere: true
-  },
-  rules: {
-    "max-len": "off"
-  }
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "airbnb-base",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+    }
 };
