@@ -11,9 +11,9 @@
   },
   "scripts": {
     "preinstall": "yarn global add pm2",
-    "dev": "nodemon backend/app.js",
-    "start": "pm2-runtime backend/app.js",
-    "temp-poller": "node backend/temperature-poller.js"
+    "dev": "nodemon app.js",
+    "start": "pm2-runtime app.js",
+    "temp-poller": "node temperature-poller.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
