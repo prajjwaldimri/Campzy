@@ -5,6 +5,7 @@
 
 dist/
 frontend/dist/
+backend/node_modules
 
 # Logs
 logs
