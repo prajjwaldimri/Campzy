@@ -105,11 +105,12 @@ app.use(history({}));
 // Public static directories
 
 app.use(
-  "/graphql",
+  "/",
   graphqlHTTP(request => ({
     schema,
     formatError: ApolloError.formatError,
     validationRules: [depthLimit(10)],
+    graphiql: true,
     context: {
       req: request,
       passport
