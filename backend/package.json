@@ -12,15 +12,8 @@
   "scripts": {
     "preinstall": "yarn global add pm2",
     "dev": "nodemon backend/app.js",
-    "precommit": "lint-staged",
     "start": "pm2-runtime backend/app.js",
     "temp-poller": "node backend/temperature-poller.js"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --cache --fix ",
-      "git add"
-    ]
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
