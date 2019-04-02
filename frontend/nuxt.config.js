@@ -1,8 +1,21 @@
+import path from 'path'
+import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
 export default {
   mode: 'universal',
+  dev: process.env.ENVIRONMENT !== 'production',
+  server: {
+    https: {
+      key: fs.readFileSync(
+        path.resolve(__dirname, '../backend/certs/server.key')
+      ),
+      cert: fs.readFileSync(
+        path.resolve(__dirname, '../backend/certs/server.crt')
+      )
+    }
+  },
 
   /*
    ** Headers of the page
@@ -10,12 +23,25 @@ export default {
   head: {
     title: 'Campzy: The complete camping solution',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      {
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: pkg.description
+      }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      },
       {
         rel: 'stylesheet',
         media: 'screen',
@@ -30,7 +56,9 @@ export default {
       }
     ],
     script: [
-      { src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js' },
+      {
+        src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
+      },
       {
         src: 'https://apis.google.com/js/api:client.js',
         defer: true
@@ -41,7 +69,9 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: {
+    color: '#fff'
+  },
 
   /*
    ** Global CSS
@@ -61,7 +91,10 @@ export default {
     '@/plugins/facebookSignin',
     '@/plugins/vue-loaders',
     '@/plugins/vue-tel-input',
-    { src: '@/plugins/vue-google-maps', ssr: true },
+    {
+      src: '@/plugins/vue-google-maps',
+      ssr: true
+    },
     '@/plugins/vue-cookie',
     '@/plugins/vue-moment'
   ],
