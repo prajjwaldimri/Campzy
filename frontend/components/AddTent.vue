@@ -93,7 +93,7 @@ export default {
           }
 
           for (let i = 1; i <= this.totalTents; i += 1) {
-            const client = new GraphQLClient('/graphql', {
+            const client = new GraphQLClient('https://api.campzy.in', {
               headers: {
                 Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
               }

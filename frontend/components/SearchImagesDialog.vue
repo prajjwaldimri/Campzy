@@ -50,7 +50,7 @@ export default {
       const variables = {
         url: this.campUrl
       }
-      request('/graphql', getCampImages, variables)
+      request('https://api.campzy.in', getCampImages, variables)
         .then(data => {
           this.campName = data.getImagesOfCamp.name
           this.images = data.getImagesOfCamp.images
