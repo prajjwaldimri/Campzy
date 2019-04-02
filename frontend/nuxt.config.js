@@ -13,9 +13,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default {
   mode: 'universal',
-  server: {
-    https: https
-  },
+  // server: {
+  //   https: https
+  // },
 
   /*
    ** Headers of the page
