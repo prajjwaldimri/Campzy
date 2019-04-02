@@ -6,12 +6,8 @@ import pkg from './package'
 let https = {}
 if (process.env.ENVIRONMENT === 'production') {
   https = {
-    key: fs.readFileSync(
-      path.resolve(__dirname, '../backend/certs/server.key')
-    ),
-    cert: fs.readFileSync(
-      path.resolve(__dirname, '../backend/certs/server.crt')
-    )
+    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
   }
 }
 
