@@ -62,10 +62,10 @@
 </template>
 <script>
 import { GraphQLClient } from 'graphql-request'
-import { EventBus } from '../event-bus'
+import { EventBus } from '../layouts/event-bus'
 
-import Navbar from './Navbar.vue'
-import Footer from './Footer.vue'
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 
 export default {
   components: {

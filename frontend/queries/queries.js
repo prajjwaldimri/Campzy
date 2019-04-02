@@ -3,7 +3,7 @@ const sendUserCredentials = `query loginUser($loginEmail: String!,$loginPassword
         loginUser(email: $loginEmail, password: $loginPassword){
           jwt
         }
-      }`;
+      }`
 
 // Get all users for admin
 
@@ -13,7 +13,7 @@ const getAllUsers = `query ($page: Int){
     name
     phoneNumber
   }
-}`;
+}`
 
 const getAllTentsQuery = `query allTents{
     allTents{
@@ -28,7 +28,7 @@ const getAllTentsQuery = `query allTents{
       disabledDates
     }
   }
-  `;
+  `
 
 const getTentById = `query tent($id: String!){
     tent(id: $id){
@@ -41,18 +41,18 @@ const getTentById = `query tent($id: String!){
       isAvailable
       disabledDates
     }
-  }`;
+  }`
 
 const countTents = `query countCampTents{
   countCampTents{
     count,
-}}`;
+}}`
 
 const countBookedTent = `query countBookedTent{
   countBookedTent{
     bookedTentCount,
   }
-}`;
+}`
 
 const getCurrentUserCampDetails = `query currentUserCamp{
         currentUserCamp {
@@ -92,13 +92,13 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           }
         }
 
-      }`;
+      }`
 
 const getWishList = `query getUserWishlist{
     getUserWishlist{
       wishlist
     }
-  }`;
+  }`
 
 const getWishlistInProfile = `query getWishlistInProfile{
     getWishlistInProfile{
@@ -111,7 +111,7 @@ const getWishlistInProfile = `query getWishlistInProfile{
         email,
       }
     }
-  }`;
+  }`
 
 const getCampDetail = `query camp($id: String!){
   camp(id: $id){
@@ -148,7 +148,7 @@ const getCampDetail = `query camp($id: String!){
 
   }
 }
-`;
+`
 
 // Gets camp details available in public
 const getCampByUrl = `query campUser($url: String!){
@@ -195,7 +195,7 @@ const getCampByUrl = `query campUser($url: String!){
     averageRating,
     ratingsCount,
   }
-}`;
+}`
 
 const getCampImages = `query getImagesOfCamp($url: String!){
   getImagesOfCamp(url: $url){
@@ -203,7 +203,7 @@ const getCampImages = `query getImagesOfCamp($url: String!){
     name,
     images,
   }
-}`;
+}`
 
 const getBestTentAvailable = `query bestTentInCamp($url: String!, $tentCount: Int!, $personCount: Int!, $preBookPeriod: Int!, $bookingStartDate: Date!, $bookingEndDate: Date!){
   bestTentInCamp(url: $url, tentCount: $tentCount, personCount: $personCount, preBookPeriod: $preBookPeriod, bookingStartDate: $bookingStartDate, bookingEndDate: $bookingEndDate){
@@ -211,20 +211,20 @@ const getBestTentAvailable = `query bestTentInCamp($url: String!, $tentCount: In
     capacity,
     bookingPrice
   }
-}`;
+}`
 
 // Count all camps present in model
 const countAllCamps = `query countCamps{
   countCamps{
       count,
   }
-}`;
+}`
 
 const countAllUsers = `query countUsers{
   countUsers{
       count,
   }
-}`;
+}`
 
 const userSearch = `query searchUniqueUser($searchTerm: String, $page: Int!){
   searchUniqueUser(searchTerm : $searchTerm, page: $page){
@@ -232,7 +232,7 @@ const userSearch = `query searchUniqueUser($searchTerm: String, $page: Int!){
       name,
       phoneNumber
   }
-}`;
+}`
 
 const campSearch = `query searchCamp($searchTerm: String!, $page: Int!){
   searchCamp(searchTerm : $searchTerm, page: $page){
@@ -248,7 +248,7 @@ const campSearch = `query searchCamp($searchTerm: String!, $page: Int!){
         name
       },
   }
-}`;
+}`
 
 const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, $bookingStartDate: Date!, $bookingEndDate: Date!, $preBookPeriod: Int!, $minPrice: Int!, $maxPrice: Int!, $tentCount: Int!, $personCount: Int!, $tripDuration: Int!, $amenities: [String]) {
   campSearchUser(searchTerm: $searchTerm, page: $page, bookingStartDate: $bookingStartDate, bookingEndDate: $bookingEndDate, preBookPeriod: $preBookPeriod, minPrice: $minPrice, maxPrice: $maxPrice, tentCount: $tentCount, personCount: $personCount, tripDuration: $tripDuration, amenities: $amenities){
@@ -282,7 +282,7 @@ const campSearchUser = `query campSearchUser($searchTerm: String!, $page: Int!, 
       chargingPoints,
     },
   }
-}`;
+}`
 const getCurrentUserBlogsQuery = `query currentUserBlogs{
   currentUserBlogs {
     blogs {
@@ -295,7 +295,7 @@ const getCurrentUserBlogsQuery = `query currentUserBlogs{
       heroImage
     }
   }
-}`;
+}`
 
 const getBlogQuery = `query getBlog($url: String!){
   getBlog(url: $url){
@@ -309,7 +309,7 @@ const getBlogQuery = `query getBlog($url: String!){
     },
     createdAt
   }
-}`;
+}`
 
 const getAllBlogs = `query getAllBlogs($page: Int!){
   getAllBlogs(page: $page){
@@ -318,7 +318,7 @@ const getAllBlogs = `query getAllBlogs($page: Int!){
     url,
     darkTheme
   }
-}`;
+}`
 
 const getBlogById = `query getUpdateBlog($id: String!){
   getUpdateBlog(id: $id){
@@ -329,13 +329,13 @@ const getBlogById = `query getUpdateBlog($id: String!){
     heroImageCaption,
     heroImage,
     darkTheme,
-}}`;
+}}`
 
 const isEmailAvailable = `query isEmailAvailable($email: String!){
   isEmailAvailable(email: $email){
     id
   }
-}`;
+}`
 
 const getUserBookings = `query getUserBookings($active: Boolean, $past: Boolean) {
   getUserBookings(active: $active, past: $past){
@@ -354,7 +354,7 @@ const getUserBookings = `query getUserBookings($active: Boolean, $past: Boolean)
     startDate,
     endDate
   }
-}`;
+}`
 
 const campBookings = `query campBookings($id : String!, $active: Boolean!, $past: Boolean!, $page: Int){
         campBookings(id : $id, active: $active, past: $past, page: $page){
@@ -367,20 +367,20 @@ const campBookings = `query campBookings($id : String!, $active: Boolean!, $past
            personCount,
            amount,
         }
-      }`;
+      }`
 
 const countCampActiveBooking = `query countCampActiveBookings($id: String!){
   countCampActiveBookings(id: $id){
     countActiveBooking
   }
-}`;
+}`
 
 const getLatestCampForReview = `query getLatestCampForReview{
   getLatestCampForReview{
     id,
     name
   }
-}`;
+}`
 
 const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
   getReviewsForCamp(campId: $campId){
@@ -391,7 +391,7 @@ const getReviewsForCamp = `query getReviewsForCamp($campId: String!){
     },
     createdAt
   }
-}`;
+}`
 
 const allBookings = `query allBookings($active: Boolean!, $past: Boolean!, $page: Int){
         allBookings(active: $active, past: $past, page: $page){
@@ -409,29 +409,29 @@ const allBookings = `query allBookings($active: Boolean!, $past: Boolean!, $page
            },
            code
         }
-      }`;
+      }`
 
 const countCampPastBookings = `query countCampPastBookings($id: String!){
     countCampPastBookings(id: $id){
       bookingCount
     }
-  }`;
+  }`
 const countAdminPastBookings = `query countAdminPastBookings{
     countAdminPastBookings{
       bookingCount
     }
-  }`;
+  }`
 
 const isCampUrlAvailable = `query isCampUrlAvailable($url: String!){
   isCampUrlAvailable(url: $url){
     id
   }
-}`;
+}`
 
 const isIFSCValid = `query isIFSCValid($IFSCCode: String!){
   isIFSCValid(IFSCCode: $IFSCCode)
 
-}`;
+}`
 
 const getIFSCDetails = `query getIFSCDetails($IFSCCode: String!){
   getIFSCDetails(IFSCCode: $IFSCCode){
@@ -442,7 +442,7 @@ const getIFSCDetails = `query getIFSCDetails($IFSCCode: String!){
     DISTRICT,
     STATE
   }
-}`;
+}`
 
 const getBankDetails = `query getBankDetails{
   getBankDetails{
@@ -455,7 +455,7 @@ const getBankDetails = `query getBankDetails{
     }
     agreementAccepted,
   }
-}`;
+}`
 
 const getCampRequests = `query getAllRequests{
   getAllRequests{
@@ -463,7 +463,7 @@ const getCampRequests = `query getAllRequests{
     name,
     phoneNumber,
   }
-}`;
+}`
 
 module.exports = {
   sendUserCredentials,
@@ -501,5 +501,5 @@ module.exports = {
   getBankDetails,
   getCampRequests,
   countAdminPastBookings,
-  countCampPastBookings,
-};
+  countCampPastBookings
+}
