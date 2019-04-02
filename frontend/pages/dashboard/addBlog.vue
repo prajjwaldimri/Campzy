@@ -54,6 +54,7 @@ import { addBlogQuery } from '../../queries/mutationQueries'
 
 export default {
   name: 'AddBlog',
+  layout: 'dashboard',
   $_veeValidate: {
     validator: 'new'
   },

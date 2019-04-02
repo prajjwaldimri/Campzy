@@ -87,6 +87,7 @@ export default {
     closeByDate: CloseBooking,
     editTent: EditTent
   },
+  layout: 'dashboard',
   metaInfo: {
     title: 'Dashboard | Inventory'
   },
