@@ -205,7 +205,6 @@ export default {
   components: {
     InfiniteLoading
   },
-  layout: 'dashboard',
   metaInfo: {
     title: 'Dashboard | Camp Details'
   },

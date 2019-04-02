@@ -81,7 +81,7 @@
                 v-btn(icon @click.stop='mini=!mini; isDrawerOpen=true')
                   v-icon chevron_right
           v-tour(name='adminTour' :steps='adminSteps')
-    router-view
+    nuxt-child
     // CampzyAgreement
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
    fixed shift).hidden-md-and-up

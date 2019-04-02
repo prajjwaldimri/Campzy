@@ -26,7 +26,6 @@ import { deleteRequest } from '../../queries/mutationQueries'
 import { EventBus } from '../../layouts/event-bus'
 
 export default {
-  layout: 'dashboard',
   data() {
     return {
       campRequests: {}

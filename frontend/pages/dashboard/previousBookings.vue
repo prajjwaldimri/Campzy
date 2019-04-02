@@ -96,7 +96,6 @@ import {
 } from '../../queries/queries'
 
 export default {
-  layout: 'dashboard',
   data() {
     return {
       isTypeCampOwner: false,

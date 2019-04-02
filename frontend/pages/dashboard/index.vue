@@ -153,7 +153,6 @@ export default {
     ICountUp,
     apexcharts: VueApexCharts
   },
-  layout: 'dashboard',
   metaInfo: {
     title: 'Dashboard | Statistics'
   },
