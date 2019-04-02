@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     getAllCampsLength() {
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -154,7 +154,7 @@ export default {
       const variables = {
         page: pageNumber
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -199,7 +199,7 @@ export default {
         const variables = {
           id: this.deleteCampId
         }
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient('https://api.campzy.in', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -231,7 +231,7 @@ export default {
         searchTerm: this.searchCampTerm,
         page: pageNumber
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

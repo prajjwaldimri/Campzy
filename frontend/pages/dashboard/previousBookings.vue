@@ -120,7 +120,7 @@ export default {
       const userType = `{currentUser {
         type,
       }}`
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -151,7 +151,7 @@ export default {
         this.$router.push('/')
       }
       // EventBus.$emit('show-progress-bar');
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -178,7 +178,7 @@ export default {
         this.$router.push('/')
       }
       EventBus.$emit('show-progress-bar')
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -216,7 +216,7 @@ export default {
         id,
         agreementAccepted,
       }}`
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -244,7 +244,7 @@ export default {
         this.$router.push('/')
       }
       // EventBus.$emit('show-progress-bar');
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -273,7 +273,7 @@ export default {
         this.$router.push('/')
       }
       EventBus.$emit('show-progress-bar')
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

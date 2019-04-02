@@ -123,7 +123,7 @@ export default {
         heroImageCaption: this.imageCaption,
         darkTheme: this.darkTheme
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

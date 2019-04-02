@@ -316,7 +316,7 @@ export default {
         id: this.camp.id,
         heroImage: img
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -366,7 +366,7 @@ export default {
         id: this.camp.id,
         documentName: docName
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -432,7 +432,7 @@ export default {
           id: this.camp.id,
           images: image
         }
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient('https://api.campzy.in', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -508,7 +508,7 @@ export default {
           id: this.camp.id,
           campDocuments: campdoc
         }
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient('https://api.campzy.in', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -537,7 +537,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/')
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -594,7 +594,7 @@ export default {
         latitude: this.coordinates.lat,
         longitude: this.coordinates.lng
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -640,7 +640,7 @@ export default {
         petsAllowed: this.amenities.petsAllowed,
         chargingPoints: this.amenities.chargingPoints
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -667,7 +667,7 @@ export default {
           name: temp.name,
           distance: parseFloat(temp.distance)
         }
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient('https://api.campzy.in', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -707,7 +707,7 @@ export default {
         id: this.camp.id,
         imageName: imgName
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

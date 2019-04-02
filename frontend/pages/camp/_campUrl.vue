@@ -288,7 +288,7 @@ export default {
         tentCount: this.tentCount,
         personCount: this.personCount
       }
-      request('/graphql', getCampByUrl, variables)
+      request('https://api.campzy.in', getCampByUrl, variables)
         .then(data => {
           this.camp = data.campUser
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${
@@ -316,7 +316,7 @@ export default {
             email,
             phoneNumber,
           }}`
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -345,7 +345,7 @@ export default {
       const variables = {
         campId: this.camp.id
       }
-      request('/graphql', getReviewsForCamp, variables)
+      request('https://api.campzy.in', getReviewsForCamp, variables)
         .then(data => {
           this.reviews = data.getReviewsForCamp
         })
@@ -371,7 +371,7 @@ export default {
         bookingEndDate: this.toDate,
         personCount: parseInt(this.personCount, 10)
       }
-      request('/graphql', getBestTentAvailable, variables)
+      request('https://api.campzy.in', getBestTentAvailable, variables)
         .then(data => {
           if (!data.bestTentInCamp || data.bestTentInCamp.length <= 0) {
             EventBus.$emit(
@@ -405,7 +405,7 @@ export default {
     },
     bookCamp() {
       this.bookButtonLoading = true
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -483,7 +483,7 @@ export default {
 
     addToWishList(campID) {
       EventBus.$emit('show-progress-bar')
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -510,7 +510,7 @@ export default {
         })
     },
     getUserWishList() {
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -535,7 +535,7 @@ export default {
     },
     removeFromWishList(campID) {
       EventBus.$emit('show-progress-bar')
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
