@@ -336,6 +336,9 @@ export default {
     }
     this.searchInput = this.$route.params.searchterm
 
+    // eslint-disable-next-line no-console
+    console.log(this.searchInput)
+
     this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2
 
@@ -359,10 +362,8 @@ export default {
       if (this.searchInput.trim() === '') {
         return
       }
-      this.$router.push({
-        name: 'search',
-        params: { searchterm: this.searchInput.trim() }
-      })
+      this.$router.push(`/search/${this.searchInput.trim()}`)
+
       const variables = {
         searchTerm: this.searchInput,
         minPrice: this.priceRange[0],
