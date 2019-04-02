@@ -3,14 +3,23 @@ import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
+let https = {}
+if (process.env.ENVIRONMENT === 'production') {
+  https = {
+    key: fs.readFileSync(
+      path.resolve(__dirname, '../backend/certs/server.key')
+    ),
+    cert: fs.readFileSync(
+      path.resolve(__dirname, '../backend/certs/server.crt')
+    )
+  }
+}
+
 export default {
   mode: 'universal',
   dev: process.env.ENVIRONMENT !== 'production',
   server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
-    }
+    https: https
   },
 
   /*
