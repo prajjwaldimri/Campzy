@@ -1,91 +1,118 @@
-<template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title" />
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar :clipped-left="clipped" fixed app>
-      <v-toolbar-side-icon @click="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-content>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2019</span>
-    </v-footer>
-  </v-app>
+<template lang="pug">
+  v-app
+    no-ssr
+      cookie-law(theme="dark-lime" buttonText="ACCEPT COOKIES")
+      div(slot="message")
+        h3 This website uses cookies to ensure you get the best experience on our website. For more info
+          router-link(to="privacyPolicy").ml-1.white--text click here
+
+
+    v-snackbar(v-model='snackbarSuccess' top right color='green' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarSuccess = false') close
+    v-snackbar(v-model='snackbarFail' top right color='red' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarFail = false') close
+    v-snackbar(v-model='snackbarInfo' top right dark :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarInfo = false') close
+    v-snackbar(v-model='snackbarWarning' top right color='yellow' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarWarning = false') close
+    transition(name="fade-transition" mode="out-in")
+      router-view
+
 </template>
 
 <script>
+import CookieLaw from 'vue-cookie-law'
+import { EventBus } from './event-bus'
+
 export default {
+  name: 'App',
+  components: {
+    CookieLaw
+  },
   data() {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'bubble_chart',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      snackbarSuccess: false,
+      snackbarFail: false,
+      snackbarInfo: false,
+      snackbarWarning: false,
+      message: '',
+      timeout: 0
     }
+  },
+  created() {
+    // N-Progress
+    /* global NProgress */
+    EventBus.$on('show-progress-bar', () => {
+      NProgress.start()
+    })
+    EventBus.$on('hide-progress-bar', () => {
+      NProgress.done()
+    })
+
+    EventBus.$on('show-success-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarSuccess = true
+    })
+
+    EventBus.$on('show-success-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarSuccess = true
+    })
+
+    EventBus.$on('show-error-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarFail = true
+    })
+
+    EventBus.$on('show-error-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarFail = true
+    })
+
+    EventBus.$on('show-info-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarInfo = true
+    })
+
+    EventBus.$on('show-info-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarInfo = true
+    })
+    EventBus.$on('show-warning-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarWarning = true
+    })
+
+    EventBus.$on('show-warning-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarWarning = true
+    })
   }
 }
 </script>
+
+<style lang="scss">
+@import 'static/scss/main.scss';
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Cookie__button {
+  background-color: #4caf50 !important;
+}
+
+.Cookie--dark-lime {
+  background-color: #424242 !important;
+}
+</style>

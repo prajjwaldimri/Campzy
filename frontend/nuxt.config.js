@@ -8,7 +8,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Campzy',
+    title: 'Campzy: The complete camping solution',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -18,8 +18,22 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
+        media: 'screen',
+        href: 'https://fontlibrary.org/face/glacial-indifference',
+        type: 'text/css'
+      },
+
+      {
+        rel: 'stylesheet',
         href:
           'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      }
+    ],
+    script: [
+      { src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js' },
+      {
+        src: 'https://apis.google.com/js/api:client.js',
+        defer: true
       }
     ]
   },
