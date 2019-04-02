@@ -104,9 +104,9 @@ export default {
    */
   modules: ['@nuxtjs/proxy', '@nuxtjs/pwa'],
 
-  router: {
-    middleware: 'i18n'
-  },
+  // router: {
+  //   middleware: 'i18n'
+  // },
 
   /*
    ** Build configuration
@@ -119,7 +119,6 @@ export default {
         import: ['~assets/style/variables.styl']
       }
     },
-    vendor: ['vue-i18n'],
     /*
      ** You can extend webpack config here
      */
