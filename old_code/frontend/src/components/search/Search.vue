@@ -243,30 +243,30 @@
 
 <script>
 /* eslint no-param-reassign: ["error", { "props": false }] */
-import InfiniteLoading from 'vue-infinite-loading';
-import { request } from 'graphql-request';
-import navbar from '../Navbar.vue';
-import Footer from '../Footer.vue';
-import SearchImagesDialog from './SearchImagesDialog.vue';
-import { EventBus } from '../../event-bus';
-import { campSearchUser } from '../../queries/queries';
+import InfiniteLoading from "vue-infinite-loading";
+import { request } from "graphql-request";
+import navbar from "../Navbar.vue";
+import Footer from "../Footer.vue";
+import SearchImagesDialog from "./SearchImagesDialog.vue";
+import { EventBus } from "../../event-bus";
+import { campSearchUser } from "../../queries/queries";
 
 export default {
   components: {
     navbar,
     InfiniteLoading,
     SearchImagesDialog,
-    Footer,
+    Footer
   },
   metaInfo() {
     return {
       title: this.searchInput,
-      titleTemplate: '%s - Campzy',
+      titleTemplate: "%s - Campzy"
     };
   },
   data() {
     return {
-      searchInput: '',
+      searchInput: "",
       searchResults: [],
       searchComplete: false,
       fromDate: null,
@@ -274,26 +274,26 @@ export default {
       tripDurationMenu: false,
       priceRange: [1000, 50000],
       priceLabels: [],
-      tentType: ['Dome', 'Swiss'],
-      tentTypes: ['Dome', 'Swiss'],
+      tentType: ["Dome", "Swiss"],
+      tentTypes: ["Dome", "Swiss"],
       amenitiesSelected: [],
       amenities: [
-        'Attached Washroom',
-        'Charging Points',
-        'Meals Included',
-        'Mobile Connectivity',
-        'Bonfire',
-        'Pets Allowed',
-        'Meals Included',
+        "Attached Washroom",
+        "Charging Points",
+        "Meals Included",
+        "Mobile Connectivity",
+        "Bonfire",
+        "Pets Allowed",
+        "Meals Included"
       ],
       tentCount: 1,
       tentNumbers: [1, 2, 3, 4, 5],
       personCount: 1,
       personNumbers: [0, 1, 2, 3, 4, 5],
-      dateLabel: 'Choose a date',
+      dateLabel: "Choose a date",
       filterDialog: false,
       sortDialog: false,
-      isSearching: false,
+      isSearching: false
     };
   },
   mounted() {
@@ -302,32 +302,32 @@ export default {
     }
     this.searchInput = this.$route.params.searchterm;
 
-    this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1;
-    this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2;
+    this.tentCount = parseInt(sessionStorage.getItem("tentCount"), 10) || 1;
+    this.personCount = parseInt(sessionStorage.getItem("personCount"), 10) || 2;
 
     // Set the default date label
-    this.fromDate = this.$moment().format('YYYY-MM-DD');
+    this.fromDate = this.$moment().format("YYYY-MM-DD");
     this.toDate = this.$moment()
-      .add(1, 'days')
-      .format('YYYY-MM-DD');
+      .add(1, "days")
+      .format("YYYY-MM-DD");
     this.search();
   },
 
   methods: {
     allowedDates(val) {
-      return this.$moment(val).isSameOrAfter(Date.now(), 'days');
+      return this.$moment(val).isSameOrAfter(Date.now(), "days");
     },
 
     search() {
-      EventBus.$emit('show-progress-bar');
+      EventBus.$emit("show-progress-bar");
       this.searchComplete = false;
       this.filterDialog = false;
-      if (this.searchInput.trim() === '') {
+      if (this.searchInput.trim() === "") {
         return;
       }
       this.$router.push({
-        name: 'search',
-        params: { searchterm: this.searchInput.trim() },
+        name: "search",
+        params: { searchterm: this.searchInput.trim() }
       });
       const variables = {
         searchTerm: this.searchInput,
@@ -335,15 +335,15 @@ export default {
         maxPrice: this.priceRange[1],
         bookingStartDate: this.fromDate,
         bookingEndDate: this.toDate,
-        preBookPeriod: this.$moment(this.fromDate).diff(Date.now(), 'days'),
+        preBookPeriod: this.$moment(this.fromDate).diff(Date.now(), "days"),
         page: 1,
         tentCount: this.tentCount,
         personCount: this.personCount,
-        tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
-        amenities: this.amenitiesSelected,
+        tripDuration: this.$moment(this.toDate).diff(this.fromDate, "days"),
+        amenities: this.amenitiesSelected
       };
-      request('/graphql', campSearchUser, variables)
-        .then((data) => {
+      request("/graphql", campSearchUser, variables)
+        .then(data => {
           this.searchResults = data.campSearchUser;
           this.calculatePrice();
         })
@@ -352,19 +352,19 @@ export default {
         })
         .finally(() => {
           this.searchComplete = true;
-          EventBus.$emit('hide-progress-bar');
+          EventBus.$emit("hide-progress-bar");
         });
     },
     openImageDialog(campUrl, campName) {
-      EventBus.$emit('open-image-dialog', { campUrl, campName });
+      EventBus.$emit("open-image-dialog", { campUrl, campName });
     },
     calculatePrice() {
-      this.searchResults.forEach((searchResult) => {
+      this.searchResults.forEach(searchResult => {
         // If the backend search provides more tents than needed then sort the tents and remove additional ones
         let { inventory } = searchResult;
         if (inventory.length > this.tentCount) {
           const tents = inventory.sort(
-            (a, b) => a.bookingPrice - b.bookingPrice,
+            (a, b) => a.bookingPrice - b.bookingPrice
           );
           inventory = tents.slice(0, this.tentCount);
         }
@@ -373,60 +373,61 @@ export default {
         // Calculate the minimum price for each Camp.
         const minPrice = searchResult.inventory.reduce(
           (price, tent) => price + tent.bookingPrice,
-          0,
+          0
         );
-        searchResult.minPrice =          minPrice * this.$moment(this.toDate).diff(this.fromDate, 'days');
+        searchResult.minPrice =
+          minPrice * this.$moment(this.toDate).diff(this.fromDate, "days");
       });
     },
     sort(option) {
       this.sortDialog = false;
       switch (option) {
-        case 'price':
+        case "price":
           this.searchResults.sort((a, b) => a.minPrice > b.minPrice);
           break;
-        case 'priceReverse':
+        case "priceReverse":
           this.searchResults.sort((a, b) => a.minPrice < b.minPrice);
           break;
 
         default:
           break;
       }
-    },
+    }
   },
   watch: {
     fromDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format(
-        'DD MMMM',
-      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
-      sessionStorage.setItem('fromDate', this.fromDate);
+        "DD MMMM"
+      )} - ${this.$moment(this.toDate).format("DD MMMM")}`;
+      sessionStorage.setItem("fromDate", this.fromDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+      if (this.$moment(this.toDate).diff(this.fromDate, "days") < 1) {
         this.toDate = this.$moment(this.fromDate)
-          .add(1, 'days')
-          .format('YYYY-MM-DD');
+          .add(1, "days")
+          .format("YYYY-MM-DD");
       }
     },
     toDate() {
       this.dateLabel = `${this.$moment(this.fromDate).format(
-        'DD MMMM',
-      )} - ${this.$moment(this.toDate).format('DD MMMM')}`;
-      sessionStorage.setItem('toDate', this.toDate);
+        "DD MMMM"
+      )} - ${this.$moment(this.toDate).format("DD MMMM")}`;
+      sessionStorage.setItem("toDate", this.toDate);
 
-      if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
+      if (this.$moment(this.toDate).diff(this.fromDate, "days") < 1) {
         this.toDate = this.$moment(this.fromDate)
-          .add(1, 'days')
-          .format('YYYY-MM-DD');
+          .add(1, "days")
+          .format("YYYY-MM-DD");
       }
     },
     tentCount() {
-      sessionStorage.setItem('tentCount', this.tentCount);
+      sessionStorage.setItem("tentCount", this.tentCount);
       this.calculatePrice();
     },
     personCount() {
-      sessionStorage.setItem('personCount', this.personCount);
+      sessionStorage.setItem("personCount", this.personCount);
       this.calculatePrice();
-    },
-  },
+    }
+  }
 };
 </script>
 
