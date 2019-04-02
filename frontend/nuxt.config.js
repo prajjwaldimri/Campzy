@@ -1,22 +1,18 @@
-import path from 'path'
-import fs from 'fs'
+// import path from 'path'
+// import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
-let https = {}
-if (process.env.ENVIRONMENT !== 'production') {
-  https = {
-    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
-  }
-}
+// let https = {}
+// if (process.env.ENVIRONMENT !== 'production') {
+//   https = {
+//     key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
+//     cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
+//   }
+// }
 
 export default {
   mode: 'universal',
-  dev: process.env.ENVIRONMENT !== 'production',
-  server: {
-    https: https
-  },
 
   /*
    ** Headers of the page
@@ -103,7 +99,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa'],
+  modules: ['@nuxtjs/pwa'],
 
   router: {
     middleware: 'i18n'
