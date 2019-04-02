@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getUserWishList() {
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -74,7 +74,7 @@ export default {
 
     removeFromWishlist(campID) {
       EventBus.$emit('show-progress-bar')
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

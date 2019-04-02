@@ -113,7 +113,7 @@ export default {
       const query = `{currentUser {
         name,
       }}`
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

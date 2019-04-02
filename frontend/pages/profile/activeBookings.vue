@@ -85,7 +85,7 @@ export default {
     getActiveBookings() {
       /* global NProgress */
       NProgress.start()
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -117,7 +117,7 @@ export default {
             email,
             phoneNumber,
           }}`
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

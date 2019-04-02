@@ -57,7 +57,7 @@ export default {
       const variables = {
         page: 0
       }
-      request('/graphql', getAllBlogs, variables)
+      request('https://api.campzy.in', getAllBlogs, variables)
         .then(data => {
           this.blogs = data.getAllBlogs
         })

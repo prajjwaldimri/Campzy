@@ -376,7 +376,7 @@ export default {
         tripDuration: this.$moment(this.toDate).diff(this.fromDate, 'days'),
         amenities: this.amenitiesSelected
       }
-      request('/graphql', campSearchUser, variables)
+      request('https://api.campzy.in', campSearchUser, variables)
         .then(data => {
           this.searchResults = data.campSearchUser
           this.calculatePrice()

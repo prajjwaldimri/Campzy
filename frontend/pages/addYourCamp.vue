@@ -58,7 +58,7 @@ export default {
       }
       EventBus.$emit('show-progress-bar')
       this.sendingRequest = true
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
