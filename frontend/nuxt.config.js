@@ -69,7 +69,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa'],
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa'],
 
   router: {
     middleware: 'i18n'
