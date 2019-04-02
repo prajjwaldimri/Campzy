@@ -37,7 +37,19 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/vuetify'],
+  plugins: [
+    '@/plugins/vuetify',
+    '@/plugins/vue-meta',
+    '@/plugins/vee-validate',
+    '@/plugins/vue-tour',
+    '@/plugins/googleSignin',
+    '@/plugins/facebookSignin',
+    '@/plugins/vue-loaders',
+    '@/plugins/vue-tel-input',
+    { src: '@/plugins/vue-google-maps', ssr: true },
+    '@/plugins/vue-cookie',
+    '@/plugins/vue-moment'
+  ],
 
   /*
    ** Nuxt.js modules
@@ -48,7 +60,7 @@ export default {
    ** Build configuration
    */
   build: {
-    transpile: ['vuetify/lib'],
+    transpile: ['vuetify/lib', /^vue2-google-maps($|\/)/],
     plugins: [new VuetifyLoaderPlugin()],
     loaders: {
       stylus: {
