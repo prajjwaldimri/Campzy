@@ -4,7 +4,7 @@ import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
 let https = {}
-if (process.env.ENVIRONMENT === 'production') {
+if (process.env.ENVIRONMENT !== 'production') {
   https = {
     key: fs.readFileSync(
       path.resolve(__dirname, '../backend/certs/server.key')
