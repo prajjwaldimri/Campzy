@@ -60,7 +60,7 @@ import {
 
 export default {
   name: 'BankDetails',
-  layout: 'dashboard',
+
   $_veeValidate: {
     validator: 'new'
   },

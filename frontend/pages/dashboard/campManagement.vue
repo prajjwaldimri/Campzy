@@ -61,7 +61,6 @@ export default {
     addCamp: AddCamp,
     editCamp: EditCamp
   },
-  layout: 'dashboard',
   metaInfo: {
     title: 'Dashboard | Camp Management'
   },

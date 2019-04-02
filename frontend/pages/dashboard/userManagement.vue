@@ -51,7 +51,6 @@ export default {
   components: {
     addBlogger: AddBlogger
   },
-  layout: 'dashboard',
   metaInfo: {
     title: 'Dashboard | User Mangement'
   },
