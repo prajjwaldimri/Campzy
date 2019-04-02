@@ -18,6 +18,7 @@
     "@sentry/browser": "^5.0.2",
     "animejs": "^3.0.1",
     "apexcharts": "^3.6.5",
+    "axios": "^0.18.0",
     "countup.js": "^2.0.4",
     "cross-env": "^5.2.0",
     "fb": "^2.0.0",
