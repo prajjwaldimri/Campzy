@@ -17,6 +17,13 @@
     "@nuxtjs/pwa": "^2.6.0",
     "cross-env": "^5.2.0",
     "nuxt": "^2.5.1",
+    "vue-facebook-signin-button": "^1.0.1",
+    "vue-google-signin-button": "^1.0.2",
+    "vue-loaders": "^2.0.0",
+    "vue-meta": "^1.6.0",
+    "vue-tel-input": "^2.0.21",
+    "vue-tour": "^1.1.0",
+    "vue2-google-maps": "^0.10.6",
     "vuetify": "^1.5.5",
     "vuetify-loader": "^1.2.1"
   },
