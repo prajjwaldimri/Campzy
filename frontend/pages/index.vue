@@ -1,70 +1,117 @@
-<template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <div class="text-xs-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline"
-          >Welcome to the Vuetify + Nuxt.js template</v-card-title
-        >
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a href="https://vuetifyjs.com" target="_blank">documentation</a>.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a href="https://chat.vuetifyjs.com/" target="_blank" title="chat"
-              >discord</a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-              >issue board</a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a href="https://nuxtjs.org/" target="_blank">Nuxt Documentation</a>
-          <br />
-          <a href="https://github.com/nuxt/nuxt.js" target="_blank"
-            >Nuxt GitHub</a
-          >
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" flat nuxt to="/inspire">Continue</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+<template lang="pug">
+  v-app
+    cookie-law(theme="dark-lime" buttonText="ACCEPT COOKIES")
+      div(slot="message")
+        h3 This website uses cookies to ensure you get the best experience on our website. For more info
+          router-link(to="privacyPolicy").ml-1.white--text click here
+
+
+    v-snackbar(v-model='snackbarSuccess' top right color='green' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarSuccess = false') close
+    v-snackbar(v-model='snackbarFail' top right color='red' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarFail = false') close
+    v-snackbar(v-model='snackbarInfo' top right dark :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarInfo = false') close
+    v-snackbar(v-model='snackbarWarning' top right color='yellow' :timeout='timeout') {{message}}
+      v-btn(flat @click='snackbarWarning = false') close
+    transition(name="fade-transition" mode="out-in")
+      router-view
+
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import CookieLaw from 'vue-cookie-law'
+import { EventBus } from './event-bus'
 
 export default {
+  name: 'App',
   components: {
-    Logo,
-    VuetifyLogo
+    CookieLaw
+  },
+  data() {
+    return {
+      snackbarSuccess: false,
+      snackbarFail: false,
+      snackbarInfo: false,
+      snackbarWarning: false,
+      message: '',
+      timeout: 0
+    }
+  },
+  created() {
+    // N-Progress
+    /* global NProgress */
+    EventBus.$on('show-progress-bar', () => {
+      NProgress.start()
+    })
+    EventBus.$on('hide-progress-bar', () => {
+      NProgress.done()
+    })
+
+    EventBus.$on('show-success-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarSuccess = true
+    })
+
+    EventBus.$on('show-success-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarSuccess = true
+    })
+
+    EventBus.$on('show-error-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarFail = true
+    })
+
+    EventBus.$on('show-error-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarFail = true
+    })
+
+    EventBus.$on('show-info-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarInfo = true
+    })
+
+    EventBus.$on('show-info-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarInfo = true
+    })
+    EventBus.$on('show-warning-notification-short', message => {
+      this.timeout = 2000
+      this.message = message
+      this.snackbarWarning = true
+    })
+
+    EventBus.$on('show-warning-notification-long', message => {
+      this.timeout = 5000
+      this.message = message
+      this.snackbarWarning = true
+    })
   }
 }
 </script>
+
+<style lang="scss">
+@import './scss/main.scss';
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Cookie__button {
+  background-color: #4caf50 !important;
+}
+
+.Cookie--dark-lime {
+  background-color: #424242 !important;
+}
+</style>
