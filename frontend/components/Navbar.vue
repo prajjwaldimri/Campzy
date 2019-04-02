@@ -14,7 +14,7 @@
           | Places
         v-card.places-card
           v-list
-            v-list-tile(v-for="(place, index) in places" @click='sendPlaces(place)')
+            v-list-tile(v-for="(place, index) in places" @click='sendPlaces(place)' :key="index")
               v-list-tile-content
                 v-list-tile-title {{place}}
 
@@ -48,7 +48,7 @@
           v-icon room
         v-card.places-card
           v-list
-            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)`)
+            v-list-tile(v-for="(place, index) in places" @click=`$router.push('/places/' + place)` :key="index")
               v-list-tile-content
                 v-list-tile-title {{place}}
       v-btn(icon flat v-show="!isLoggedIn" to='/login')
@@ -82,6 +82,7 @@ import { EventBus } from '../layouts/event-bus'
 
 export default {
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     color: String,
     app: Boolean,
     absolute: Boolean,
