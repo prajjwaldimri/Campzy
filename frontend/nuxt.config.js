@@ -52,6 +52,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '@/plugins/i18n',
     '@/plugins/vuetify',
     '@/plugins/vue-meta',
     '@/plugins/vee-validate',
@@ -70,6 +71,10 @@ export default {
    */
   modules: ['@nuxtjs/pwa'],
 
+  router: {
+    middleware: 'i18n'
+  },
+
   /*
    ** Build configuration
    */
@@ -81,6 +86,7 @@ export default {
         import: ['~assets/style/variables.styl']
       }
     },
+    vendor: ['vue-i18n'],
     /*
      ** You can extend webpack config here
      */
