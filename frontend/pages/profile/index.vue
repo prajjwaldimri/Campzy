@@ -1,118 +1,140 @@
-/* global LC_API */
 <template lang="pug">
   div
-    navbar(:dark="true")
-    v-tabs(dark icons-and-text grow centered style="width:100%" v-model="selectedTab").hidden-sm-and-down
-      v-tabs-slider(color="green")
-      v-tab(href="#tab-1" @click="$router.push('/profile')")
-        | Settings
-        v-icon settings
-      v-tab(href="#tab-2" @click="$router.push('/profile/activeBookings')")
-        | Active Bookings
-        v-icon event
-      v-tab(href="#tab-3" @click="$router.push('/profile/pastBookings')")
-        | Past Bookings
-        v-icon receipt
-      v-tab(href="#tab-4" @click="$router.push('/profile/wishlist')")
-        | Wishlist
-        v-icon shopping_cart
-
-    transition(name="fade-transition" mode="out-in")
-      router-view
-
-
-    v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
-     fixed).hidden-md-and-up
-      v-btn(dark @click="$router.push('/profile')")
-        v-icon settings
-      v-btn(dark @click="$router.push('/profile/activeBookings')")
-        v-icon event
-      v-btn(dark @click="$router.push('/profile/pastBookings')")
-        v-icon receipt
-      v-btn(dark @click="$router.push('/profile/wishlist')")
-        v-icon shopping_cart
+    v-alert.alert-dialog(:value='!isEmailVerified' type='warning')
+      span Your Email is not verified! If you do not recieve any mail,
+      v-btn(flat small @click='resendVerificationEmail') &nbsp; Please click here to resend it.
+    .settings-page
+      v-container(grid-list-lg)
+        v-layout(row wrap)
+          v-flex(xs12 md6)
+            v-card.settings-card
+              v-card-title(primary-title).pl-0
+                h2.headline.font-weight-bold EDIT PROFILE
+              v-form
+                v-text-field(label="Name" required v-model="user.name" clearable
+                data-vv-name="Name" v-validate="'alpha_spaces|min:3|required'"
+                :error-messages="errors.collect('Name')")
+                v-text-field(label="Email" v-validate="'required|email'" required
+                 v-model="user.email" clearable data-vv-name="email"
+                 :error-messages="errors.collect('email')")
+                v-text-field(label="Current Password" v-model="user.currentPassword" clearable
+                type="password" counter data-vv-name="currentPassword" v-validate="'min:8|required'"
+                 :error-messages="errors.collect('currentPassword')")
+                v-text-field(label="New Password" v-model="user.newPassword" clearable
+                type="password" counter data-vv-name="New Password" v-validate="'min:8'"
+                 :error-messages="errors.collect('New Password')" ref="newPassword")
+                v-text-field(label="Confirm New Password" type="password"
+                v-model="user.confirmNewPassword" clearable counter
+                v-validate="'confirmed:newPassword'"
+                data-vv-name="Confirm New Password"
+                :error-messages="errors.collect('Confirm New Password')")
+              v-card-actions.mt-2
+                v-spacer
+                v-btn(color="green" @click="updateProfile" :loading="isProfileUpdating").white--text
+                  | Update Profile
+          v-flex(xs12 md6)
+            v-card.settings-card
+              v-card-title(primary-title).pl-0
+                h2.headline.font-weight-bold SOCIAL ACCOUNTS
+              .settings-flex
+                img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Facebook.svg/1024px-Facebook.svg.png" height="36" width="100").ml-1
+                v-btn(flat) LINK ACCOUNT
+              v-divider
+              .settings-flex
+                img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1000px-Google_2015_logo.svg.png" height="30" width="90").ml-2
+                v-btn(flat) LINK ACCOUNT
 
 </template>
 
 <script>
 import { GraphQLClient } from 'graphql-request'
-import navbar from '../../components/Navbar.vue'
 
+import { sendVerificationEmail } from '../../queries/mutationQueries'
 import { EventBus } from '../../layouts/event-bus'
 
 export default {
-  name: 'Profile',
-  metaInfo: {
-    title: 'Profile - Campzy',
-    script: [
-      // LiveChat
-      {
-        innerHTML: `window.__lc = window.__lc || {};
-    window.__lc.license = 10150997;
-    (function () {
-      var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
-      lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
-    })();`,
-        type: 'text/javascript'
-      }
-    ],
-    noscript: [
-      {
-        innerHTML: `<a href="https://www.livechatinc.com/chat-with/10150997/">Chat with us</a>,
-    powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener" target="_blank">LiveChat</a>`
-      }
-    ]
+  $_veeValidate: {
+    validator: 'new'
   },
-  components: {
-    navbar
-  },
+
   data() {
     return {
-      drawer: true,
-      userProfileImage: '',
-      userName: '',
-      bottomNav: 0,
-      selectedTab: 'tab-1'
+      user: {},
+      isProfileUpdating: false,
+      isEmailVerified: true,
+      isEmailVerifying: false
     }
   },
   mounted() {
+    this.isWatchList = true
     if (!this.$cookie.get('sessionToken')) {
       this.$router.push({ name: 'login' })
-      EventBus.$emit('show-error-notification-short', 'Please Login First')
     } else {
-      this.getProfileImage()
+      this.getCurrentUser()
     }
 
-    // Select the proper tab based on the url
-
-    switch (this.$route.name) {
-      case 'activeBookings':
-        this.selectedTab = 'tab-2'
-        break
-
-      case 'pastBookings':
-        this.selectedTab = 'tab-3'
-        break
-
-      case 'wishlist':
-        this.selectedTab = 'tab-4'
-        break
-
-      default:
-        this.selectedTab = 'tab-1'
-    }
-
-    var LC_API = LC_API || {} //eslint-disable-line
-    LC_API.on_after_load = () => {
-      LC_API.hide_chat_window()
-    }
+    EventBus.$on('email-verification-successful', () => {
+      this.isEmailVerified = true
+    })
   },
   methods: {
-    getProfileImage() {
+    openEmailVerificationDialog() {
+      EventBus.$emit('open-email-verification-dialog')
+    },
+    updateProfile() {
+      this.isProfileUpdating = true
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          const query = `mutation updateUser($name: String!, $currentPassword: String!,   $newPassword: String) {
+             updateUser (name: $name, currentPassword: $currentPassword, newPassword: $newPassword) {
+            name,
+            email,
+            dateOfBirth
+              }
+            }`
+          const variables = {
+            name: this.user.name,
+            currentPassword: this.user.currentPassword,
+            newPassword: this.user.newPassword
+          }
+          const client = new GraphQLClient('https://api.campzy.in', {
+            headers: {
+              Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+            }
+          })
+
+          client
+            .request(query, variables)
+            .then(data => {
+              this.user = data.updateUser
+              this.isProfileUpdating = false
+              EventBus.$emit(
+                'show-success-notification-long',
+                'Profile updated! Refreshing....'
+              )
+            })
+            .catch(err => {
+              EventBus.$emit(
+                'show-error-notification-long',
+                err.response.errors[0].message
+              )
+              this.isProfileUpdating = false
+            })
+            .finally(() => {
+              this.getCurrentUser()
+            })
+        } else {
+          this.isProfileUpdating = false
+        }
+      })
+    },
+    getCurrentUser() {
       const query = `{currentUser {
-        name,
-      }}`
+            name,
+            email,
+            dateOfBirth,
+            isEmailVerified
+          }}`
       const client = new GraphQLClient('https://api.campzy.in', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
@@ -122,22 +144,10 @@ export default {
       client
         .request(query)
         .then(data => {
-          this.userName = data.currentUser.name
-          if (data.currentUser.type === 'Admin') {
-            this.isAdmin = true
+          this.user = data.currentUser
+          if (this.user.isEmailVerified === false) {
+            this.isEmailVerified = false
           }
-          if (data.currentUser.type === 'CampOwner') {
-            this.isCampOwner = true
-          }
-          if (data.currentUser.type === 'Blogger') {
-            this.isBlogger = true
-          }
-          if (this.userName === null) {
-            this.userName = 'Unnamed User'
-          }
-          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${
-            this.userName
-          }`
         })
         .catch(err => {
           EventBus.$emit(
@@ -148,20 +158,44 @@ export default {
           this.$router.push({ name: 'login' })
         })
     },
-    logout() {
-      this.$cookie.delete('sessionToken')
-      this.$router.push('/login')
+    resendVerificationEmail() {
+      const client = new GraphQLClient('https://api.campzy.in', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+        }
+      })
+      client
+        .request(sendVerificationEmail)
+        .then(() => {
+          EventBus.$emit(
+            'show-success-notification-long',
+            'Sent Verification Email'
+          )
+        })
+        .catch(err => {
+          if (err) {
+            EventBus.$emit(
+              'show-error-notification-long',
+              err.response.errors[0].message
+            )
+          }
+        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.full-height {
-  height: 100vh;
-}
+.settings-page {
+  .settings-card {
+    padding: 2rem;
+  }
 
-.v-tabs__slider {
-  height: 5px;
+  .settings-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
 }
 </style>
