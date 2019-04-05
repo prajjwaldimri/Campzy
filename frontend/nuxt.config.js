@@ -13,17 +13,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default {
   mode: 'universal',
-  server: {
-    https: https
-  },
+  // server: {
+  //   https: https
+  // },
 
   /*
    ** Headers of the page
    */
   head: {
     title: 'Campzy: The complete camping solution',
-    meta: [
-      {
+    meta: [{
         charset: 'utf-8'
       },
       {
@@ -36,8 +35,7 @@ export default {
         content: pkg.description
       }
     ],
-    link: [
-      {
+    link: [{
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
@@ -51,12 +49,10 @@ export default {
 
       {
         rel: 'stylesheet',
-        href:
-          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+        href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       }
     ],
-    script: [
-      {
+    script: [{
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
       },
       {
