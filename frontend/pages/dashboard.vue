@@ -82,7 +82,7 @@
                   v-icon chevron_right
           v-tour(name='adminTour' :steps='adminSteps')
     nuxt-child
-    // CampzyAgreement
+    CampzyAgreement
     v-bottom-nav(:value="true" :active.sync="bottomNav" color="grey darken-4"
    fixed shift).hidden-md-and-up
       v-btn(dark @click="$router.push('/dashboard/')"
@@ -129,13 +129,13 @@
 <script>
 import { GraphQLClient } from 'graphql-request'
 import { EventBus } from '../layouts/event-bus'
-// import CampzyAgreement from './CampzyAgreement.vue'
+import CampzyAgreement from '../components/CampzyAgreement.vue'
 
 export default {
   name: 'Dashboard',
-  // components: {
-  //   CampzyAgreement
-  // },
+  components: {
+    CampzyAgreement
+  },
   data() {
     return {
       drawer: true,
