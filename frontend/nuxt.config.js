@@ -22,7 +22,8 @@ export default {
    */
   head: {
     title: 'Campzy: The complete camping solution',
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
       },
       {
@@ -35,7 +36,8 @@ export default {
         content: pkg.description
       }
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
@@ -49,10 +51,12 @@ export default {
 
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       }
     ],
-    script: [{
+    script: [
+      {
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
       },
       {
@@ -98,11 +102,20 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa'],
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap'],
 
   // router: {
   //   middleware: 'i18n'
   // },
+
+  sitemap: {
+    path: '/sitemap.xml',
+    hostname: 'https://campzy.in',
+    cacheTime: 1000 * 60 * 15,
+    gzip: true,
+    generate: false, // Enable me when using nuxt generate
+    exclude: ['/dashboard/**', '/profile/**']
+  },
 
   /*
    ** Build configuration
