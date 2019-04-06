@@ -17,6 +17,10 @@ export default {
         charset: 'utf-8'
       },
       {
+        name: 'theme-color',
+        content: '#2ecc71'
+      },
+      {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
       },
@@ -113,7 +117,7 @@ export default {
     short_name: 'Campzy',
     description: 'The complete camping solution',
     lang: 'en',
-    background_color: '#2ecc71',
+    theme_color: '#2ecc71',
     icons: [
       {
         src: '/android-chrome-192x192.png',
