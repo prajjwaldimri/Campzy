@@ -1,15 +1,5 @@
-import path from 'path'
-import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
-
-let https = {}
-if (process.env.NODE_ENV !== 'production') {
-  https = {
-    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
-  }
-}
 
 export default {
   mode: 'universal',
@@ -115,6 +105,25 @@ export default {
     gzip: true,
     generate: false, // Enable me when using nuxt generate
     exclude: ['/dashboard/**', '/profile/**']
+  },
+
+  // PWA Config
+  manifest: {
+    name: 'Campzy',
+    short_name: 'Campzy',
+    description: 'The complete camping solution',
+    lang: 'en',
+    background_color: '#2ecc71',
+    icons: [
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      }
+    ]
+  },
+  icon: {
+    iconSrc: '/android-chrome-512x512.png'
   },
 
   /*
