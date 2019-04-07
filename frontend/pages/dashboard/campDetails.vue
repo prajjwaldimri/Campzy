@@ -178,7 +178,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='savePlacesOfInterests'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
@@ -662,10 +662,11 @@ export default {
         }
         const temp = {}
         ;[temp.name, temp.distance] = places.split(',')
+
         const variables = {
           id: this.camp.id,
           name: temp.name,
-          distance: parseFloat(temp.distance)
+          distance: temp.distance
         }
         const client = new GraphQLClient('https://api.campzy.in', {
           headers: {
@@ -675,7 +676,9 @@ export default {
         client
           .request(addPlacesOfInterest, variables)
           .then(() => {})
-          .catch(() => {
+          .catch(err => {
+            // eslint-disable-next-line no-console
+            console.log(err)
             EventBus.$emit(
               'show-info-notification-short',
               'Failed to update Places of Interests'

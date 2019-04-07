@@ -276,8 +276,8 @@ const savePlacesOfInterest = {
       type: GraphQLString,
     },
     distance: {
-      type: GraphQLFloat,
-    },
+      type: GraphQLFloat
+    }
   },
   async resolve(parent, args, context) {
     try {
@@ -295,9 +295,11 @@ const savePlacesOfInterest = {
           $push: {
             placesOfInterest: {
               name: args.name,
-              distance: args.distance,
+              distance: args.deleteCamp
             },
-          },
+
+          }
+
         }, {
           new: true,
         },

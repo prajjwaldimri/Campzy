@@ -185,10 +185,10 @@
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
-import { GraphQLClient } from 'graphql-request';
-import axios from 'axios';
-import { getCurrentUserCampDetails } from '../../../queries/queries';
+import InfiniteLoading from "vue-infinite-loading";
+import { GraphQLClient } from "graphql-request";
+import axios from "axios";
+import { getCurrentUserCampDetails } from "../../../queries/queries";
 import {
   saveCampDetails,
   updateCampImages,
@@ -197,16 +197,16 @@ import {
   deleteCampDocument,
   addAmenities,
   addPlacesOfInterest,
-  setHeroImage,
-} from '../../../queries/mutationQueries';
-import { EventBus } from '../../../event-bus';
+  setHeroImage
+} from "../../../queries/mutationQueries";
+import { EventBus } from "../../../event-bus";
 
 export default {
   components: {
-    InfiniteLoading,
+    InfiniteLoading
   },
   metaInfo: {
-    title: 'Dashboard | Camp Details',
+    title: "Dashboard | Camp Details"
   },
 
   data() {
@@ -215,13 +215,13 @@ export default {
       camp: {},
       isDataUpdating: false,
       amenitiesItems: [
-        { name: 'Washroom-Attached', value: true },
-        { name: 'Bonfire', value: true },
-        { name: '24 hour hot water', value: true },
-        { name: 'Mobile connectivity', value: true },
-        { name: 'Meals included', value: true },
-        { name: 'Pets allowed', value: true },
-        { name: 'Charging points', value: true },
+        { name: "Washroom-Attached", value: true },
+        { name: "Bonfire", value: true },
+        { name: "24 hour hot water", value: true },
+        { name: "Mobile connectivity", value: true },
+        { name: "Meals included", value: true },
+        { name: "Pets allowed", value: true },
+        { name: "Charging points", value: true }
       ],
       amenities: {},
       placesOfInterest: [],
@@ -234,15 +234,15 @@ export default {
       storeImages: [],
       uploadingDocuments: false,
       getOwnerDocuments: [],
-      getImages: '',
+      getImages: "",
       uploadingImages: false,
       viewDocument: false,
       isDocument: false,
-      location: '',
+      location: "",
       loc: false,
       center: {},
       markerPosition: {},
-      coordinates: {},
+      coordinates: {}
     };
   },
 
@@ -255,11 +255,11 @@ export default {
       if (this.coordinates) {
         this.center = {
           lat: parseFloat(this.coordinates.lat),
-          lng: parseFloat(this.coordinates.lng),
+          lng: parseFloat(this.coordinates.lng)
         };
         this.markerPosition = {
           lat: this.center.lat,
-          lng: this.center.lng,
+          lng: this.center.lng
         };
         this.center = this.markerPosition;
       } else {
@@ -271,33 +271,33 @@ export default {
       if (this.center) {
         this.markerPosition = {
           lat: this.center.geometry.location.lat(),
-          lng: this.center.geometry.location.lng(),
+          lng: this.center.geometry.location.lng()
         };
         this.center = this.markerPosition;
         this.coordinates = {
           lat: this.center.lat.toString(),
-          lng: this.center.lng.toString(),
+          lng: this.center.lng.toString()
         };
       }
     },
 
     geolocate() {
-      navigator.geolocation.getCurrentPosition((position) => {
+      navigator.geolocation.getCurrentPosition(position => {
         this.center = {
           lat: position.coords.latitude,
-          lng: position.coords.longitude,
+          lng: position.coords.longitude
         };
         if (this.center) {
           this.markerPosition = {
             lat: this.center.lat,
-            lng: this.center.lng,
+            lng: this.center.lng
           };
           this.center = this.markerPosition;
         }
 
         this.coordinates = {
           lat: this.center.lat.toString(),
-          lng: this.center.lng.toString(),
+          lng: this.center.lng.toString()
         };
 
         this.addMarker();
@@ -309,30 +309,30 @@ export default {
       this.loc = !this.loc;
     },
     setImageAsHero(img) {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
       const variables = {
         id: this.camp.id,
-        heroImage: img,
+        heroImage: img
       };
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       client
         .request(setHeroImage, variables)
         .then(() => {
           EventBus.$emit(
-            'show-success-notification-short',
-            'Successfully Added as Hero Image',
+            "show-success-notification-short",
+            "Successfully Added as Hero Image"
           );
         })
         .catch(() => {
           EventBus.$emit(
-            'show-error-notification-short',
-            'Cannot Add right now, Please try later!',
+            "show-error-notification-short",
+            "Cannot Add right now, Please try later!"
           );
         });
     },
@@ -345,45 +345,45 @@ export default {
     },
     deleteDocumentFromAws(documentName) {
       axios
-        .delete('/deleteDocuments', {
-          data: { documentName },
+        .delete("/deleteDocuments", {
+          data: { documentName }
         })
-        .then((res) => {
+        .then(res => {
           this.deleteDocumentFromCamp(res.data);
         })
-        .catch((err) => {
+        .catch(err => {
           EventBus.$emit(
-            'show-error-notification-long',
-            err.response.errors[0].message,
+            "show-error-notification-long",
+            err.response.errors[0].message
           );
         });
     },
     deleteDocumentFromCamp(docName) {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
       const variables = {
         id: this.camp.id,
-        documentName: docName,
+        documentName: docName
       };
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       client
         .request(deleteCampDocument, variables)
         .then(() => {
           this.getCampDetails();
           EventBus.$emit(
-            'show-success-notification-short',
-            'Successfully Deleted ',
+            "show-success-notification-short",
+            "Successfully Deleted "
           );
         })
-        .catch((err) => {
+        .catch(err => {
           EventBus.$emit(
-            'show-error-notification-short',
-            err.response.errors[0].message,
+            "show-error-notification-short",
+            err.response.errors[0].message
           );
         })
         .finally(() => {});
@@ -398,25 +398,25 @@ export default {
       const formData = new FormData();
       for (let i = 0; i < this.files.length; i += 1) {
         const file = this.files[i];
-        formData.append('images', file);
+        formData.append("images", file);
       }
       axios
-        .post('/uploadImages', formData, {
+        .post("/uploadImages", formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            "Content-Type": "multipart/form-data"
+          }
         })
-        .then((res) => {
+        .then(res => {
           this.getImages = res.data;
           EventBus.$emit(
-            'show-success-notification-long',
-            'Successfully Uploaded to AWS',
+            "show-success-notification-long",
+            "Successfully Uploaded to AWS"
           );
           this.storeImages = [];
           this.updateImagesToCamp();
         })
         .catch(() => {
-          EventBus.$emit('show-error-notification-long', 'Failed to Upload');
+          EventBus.$emit("show-error-notification-long", "Failed to Upload");
         })
         .finally(() => {
           this.uploadingImages = false;
@@ -424,32 +424,32 @@ export default {
     },
 
     updateImagesToCamp() {
-      this.getImages.forEach((image) => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/');
+      this.getImages.forEach(image => {
+        if (!this.$cookie.get("sessionToken")) {
+          this.$router.push("/");
         }
         const variables = {
           id: this.camp.id,
-          images: image,
+          images: image
         };
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient("/graphql", {
           headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
+            Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+          }
         });
         client
           .request(updateCampImages, variables)
           .then(() => {
             this.getCampDetails();
             EventBus.$emit(
-              'show-success-notification-short',
-              'Successfully Updated ',
+              "show-success-notification-short",
+              "Successfully Updated "
             );
           })
-          .catch((err) => {
+          .catch(err => {
             EventBus.$emit(
-              'show-error-notification-short',
-              err.response.errors[0].message,
+              "show-error-notification-short",
+              err.response.errors[0].message
             );
           })
           .finally(() => {});
@@ -460,8 +460,8 @@ export default {
     uploadDocuments() {
       if (this.storeDocuments.length < 0) {
         EventBus.$emit(
-          'show-error-notification-short',
-          'Please select all files!',
+          "show-error-notification-short",
+          "Please select all files!"
         );
       } else {
         this.uploadingDocuments = true;
@@ -472,28 +472,28 @@ export default {
         const formData = new FormData();
         for (let i = 0; i < this.files.length; i += 1) {
           const file = this.files[i];
-          formData.append('document', file);
+          formData.append("document", file);
         }
         axios
-          .post('/uploadCampOwnerDocuments', formData, {
+          .post("/uploadCampOwnerDocuments", formData, {
             headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+              "Content-Type": "multipart/form-data"
+            }
           })
-          .then((res) => {
-            res.data.forEach((item) => {
+          .then(res => {
+            res.data.forEach(item => {
               this.getOwnerDocuments.push(item.key);
             });
             EventBus.$emit(
-              'show-success-notification-long',
-              'Successfully Uploaded',
+              "show-success-notification-long",
+              "Successfully Uploaded"
             );
             this.saveDocumentsToCamp();
           })
           .catch(() => {
             EventBus.$emit(
-              'show-error-notification-long',
-              'Failed to Uploaded',
+              "show-error-notification-long",
+              "Failed to Uploaded"
             );
           })
           .finally(() => {
@@ -503,32 +503,32 @@ export default {
     },
 
     saveDocumentsToCamp() {
-      this.getOwnerDocuments.forEach((campdoc) => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/');
+      this.getOwnerDocuments.forEach(campdoc => {
+        if (!this.$cookie.get("sessionToken")) {
+          this.$router.push("/");
         }
         const variables = {
           id: this.camp.id,
-          campDocuments: campdoc,
+          campDocuments: campdoc
         };
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient("/graphql", {
           headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
+            Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+          }
         });
         client
           .request(updateCampDocuments, variables)
           .then(() => {
             this.getCampDetails();
             EventBus.$emit(
-              'show-success-notification-short',
-              'Successfully Updated ',
+              "show-success-notification-short",
+              "Successfully Updated "
             );
           })
-          .catch((err) => {
+          .catch(err => {
             EventBus.$emit(
-              'show-error-notification-short',
-              err.response.errors[0].message,
+              "show-error-notification-short",
+              err.response.errors[0].message
             );
           })
           .finally(() => {});
@@ -537,19 +537,19 @@ export default {
 
     // Get the camp ID related to current user
     getCampDetails() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       client
         .request(getCurrentUserCampDetails)
-        .then((data) => {
+        .then(data => {
           if (data.currentUserCamp.agreementAccepted === false) {
-            EventBus.$emit('agreement-not-accepted');
+            EventBus.$emit("agreement-not-accepted");
           }
           this.camp = data.currentUserCamp;
           this.coordinates = this.camp.coordinates;
@@ -563,8 +563,8 @@ export default {
             this.isDocument = false;
           }
           if (
-            this.camp.campDocuments.length === 0
-            || this.camp.campDocuments.length > 3
+            this.camp.campDocuments.length === 0 ||
+            this.camp.campDocuments.length > 3
           ) {
             this.viewDocument = false;
           } else {
@@ -572,17 +572,17 @@ export default {
           }
           // this.createPlacesOfInterest();
         })
-        .catch((err) => {
+        .catch(err => {
           EventBus.$emit(
-            'show-error-notification-short',
-            err.response.errors[0].message,
+            "show-error-notification-short",
+            err.response.errors[0].message
           );
         });
     },
     // Save updated vlaues of camp
     saveCampDetails() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
       const variables = {
         id: this.camp.id,
@@ -595,12 +595,12 @@ export default {
         tags: this.tags,
         campDocuments: this.getOwnerDocuments,
         latitude: this.coordinates.lat,
-        longitude: this.coordinates.lng,
+        longitude: this.coordinates.lng
       };
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       this.isDataUpdating = true;
       this.saveAmenity();
@@ -609,13 +609,13 @@ export default {
         .request(saveCampDetails, variables)
         .then(() => {
           EventBus.$emit(
-            'show-success-notification-short',
-            'Successfully Updated ',
+            "show-success-notification-short",
+            "Successfully Updated "
           );
           this.getCampDetails();
         })
         .catch(() => {
-          EventBus.$emit('show-error-notification-short', 'Failed to update');
+          EventBus.$emit("show-error-notification-short", "Failed to update");
         })
         .finally(() => {
           this.isDataUpdating = false;
@@ -623,15 +623,15 @@ export default {
     },
 
     createPlacesOfInterest() {
-      this.camp.placesOfInterest.forEach((places) => {
+      this.camp.placesOfInterest.forEach(places => {
         const tempPlace = Object.values(places).join();
         this.placesOfInterest.push(tempPlace);
       });
     },
 
     saveAmenity() {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
       const variables = {
         id: this.camp.id,
@@ -641,47 +641,47 @@ export default {
         mobileConnectivity: this.amenities.mobileConnectivity,
         mealsInclude: this.amenities.mealsInclude,
         petsAllowed: this.amenities.petsAllowed,
-        chargingPoints: this.amenities.chargingPoints,
+        chargingPoints: this.amenities.chargingPoints
       };
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       client
         .request(addAmenities, variables)
         .then(() => {})
         .catch(() => {
           EventBus.$emit(
-            'show-info-notification-short',
-            'Failed to Update Amenities',
+            "show-info-notification-short",
+            "Failed to Update Amenities"
           );
         });
     },
     savePlacesOfInterests() {
-      this.placesOfInterest.forEach((places) => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/');
+      this.placesOfInterest.forEach(places => {
+        if (!this.$cookie.get("sessionToken")) {
+          this.$router.push("/");
         }
         const temp = {};
-        [temp.name, temp.distance] = places.split(',');
+        [temp.name, temp.distance] = places.split(",");
         const variables = {
           id: this.camp.id,
           name: temp.name,
-          distance: parseFloat(temp.distance),
+          distance: parseFloat(temp.distance)
         };
-        const client = new GraphQLClient('/graphql', {
+        const client = new GraphQLClient("/graphql", {
           headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-          },
+            Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+          }
         });
         client
           .request(addPlacesOfInterest, variables)
           .then(() => {})
           .catch(() => {
             EventBus.$emit(
-              'show-info-notification-short',
-              'Failed to update Places of Interests',
+              "show-info-notification-short",
+              "Failed to update Places of Interests"
             );
           });
       });
@@ -689,50 +689,50 @@ export default {
 
     deleteImageFromAWS(imageName) {
       axios
-        .delete('/deleteImages', { data: { imageName } })
-        .then((res) => {
+        .delete("/deleteImages", { data: { imageName } })
+        .then(res => {
           EventBus.$emit(
-            'show-success-notification-short',
-            'Successfully Deleted',
+            "show-success-notification-short",
+            "Successfully Deleted"
           );
           this.deleteImage(res.data);
         })
         .catch(() => {
-          EventBus.$emit('show-error-notification-short', 'Failed to delete');
+          EventBus.$emit("show-error-notification-short", "Failed to delete");
         });
     },
 
     deleteImage(imgName) {
-      if (!this.$cookie.get('sessionToken')) {
-        this.$router.push('/');
+      if (!this.$cookie.get("sessionToken")) {
+        this.$router.push("/");
       }
       const variables = {
         id: this.camp.id,
-        imageName: imgName,
+        imageName: imgName
       };
-      const client = new GraphQLClient('/graphql', {
+      const client = new GraphQLClient("/graphql", {
         headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`,
-        },
+          Authorization: `Bearer ${this.$cookie.get("sessionToken")}`
+        }
       });
       client
         .request(deleteCampImage, variables)
         .then(() => {
           this.getCampDetails();
           EventBus.$emit(
-            'show-success-notification-short',
-            'Successfully Deleted ',
+            "show-success-notification-short",
+            "Successfully Deleted "
           );
         })
-        .catch((err) => {
+        .catch(err => {
           EventBus.$emit(
-            'show-error-notification-short',
-            err.response.errors[0].message,
+            "show-error-notification-short",
+            err.response.errors[0].message
           );
         })
         .finally(() => {});
-    },
-  },
+    }
+  }
 };
 </script>
 
