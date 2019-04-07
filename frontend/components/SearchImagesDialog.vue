@@ -70,3 +70,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.v-carousel__item {
+  @media screen and (min-width: 960px) {
+    height: 100vh !important;
+  }
+  @media screen and (max-width: 959px) {
+    object-fit: contain !important;
+    height: 100vh !important;
+  }
+}
+</style>
