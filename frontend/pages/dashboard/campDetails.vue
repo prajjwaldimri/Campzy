@@ -178,7 +178,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='savePlacesOfInterests'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
