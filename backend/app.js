@@ -83,7 +83,8 @@ app.delete("/deleteImages", deleteImage);
 
 // Connect to MLab Database
 mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useCreateIndex: true
 });
 mongoose.connection.once("open", () => {
   console.log("Database connected");

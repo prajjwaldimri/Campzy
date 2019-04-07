@@ -1,15 +1,5 @@
-import path from 'path'
-import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
-
-let https = {}
-if (process.env.NODE_ENV !== 'production') {
-  https = {
-    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
-  }
-}
 
 export default {
   mode: 'universal',
@@ -22,8 +12,13 @@ export default {
    */
   head: {
     title: 'Campzy: The complete camping solution',
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
+      },
+      {
+        name: 'theme-color',
+        content: '#2ecc71'
       },
       {
         name: 'viewport',
@@ -35,7 +30,8 @@ export default {
         content: pkg.description
       }
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
@@ -49,10 +45,12 @@ export default {
 
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       }
     ],
-    script: [{
+    script: [
+      {
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
       },
       {
@@ -98,11 +96,39 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa'],
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap'],
 
   // router: {
   //   middleware: 'i18n'
   // },
+
+  sitemap: {
+    path: '/sitemap.xml',
+    hostname: 'https://campzy.in',
+    cacheTime: 1000 * 60 * 15,
+    gzip: true,
+    generate: false, // Enable me when using nuxt generate
+    exclude: ['/dashboard/**', '/profile/**']
+  },
+
+  // PWA Config
+  manifest: {
+    name: 'Campzy',
+    short_name: 'Campzy',
+    description: 'The complete camping solution',
+    lang: 'en',
+    theme_color: '#2ecc71',
+    icons: [
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      }
+    ]
+  },
+  icon: {
+    iconSrc: '/android-chrome-512x512.png'
+  },
 
   /*
    ** Build configuration
