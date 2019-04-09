@@ -28,9 +28,7 @@ const addCamp = {
     email: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    gst: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
+
     location: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -59,7 +57,6 @@ const addCamp = {
         name: args.name,
         phoneNumber: args.phoneNumber,
         email: args.email,
-        gst: args.gst,
         shortDescription: 'Unfilled Description',
         location: args.location,
         url: args.url,

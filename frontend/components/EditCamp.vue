@@ -177,6 +177,8 @@ export default {
       client
         .request(getCampQuery, variables)
         .then(data => {
+          // eslint-disable-next-line no-console
+          console.log(data)
           this.camp = data.camp
           this.camp.owner = data.camp.owner.id
           this.searchedUsers.push(data.camp.owner)
@@ -218,10 +220,14 @@ export default {
           })
           client
             .request(updateCampsQuery, variables)
-            .then(() => {
+            .then(data => {
+              // eslint-disable-next-line no-console
+              console.log(data)
               EventBus.$emit('success', 'Successfully Updated')
             })
             .catch(err => {
+              // eslint-disable-next-line no-console
+              console.log(err)
               EventBus.$emit('error', err.response.errors[0].message)
             })
             .finally(() => {

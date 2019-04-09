@@ -269,6 +269,9 @@ export default {
   @media screen and (max-width: 959px) {
     padding-bottom: 15rem;
   }
+  @media screen and (min-width: 1904px) {
+    max-width: 85% !important;
+  }
 }
 
 .pagination-container {

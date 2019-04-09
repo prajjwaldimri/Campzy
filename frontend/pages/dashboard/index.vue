@@ -468,6 +468,9 @@ export default {
     padding: 2rem;
     padding-bottom: 15rem !important;
   }
+  @media screen and (min-width: 1904px) {
+    max-width: 85% !important;
+  }
 }
 
 .camp-owner-conatiner {

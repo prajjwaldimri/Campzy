@@ -178,6 +178,9 @@ export default {
     padding-bottom: 15rem;
   }
   height: 100%;
+  @media screen and (min-width: 1904px) {
+    max-width: 85% !important;
+  }
 }
 .pagination-container {
   display: flex;

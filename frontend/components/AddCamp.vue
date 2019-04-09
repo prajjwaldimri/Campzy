@@ -15,9 +15,6 @@
        data-vv-name="url" v-validate="'required|alpha_dash'"
       :error-messages="errors.collect('url')")
 
-      v-text-field(v-model="camp.gst" label="GST Number" prepend-icon="link" clearable
-       data-vv-name="gst" v-validate="'required|alpha_dash'"
-      :error-messages="errors.collect('gst')")
       v-text-field(v-model="camp.email" label="Email" type="email" prepend-icon="email"
       clearable  data-vv-name="campEmail" v-validate="'min:4|required|email'"
       :error-messages="errors.collect('campEmail')")
@@ -153,9 +150,9 @@ export default {
           }
           this.isOwnerFieldLoading = true
           const addCampsQuery = `mutation addCamp($tags: [String]!, $name: String!, $phoneNumber: String!,
-        $email: String!,$gst: String!, $location: String!, $url: String!, $ownerId: String!){
+        $email: String!, $location: String!, $url: String!, $ownerId: String!){
           addCamp(tags: $tags, name: $name, phoneNumber: $phoneNumber,
-          email: $email, gst: $gst, location: $location, url: $url, ownerId: $ownerId){
+          email: $email, location: $location, url: $url, ownerId: $ownerId){
             id,
           }
         }`
@@ -166,8 +163,7 @@ export default {
             email: this.camp.email,
             location: this.camp.location,
             url: this.url,
-            ownerId: this.camp.owner,
-            gst: this.camp.gst
+            ownerId: this.camp.owner
           }
           const client = new GraphQLClient('https://api.campzy.in', {
             headers: {
@@ -181,6 +177,8 @@ export default {
               this.isOwnerSelected = false
             })
             .catch(err => {
+              // eslint-disable-next-line no-console
+              console.log(err)
               EventBus.$emit(
                 'show-error-notification-short',
                 err.response.errors[0].message
