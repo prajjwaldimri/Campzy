@@ -345,7 +345,7 @@ export default {
     },
     deleteDocumentFromAws(documentName) {
       axios
-        .delete('/deleteDocuments', {
+        .delete('https://api.campzy.in/deleteDocuments', {
           data: { documentName }
         })
         .then(res => {
@@ -401,7 +401,7 @@ export default {
         formData.append('images', file)
       }
       axios
-        .post('/uploadImages', formData, {
+        .post('https://api.campzy.in/uploadImages', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -479,7 +479,7 @@ export default {
         }
 
         axios
-          .post('/uploadCampOwnerDocuments', formData, {
+          .post('https://api.campzy.in/uploadCampOwnerDocuments', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -699,7 +699,7 @@ export default {
 
     deleteImageFromAWS(imageName) {
       axios
-        .delete('/deleteImages', { data: { imageName } })
+        .delete('https://api.campzy.in/deleteImages', { data: { imageName } })
         .then(res => {
           EventBus.$emit(
             'show-success-notification-short',
