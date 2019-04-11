@@ -14,9 +14,7 @@ const https = require("https");
 const multer = require("multer");
 const bodyParser = require("body-parser");
 const Sentry = require("@sentry/node");
-const {
-  sitemap
-} = require("./sitemapGen");
+const { sitemap } = require("./sitemapGen");
 
 if (process.env.ENVIRONMENT === "production") {
   Sentry.init({
@@ -93,7 +91,7 @@ mongoose.connection.once("open", () => {
 });
 
 // History mode fallback
-app.use(history({}));
+// app.use(history({}));
 
 // if (process.env.ENVIRONMENT === 'development') {
 //   app.use(webpackMiddleware(webpack(webpackConfig)));
