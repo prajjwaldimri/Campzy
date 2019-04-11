@@ -415,7 +415,9 @@ export default {
           this.storeImages = []
           this.updateImagesToCamp()
         })
-        .catch(() => {
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.log(err)
           EventBus.$emit('show-error-notification-long', 'Failed to Upload')
         })
         .finally(() => {
