@@ -45,7 +45,8 @@ const getCamp = {
       if (!isUserAdmin) {
         throw new PrivilegeError();
       }
-      return await CampModel.findById(args.id);
+      return await CampModel.findById(args.id).populate('ownerId', 'name');
+
     } catch (err) {
       return err;
     }
@@ -180,10 +181,10 @@ const searchParticularCamp = {
         throw new PrivilegeError();
       }
       return await CampModel.find({
-        $text: {
-          $search: args.searchTerm,
-        },
-      })
+          $text: {
+            $search: args.searchTerm,
+          },
+        })
         .limit(8)
         .skip((args.page - 1) * 8)
         .populate('ownerId', 'id name');
@@ -234,14 +235,14 @@ const campSearchUser = {
   async resolve(parent, args) {
     try {
       let results = await CampModel.find({
-        $text: {
-          $search: args.searchTerm,
-        },
-      }, {
-        score: {
-          $meta: 'textScore',
-        },
-      })
+          $text: {
+            $search: args.searchTerm,
+          },
+        }, {
+          score: {
+            $meta: 'textScore',
+          },
+        })
         .and({
           isAvailable: {
             $eq: true,
@@ -306,8 +307,8 @@ const campSearchUser = {
                 moment(booking.startDate).subtract(1, 'day'),
                 moment(booking.endDate).add(1, 'day'),
                 'days',
-              )
-              || moment(args.bookingEndDate).isBetween(
+              ) ||
+              moment(args.bookingEndDate).isBetween(
                 moment(booking.startDate).subtract(1, 'day'),
                 moment(booking.endDate).add(1, 'day'),
                 'days',
@@ -324,9 +325,9 @@ const campSearchUser = {
         );
 
         return (
-          inventory.length !== 0
-          && inventory.length >= args.tentCount
-          && availableCapacity >= requiredCapacity
+          inventory.length !== 0 &&
+          inventory.length >= args.tentCount &&
+          availableCapacity >= requiredCapacity
         );
       });
 
@@ -341,26 +342,26 @@ const campSearchUser = {
       // Check for amenities
       results = await filter(results, async (result) => {
         if (
-          args.amenities.includes('Attached Washroom')
-          && !result.amenities.washRoomAttached
+          args.amenities.includes('Attached Washroom') &&
+          !result.amenities.washRoomAttached
         ) {
           return false;
         }
         if (
-          args.amenities.includes('Charging Points')
-          && !result.amenities.chargingPoints
+          args.amenities.includes('Charging Points') &&
+          !result.amenities.chargingPoints
         ) {
           return false;
         }
         if (
-          args.amenities.includes('Meals Included')
-          && !result.amenities.mealsInclude
+          args.amenities.includes('Meals Included') &&
+          !result.amenities.mealsInclude
         ) {
           return false;
         }
         if (
-          args.amenities.includes('Mobile Connectivity')
-          && !result.amenities.mobileConnectivity
+          args.amenities.includes('Mobile Connectivity') &&
+          !result.amenities.mobileConnectivity
         ) {
           return false;
         }
@@ -368,8 +369,8 @@ const campSearchUser = {
           return false;
         }
         if (
-          args.amenities.includes('Pets Allowed')
-          && !result.amenities.petsAllowed
+          args.amenities.includes('Pets Allowed') &&
+          !result.amenities.petsAllowed
         ) {
           return false;
         }
@@ -440,14 +441,14 @@ const getCampsInPlace = {
         cheapCamps: [],
       };
       const results = await CampModel.find({
-        $text: {
-          $search: args.place,
-        },
-      }, {
-        score: {
-          $meta: 'textScore',
-        },
-      })
+          $text: {
+            $search: args.place,
+          },
+        }, {
+          score: {
+            $meta: 'textScore',
+          },
+        })
         .populate({
           path: 'inventory',
           select: 'id bookingPrice',

@@ -28,9 +28,7 @@ const addCamp = {
     email: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    gst: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
+
     location: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -59,7 +57,6 @@ const addCamp = {
         name: args.name,
         phoneNumber: args.phoneNumber,
         email: args.email,
-        gst: args.gst,
         shortDescription: 'Unfilled Description',
         location: args.location,
         url: args.url,
@@ -276,8 +273,8 @@ const savePlacesOfInterest = {
       type: GraphQLString,
     },
     distance: {
-      type: GraphQLFloat,
-    },
+      type: GraphQLFloat
+    }
   },
   async resolve(parent, args, context) {
     try {
@@ -295,9 +292,11 @@ const savePlacesOfInterest = {
           $push: {
             placesOfInterest: {
               name: args.name,
-              distance: args.distance,
+              distance: args.deleteCamp
             },
-          },
+
+          }
+
         }, {
           new: true,
         },
