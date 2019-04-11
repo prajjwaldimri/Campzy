@@ -94,7 +94,7 @@ export default {
       const variables = {
         searchTerm: this.searchUsers
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -116,7 +116,7 @@ export default {
       const variables = {
         url: value
       }
-      request('https://api.campzy.in', isCampUrlAvailable, variables)
+      request('https://api.campzy.in/graphql', isCampUrlAvailable, variables)
         .then(() => {
           // this.isUrlAlreadyinUse = false;
         })
@@ -169,7 +169,7 @@ export default {
       const variables = {
         id: this.campId
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -213,7 +213,7 @@ export default {
             ownerId: this.camp.owner,
             gst: this.camp.gst
           }
-          const client = new GraphQLClient('https://api.campzy.in', {
+          const client = new GraphQLClient('https://api.campzy.in/graphql', {
             headers: {
               Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
             }

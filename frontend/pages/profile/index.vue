@@ -97,7 +97,7 @@ export default {
             currentPassword: this.user.currentPassword,
             newPassword: this.user.newPassword
           }
-          const client = new GraphQLClient('https://api.campzy.in', {
+          const client = new GraphQLClient('https://api.campzy.in/graphql', {
             headers: {
               Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
             }
@@ -135,7 +135,7 @@ export default {
             dateOfBirth,
             isEmailVerified
           }}`
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -159,7 +159,7 @@ export default {
         })
     },
     resendVerificationEmail() {
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

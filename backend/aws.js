@@ -24,8 +24,7 @@ const uploadCampImages = (req, res) => {
     req.files.forEach((file) => {
       const fileName = `${Date.now()}__${file.originalname}`;
       filesArray.push(fileName);
-      aws3.putObject(
-        {
+      aws3.putObject({
           Bucket: 'campzy-images',
           Key: `high-res/${fileName}`,
           Body: file.buffer,
@@ -34,10 +33,12 @@ const uploadCampImages = (req, res) => {
         () => {
           sharp(file.buffer)
             .resize(300, null)
-            .png({ progressive: true, compressionLevel: 5 })
+            .png({
+              progressive: true,
+              compressionLevel: 5
+            })
             .toBuffer((err, buffer) => {
-              aws3.putObject(
-                {
+              aws3.putObject({
                   Bucket: 'campzy-images',
                   Key: `low-res/${fileName}`,
                   Body: buffer,
@@ -46,10 +47,12 @@ const uploadCampImages = (req, res) => {
                 () => {
                   sharp(file.buffer)
                     .resize(40, 40)
-                    .png({ progressive: true, compressionLevel: 9 })
+                    .png({
+                      progressive: true,
+                      compressionLevel: 9
+                    })
                     .toBuffer((err2, buffer2) => {
-                      aws3.putObject(
-                        {
+                      aws3.putObject({
                           Bucket: 'campzy-images',
                           Key: `thumbnails/${fileName}`,
                           Body: buffer2,
@@ -84,7 +87,9 @@ const uploadDocument = multer({
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata(req, file, cb) {
-      cb(null, { fieldName: file.originalname });
+      cb(null, {
+        fieldName: file.originalname
+      });
     },
     key(req, file, cb) {
       cb(null, `${Date.now()}__${file.originalname}`);
@@ -96,7 +101,10 @@ const uploadCampDocuments = (req, res) => {
   if (!req.files) {
     throw new Error('Cannot update empty files');
   }
-  res.json(req.files);
+  if (req.files.length !== 0) {
+
+    res.json(req.files);
+  } else throw new Error("Failed to update");
 };
 
 const deleteDocuments = (req, res) => {
@@ -105,8 +113,7 @@ const deleteDocuments = (req, res) => {
       throw new Error('Cannot Delete Empty Body');
     }
     const documentDelete = req.body.documentName;
-    aws3.deleteObject(
-      {
+    aws3.deleteObject({
         Bucket: 'campzy-documents',
         Key: `${documentDelete}`,
       },
@@ -136,20 +143,17 @@ const deleteImage = (req, res) => {
       if (req.body.imageName) {
         imageDelete = req.body.imageName;
       }
-      aws3.deleteObject(
-        {
+      aws3.deleteObject({
           Bucket: 'campzy-images',
           Key: `high-res/${imageDelete}`,
         },
         () => {
-          aws3.deleteObject(
-            {
+          aws3.deleteObject({
               Bucket: 'campzy-images',
               Key: `low-res/${imageDelete}`,
             },
             () => {
-              aws3.deleteObject(
-                {
+              aws3.deleteObject({
                   Bucket: 'campzy-images',
                   Key: `thumbnails/${imageDelete}`,
                 },

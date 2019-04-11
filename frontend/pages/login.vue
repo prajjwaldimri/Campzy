@@ -154,7 +154,7 @@ export default {
         const variables = {
           email: value
         }
-        request('https://api.campzy.in', isEmailAvailable, variables)
+        request('https://api.campzy.in/graphql', isEmailAvailable, variables)
           .then(() => {
             this.isEmailAlreadyinUse = false
           })
@@ -183,7 +183,7 @@ export default {
         email: googleUser.getBasicProfile().getEmail()
       }
       NProgress.start()
-      request('https://api.campzy.in', googleAuth, variables)
+      request('https://api.campzy.in/graphql', googleAuth, variables)
         .then(data => {
           const jwt = JSON.parse(data.googleAuth.jwt)
           this.$cookie.set('sessionToken', jwt, { secure: true })
@@ -213,7 +213,7 @@ export default {
         token: response.authResponse.accessToken
       }
       NProgress.start()
-      request('https://api.campzy.in', facebookAuth, variables)
+      request('https://api.campzy.in/graphql', facebookAuth, variables)
         .then(data => {
           const jwt = JSON.parse(data.facebookAuth.jwt)
           this.$cookie.set('sessionToken', jwt, { secure: true })
@@ -257,7 +257,7 @@ export default {
         facebookToken: this.facebookToken
       }
       NProgress.start()
-      request('https://api.campzy.in', registerUser, variables)
+      request('https://api.campzy.in/graphql', registerUser, variables)
         .then(data => {
           const jwt = JSON.parse(data.register.jwt)
           this.$cookie.set('sessionToken', jwt, { secure: true })
@@ -285,7 +285,7 @@ export default {
         loginPassword: this.password
       }
       NProgress.start()
-      request('https://api.campzy.in', sendUserCredentials, variables)
+      request('https://api.campzy.in/graphql', sendUserCredentials, variables)
         .then(data => {
           const jwt = JSON.parse(data.loginUser.jwt)
           this.$cookie.set('sessionToken', jwt, { secure: true })
@@ -314,7 +314,7 @@ export default {
         this.isSendOTPButtonEnabled = true
       }, 15000)
       NProgress.start()
-      request('https://api.campzy.in', sendOTP, variables)
+      request('https://api.campzy.in/graphql', sendOTP, variables)
         .then(() => {
           EventBus.$emit('show-info-notification-short', 'OTP Sent!')
           this.isOTPSent = true
@@ -346,7 +346,11 @@ export default {
         email: this.email
       }
       NProgress.start()
-      request('https://api.campzy.in', sendResetPasswordToken, variables)
+      request(
+        'https://api.campzy.in/graphql',
+        sendResetPasswordToken,
+        variables
+      )
         .then(() => {
           EventBus.$emit(
             'show-info-notification-short',

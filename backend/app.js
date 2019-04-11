@@ -14,7 +14,9 @@ const https = require("https");
 const multer = require("multer");
 const bodyParser = require("body-parser");
 const Sentry = require("@sentry/node");
-const { sitemap } = require("./sitemapGen");
+const {
+  sitemap
+} = require("./sitemapGen");
 
 if (process.env.ENVIRONMENT === "production") {
   Sentry.init({
@@ -106,7 +108,7 @@ app.use(history({}));
 // Public static directories
 
 app.use(
-  "/",
+  "/graphql",
   graphqlHTTP(request => ({
     schema,
     formatError: ApolloError.formatError,

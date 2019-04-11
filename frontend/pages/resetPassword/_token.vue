@@ -46,7 +46,7 @@ export default {
         confirmNewPassword: this.confirmNewPassword,
         resetToken: this.$route.params.token
       }
-      request('https://api.campzy.in', resetPasswordMutation, variables)
+      request('https://api.campzy.in/graphql', resetPasswordMutation, variables)
         .then(() => {
           EventBus.$emit(
             'show-success-notification-long',

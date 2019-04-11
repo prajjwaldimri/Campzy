@@ -34,7 +34,7 @@ export default {
       const variables = {
         tokenValue: this.token
       }
-      request('https://api.campzy.in', verifyEmailToken, variables)
+      request('https://api.campzy.in/graphql', verifyEmailToken, variables)
         .then(() => {
           EventBus.$emit('show-success-notification-long', 'Email Verified')
           setTimeout(() => {

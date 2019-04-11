@@ -55,7 +55,7 @@ export default {
     const variables = {
       url: this.$route.params.blogUrl
     }
-    request('https://api.campzy.in', getBlogQuery, variables)
+    request('https://api.campzy.in/graphql', getBlogQuery, variables)
       .then(data => {
         this.blog = data.getBlog
       })

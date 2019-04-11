@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     getAllUsersLength() {
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -113,7 +113,7 @@ export default {
       const variables = {
         page: pageNumber
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -140,7 +140,7 @@ export default {
         searchTerm: this.userSearchTerm,
         page: pageNumber
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

@@ -82,7 +82,7 @@ export default {
           if (!this.$cookie.get('sessionToken')) {
             this.$router.push('/login')
           }
-          const client = new GraphQLClient('https://api.campzy.in', {
+          const client = new GraphQLClient('https://api.campzy.in/graphql', {
             headers: {
               Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
             }
@@ -120,7 +120,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login')
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -153,7 +153,7 @@ export default {
             if (!this.$cookie.get('sessionToken')) {
               this.$router.push('/login')
             }
-            const client = new GraphQLClient('https://api.campzy.in', {
+            const client = new GraphQLClient('https://api.campzy.in/graphql', {
               headers: {
                 Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
               }
@@ -195,7 +195,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/login')
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

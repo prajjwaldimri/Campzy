@@ -83,7 +83,7 @@ export default {
       const variables = {
         id: this.$route.params.id
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -169,7 +169,7 @@ export default {
         heroImageCaption: this.blog.heroImageCaption,
         darkTheme: this.blog.darkTheme
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }

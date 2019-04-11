@@ -316,7 +316,7 @@ export default {
         id: this.camp.id,
         heroImage: img
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -366,7 +366,7 @@ export default {
         id: this.camp.id,
         documentName: docName
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -432,7 +432,7 @@ export default {
           id: this.camp.id,
           images: image
         }
-        const client = new GraphQLClient('https://api.campzy.in', {
+        const client = new GraphQLClient('https://api.campzy.in/graphql', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -469,11 +469,13 @@ export default {
         for (let i = 0; i < updateFile.length; i += 1) {
           this.files.push(updateFile[i])
         }
+
         const formData = new FormData()
         for (let i = 0; i < this.files.length; i += 1) {
           const file = this.files[i]
           formData.append('document', file)
         }
+
         axios
           .post('/uploadCampOwnerDocuments', formData, {
             headers: {
@@ -490,8 +492,10 @@ export default {
             )
             this.saveDocumentsToCamp()
           })
-          .catch(() => {
-            EventBus.$emit('show-error-notification-long', 'Failed to Uploaded')
+          .catch(err => {
+            // eslint-disable-next-line no-console
+            console.log(err)
+            EventBus.$emit('show-error-notification-long', 'Failed to Upload')
           })
           .finally(() => {
             this.uploadingDocuments = false
@@ -508,7 +512,7 @@ export default {
           id: this.camp.id,
           campDocuments: campdoc
         }
-        const client = new GraphQLClient('https://api.campzy.in', {
+        const client = new GraphQLClient('https://api.campzy.in/graphql', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -523,6 +527,8 @@ export default {
             )
           })
           .catch(err => {
+            // eslint-disable-next-line no-console
+            console.log(err)
             EventBus.$emit(
               'show-error-notification-short',
               err.response.errors[0].message
@@ -537,7 +543,7 @@ export default {
       if (!this.$cookie.get('sessionToken')) {
         this.$router.push('/')
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -594,7 +600,7 @@ export default {
         latitude: this.coordinates.lat,
         longitude: this.coordinates.lng
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -611,7 +617,9 @@ export default {
           )
           this.getCampDetails()
         })
-        .catch(() => {
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.log(err)
           EventBus.$emit('show-error-notification-short', 'Failed to update')
         })
         .finally(() => {
@@ -640,7 +648,7 @@ export default {
         petsAllowed: this.amenities.petsAllowed,
         chargingPoints: this.amenities.chargingPoints
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
@@ -668,7 +676,7 @@ export default {
           name: temp.name,
           distance: temp.distance
         }
-        const client = new GraphQLClient('https://api.campzy.in', {
+        const client = new GraphQLClient('https://api.campzy.in/graphql', {
           headers: {
             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
           }
@@ -710,7 +718,7 @@ export default {
         id: this.camp.id,
         imageName: imgName
       }
-      const client = new GraphQLClient('https://api.campzy.in', {
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
         }
