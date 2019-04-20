@@ -292,7 +292,7 @@ const savePlacesOfInterest = {
           $push: {
             placesOfInterest: {
               name: args.name,
-              distance: args.deleteCamp
+              distance: args.distance
             },
 
           }
@@ -307,6 +307,51 @@ const savePlacesOfInterest = {
     }
   },
 };
+
+const deletePlacesOfInterest = {
+  type: CampType,
+  args: {
+    id: {
+      type: GraphQLString,
+    },
+    name: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    distance: {
+      type: new GraphQLNonNull(GraphQLFloat)
+    }
+  },
+  async resolve(parent, args, context) {
+    try {
+      const user = await auth.getAuthenticatedUser(context.req);
+      const userData = await UserModel.findById(user.id);
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (userData === null) {
+        throw new NotLoggedinError();
+      }
+      if (!isUserCampOwner) {
+        throw new PrivilegeError();
+      }
+      const places = await CampModel.findByIdAndUpdate(
+        args.id, {
+          $pull: {
+            placesOfInterest: {
+              name: args.name,
+              distance: args.distance
+            },
+
+          }
+
+        }, {
+          multi: true,
+        },
+      );
+      return places;
+    } catch (err) {
+      return err;
+    }
+  }
+}
 
 const updateCampImages = {
   type: CampType,
@@ -584,4 +629,5 @@ module.exports = {
   savePlacesOfInterest,
   acceptAgreement,
   setHeroImage,
+  deletePlacesOfInterest
 };

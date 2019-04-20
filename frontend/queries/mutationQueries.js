@@ -90,8 +90,14 @@ const addAmenities = `mutation saveAmenities($id: String!,$washRoomAttached: Boo
   }
 }`
 
-const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name : String, $distance : float!){
+const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name : String!, $distance : Float!){
   savePlacesOfInterest(id: $id, name : $name, distance : $distance){
+    id
+  }
+}`
+
+const deletePlacesOfInterest = `mutation deletePlacesOfInterest($id:String!, $name : String!, $distance : Float!){
+  deletePlacesOfInterest(id: $id, name : $name, distance : $distance){
     id
   }
 }`
@@ -250,6 +256,7 @@ module.exports = {
   cancelBooking,
   addAmenities,
   addPlacesOfInterest,
+  deletePlacesOfInterest,
   addCampToWishlist,
   addReview,
   closeBookingByDates,

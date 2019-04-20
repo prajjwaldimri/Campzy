@@ -110,6 +110,7 @@ const Mutation = new GraphQLObjectType({
     deleteCampDocument: CampMutations.deleteCampDocument,
     saveAmenities: CampMutations.saveAmenities,
     savePlacesOfInterest: CampMutations.savePlacesOfInterest,
+    deletePlacesOfInterest: CampMutations.deletePlacesOfInterest,
     acceptAgreement: CampMutations.acceptAgreement,
     setHeroImage: CampMutations.setHeroImage,
 

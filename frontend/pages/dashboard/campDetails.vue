@@ -7,7 +7,7 @@
       v-tab(href='#campdetail') Camp Details
       v-tab(href='#images') Camp Images
       v-tabs-items
-        v-tab-item(id='basic')
+        v-tab-item(value='basic')
           v-flex(xs12 md6 style='max-width:100%')
             v-card.body-card(flat)
               v-layout(row wrap)
@@ -28,31 +28,32 @@
                       v-flex(xs12 md5)
                         v-text-field#camp__location(label='Location' v-model='location')
                       v-flex.flex-spacing(xs12 md6)
-                        v-dialog(v-model='loc' height='700' width='900' persistent)
+                        v-dialog(v-model='loc' width='900px' persistent)
                           v-btn(dark slot="activator" @click='setMapCoordinates')
                             span My Location
                             v-icon.ml-2 location_searching
-                          v-card(height='600' width='900')
+                          v-card.map_card
                             v-container(fluid style='padding:0px;height:90%;')
-                              v-card-title
+                              v-card-title.mobile_layout
                                 h2 Search your Place
                                 v-flex(xs12 md9)
                                   v-layout(row wrap style='margin:0;')
-                                    v-flex(xs12 md8)
+                                    v-flex(xs8 md8)
                                       label
                                         gmap-autocomplete(@place_changed='searchPlace' style='width:100%;margin: 1rem;border-style:double;' )
-                                    v-flex.ml-3(xs12 md2)
+                                    v-flex.ml-3(xs2 md2)
                                       v-btn(flat icon @click='geolocate')
                                         v-icon my_location
-                              gmap-map(:center='center' :zoom='15' style='width:100%;  height: 100%;')
-                                gmap-marker(:position='markerPosition' @click='center=markerPosition')
-                              v-card-actions(dark)
+                              v-container(fluid style='padding:0px;height:85%;')
+                                gmap-map(:center='center' :zoom='15' style='width:100%;  height: 100%;')
+                                  gmap-marker(:position='markerPosition' @click='center=markerPosition')
+                              v-card-actions
                                 v-spacer
                                 v-btn(dark @click='loc=!loc') Cancel
                                 v-btn(dark @click='closeMapDialog' color='success') Ok
 
 
-        v-tab-item(id='documents')
+        v-tab-item(value='documents')
           v-layout(row wrap)
             v-flex(xs12 md8)
               v-card.body-card(flat)
@@ -109,7 +110,7 @@
                         v-btn.white--text( @click='uploadImages' color='green'
                         :loading='uploadingImages') Upload Images
 
-        v-tab-item(id='campdetail')
+        v-tab-item(value='campdetail')
             v-card.body-card(flat)
               v-card-title.title(primary-title)
                 h2.font-weight-bold.headline CAMP DETAILS
@@ -139,7 +140,7 @@
                       v-flex(xs12 md6)
                         v-layout(column)
                           v-flex(xs12 md6)
-                            v-combobox(v-model='placesOfInterest' attach chips
+                            v-combobox(v-model='updatedPlacesOfInterest' attach chips
                              label='Places of Interest' multiple clearable hint='Write distance in km, separated with a comma')
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
@@ -149,7 +150,7 @@
                       v-model='camp.shortDescription')
                     v-flex.flex-spacing(xs12)
                       v-textarea(outline label='Camp Description' v-model='camp.longDescription')
-        v-tab-item(id='images')
+        v-tab-item(value='images')
           v-flex(xs12)
             v-layout(row wrap)
               v-flex(xs12 md3 v-for='(image, index) in camp.images'
@@ -197,6 +198,7 @@ import {
   deleteCampDocument,
   addAmenities,
   addPlacesOfInterest,
+  deletePlacesOfInterest,
   setHeroImage
 } from '../../queries/mutationQueries'
 import { EventBus } from '../../layouts/event-bus'
@@ -224,7 +226,7 @@ export default {
         { name: 'Charging points', value: true }
       ],
       amenities: {},
-      placesOfInterest: [],
+      updatedPlacesOfInterest: [],
       tags: [],
       panNumber: null,
       tinNumber: null,
@@ -242,7 +244,8 @@ export default {
       loc: false,
       center: {},
       markerPosition: {},
-      coordinates: {}
+      coordinates: {},
+      oldPlacesOfInterest: []
     }
   },
 
@@ -415,9 +418,7 @@ export default {
           this.storeImages = []
           this.updateImagesToCamp()
         })
-        .catch(err => {
-          // eslint-disable-next-line no-console
-          console.log(err)
+        .catch(() => {
           EventBus.$emit('show-error-notification-long', 'Failed to Upload')
         })
         .finally(() => {
@@ -494,9 +495,7 @@ export default {
             )
             this.saveDocumentsToCamp()
           })
-          .catch(err => {
-            // eslint-disable-next-line no-console
-            console.log(err)
+          .catch(() => {
             EventBus.$emit('show-error-notification-long', 'Failed to Upload')
           })
           .finally(() => {
@@ -529,8 +528,6 @@ export default {
             )
           })
           .catch(err => {
-            // eslint-disable-next-line no-console
-            console.log(err)
             EventBus.$emit(
               'show-error-notification-short',
               err.response.errors[0].message
@@ -562,6 +559,7 @@ export default {
           this.location = `${this.coordinates.lat},${this.coordinates.lng}`
           this.tags = this.camp.tags
           this.amenities = this.camp.amenities
+          this.createPlacesOfInterest()
           if (this.camp.campDocuments.length === 3) {
             this.isDocument = true
           } else {
@@ -575,7 +573,6 @@ export default {
           } else {
             this.viewDocument = true
           }
-          // this.createPlacesOfInterest();
         })
         .catch(err => {
           EventBus.$emit(
@@ -609,7 +606,7 @@ export default {
       })
       this.isDataUpdating = true
       this.saveAmenity()
-      // this.savePlacesOfInterests();
+      this.savePlacesOfInterests()
       client
         .request(saveCampDetails, variables)
         .then(() => {
@@ -617,23 +614,23 @@ export default {
             'show-success-notification-short',
             'Successfully Updated '
           )
-          this.getCampDetails()
         })
-        .catch(err => {
-          // eslint-disable-next-line no-console
-          console.log(err)
+        .catch(() => {
           EventBus.$emit('show-error-notification-short', 'Failed to update')
         })
         .finally(() => {
           this.isDataUpdating = false
+          this.getCampDetails()
         })
     },
 
     createPlacesOfInterest() {
+      this.updatedPlacesOfInterest = []
       this.camp.placesOfInterest.forEach(places => {
         const tempPlace = Object.values(places).join()
-        this.placesOfInterest.push(tempPlace)
+        this.updatedPlacesOfInterest.push(tempPlace)
       })
+      this.oldPlacesOfInterest = this.updatedPlacesOfInterest
     },
 
     saveAmenity() {
@@ -666,35 +663,86 @@ export default {
         })
     },
     savePlacesOfInterests() {
-      this.placesOfInterest.forEach(places => {
-        if (!this.$cookie.get('sessionToken')) {
-          this.$router.push('/')
-        }
-        const temp = {}
-        ;[temp.name, temp.distance] = places.split(',')
+      if (
+        this.updatedPlacesOfInterest.length > this.oldPlacesOfInterest.length
+      ) {
+        for (const i in this.updatedPlacesOfInterest) {
+          if (
+            this.oldPlacesOfInterest.indexOf(
+              this.updatedPlacesOfInterest[i]
+            ) === -1
+          ) {
+            if (!this.$cookie.get('sessionToken')) {
+              this.$router.push('/')
+            }
 
-        const variables = {
-          id: this.camp.id,
-          name: temp.name,
-          distance: temp.distance
-        }
-        const client = new GraphQLClient('https://api.campzy.in/graphql', {
-          headers: {
-            Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-          }
-        })
-        client
-          .request(addPlacesOfInterest, variables)
-          .then(() => {})
-          .catch(err => {
-            // eslint-disable-next-line no-console
-            console.log(err)
-            EventBus.$emit(
-              'show-info-notification-short',
-              'Failed to update Places of Interests'
+            const temp = {}
+            ;[temp.name, temp.distance] = this.updatedPlacesOfInterest[i].split(
+              ','
             )
-          })
-      })
+
+            const variables = {
+              id: this.camp.id,
+              name: temp.name,
+              distance: parseFloat(temp.distance)
+            }
+
+            const client = new GraphQLClient('https://api.campzy.in/graphql', {
+              headers: {
+                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+              }
+            })
+            client
+              .request(addPlacesOfInterest, variables)
+              .then(() => {})
+              .catch(() => {
+                EventBus.$emit(
+                  'show-info-notification-short',
+                  'Failed to update Places of Interests'
+                )
+              })
+          }
+        }
+      } else if (
+        this.updatedPlacesOfInterest.length < this.oldPlacesOfInterest.length
+      ) {
+        for (const i in this.oldPlacesOfInterest) {
+          if (
+            this.updatedPlacesOfInterest.indexOf(
+              this.oldPlacesOfInterest[i]
+            ) === -1
+          ) {
+            if (!this.$cookie.get('sessionToken')) {
+              this.$router.push('/')
+            }
+
+            const temp = {}
+            ;[temp.name, temp.distance] = this.oldPlacesOfInterest[i].split(',')
+            const variables = {
+              id: this.camp.id,
+              name: temp.name,
+              distance: parseFloat(temp.distance)
+            }
+
+            const client = new GraphQLClient('https://api.campzy.in/graphql', {
+              headers: {
+                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+              }
+            })
+            client
+              .request(deletePlacesOfInterest, variables)
+              .then(() => {})
+              .catch(err => {
+                // eslint-disable-next-line no-console
+                console.log(err)
+                EventBus.$emit(
+                  'show-info-notification-short',
+                  'Failed to update Places of Interests'
+                )
+              })
+          }
+        }
+      }
     },
 
     deleteImageFromAWS(imageName) {
@@ -801,5 +849,20 @@ export default {
 .document-link {
   color: black;
   font-size: 1rem;
+}
+
+.mobile_layout {
+  @media screen and (max-width: 956px) {
+    padding: 5px !important;
+  }
+}
+.map_card {
+  @media screen and (max-width: 956px) {
+    height: 85vh;
+    width: 85vw;
+  }
+
+  height: 600px;
+  width: 900px;
 }
 </style>
