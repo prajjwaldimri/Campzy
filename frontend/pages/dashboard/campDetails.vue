@@ -145,34 +145,31 @@
                                 span.headline Near by Activities
                                 v-layout(row wrap style="margin-top:0;")
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Water rafting' color='info' v-model='activities.washRoomAttached')
+                                    v-checkbox(label='Water rafting' color='info' v-model='activities.waterRafting')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Kayaking' color='info' v-model='activities.bonfire')
+                                    v-checkbox(label='Kayaking' color='info' v-model='activities.kayaking')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Skiing' color='info' v-model='activities.hotWater')
+                                    v-checkbox(label='Skiing' color='info' v-model='activities.skiing')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Waterfall Rappelling' color='info' v-model='activities.mobileConnectivity')
+                                    v-checkbox(label='Waterfall Rappelling' color='info' v-model='activities.waterfallRappelling')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Skydiving' color='info' v-model='activities.mealsInclude')
+                                    v-checkbox(label='Skydiving' color='info' v-model='activities.skydiving')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Scuba Diving' color='info' v-model='activities.petsAllowed')
+                                    v-checkbox(label='Scuba Diving' color='info' v-model='activities.scubaDiving')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Hot Air Balloning' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Hot Air Balloning' color='info' v-model='activities.hotAirBallon')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Caving' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Caving' color='info' v-model='activities.caving')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Trekking' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Trekking' color='info' v-model='activities.trekking')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Snorkelling' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Snorkelling' color='info' v-model='activities.snorkelling')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Cliff Jumping' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Cliff Jumping' color='info' v-model='activities.cliffJumping')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Paragliding' color='info' v-model='activities.chargingPoints')
+                                    v-checkbox(label='Paragliding' color='info' v-model='activities.paragliding')
                                   v-flex(xs6 md4)
-                                    v-checkbox(label='Cycling' color='info' v-model='activities.chargingPoints')
-                          // v-flex(xs12 md6)
-                          //   v-combobox(v-model='updatedPlacesOfInterest' attach chips
-                          //    label='Places of Interest' multiple clearable hint='Write distance in km, separated with a comma')
+                                    v-checkbox(label='Cycling' color='info' v-model='activities.cycling')
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
@@ -210,7 +207,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveActivities'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
@@ -247,7 +244,6 @@ export default {
       camp: {},
       isDataUpdating: false,
       amenities: {},
-      updatedPlacesOfInterest: [],
       tags: [],
       panNumber: null,
       gstNumber: null,
@@ -265,7 +261,6 @@ export default {
       center: {},
       markerPosition: {},
       coordinates: {},
-      oldPlacesOfInterest: [],
       activities: {}
     }
   },
@@ -580,8 +575,7 @@ export default {
           this.location = `${this.coordinates.lat},${this.coordinates.lng}`
           this.tags = this.camp.tags
           this.amenities = this.camp.amenities
-          // this.activities = this.camp.activities
-          // this.createPlacesOfInterest()
+          this.activities = this.camp.nearByActivities
           if (this.camp.campDocuments.length === 3) {
             this.isDocument = true
           } else {
@@ -630,7 +624,7 @@ export default {
       })
       this.isDataUpdating = true
       this.saveAmenity()
-      this.savePlacesOfInterests()
+      this.saveActivities()
       client
         .request(saveCampDetails, variables)
         .then(() => {
@@ -646,15 +640,6 @@ export default {
           this.isDataUpdating = false
           this.getCampDetails()
         })
-    },
-
-    createPlacesOfInterest() {
-      this.updatedPlacesOfInterest = []
-      this.camp.placesOfInterest.forEach(places => {
-        const tempPlace = Object.values(places).join()
-        this.updatedPlacesOfInterest.push(tempPlace)
-      })
-      this.oldPlacesOfInterest = this.updatedPlacesOfInterest
     },
 
     saveAmenity() {
@@ -724,88 +709,6 @@ export default {
           )
         })
     },
-    // savePlacesOfInterests() {
-    //   if (
-    //     this.updatedPlacesOfInterest.length > this.oldPlacesOfInterest.length
-    //   ) {
-    //     for (const i in this.updatedPlacesOfInterest) {
-    //       if (
-    //         this.oldPlacesOfInterest.indexOf(
-    //           this.updatedPlacesOfInterest[i]
-    //         ) === -1
-    //       ) {
-    //         if (!this.$cookie.get('sessionToken')) {
-    //           this.$router.push('/')
-    //         }
-
-    //         const temp = {}
-    //         ;[temp.name, temp.distance] = this.updatedPlacesOfInterest[i].split(
-    //           ','
-    //         )
-
-    //         const variables = {
-    //           id: this.camp.id,
-    //           name: temp.name,
-    //           distance: parseFloat(temp.distance)
-    //         }
-
-    //         const client = new GraphQLClient('https://api.campzy.in/graphql', {
-    //           headers: {
-    //             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-    //           }
-    //         })
-    //         client
-    //           .request(addPlacesOfInterest, variables)
-    //           .then(() => {})
-    //           .catch(() => {
-    //             EventBus.$emit(
-    //               'show-info-notification-short',
-    //               'Failed to update Places of Interests'
-    //             )
-    //           })
-    //       }
-    //     }
-    //   } else if (
-    //     this.updatedPlacesOfInterest.length < this.oldPlacesOfInterest.length
-    //   ) {
-    //     for (const i in this.oldPlacesOfInterest) {
-    //       if (
-    //         this.updatedPlacesOfInterest.indexOf(
-    //           this.oldPlacesOfInterest[i]
-    //         ) === -1
-    //       ) {
-    //         if (!this.$cookie.get('sessionToken')) {
-    //           this.$router.push('/')
-    //         }
-
-    //         const temp = {}
-    //         ;[temp.name, temp.distance] = this.oldPlacesOfInterest[i].split(',')
-    //         const variables = {
-    //           id: this.camp.id,
-    //           name: temp.name,
-    //           distance: parseFloat(temp.distance)
-    //         }
-
-    //         const client = new GraphQLClient('https://api.campzy.in/graphql', {
-    //           headers: {
-    //             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-    //           }
-    //         })
-    //         client
-    //           .request(deletePlacesOfInterest, variables)
-    //           .then(() => {})
-    //           .catch(err => {
-    //             // eslint-disable-next-line no-console
-    //             console.log(err)
-    //             EventBus.$emit(
-    //               'show-info-notification-short',
-    //               'Failed to update Places of Interests'
-    //             )
-    //           })
-    //       }
-    //     }
-    //   }
-    // },
 
     deleteImageFromAWS(imageName) {
       axios

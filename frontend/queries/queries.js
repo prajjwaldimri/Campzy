@@ -180,10 +180,21 @@ const getCampByUrl = `query campUser($url: String!){
     location,
     shortDescription,
     longDescription,
-    placesOfInterest{
-      name,
-      distance
-    }
+    nearByActivities{
+      waterRafting
+      kayaking
+      skiing
+      waterfallRappelling
+      skydiving
+      scubaDiving
+      hotAirBallon
+      caving
+      trekking
+      snorkelling
+      cliffJumping
+      paragliding
+      cycling
+    },
     tags,
     amenities{
       washRoomAttached,

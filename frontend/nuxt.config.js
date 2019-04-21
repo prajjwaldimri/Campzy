@@ -1,11 +1,21 @@
+import path from 'path'
+import fs from 'fs'
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
+let https = {}
+if (process.env.NODE_ENV !== 'production') {
+  https = {
+    key: fs.readFileSync(path.resolve(__dirname, 'certs/server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, 'certs/server.crt'))
+  }
+}
+
 export default {
-  // mode: 'universal',
-  // server: {
-  //   https: https
-  // },
+  mode: 'universal',
+  server: {
+    https: https
+  },
 
   /*
    ** Headers of the page
