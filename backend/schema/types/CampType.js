@@ -51,14 +51,47 @@ const AmenitiesType = new GraphQLObjectType({
   }),
 });
 
-const PlacesOfInterestType = new GraphQLObjectType({
-  name: 'PlacesOfInterest',
+const NearByActivitiesType = new GraphQLObjectType({
+  name: 'NearByActivities',
   fields: () => ({
-    name: {
-      type: GraphQLString,
+    waterRafting: {
+      type: GraphQLBoolean,
     },
-    distance: {
-      type: GraphQLFloat,
+    kayaking: {
+      type: GraphQLBoolean,
+    },
+    skiing: {
+      type: GraphQLBoolean,
+    },
+    waterfallRappelling: {
+      type: GraphQLBoolean,
+    },
+    skydiving: {
+      type: GraphQLBoolean,
+    },
+    scubaDiving: {
+      type: GraphQLBoolean,
+    },
+    hotAirBallon: {
+      type: GraphQLBoolean,
+    },
+    caving: {
+      type: GraphQLBoolean,
+    },
+    trekking: {
+      type: GraphQLBoolean,
+    },
+    snorkelling: {
+      type: GraphQLBoolean,
+    },
+    cliffJumping: {
+      type: GraphQLBoolean,
+    },
+    paragliding: {
+      type: GraphQLBoolean,
+    },
+    cycling: {
+      type: GraphQLBoolean,
     },
   }),
 });
@@ -162,8 +195,8 @@ const CampType = new GraphQLObjectType({
     amenities: {
       type: AmenitiesType,
     },
-    placesOfInterest: {
-      type: new GraphQLList(PlacesOfInterestType),
+    nearByActivities: {
+      type: new GraphQLList(NearByActivitiesType),
     },
     images: {
       type: new GraphQLList(GraphQLString),

@@ -139,9 +139,40 @@
                       v-spacer
                       v-flex(xs12 md6)
                         v-layout(column)
-                          v-flex(xs12 md6)
-                            v-combobox(v-model='updatedPlacesOfInterest' attach chips
-                             label='Places of Interest' multiple clearable hint='Write distance in km, separated with a comma')
+                          v-layout(row wrap)
+                            v-flex(xs12 md12)
+                              v-layout(column)
+                                span.headline Near by Activities
+                                v-layout(row wrap style="margin-top:0;")
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Water rafting' color='info' v-model='activities.washRoomAttached')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Kayaking' color='info' v-model='activities.bonfire')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Skiing' color='info' v-model='activities.hotWater')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Waterfall Rappelling' color='info' v-model='activities.mobileConnectivity')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Skydiving' color='info' v-model='activities.mealsInclude')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Scuba Diving' color='info' v-model='activities.petsAllowed')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Hot Air Balloning' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Caving' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Trekking' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Snorkelling' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Cliff Jumping' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Paragliding' color='info' v-model='activities.chargingPoints')
+                                  v-flex(xs6 md4)
+                                    v-checkbox(label='Cycling' color='info' v-model='activities.chargingPoints')
+                          // v-flex(xs12 md6)
+                          //   v-combobox(v-model='updatedPlacesOfInterest' attach chips
+                          //    label='Places of Interest' multiple clearable hint='Write distance in km, separated with a comma')
                           v-flex.mt-4(xs12 md6)
                             v-combobox(v-model='tags' attach chips
                               label='Tags' multiple clearable)
@@ -179,7 +210,7 @@
 
     v-fab-transition
       v-tooltip(top)
-        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveCampDetails'
+        v-btn(color='green' slot='activator' fab dark bottom right fixed @click='saveActivities'
         :loading='isDataUpdating' style='bottom:5.5rem')
           v-icon save
         span Save Details
@@ -197,8 +228,7 @@ import {
   updateCampDocuments,
   deleteCampDocument,
   addAmenities,
-  addPlacesOfInterest,
-  deletePlacesOfInterest,
+  addActivities,
   setHeroImage
 } from '../../queries/mutationQueries'
 import { EventBus } from '../../layouts/event-bus'
@@ -216,20 +246,10 @@ export default {
       el: 0,
       camp: {},
       isDataUpdating: false,
-      amenitiesItems: [
-        { name: 'Washroom-Attached', value: true },
-        { name: 'Bonfire', value: true },
-        { name: '24 hour hot water', value: true },
-        { name: 'Mobile connectivity', value: true },
-        { name: 'Meals included', value: true },
-        { name: 'Pets allowed', value: true },
-        { name: 'Charging points', value: true }
-      ],
       amenities: {},
       updatedPlacesOfInterest: [],
       tags: [],
       panNumber: null,
-      tinNumber: null,
       gstNumber: null,
       files: [],
       storeDocuments: [],
@@ -245,7 +265,8 @@ export default {
       center: {},
       markerPosition: {},
       coordinates: {},
-      oldPlacesOfInterest: []
+      oldPlacesOfInterest: [],
+      activities: {}
     }
   },
 
@@ -559,6 +580,7 @@ export default {
           this.location = `${this.coordinates.lat},${this.coordinates.lng}`
           this.tags = this.camp.tags
           this.amenities = this.camp.amenities
+          // this.activities = this.camp.activities
           this.createPlacesOfInterest()
           if (this.camp.campDocuments.length === 3) {
             this.isDocument = true
@@ -662,88 +684,126 @@ export default {
           )
         })
     },
-    savePlacesOfInterests() {
-      if (
-        this.updatedPlacesOfInterest.length > this.oldPlacesOfInterest.length
-      ) {
-        for (const i in this.updatedPlacesOfInterest) {
-          if (
-            this.oldPlacesOfInterest.indexOf(
-              this.updatedPlacesOfInterest[i]
-            ) === -1
-          ) {
-            if (!this.$cookie.get('sessionToken')) {
-              this.$router.push('/')
-            }
 
-            const temp = {}
-            ;[temp.name, temp.distance] = this.updatedPlacesOfInterest[i].split(
-              ','
-            )
-
-            const variables = {
-              id: this.camp.id,
-              name: temp.name,
-              distance: parseFloat(temp.distance)
-            }
-
-            const client = new GraphQLClient('https://api.campzy.in/graphql', {
-              headers: {
-                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-              }
-            })
-            client
-              .request(addPlacesOfInterest, variables)
-              .then(() => {})
-              .catch(() => {
-                EventBus.$emit(
-                  'show-info-notification-short',
-                  'Failed to update Places of Interests'
-                )
-              })
-          }
-        }
-      } else if (
-        this.updatedPlacesOfInterest.length < this.oldPlacesOfInterest.length
-      ) {
-        for (const i in this.oldPlacesOfInterest) {
-          if (
-            this.updatedPlacesOfInterest.indexOf(
-              this.oldPlacesOfInterest[i]
-            ) === -1
-          ) {
-            if (!this.$cookie.get('sessionToken')) {
-              this.$router.push('/')
-            }
-
-            const temp = {}
-            ;[temp.name, temp.distance] = this.oldPlacesOfInterest[i].split(',')
-            const variables = {
-              id: this.camp.id,
-              name: temp.name,
-              distance: parseFloat(temp.distance)
-            }
-
-            const client = new GraphQLClient('https://api.campzy.in/graphql', {
-              headers: {
-                Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-              }
-            })
-            client
-              .request(deletePlacesOfInterest, variables)
-              .then(() => {})
-              .catch(err => {
-                // eslint-disable-next-line no-console
-                console.log(err)
-                EventBus.$emit(
-                  'show-info-notification-short',
-                  'Failed to update Places of Interests'
-                )
-              })
-          }
-        }
+    saveActivities() {
+      if (!this.$cookie.get('sessionToken')) {
+        this.$router.push('/')
       }
+      const variables = {
+        id: this.camp.id,
+        waterRafting: this.activities.waterRafting,
+        kayaking: this.activities.kayaking,
+        skiing: this.activities.skiing,
+        waterfallRappelling: this.activities.waterfallRappelling,
+        skydiving: this.activities.skydiving,
+        scubaDiving: this.activities.scubaDiving,
+        hotAirBallon: this.activities.hotAirBallon,
+        caving: this.activities.caving,
+        trekking: this.activities.trekking,
+        snorkelling: this.activities.snorkelling,
+        cliffJumping: this.activities.cliffJumping,
+        paragliding: this.activities.paragliding,
+        cycling: this.activities.cycling
+      }
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+        }
+      })
+      client
+        .request(addActivities, variables)
+        .then(() => {})
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.log(err)
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Failed to Update Activities'
+          )
+        })
     },
+    // savePlacesOfInterests() {
+    //   if (
+    //     this.updatedPlacesOfInterest.length > this.oldPlacesOfInterest.length
+    //   ) {
+    //     for (const i in this.updatedPlacesOfInterest) {
+    //       if (
+    //         this.oldPlacesOfInterest.indexOf(
+    //           this.updatedPlacesOfInterest[i]
+    //         ) === -1
+    //       ) {
+    //         if (!this.$cookie.get('sessionToken')) {
+    //           this.$router.push('/')
+    //         }
+
+    //         const temp = {}
+    //         ;[temp.name, temp.distance] = this.updatedPlacesOfInterest[i].split(
+    //           ','
+    //         )
+
+    //         const variables = {
+    //           id: this.camp.id,
+    //           name: temp.name,
+    //           distance: parseFloat(temp.distance)
+    //         }
+
+    //         const client = new GraphQLClient('https://api.campzy.in/graphql', {
+    //           headers: {
+    //             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+    //           }
+    //         })
+    //         client
+    //           .request(addPlacesOfInterest, variables)
+    //           .then(() => {})
+    //           .catch(() => {
+    //             EventBus.$emit(
+    //               'show-info-notification-short',
+    //               'Failed to update Places of Interests'
+    //             )
+    //           })
+    //       }
+    //     }
+    //   } else if (
+    //     this.updatedPlacesOfInterest.length < this.oldPlacesOfInterest.length
+    //   ) {
+    //     for (const i in this.oldPlacesOfInterest) {
+    //       if (
+    //         this.updatedPlacesOfInterest.indexOf(
+    //           this.oldPlacesOfInterest[i]
+    //         ) === -1
+    //       ) {
+    //         if (!this.$cookie.get('sessionToken')) {
+    //           this.$router.push('/')
+    //         }
+
+    //         const temp = {}
+    //         ;[temp.name, temp.distance] = this.oldPlacesOfInterest[i].split(',')
+    //         const variables = {
+    //           id: this.camp.id,
+    //           name: temp.name,
+    //           distance: parseFloat(temp.distance)
+    //         }
+
+    //         const client = new GraphQLClient('https://api.campzy.in/graphql', {
+    //           headers: {
+    //             Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+    //           }
+    //         })
+    //         client
+    //           .request(deletePlacesOfInterest, variables)
+    //           .then(() => {})
+    //           .catch(err => {
+    //             // eslint-disable-next-line no-console
+    //             console.log(err)
+    //             EventBus.$emit(
+    //               'show-info-notification-short',
+    //               'Failed to update Places of Interests'
+    //             )
+    //           })
+    //       }
+    //     }
+    //   }
+    // },
 
     deleteImageFromAWS(imageName) {
       axios

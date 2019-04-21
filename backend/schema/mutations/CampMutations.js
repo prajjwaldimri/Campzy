@@ -263,18 +263,51 @@ const saveAmenities = {
   },
 };
 
-const savePlacesOfInterest = {
+const saveActivities = {
   type: CampType,
   args: {
     id: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
     },
-    name: {
-      type: GraphQLString,
+    waterRafting: {
+      type: new GraphQLNonNull(GraphQLBoolean),
     },
-    distance: {
-      type: GraphQLFloat
-    }
+    kayaking: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    skiing: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    waterfallRappelling: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    skydiving: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    scubaDiving: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    hotAirBallon: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    caving: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    trekking: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    snorkelling: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    cliffJumping: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    paragliding: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    cycling: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -287,71 +320,34 @@ const savePlacesOfInterest = {
       if (!isUserCampOwner) {
         throw new PrivilegeError();
       }
-      const places = await CampModel.findByIdAndUpdate(
+      const activities = await CampModel.findByIdAndUpdate(
         args.id, {
-          $push: {
-            placesOfInterest: {
-              name: args.name,
-              distance: args.distance
-            },
+          nearByActivities: {
+            waterRafting: args.waterRafting,
+            kayaking: args.kayaking,
+            skiing: args.skiing,
+            waterfallRappelling: args.waterfallRappelling,
+            skydiving: args.skydiving,
+            scubaDiving: args.scubaDiving,
+            hotAirBallon: args.hotAirBallon,
+            caving: args.caving,
+            trekking: args.trekking,
+            snorkelling: args.snorkelling,
+            cliffJumping: args.cliffJumping,
+            paragliding: args.paragliding,
+            cycling: args.cycling
 
           }
-
-        }, {
-          new: true,
-        },
+        }
       );
-      return places;
+      return activities;
     } catch (err) {
       return err;
     }
   },
 };
 
-const deletePlacesOfInterest = {
-  type: CampType,
-  args: {
-    id: {
-      type: GraphQLString,
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    distance: {
-      type: new GraphQLNonNull(GraphQLFloat)
-    }
-  },
-  async resolve(parent, args, context) {
-    try {
-      const user = await auth.getAuthenticatedUser(context.req);
-      const userData = await UserModel.findById(user.id);
-      const isUserCampOwner = await auth.isUserCampOwner(userData);
-      if (userData === null) {
-        throw new NotLoggedinError();
-      }
-      if (!isUserCampOwner) {
-        throw new PrivilegeError();
-      }
-      const places = await CampModel.findByIdAndUpdate(
-        args.id, {
-          $pull: {
-            placesOfInterest: {
-              name: args.name,
-              distance: args.distance
-            },
 
-          }
-
-        }, {
-          multi: true,
-        },
-      );
-      return places;
-    } catch (err) {
-      return err;
-    }
-  }
-}
 
 const updateCampImages = {
   type: CampType,
@@ -626,8 +622,7 @@ module.exports = {
   updateCampDocuments,
   deleteCampDocument,
   saveAmenities,
-  savePlacesOfInterest,
+  saveActivities,
   acceptAgreement,
   setHeroImage,
-  deletePlacesOfInterest
 };

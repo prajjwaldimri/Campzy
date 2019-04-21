@@ -90,14 +90,8 @@ const addAmenities = `mutation saveAmenities($id: String!,$washRoomAttached: Boo
   }
 }`
 
-const addPlacesOfInterest = `mutation savePlacesOfInterest($id:String!, $name : String!, $distance : Float!){
-  savePlacesOfInterest(id: $id, name : $name, distance : $distance){
-    id
-  }
-}`
-
-const deletePlacesOfInterest = `mutation deletePlacesOfInterest($id:String!, $name : String!, $distance : Float!){
-  deletePlacesOfInterest(id: $id, name : $name, distance : $distance){
+const addActivities = `mutation saveActivities($id:String!, $waterRafting : Boolean!, $kayaking : Boolean!,$skiing: Boolean!,$waterfallRappelling: Boolean!,$skydiving: Boolean!,$scubaDiving: Boolean!,$hotAirBallon: Boolean!,$caving: Boolean!,$trekking: Boolean!,$snorkelling: Boolean!,$cliffJumping: Boolean!,$paragliding: Boolean!,$cycling: Boolean!){
+  saveActivities(id: $id, waterRafting: $waterRafting,kayaking: $kayaking,skiing: $skiing,waterfallRappelling: $waterfallRappelling,skydiving: $skydiving, scubaDiving: $scubaDiving, hotAirBallon: $hotAirBallon, caving: $caving, trekking: $trekking,snorkelling: $snorkelling,cliffJumping : $cliffJumping,paragliding: $paragliding, cycling: $cycling ){
     id
   }
 }`
@@ -255,8 +249,7 @@ module.exports = {
   bookCamp,
   cancelBooking,
   addAmenities,
-  addPlacesOfInterest,
-  deletePlacesOfInterest,
+  addActivities,
   addCampToWishlist,
   addReview,
   closeBookingByDates,

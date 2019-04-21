@@ -110,10 +110,60 @@ const CampSchema = new Schema({
   services: {
     type: [String],
   },
-  placesOfInterest: [{
-    name: String,
-    distance: String,
-  }],
+  nearByActivities: {
+    waterRafting: {
+      type: Boolean,
+      default: false,
+    },
+    kayaking: {
+      type: Boolean,
+      default: false,
+    },
+    skiing: {
+      type: Boolean,
+      default: false,
+    },
+    waterfallRappelling: {
+      type: Boolean,
+      default: false,
+    },
+    skydiving: {
+      type: Boolean,
+      default: false,
+    },
+    scubaDiving: {
+      type: Boolean,
+      default: false,
+    },
+    hotAirBallon: {
+      type: Boolean,
+      default: false,
+    },
+    caving: {
+      type: Boolean,
+      default: false,
+    },
+    trekking: {
+      type: Boolean,
+      default: false,
+    },
+    snorkelling: {
+      type: Boolean,
+      default: false,
+    },
+    cliffJumping: {
+      type: Boolean,
+      default: false,
+    },
+    paragliding: {
+      type: Boolean,
+      default: false,
+    },
+    cycling: {
+      type: Boolean,
+      default: false,
+    },
+  },
   temperature: {
     type: String,
   },
