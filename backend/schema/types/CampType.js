@@ -196,7 +196,7 @@ const CampType = new GraphQLObjectType({
       type: AmenitiesType,
     },
     nearByActivities: {
-      type: new GraphQLList(NearByActivitiesType),
+      type: NearByActivitiesType,
     },
     images: {
       type: new GraphQLList(GraphQLString),

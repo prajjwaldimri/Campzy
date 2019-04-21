@@ -581,7 +581,7 @@ export default {
           this.tags = this.camp.tags
           this.amenities = this.camp.amenities
           // this.activities = this.camp.activities
-          this.createPlacesOfInterest()
+          // this.createPlacesOfInterest()
           if (this.camp.campDocuments.length === 3) {
             this.isDocument = true
           } else {
@@ -597,6 +597,8 @@ export default {
           }
         })
         .catch(err => {
+          // eslint-disable-next-line no-console
+          console.log(err)
           EventBus.$emit(
             'show-error-notification-short',
             err.response.errors[0].message

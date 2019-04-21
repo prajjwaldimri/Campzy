@@ -66,9 +66,20 @@ const getCurrentUserCampDetails = `query currentUserCamp{
           url,
           shortDescription,
           longDescription,
-          placesOfInterest{
-            name,
-            distance
+          nearByActivities{
+            waterRafting
+            kayaking
+            skiing
+            waterfallRappelling
+            skydiving
+            scubaDiving
+            hotAirBallon
+            caving
+            trekking
+            snorkelling
+            cliffJumping
+            paragliding
+            cycling
           },
           amenities{
             washRoomAttached,
@@ -122,9 +133,20 @@ const getCampDetail = `query camp($id: String!){
       location,
       shortDescription,
       longDescription,
-      placesOfInterest{
-        name,
-        distance
+      nearByActivities{
+        waterRafting
+        kayaking
+        skiing
+        waterfallRappelling
+        skydiving
+        scubaDiving
+        hotAirBallon
+        caving
+        trekking
+        snorkelling
+        cliffJumping
+        paragliding
+        cycling
       },
       tags,
       amenities{
