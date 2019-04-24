@@ -92,7 +92,7 @@ export default {
         formData.append('images', file)
       }
       axios
-        .post('/uploadImages', formData, {
+        .post('https://api.campzy.in/uploadImages', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

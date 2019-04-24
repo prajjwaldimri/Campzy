@@ -114,7 +114,7 @@ export default {
 
     deleteAwsImage(blogImage) {
       axios
-        .delete('/deleteImages', { data: { blogImage } })
+        .delete('https://api.campzy.in/deleteImages', { data: { blogImage } })
         .then(() => {
           EventBus.$emit(
             'show-success-notification-short',
