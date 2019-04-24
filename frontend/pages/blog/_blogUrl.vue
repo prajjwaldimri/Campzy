@@ -10,7 +10,7 @@
 
         .mt-4.justify-start(style="display: flex; align-items: center")
           v-avatar(size="48")
-            img(:src="'https://ui-avatars.com/api/?name=' + blog.authorId.name")
+            img(:src="'https://ui-avatars.com/api/?name=' + authorName")
           div.ml-3
             h2.subheading(v-if="blog.authorId") {{blog.authorId.name}}
             span.body-2 {{blog.createdAt | moment("MMMM Do YYYY")}},
@@ -48,7 +48,8 @@ export default {
   data() {
     return {
       blog: {},
-      readTime: {}
+      readTime: {},
+      authorName: ''
     }
   },
   mounted() {
@@ -58,6 +59,7 @@ export default {
     request('https://api.campzy.in/graphql', getBlogQuery, variables)
       .then(data => {
         this.blog = data.getBlog
+        this.authorName = this.blog.authorId.name
       })
       .catch(() => {
         this.blog = ''
