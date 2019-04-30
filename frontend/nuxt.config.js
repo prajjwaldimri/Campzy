@@ -90,7 +90,11 @@ export default {
       ssr: true
     },
     '@/plugins/vue-cookie',
-    '@/plugins/vue-moment'
+    '@/plugins/vue-moment',
+    {
+      src: '@/plugins/vue-tiny-slider',
+      ssr: false
+    }
   ],
 
   /*

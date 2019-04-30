@@ -252,7 +252,7 @@
 
 <script>
 /* global Razorpay */
-import VueTinySlider from 'vue-tiny-slider'
+// import VueTinySlider from 'vue-tiny-slider'
 import { GraphQLClient, request } from 'graphql-request'
 import navbar from '../../components/Navbar.vue'
 import SearchImagesDialog from '../../components/SearchImagesDialog.vue'
@@ -271,11 +271,15 @@ import {
 } from '../../queries/mutationQueries'
 import { EventBus } from '../../layouts/event-bus'
 import ReviewCamp from '../../components/ReviewCamp.vue'
+const VueTinySlider = {}
+if (process.client) {
+  VueTinySlider.tiny = require('vue-tiny-slider')
+}
 
 export default {
   components: {
     navbar,
-    'tiny-slider': VueTinySlider,
+    'tiny-slider': VueTinySlider.tiny,
     SearchImagesDialog,
     ReviewCampDialog: ReviewCamp,
     Footer
@@ -283,7 +287,6 @@ export default {
   data() {
     return {
       camp: {},
-      campName: '',
       reviews: [],
       price: 0,
       tripDurationMenu: false,
