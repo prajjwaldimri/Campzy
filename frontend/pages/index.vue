@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    HomeNav
     .home-flex
       .search-flex
         .campzy-logo.pb-4.pt-4
@@ -12,34 +13,35 @@
         hint="You can search for Nature, Leh, Mountains, etc.").mb-0
 
         .d-flex.actions-flex.py-2
-          v-layout(row).hidden-sm-and-down
-            v-flex(justify-center align-center md4).button-flex
-              v-btn(outline color="blue" fab @click="login")
-                v-icon account_box
-              h3.subheading Account
-            v-flex(justify-center align-center md4).button-flex
-              v-btn(color="green" fab outline)
-                v-icon pages
-              h3.subheading Featured Camps
-            v-flex(justify-center align-center md4).button-flex
-              v-btn(color="blue-grey" fab outline @click="$router.push('blogs')")
-                v-icon chrome_reader_mode
-              h3.subheading Blogs
+          h2.tagline Bringing camping 🏕 to your doorstep 🚪
+          //- v-layout(row).hidden-sm-and-down
+          //-   v-flex(justify-center align-center md4).button-flex
+          //-     v-btn(outline color="blue" fab @click="login")
+          //-       v-icon account_box
+          //-     h3.subheading Account
+          //-   v-flex(justify-center align-center md4).button-flex
+          //-     v-btn(color="green" fab outline)
+          //-       v-icon pages
+          //-     h3.subheading Featured Camps
+          //-   v-flex(justify-center align-center md4).button-flex
+          //-     v-btn(color="blue-grey" fab outline @click="$router.push('blogs')")
+          //-       v-icon chrome_reader_mode
+          //-     h3.subheading Blogs
 
-          //- Mobile Layout
-          v-layout(row).hidden-md-and-up
-            v-flex(justify-center align-center sm4).button-flex
-              v-btn(outline color="blue" fab @click="login" small)
-                v-icon account_box
-              h3.body-2 Account
-            v-flex(justify-center align-center sm4).button-flex
-              v-btn(color="green" fab outline small)
-                v-icon pages
-              h3.body-2 Featured Camps
-            v-flex(justify-center align-center sm4).button-flex
-              v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
-                v-icon chrome_reader_mode
-              h3.body-2 Blogs
+          //- //- Mobile Layout
+          //- v-layout(row).hidden-md-and-up
+          //-   v-flex(justify-center align-center sm4).button-flex
+          //-     v-btn(outline color="blue" fab @click="login" small)
+          //-       v-icon account_box
+          //-     h3.body-2 Account
+          //-   v-flex(justify-center align-center sm4).button-flex
+          //-     v-btn(color="green" fab outline small)
+          //-       v-icon pages
+          //-     h3.body-2 Featured Camps
+          //-   v-flex(justify-center align-center sm4).button-flex
+          //-     v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
+          //-       v-icon chrome_reader_mode
+          //-     h3.body-2 Blogs
 
 
     Footer
@@ -47,6 +49,7 @@
 
 <script>
 import anime from 'animejs'
+import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
 
 export default {
@@ -55,7 +58,8 @@ export default {
     title: 'Campzy'
   },
   components: {
-    Footer
+    Footer,
+    HomeNav
   },
   data() {
     return {
@@ -178,5 +182,15 @@ export default {
   .green-text {
     color: #2ecc71;
   }
+}
+
+.tagline {
+  font-weight: normal;
+  font-size: 24px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.v-input__slot {
+  border-radius: 30px !important;
 }
 </style>
