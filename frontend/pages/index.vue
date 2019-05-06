@@ -14,39 +14,12 @@
 
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
-          //- v-layout(row).hidden-sm-and-down
-          //-   v-flex(justify-center align-center md4).button-flex
-          //-     v-btn(outline color="blue" fab @click="login")
-          //-       v-icon account_box
-          //-     h3.subheading Account
-          //-   v-flex(justify-center align-center md4).button-flex
-          //-     v-btn(color="green" fab outline)
-          //-       v-icon pages
-          //-     h3.subheading Featured Camps
-          //-   v-flex(justify-center align-center md4).button-flex
-          //-     v-btn(color="blue-grey" fab outline @click="$router.push('blogs')")
-          //-       v-icon chrome_reader_mode
-          //-     h3.subheading Blogs
-
-          //- //- Mobile Layout
-          //- v-layout(row).hidden-md-and-up
-          //-   v-flex(justify-center align-center sm4).button-flex
-          //-     v-btn(outline color="blue" fab @click="login" small)
-          //-       v-icon account_box
-          //-     h3.body-2 Account
-          //-   v-flex(justify-center align-center sm4).button-flex
-          //-     v-btn(color="green" fab outline small)
-          //-       v-icon pages
-          //-     h3.body-2 Featured Camps
-          //-   v-flex(justify-center align-center sm4).button-flex
-          //-     v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
-          //-       v-icon chrome_reader_mode
-          //-     h3.body-2 Blogs
+         
       v-container(fluid)
-        v-flex.more_btn.pt-5
+        v-flex.more_btn
           v-btn(icon large color='green' dark @click='showContent')
             v-icon keyboard_arrow_down
-        v-flex.why_campzy(v-html='content' transition="scale-transition" origin="center center")
+        v-flex.why_campzy(v-html='whyCmapzycontent')
         
 
         
@@ -77,7 +50,7 @@ export default {
     return {
       searchInput: '',
       searchClicked: false,
-      content: ''
+      whyCmapzycontent: ''
     }
   },
   mounted() {
@@ -111,28 +84,22 @@ export default {
           document.documentElement.offsetHeight
 
         if (bottomOfWindow) {
-          this.content =
+          this.whyCmapzycontent =
             '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
             '<img class="camp_img" src="/android-chrome-192x192.png"/>'
         }
 
         if (document.documentElement.scrollTop === 0) {
-          this.content = ''
+          this.whyCmapzycontent = ''
         }
       }
     },
     showContent() {
-      this.content =
+      this.whyCmapzycontent =
         '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
         '<img class="camp_img" src="/android-chrome-192x192.png"/>'
     },
-    login() {
-      if (this.$cookie.get('sessionToken')) {
-        this.$router.push('profile')
-      } else {
-        this.$router.push('login')
-      }
-    },
+
     searchClick() {
       if (this.searchInput === '') {
         anime({
@@ -157,8 +124,6 @@ export default {
 
 <style lang="scss">
 .home-flex {
-  margin-top: auto;
-  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -171,6 +136,9 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media screen and (max-width: 960px) {
+      margin-top: 8rem;
+    }
 
     .v-input {
       min-width: 40vw;
@@ -186,13 +154,15 @@ export default {
     .actions-flex {
       align-content: space-between;
       flex-wrap: wrap;
+      .tagline {
+        font-weight: normal;
+        font-size: 24px;
+        letter-spacing: 4px;
 
-      .button-flex {
-        display: flex;
-        flex-direction: column;
-
-        > .subheading {
-          letter-spacing: 0.0625em;
+        @media screen and (max-width: 960px) {
+          font-size: 14px;
+          font-weight: normal;
+          letter-spacing: 1px;
         }
       }
     }
@@ -223,18 +193,6 @@ export default {
 
   .green-text {
     color: #2ecc71;
-  }
-}
-
-.tagline {
-  font-weight: normal;
-  font-size: 24px;
-  letter-spacing: 4px;
-
-  @media screen and (max-width: 960px) {
-    font-size: 14px;
-    font-weight: normal;
-    letter-spacing: 1px;
   }
 }
 
@@ -269,6 +227,10 @@ export default {
 
 .more_btn {
   text-align: center;
+  padding-top: 6rem;
+  @media screen and (max-width: 960px) {
+    padding-top: 4rem;
+  }
 }
 
 @keyframes fadeInFadeOut {
