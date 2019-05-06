@@ -3,11 +3,11 @@
   prominent color="transparent" app)
     v-spacer
     v-toolbar-items.hidden-sm-and-down
-      v-btn(flat @click="$router.push('/')") Add your Camp
-      v-btn(flat @click="$router.push('/profile/wishlist')") Support
-      v-btn(flat icon to="/login")
+      v-btn.btn_margin(flat @click="$router.push('/')") Add your Camp
+      v-btn.btn_margin(flat @click="$router.push('/profile/wishlist')") Support
+      v-btn.btn_margin(flat icon to="/login")
         v-icon account_circle
-      v-btn.featured__btn(round depressed color='green' dark ) Featured Camps 
+      v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
       
 
     //- v-toolbar-items.hidden-md-and-up
@@ -163,5 +163,9 @@
 .featured__btn {
   height: 42px !important;
   width: 200px !important;
+}
+
+.btn_margin {
+  margin-right: 2rem !important;
 }
 </style>

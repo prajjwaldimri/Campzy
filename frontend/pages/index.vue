@@ -42,6 +42,9 @@
           //-     v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
           //-       v-icon chrome_reader_mode
           //-     h3.body-2 Blogs
+        v-flex.pt-5
+          v-btn(icon large color='green' dark)
+            v-icon keyboard_arrow_down
 
 
     Footer
@@ -138,10 +141,12 @@ export default {
       @media screen and (max-width: 960px) {
         min-width: 90vw;
       }
+      .v-input__slot {
+        border-radius: 30px !important;
+      }
     }
 
     .actions-flex {
-      width: 100%;
       align-content: space-between;
       flex-wrap: wrap;
 
@@ -187,10 +192,12 @@ export default {
 .tagline {
   font-weight: normal;
   font-size: 24px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.v-input__slot {
-  border-radius: 30px !important;
+  letter-spacing: 4px;
+
+  @media screen and (max-width: 960px) {
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 1px;
+  }
 }
 </style>
