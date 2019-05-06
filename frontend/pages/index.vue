@@ -42,9 +42,18 @@
           //-     v-btn(color="blue-grey" fab outline small @click="$router.push('blogs')")
           //-       v-icon chrome_reader_mode
           //-     h3.body-2 Blogs
-        v-flex.pt-5
-          v-btn(icon large color='green' dark)
+      v-container(fluid)
+        v-flex.more_btn.pt-5
+          v-btn(icon large color='green' dark @click='showContent')
             v-icon keyboard_arrow_down
+        v-flex.why_campzy(v-html='content' transition="scale-transition" origin="center center")
+        
+
+        
+       
+       
+          
+        
 
 
     Footer
@@ -67,7 +76,8 @@ export default {
   data() {
     return {
       searchInput: '',
-      searchClicked: false
+      searchClicked: false,
+      content: ''
     }
   },
   mounted() {
@@ -78,7 +88,8 @@ export default {
         '.campzy-logo',
         '.search-flex .v-input',
         '.home-flex .account-flex',
-        '.home-flex .actions-flex'
+        '.home-flex .actions-flex',
+        '.more_btn'
       ],
       translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
       opacity: [0, 1],
@@ -89,8 +100,32 @@ export default {
         return index * 150
       }
     })
+
+    this.scrollToLoadContent()
   },
   methods: {
+    scrollToLoadContent() {
+      window.onscroll = () => {
+        const bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight
+
+        if (bottomOfWindow) {
+          this.content =
+            '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
+            '<img class="camp_img" src="/android-chrome-192x192.png"/>'
+        }
+
+        if (document.documentElement.scrollTop === 0) {
+          this.content = ''
+        }
+      }
+    },
+    showContent() {
+      this.content =
+        '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
+        '<img class="camp_img" src="/android-chrome-192x192.png"/>'
+    },
     login() {
       if (this.$cookie.get('sessionToken')) {
         this.$router.push('profile')
@@ -122,6 +157,8 @@ export default {
 
 <style lang="scss">
 .home-flex {
+  margin-top: auto;
+  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -129,7 +166,7 @@ export default {
   max-height: 100vh;
 
   .search-flex {
-    margin-top: auto;
+    margin-top: 20rem;
     margin-bottom: auto;
     display: flex;
     flex-direction: column;
@@ -198,6 +235,49 @@ export default {
     font-size: 14px;
     font-weight: normal;
     letter-spacing: 1px;
+  }
+}
+
+.why_campzy {
+  padding-top: 5rem;
+  text-align: center;
+  @media screen and (max-width: 960px) {
+    padding-top: 2rem;
+  }
+  .details_tagline {
+    font-weight: normal;
+    font-size: 25px;
+    text-align: center;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      font-size: 14px;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+  }
+  .camp_img {
+    height: 80px;
+    width: 75px;
+    margin-top: 1rem;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      height: 70px;
+      width: 65px;
+    }
+  }
+}
+
+.more_btn {
+  text-align: center;
+}
+
+@keyframes fadeInFadeOut {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 </style>
