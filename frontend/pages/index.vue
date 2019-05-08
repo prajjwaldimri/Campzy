@@ -14,19 +14,28 @@
 
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
-         
+    div     
       v-container(fluid)
         v-flex.more_btn
           v-btn(icon large color='green' dark @click='showContent')
             v-icon keyboard_arrow_down
         v-flex.why_campzy(v-html='whyCmapzycontent')
-        
-
-        
-       
-       
+      v-container.content_container(fluid)
+        v-layout(row wrap)
+          v-flex.text_content(xs12 md5 v-html='valueForMoney')
+          v-flex.scroll_image(xs12 md7 v-html='valueForMoneyImg')
+      v-container.content_container_right(fluid)
+        v-layout(row wrap)
+          v-flex.scroll_image(xs12 md7 v-html='exoticLocationsImg')
+          v-flex.text_content(xs12 md5 v-html='exoticLocations')
+      v-container.content_container(fluid)
+        v-layout(row wrap)
+          v-flex.text_content(xs12 md5 v-html='paymentOptions')
+          v-flex.scroll_image(xs12 md7 v-html='paymentOptionsImg')
+      v-container.why_campzy(fluid)
+        v-flex(v-html='featuredBtnText')
+        v-flex(v-html='featuredBtn')
           
-        
 
 
     Footer
@@ -50,7 +59,15 @@ export default {
     return {
       searchInput: '',
       searchClicked: false,
-      whyCmapzycontent: ''
+      whyCmapzycontent: '',
+      valueForMoney: '',
+      valueForMoneyImg: '',
+      exoticLocations: '',
+      exoticLocationsImg: '',
+      paymentOptions: '',
+      paymentOptionsImg: '',
+      featuredBtn: '',
+      featuredBtnText: ''
     }
   },
   mounted() {
@@ -79,18 +96,50 @@ export default {
   methods: {
     scrollToLoadContent() {
       window.onscroll = () => {
-        const bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.offsetHeight
-
-        if (bottomOfWindow) {
+        if (document.documentElement.scrollTop > 0) {
           this.whyCmapzycontent =
             '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
             '<img class="camp_img" src="/android-chrome-192x192.png"/>'
+
+          this.valueForMoney =
+            '<h2 class="main_headings" > 💸 Get the best deals everytime </h2>' +
+            '<h2 class="light_headings"> Here at campzy, we don’t trick users into buying something using price manupulation. Every price you see will be fair to the camp owners and you</h2>'
+
+          this.valueForMoneyImg =
+            '<img class="scroll_image" src="/vectors/money.svg"/>'
+
+          this.exoticLocations =
+            '<h2 class="main_headings" > Exotic Locations 🏔️ </h2>' +
+            '<h2 class="light_headings"> Locations like you have never seen before including famous hotspots like Chopta, Rishikesh, Himachal, Caribbean etc.</h2>'
+
+          this.exoticLocationsImg =
+            '<img class="scroll_image" src="/vectors/mountain.svg"/>'
+
+          this.paymentOptions =
+            '<h2 class="main_headings" > 💳 Every payment option available </h2>' +
+            '<h2 class="light_headings"> Whether you like UPI, credit card, debit card, online banking we accept everything.</h2>'
+
+          this.paymentOptionsImg =
+            '<img class="scroll_image" src="/vectors/payment.svg"/>'
+
+          this.featuredBtnText =
+            '<h2 class="large_heading" > Convinced yet? </h2>' +
+            '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
+
+          this.featuredBtn =
+            '<button type="button" class="featured_btn">Show our featured camps</button>'
         }
 
         if (document.documentElement.scrollTop === 0) {
           this.whyCmapzycontent = ''
+          this.valueForMoney = ''
+          this.valueForMoneyImg = ''
+          this.exoticLocations = ''
+          this.exoticLocationsImg = ''
+          this.paymentOptions = ''
+          this.paymentOptionsImg = ''
+          this.featuredBtn = ''
+          this.featuredBtnText = ''
         }
       }
     },
@@ -127,9 +176,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  max-height: 100vh;
-
+  min-height: 60vh;
+  max-height: 60vh;
   .search-flex {
     margin-top: 20rem;
     margin-bottom: auto;
@@ -197,15 +245,16 @@ export default {
 }
 
 .why_campzy {
-  padding-top: 5rem;
   text-align: center;
+  margin-top: 10rem;
   @media screen and (max-width: 960px) {
-    padding-top: 2rem;
+    margin-top: 4rem;
   }
   .details_tagline {
     font-weight: normal;
     font-size: 25px;
     text-align: center;
+    color: gray;
     animation: fadeInFadeOut 2s;
     @media screen and (max-width: 960px) {
       font-size: 14px;
@@ -228,11 +277,94 @@ export default {
 .more_btn {
   text-align: center;
   padding-top: 6rem;
+  animation: bounce 2s infinite both;
   @media screen and (max-width: 960px) {
     padding-top: 4rem;
   }
 }
 
+.content_container {
+  padding-left: 12rem;
+  margin-top: 12rem;
+  @media screen and (max-width: 960px) {
+    padding: 1rem;
+    margin-top: 4rem;
+  }
+}
+
+.content_container_right {
+  padding-right: 12rem;
+  margin-top: 12rem;
+  @media screen and (max-width: 960px) {
+    padding: 1rem;
+    margin-top: 4rem;
+  }
+}
+.text_content {
+  padding: 5rem 0 0 10rem;
+  @media screen and (max-width: 960px) {
+    padding: 0;
+  }
+
+  .light_headings {
+    font-weight: normal;
+    font-size: 25px;
+    text-align: left;
+    color: gray;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      font-size: 14px;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+  }
+
+  .main_headings {
+    font-weight: bold;
+    font-size: 25px;
+    text-align: left;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      font-size: 14px;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.scroll_image {
+  margin: 0px;
+  height: 300px;
+  width: 450px;
+  animation: fadeInFadeOut 2s;
+  text-align: center;
+  @media screen and (max-width: 960px) {
+    height: 200px;
+    width: 300px;
+    margin: 1rem 0 1rem 0;
+  }
+}
+.featured_btn {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 40px;
+  height: 60px;
+  width: 350px;
+  font-size: 25px;
+  margin-top: 3rem;
+  @media screen and (max-width: 960px) {
+    height: 45px;
+    width: 280px;
+    font-size: 20px;
+  }
+}
+
+.large_heading {
+  font-size: 40px;
+  @media screen and (max-width: 960px) {
+    font-size: 30px;
+  }
+}
 @keyframes fadeInFadeOut {
   0% {
     opacity: 0;
@@ -240,6 +372,22 @@ export default {
 
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px);
+  }
+  60% {
+    transform: translateY(-10px);
   }
 }
 </style>
