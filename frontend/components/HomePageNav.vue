@@ -18,12 +18,12 @@
           v-btn(icon flat v-on='on')
             v-icon reorder
         v-list.mt-5
-          v-list-tile(v-show='!isLoggedIn')
+          v-list-tile(v-show='!isLoggedIn' @click="$router.push({name: 'login'})")
             v-list-tile-action
               v-icon account_circle
             v-list-tile-content
               v-list-tile-title Login/ Signup
-          v-list-tile(v-show='isLoggedIn')
+          v-list-tile(v-show='isLoggedIn' @click="$router.push({name: 'profile'})")
             v-list-tile-action
               v-icon account_circle
             v-list-tile-content
@@ -36,12 +36,6 @@
             v-list-tile-content
               v-list-tile-title Add Your camp
           v-divider
-          v-list-tile
-            v-list-tile-action
-              v-icon contact_support
-            v-list-tile-content
-              v-list-tile-title Support
-          v-divider
           v-list-tile(@click="$router.push({name: 'blogs'})")
             v-list-tile-action
               v-icon chrome_reader_mode
@@ -53,6 +47,12 @@
               v-icon pages
             v-list-tile-content
               v-list-tile-title Featured Camps
+          v-divider
+          v-list-tile
+            v-list-tile-action
+              v-icon contact_support
+            v-list-tile-content
+              v-list-tile-title Support
         
      
     
