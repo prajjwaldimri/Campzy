@@ -14,27 +14,27 @@
 
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
-    div     
-      v-container(fluid)
-        v-flex.more_btn
-          v-btn(icon large color='green' dark @click='showContent')
-            v-icon keyboard_arrow_down
-        v-flex.why_campzy(v-html='whyCmapzycontent')
-      v-container.content_container(fluid)
-        v-layout(row wrap)
-          v-flex.text_content(xs12 md5 v-html='valueForMoney')
-          v-flex.scroll_image(xs12 md7 v-html='valueForMoneyImg')
-      v-container.content_container_right(fluid)
-        v-layout(row wrap)
-          v-flex.scroll_image(xs12 md7 v-html='exoticLocationsImg')
-          v-flex.text_content(xs12 md5 v-html='exoticLocations')
-      v-container.content_container(fluid)
-        v-layout(row wrap)
-          v-flex.text_content(xs12 md5 v-html='paymentOptions')
-          v-flex.scroll_image(xs12 md7 v-html='paymentOptionsImg')
-      v-container.why_campzy(fluid)
-        v-flex(v-html='featuredBtnText')
-        v-flex(v-html='featuredBtn')
+    //- div     
+    //-   v-container(fluid)
+    //-     v-flex.more_btn
+    //-       v-btn(icon large color='green' dark @click='showContent')
+    //-         v-icon keyboard_arrow_down
+    //-     v-flex.why_campzy(v-html='whyCmapzycontent')
+    //-   v-container.content_container(fluid)
+    //-     v-layout(row wrap)
+    //-       v-flex.text_content(xs12 md5 v-html='valueForMoney')
+    //-       v-flex.scroll_image(xs12 md7 v-html='valueForMoneyImg')
+    //-   v-container.content_container_right(fluid)
+    //-     v-layout(row wrap)
+    //-       v-flex.scroll_image(xs12 md7 v-html='exoticLocationsImg')
+    //-       v-flex.text_content(xs12 md5 v-html='exoticLocations')
+    //-   v-container.content_container(fluid)
+    //-     v-layout(row wrap)
+    //-       v-flex.text_content(xs12 md5 v-html='paymentOptions')
+    //-       v-flex.scroll_image(xs12 md7 v-html='paymentOptionsImg')
+    //-   v-container.why_campzy(fluid)
+    //-     v-flex(v-html='featuredBtnText')
+    //-     v-flex(v-html='featuredBtn')
           
 
 
@@ -91,63 +91,63 @@ export default {
       }
     })
 
-    this.scrollToLoadContent()
+    // this.scrollToLoadContent()
   },
   methods: {
-    scrollToLoadContent() {
-      window.onscroll = () => {
-        if (document.documentElement.scrollTop > 0) {
-          this.whyCmapzycontent =
-            '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
-            '<img class="camp_img" src="/android-chrome-192x192.png"/>'
+    // scrollToLoadContent() {
+    //   window.onscroll = () => {
+    //     if (document.documentElement.scrollTop > 0) {
+    //       this.whyCmapzycontent =
+    //         '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
+    //         '<img class="camp_img" src="/android-chrome-192x192.png"/>'
 
-          this.valueForMoney =
-            '<h2 class="main_headings" > 💸 Get the best deals everytime </h2>' +
-            '<h2 class="light_headings"> Here at campzy, we don’t trick users into buying something using price manupulation. Every price you see will be fair to the camp owners and you</h2>'
+    //       this.valueForMoney =
+    //         '<h2 class="main_headings" > 💸 Get the best deals everytime </h2>' +
+    //         '<h2 class="light_headings"> Here at campzy, we don’t trick users into buying something using price manupulation. Every price you see will be fair to the camp owners and you</h2>'
 
-          this.valueForMoneyImg =
-            '<img class="scroll_image" src="/vectors/money.svg"/>'
+    //       this.valueForMoneyImg =
+    //         '<img class="scroll_image" src="/vectors/money.svg"/>'
 
-          this.exoticLocations =
-            '<h2 class="main_headings" > Exotic Locations 🏔️ </h2>' +
-            '<h2 class="light_headings"> Locations like you have never seen before including famous hotspots like Chopta, Rishikesh, Himachal, Caribbean etc.</h2>'
+    //       this.exoticLocations =
+    //         '<h2 class="main_headings" > Exotic Locations 🏔️ </h2>' +
+    //         '<h2 class="light_headings"> Locations like you have never seen before including famous hotspots like Chopta, Rishikesh, Himachal, Caribbean etc.</h2>'
 
-          this.exoticLocationsImg =
-            '<img class="scroll_image" src="/vectors/mountain.svg"/>'
+    //       this.exoticLocationsImg =
+    //         '<img class="scroll_image" src="/vectors/mountain.svg"/>'
 
-          this.paymentOptions =
-            '<h2 class="main_headings" > 💳 Every payment option available </h2>' +
-            '<h2 class="light_headings"> Whether you like UPI, credit card, debit card, online banking we accept everything.</h2>'
+    //       this.paymentOptions =
+    //         '<h2 class="main_headings" > 💳 Every payment option available </h2>' +
+    //         '<h2 class="light_headings"> Whether you like UPI, credit card, debit card, online banking we accept everything.</h2>'
 
-          this.paymentOptionsImg =
-            '<img class="scroll_image" src="/vectors/payment.svg"/>'
+    //       this.paymentOptionsImg =
+    //         '<img class="scroll_image" src="/vectors/payment.svg"/>'
 
-          this.featuredBtnText =
-            '<h2 class="large_heading" > Convinced yet? </h2>' +
-            '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
+    //       this.featuredBtnText =
+    //         '<h2 class="large_heading" > Convinced yet? </h2>' +
+    //         '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
 
-          this.featuredBtn =
-            '<button type="button" class="featured_btn">Show our featured camps</button>'
-        }
+    //       this.featuredBtn =
+    //         '<button type="button" class="featured_btn">Show our featured camps</button>'
+    //     }
 
-        if (document.documentElement.scrollTop === 0) {
-          this.whyCmapzycontent = ''
-          this.valueForMoney = ''
-          this.valueForMoneyImg = ''
-          this.exoticLocations = ''
-          this.exoticLocationsImg = ''
-          this.paymentOptions = ''
-          this.paymentOptionsImg = ''
-          this.featuredBtn = ''
-          this.featuredBtnText = ''
-        }
-      }
-    },
-    showContent() {
-      this.whyCmapzycontent =
-        '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
-        '<img class="camp_img" src="/android-chrome-192x192.png"/>'
-    },
+    //     if (document.documentElement.scrollTop === 0) {
+    //       this.whyCmapzycontent = ''
+    //       this.valueForMoney = ''
+    //       this.valueForMoneyImg = ''
+    //       this.exoticLocations = ''
+    //       this.exoticLocationsImg = ''
+    //       this.paymentOptions = ''
+    //       this.paymentOptionsImg = ''
+    //       this.featuredBtn = ''
+    //       this.featuredBtnText = ''
+    //     }
+    //   }
+    // },
+    // showContent() {
+    //   this.whyCmapzycontent =
+    //     '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
+    //     '<img class="camp_img" src="/android-chrome-192x192.png"/>'
+    // },
 
     searchClick() {
       if (this.searchInput === '') {
@@ -176,17 +176,17 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 60vh;
-  max-height: 60vh;
+  min-height: 100vh;
+  max-height: 100vh;
   .search-flex {
-    margin-top: 20rem;
+    margin-top: auto;
     margin-bottom: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media screen and (max-width: 960px) {
-      margin-top: 8rem;
-    }
+    // @media screen and (max-width: 960px) {
+    //   margin-top: 8rem;
+    // }
 
     .v-input {
       min-width: 40vw;
