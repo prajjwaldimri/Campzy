@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 const OTPSchema = new Schema({
@@ -8,8 +8,8 @@ const OTPSchema = new Schema({
     type: Date,
     required: true,
     default: Date.now,
-    expires: 300,
-  },
+    expires: 300
+  }
 });
 
-module.exports = mongoose.model('OTP', OTPSchema);
+module.exports = mongoose.model("OTP", OTPSchema);

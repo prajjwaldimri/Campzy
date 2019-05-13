@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const validate = require('mongoose-validator');
+import mongoose from "mongoose";
+import validate from "mongoose-validator";
 
-const jwt = require('jsonwebtoken');
+import jwt from "jsonwebtoken";
 
 const { Schema } = mongoose;
 
@@ -13,16 +13,14 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     sparse: true,
-    validate: [
-      validate({ validator: 'isEmail', message: 'Not a valid email' }),
-    ],
+    validate: [validate({ validator: "isEmail", message: "Not a valid email" })]
   },
   isEmailVerified: { type: Boolean, default: false },
   gdprConsent: { type: Boolean, default: false },
   password: { type: String, required: true },
   passwordResetToken: String,
   passwordResetExpires: Date,
-  type: { type: String, required: true, default: 'Camper' },
+  type: { type: String, required: true, default: "Camper" },
   phoneNumber: {
     type: String,
     required: true,
@@ -30,11 +28,11 @@ const UserSchema = new Schema({
     sparse: true,
     validate: [
       validate({
-        validator: 'isMobilePhone',
-        message: 'Not a valid phone number',
-        arguments: ['any', true],
-      }),
-    ],
+        validator: "isMobilePhone",
+        message: "Not a valid phone number",
+        arguments: ["any", true]
+      })
+    ]
   },
   facebookToken: String,
   googleToken: String,
@@ -44,19 +42,19 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     unique: true,
     sparse: true,
-    ref: 'Camp',
+    ref: "Camp"
   },
   authoredBlogId: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Blog',
-    },
+      ref: "Blog"
+    }
   ],
-  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Camp' }],
+  wishlist: [{ type: Schema.Types.ObjectId, ref: "Camp" }]
 });
 
 UserSchema.index({
-  name: 'text',
+  name: "text"
 });
 
 // eslint-disable-next-line
@@ -70,10 +68,10 @@ UserSchema.methods.generateJWT = function() {
       email: this.email,
       // eslint-disable-next-line
       id: this._id,
-      exp: parseInt(expirationDate.getTime() / 1000, 10),
+      exp: parseInt(expirationDate.getTime() / 1000, 10)
     },
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET
   );
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

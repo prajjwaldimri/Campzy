@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
@@ -8,9 +8,9 @@ const TentSchema = new Schema({
   bookingPrice: Number,
   preBookPeriod: Number,
   surgePrice: Number,
-  camp: { type: Schema.Types.ObjectId, ref: 'Camp' },
+  camp: { type: Schema.Types.ObjectId, ref: "Camp" },
   isAvailable: { type: Boolean, default: false },
-  disabledDates: { type: [Date] },
+  disabledDates: { type: [Date] }
 });
 
-module.exports = mongoose.model('Tent', TentSchema);
+module.exports = mongoose.model("Tent", TentSchema);

@@ -59,7 +59,7 @@ const CampSchema = new Schema({
   gst: {
     type: String,
     unique: true,
-    default: () => nanoid(20),
+    default: (): string => nanoid(20),
     required: true
   },
   bank: {
@@ -70,7 +70,7 @@ const CampSchema = new Schema({
   },
   tags: {
     type: [String],
-    validate: [val => val.length <= 10, "Only 10 tags are allowed"]
+    validate: [(val): boolean => val.length <= 10, "Only 10 tags are allowed"]
   },
   amenities: {
     washRoomAttached: {
