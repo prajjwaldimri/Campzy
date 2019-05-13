@@ -11,7 +11,6 @@ import https from "https";
 import multer from "multer";
 import bodyParser from "body-parser";
 import Sentry from "@sentry/node";
-import { sitemap } from "./sitemapGen";
 
 if (process.env.ENVIRONMENT === "production") {
   Sentry.init({
@@ -26,7 +25,7 @@ import {
   uploadCampImages,
   uploadDocument,
   imageStorage
-} from "./aws.js";
+} from "./aws";
 
 import schema from "./schema/schema.js";
 require("./models/user");
@@ -41,23 +40,6 @@ app.use(
   bodyParser.urlencoded({
     extended: true
   })
-);
-
-// Sitemap generator
-app.get(
-  "/sitemap.xml",
-  (req, res): void => {
-    // eslint-disable-next-line consistent-return
-    sitemap.toXML(
-      (err, xml): void => {
-        if (err) {
-          return res.status(500).end();
-        }
-        res.header("Content-Type", "application/xml");
-        res.send(xml);
-      }
-    );
-  }
 );
 
 // Upload CampOwner's Documents
@@ -84,28 +66,16 @@ app.post(
 app.delete("/deleteImages", deleteImage);
 
 // Connect to MLab Database
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_URI || "", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
-mongoose.connection.once("open", () => {
-  console.log("Database connected");
-});
-
-// History mode fallback
-// app.use(history({}));
-
-// if (process.env.ENVIRONMENT === 'development') {
-//   app.use(webpackMiddleware(webpack(webpackConfig)));
-// } else {
-//   app.get('/', (req, res) => {
-//     res
-//       .status(200)
-//       .sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-//   });
-// }
-
-// Public static directories
+mongoose.connection.once(
+  "open",
+  (): void => {
+    console.log("Database connected");
+  }
+);
 
 app.use(
   "/graphql",
