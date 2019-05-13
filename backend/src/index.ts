@@ -1,4 +1,6 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
+
 import { ApolloServer, ApolloError } from "apollo-server-express";
 import express from "express";
 import compression from "compression";
@@ -7,7 +9,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import passport from "passport";
 import path from "path";
-import https from "https";
+import https, { request } from "https";
 import multer from "multer";
 import bodyParser from "body-parser";
 import Sentry from "@sentry/node";
@@ -50,10 +52,9 @@ app.post(
 );
 
 // Delete CampOwner's Documents
-
 app.delete("/deleteDocuments", deleteDocuments);
-// Image uploads
 
+// Image uploads
 app.post(
   "/uploadImages",
   multer({
@@ -77,19 +78,13 @@ mongoose.connection.once(
   }
 );
 
-app.use(
-  "/graphql",
-  graphqlHTTP(request => ({
-    schema,
-    formatError: ApolloError.formatError,
-    validationRules: [depthLimit(10)],
-    graphiql: true,
-    context: {
-      req: request,
-      passport
-    }
-  }))
-);
+// Apollo-Server Configuration
+const server = new ApolloServer({
+  playground: true,
+  schema,
+  context: { req: request, passport }
+});
+server.applyMiddleware({ app });
 
 // Last ditch error handler
 if (process.env.ENVIRONMENT === "production") {
