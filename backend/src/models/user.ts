@@ -68,9 +68,9 @@ UserSchema.methods.generateJWT = function() {
       email: this.email,
       // eslint-disable-next-line
       id: this._id,
-      exp: parseInt(expirationDate.getTime() / 1000, 10)
+      exp: expirationDate.getTime() / 1000
     },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET || ""
   );
 };
 
