@@ -1,0 +1,9 @@
+{
+  "name": "campzy-backend",
+  "version": "2.0.0",
+  "description": "Backend for campzy",
+  "main": "index.js",
+  "author": "Debug Studios",
+  "license": "MIT",
+  "private": true
+}
