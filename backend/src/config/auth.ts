@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import mailjet from "node-mailjet";
 
-import sms from "../communication/sms";
-import emailer from "../communication/email";
+import { sms } from "../communication/sms";
+import { emailer } from "../communication/email";
 
 import {
   EmailSendError,
@@ -10,15 +11,16 @@ import {
   OTPSendError
 } from "../schema/graphqlErrors";
 
-import TokenModel from "../models/token";
-import OTPModel from "../models/otp";
-import UserModel from "../models/user";
+import { TokenModel } from "../models/token";
+import { OTPModel } from "../models/otp";
+import { UserModel, User } from "../models/user";
+import { Twilio } from "twilio";
 
 /**
  * Gets the authentication JWT token from the HTTP header
  * @param  {Object} req Express's request object
  */
-const getTokenFromHeaders = req => {
+const getTokenFromHeaders = (req: any): string => {
   const {
     headers: { authorization }
   } = req;
@@ -27,23 +29,29 @@ const getTokenFromHeaders = req => {
   if (authorization && authorization.split(" ")[0] === "Bearer") {
     return authorization.split(" ")[1];
   }
-  return null;
+  return "";
 };
 
 // Retrieves the authenticated user details from JWT
-const getAuthenticatedUser = request =>
-  new Promise((resolve, reject) => {
-    const token = getTokenFromHeaders(request);
-    jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-      if (err) {
-        reject(new Error("NotLoggedInError"));
-      }
-      resolve(payload);
-    });
-  });
+const getAuthenticatedUser = (req: Express.Request): Promise<object | string> =>
+  new Promise(
+    (resolve, reject): void => {
+      const token = getTokenFromHeaders(req);
+      jwt.verify(
+        token,
+        process.env.JWT_SECRET || "",
+        (err, payload): void => {
+          if (err) {
+            reject(new Error("NotLoggedInError"));
+          }
+          resolve(payload);
+        }
+      );
+    }
+  );
 
 // Checks if a user owns any camps
-const isUserCampOwner = user => {
+const isUserCampOwner = (user: User): boolean => {
   if (!user) {
     return false;
   }
@@ -53,7 +61,7 @@ const isUserCampOwner = user => {
   return false;
 };
 
-const isUserAdmin = user => {
+const isUserAdmin = (user: User): boolean => {
   if (!user) {
     return false;
   }
@@ -63,7 +71,7 @@ const isUserAdmin = user => {
   return false;
 };
 
-const isUserBlogger = user => {
+const isUserBlogger = (user: User): boolean => {
   if (!user) {
     return false;
   }
@@ -73,7 +81,10 @@ const isUserBlogger = user => {
   return false;
 };
 
-const sendResetPasswordToken = async (userId, email) => {
+const sendResetPasswordToken = async (
+  userId: string,
+  email: string
+): Promise<mailjet.Email.Response> => {
   try {
     let token = await TokenModel.findOne({ _userId: userId });
     if (!token) {
@@ -83,22 +94,28 @@ const sendResetPasswordToken = async (userId, email) => {
       });
       await token.save();
     }
-    return await emailer.sendResetPasswordToken(email, token.tokenValue);
+    return await emailer.sendResetPasswordToken(email, token);
   } catch (err) {
     throw new EmailSendError();
   }
 };
 
-const sendEmailVerificationToken = async (userId, email) => {
+const sendEmailVerificationToken = async (
+  userId: string,
+  email: string
+): Promise<mailjet.Email.Response> => {
   try {
     let token = await TokenModel.findOne({ _userId: userId });
-    const user = await UserModel.findById(userId).select("name");
+    const user: User | null = await UserModel.findById(userId).select("name");
     if (!token) {
       token = new TokenModel({
         _userId: userId,
         tokenValue: crypto.randomBytes(16).toString("hex")
       });
       await token.save();
+    }
+    if (!user) {
+      throw new EmailSendError();
     }
     return await emailer.sendEmailVerificationToken(
       email,
@@ -110,11 +127,16 @@ const sendEmailVerificationToken = async (userId, email) => {
   }
 };
 
-const verifyUserToken = async tokenValue => {
+const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
   try {
     const token = await TokenModel.findOne({ tokenValue });
-    // eslint-disable-next-line
+    if (!token) {
+      throw new WrongEmailTokenError();
+    }
     const matchingUser = await UserModel.findById(token._userId);
+    if (!matchingUser) {
+      throw new WrongEmailTokenError();
+    }
     if (!matchingUser.isEmailVerified) {
       matchingUser.isEmailVerified = true;
       await matchingUser.save();
@@ -125,7 +147,7 @@ const verifyUserToken = async tokenValue => {
   }
 };
 
-function generateRandomNumbers(n) {
+function generateRandomNumbers(n: number): string {
   const add = 1;
   let max = 12 - add;
   // 12 is the min safe number Math.random() can generate without it starting to
@@ -142,7 +164,9 @@ function generateRandomNumbers(n) {
   return `${number}`.substring(add);
 }
 
-const sendUserOTP = async phoneNumber => {
+const sendUserOTP = async (
+  phoneNumber: string
+): Promise<Twilio.TwilioClientOptions> => {
   try {
     let otp = await OTPModel.findOne({ phoneNumber });
     if (!otp) {
@@ -158,7 +182,10 @@ const sendUserOTP = async phoneNumber => {
   }
 };
 
-const verifyUserOTP = async (otpValue, phoneNumber) => {
+const verifyUserOTP = async (
+  otpValue: string,
+  phoneNumber: string
+): Promise<boolean> => {
   try {
     const otp = await OTPModel.findOne({ otpValue });
     if (!otp) {

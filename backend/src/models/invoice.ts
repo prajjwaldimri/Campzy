@@ -1,7 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-const { Schema } = mongoose;
+export interface Invoice extends Document {
+  invoiceNumber: number;
+}
 
 const InvoiceSchema = new Schema(
   {
@@ -17,4 +19,4 @@ const InvoiceSchema = new Schema(
 // eslint-disable-next-line @typescript-eslint/camelcase
 InvoiceSchema.plugin(AutoIncrement, { inc_field: "invoiceNumber" });
 
-module.exports = mongoose.model("Invoice", InvoiceSchema);
+module.exports = mongoose.model<Invoice>("Invoice", InvoiceSchema);

@@ -1,9 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import validate from "mongoose-validator";
 
 import jwt from "jsonwebtoken";
 
-const { Schema } = mongoose;
+export interface User extends Document {
+  email: string;
+  name: string;
+  type: string;
+  isEmailVerified: boolean;
+}
 
 const UserSchema = new Schema({
   name: { type: String },
@@ -74,4 +79,4 @@ UserSchema.methods.generateJWT = function() {
   );
 };
 
-module.exports = mongoose.model("User", UserSchema);
+export var UserModel = mongoose.model<User>("User", UserSchema);

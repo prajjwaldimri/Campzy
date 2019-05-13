@@ -1,8 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import validate from "mongoose-validator";
 import nanoid from "nanoid";
 
-const { Schema } = mongoose;
+export interface Camp extends Document {
+  name: string;
+  phoneNumber: string;
+  email: string;
+  ownerId: {
+    name: string;
+  };
+  location: string;
+}
 
 const CampSchema = new Schema({
   name: {
@@ -234,4 +242,4 @@ CampSchema.index(
   }
 );
 
-module.exports = mongoose.model("Camp", CampSchema);
+module.exports = mongoose.model<Camp>("Camp", CampSchema);

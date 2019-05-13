@@ -1,8 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import en from "nanoid-good/locale/en";
 const nanoid = require("nanoid-good")(en);
 
-const { Schema } = mongoose;
+export interface Booking extends Document {
+  code: string;
+  startDate: string;
+  endDate: string;
+}
 
 const BookingSchema = new Schema(
   {
@@ -26,4 +30,4 @@ const BookingSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Booking", BookingSchema);
+module.exports = mongoose.model<Booking>("Booking", BookingSchema);

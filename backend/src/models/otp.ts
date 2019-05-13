@@ -1,6 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const { Schema } = mongoose;
+export interface OTP extends Document {
+  phoneNumber: string;
+  otpValue: string;
+}
+
 const OTPSchema = new Schema({
   phoneNumber: { type: String, required: true },
   otpValue: { type: String, required: true },
@@ -12,4 +16,4 @@ const OTPSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("OTP", OTPSchema);
+export var OTPModel = mongoose.model<OTP>("OTP", OTPSchema);

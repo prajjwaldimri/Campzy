@@ -1,6 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const { Schema } = mongoose;
+export interface Token extends Document {
+  _userId: string;
+  tokenValue: string;
+}
+
 const TokenSchema = new Schema({
   _userId: { type: Schema.Types.ObjectId, required: true },
   tokenValue: { type: String, required: true },
@@ -12,4 +16,4 @@ const TokenSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("Token", TokenSchema);
+export var TokenModel = mongoose.model<Token>("Token", TokenSchema);

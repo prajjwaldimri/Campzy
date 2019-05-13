@@ -6,6 +6,11 @@ const mailer = mailjet.connect(
 );
 
 import moment from "moment";
+import { User } from "../models/user";
+import { Token } from "../models/token";
+import { Booking } from "../models/booking";
+import { Camp } from "../models/camp";
+import { Invoice } from "../models/invoice";
 
 const sendEmailVerificationToken = async (
   email: string,
@@ -187,7 +192,7 @@ const sendBookingCancelUser = async (
   }
 };
 
-module.exports = {
+export var emailer = {
   sendEmailVerificationToken,
   sendResetPasswordToken,
   sendSuccessBookingEmail,
