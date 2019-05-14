@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { ApolloServer, ApolloError } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import compression from "compression";
 import fs from "fs";
@@ -30,7 +30,6 @@ import {
 } from "./aws";
 
 import schema from "./schema/schema.js";
-require("./models/user");
 
 const app = express();
 app.use(Sentry.Handlers.requestHandler());
