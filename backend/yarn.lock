@@ -3597,7 +3597,7 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-reflect-metadata@^0.1.13:
+reflect-metadata@^0.1.12, reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
@@ -4405,6 +4405,13 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typegoose@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/typegoose/-/typegoose-5.6.0.tgz#9ce35b3fe41cda3e3a22cdf7f4381455754feb90"
+  integrity sha512-xkmUnxriQkUYaK3CcZsgS9j/7wwxyBQ86Ai8IuNCl02WVGfIqtVbnrYjHs3P5V2A7cYwuzxx7DiuZgd62Vf4ag==
+  dependencies:
+    reflect-metadata "^0.1.12"
 
 typescript@^3.4.5:
   version "3.4.5"

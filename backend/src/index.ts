@@ -31,8 +31,6 @@ import {
   imageStorage
 } from "./aws";
 
-import schema from "./schema/schema.js";
-
 const app = express();
 app.use(Sentry.Handlers.requestHandler());
 app.use(compression());
