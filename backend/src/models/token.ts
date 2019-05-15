@@ -1,19 +1,15 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Typegoose, prop, Ref } from "typegoose";
+import { User } from "./user";
 
-export interface Token extends Document {
-  _userId: string;
-  tokenValue: string;
+export class Token extends Typegoose {
+  @prop({ ref: User, required: true })
+  private user!: Ref<User>;
+
+  @prop({ required: true })
+  private tokenValue!: string;
+
+  @prop({ required: true, default: Date.now, expires: 18000 })
+  private createdAt!: Date;
 }
 
-const TokenSchema = new Schema({
-  _userId: { type: Schema.Types.ObjectId, required: true },
-  tokenValue: { type: String, required: true },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
-    expires: 18000
-  }
-});
-
-export var TokenModel = mongoose.model<Token>("Token", TokenSchema);
+export var TokenModel = new Token().getModelForClass(Token);
