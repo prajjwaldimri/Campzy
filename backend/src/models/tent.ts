@@ -1,16 +1,30 @@
-import mongoose from "mongoose";
+import { prop, Typegoose, Ref } from "typegoose";
+import { Camp } from "./camp";
 
-const { Schema } = mongoose;
+export class Tent extends Typegoose {
+  @prop()
+  private capacity?: number;
 
-const TentSchema = new Schema({
-  capacity: Number,
-  type: String,
-  bookingPrice: Number,
-  preBookPeriod: Number,
-  surgePrice: Number,
-  camp: { type: Schema.Types.ObjectId, ref: "Camp" },
-  isAvailable: { type: Boolean, default: false },
-  disabledDates: { type: [Date] }
-});
+  @prop()
+  private type?: number;
 
-module.exports = mongoose.model("Tent", TentSchema);
+  @prop()
+  private bookingPrice?: number;
+
+  @prop()
+  private surgePrice?: number;
+
+  @prop()
+  private preBookPeriod?: number;
+
+  @prop({ ref: Camp, required: true })
+  private camp!: Ref<Camp>;
+
+  @prop({ default: false })
+  private isAvailable!: boolean;
+
+  @prop()
+  private disabledDates?: Date[];
+}
+
+export var TentModel = new Tent().getModelForClass(Tent);

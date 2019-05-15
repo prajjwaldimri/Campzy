@@ -1,33 +1,48 @@
-import mongoose, { Schema, Document } from "mongoose";
+import {
+  prop,
+  Typegoose,
+  Ref,
+  index,
+  InstanceType,
+  instanceMethod
+} from "typegoose";
 import validate from "mongoose-validator";
-
 import jwt from "jsonwebtoken";
+import { Camp } from "./camp";
 
-export interface User extends Document {
-  email: string;
-  name: string;
-  type: string;
-  isEmailVerified: boolean;
-}
+@index({ name: "text" })
+export class User extends Typegoose {
+  @prop()
+  private name?: string;
 
-const UserSchema = new Schema({
-  name: { type: String },
-  email: {
-    type: String,
+  @prop({
     lowercase: true,
     required: true,
     unique: true,
     sparse: true,
     validate: [validate({ validator: "isEmail", message: "Not a valid email" })]
-  },
-  isEmailVerified: { type: Boolean, default: false },
-  gdprConsent: { type: Boolean, default: false },
-  password: { type: String, required: true },
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  type: { type: String, required: true, default: "Camper" },
-  phoneNumber: {
-    type: String,
+  })
+  private email!: string;
+
+  @prop({ default: false })
+  private isEmailVerified!: boolean;
+
+  @prop({ default: false })
+  private gdprConsent!: boolean;
+
+  @prop({ required: true })
+  private password!: string;
+
+  @prop()
+  private passwordResetToken?: string;
+
+  @prop()
+  private passwordResetExpires?: Date;
+
+  @prop({ required: true, default: "Camper" })
+  private type!: string;
+
+  @prop({
     required: true,
     unique: true,
     sparse: true,
@@ -38,45 +53,43 @@ const UserSchema = new Schema({
         arguments: ["any", true]
       })
     ]
-  },
-  facebookToken: String,
-  googleToken: String,
-  isBlacklisted: { type: Boolean, default: false },
-  dateOfBirth: Date,
-  ownedCampId: {
-    type: Schema.Types.ObjectId,
-    unique: true,
-    sparse: true,
-    ref: "Camp"
-  },
-  authoredBlogId: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Blog"
-    }
-  ],
-  wishlist: [{ type: Schema.Types.ObjectId, ref: "Camp" }]
-});
+  })
+  private phoneNumber!: string;
 
-UserSchema.index({
-  name: "text"
-});
+  @prop()
+  private facebookToken?: string;
 
-// eslint-disable-next-line
-UserSchema.methods.generateJWT = function() {
-  const today = new Date();
-  const expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 60);
+  @prop()
+  private googleToken?: string;
 
-  return jwt.sign(
-    {
-      email: this.email,
-      // eslint-disable-next-line
-      id: this._id,
-      exp: expirationDate.getTime() / 1000
-    },
-    process.env.JWT_SECRET || ""
-  );
-};
+  @prop({ default: false })
+  private isBlacklisted?: boolean;
 
-export var UserModel = mongoose.model<User>("User", UserSchema);
+  @prop()
+  private dateOfBirth?: Date;
+
+  @prop({ ref: Camp, unique: true, sparse: true })
+  private ownedCampId?: Ref<Camp>;
+
+  @prop({ ref: Camp })
+  private wishlist?: Camp[];
+
+  @instanceMethod
+  private generateJWT(this: InstanceType<User>): string {
+    const today = new Date();
+    const expirationDate = new Date(today);
+    expirationDate.setDate(today.getDate() + 60);
+
+    return jwt.sign(
+      {
+        email: this.email,
+        // eslint-disable-next-line
+        id: this._id,
+        exp: expirationDate.getTime() / 1000
+      },
+      process.env.JWT_SECRET || ""
+    );
+  }
+}
+
+export var UserModel = new User().getModelForClass(User);

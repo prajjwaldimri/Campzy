@@ -1,7 +1,7 @@
 import { prop, Typegoose, Ref } from "typegoose";
-import mongoose from "mongoose";
+import { User } from "./user";
 
-class Blog extends Typegoose {
+export class Blog extends Typegoose {
   @prop({ required: true, trim: true })
   private title!: string;
 
@@ -23,30 +23,9 @@ class Blog extends Typegoose {
   @prop({ default: false })
   private darkTheme!: boolean;
 
-  // @prop({ ref: User, required: true })
-  // private authorId!: Ref<User>;
+  @prop({ ref: User, required: true })
+  private authorId!: Ref<User>;
 }
-
-// const BlogSchema = new Schema(
-//   {
-//     title: { type: String, required: true },
-//     description: { type: String, required: true },
-//     url: {
-//       type: String,
-//       required: true,
-//       unique: true
-//     },
-//     content: { type: String, required: true },
-//     heroImage: { type: String, required: true },
-//     heroImageCaption: { type: String, required: true },
-//     authorId: {
-//       type: Schema.Types.ObjectId,
-//       ref: "User"
-//     },
-//     darkTheme: { type: Boolean, default: false }
-//   },
-//   { timestamps: true }
-// );
 
 export var BlogModel = new Blog().getModelForClass(Blog, {
   schemaOptions: { timestamps: true }

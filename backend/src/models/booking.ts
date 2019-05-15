@@ -1,33 +1,45 @@
-import mongoose, { Schema, Document } from "mongoose";
-import en from "nanoid-good/locale/en";
-const nanoid = require("nanoid-good")(en);
+import { prop, Typegoose, Ref } from "typegoose";
+import { Schema } from "mongoose";
+import nanoid from "nanoid";
+import { User } from "./user";
+import { Tent } from "./tent";
+import { Camp } from "./camp";
 
-export interface Booking extends Document {
-  code: string;
-  startDate: string;
-  endDate: string;
+export class Booking extends Typegoose {
+  @prop({ unique: true, required: true, default: (): string => nanoid(20) })
+  private code!: string;
+
+  @prop({ required: true })
+  private razorpayPaymentId!: string;
+
+  @prop({ default: false })
+  private isCancelled!: boolean;
+
+  @prop({ ref: User, required: true })
+  private user!: Ref<User>;
+
+  @prop({ ref: Tent, required: true })
+  private tents!: Ref<Tent[]>;
+
+  @prop({ ref: Camp, required: true })
+  private camp!: Ref<Camp>;
+
+  @prop({ required: true })
+  private startDate!: Date;
+
+  @prop({ required: true })
+  private endDate!: Date;
+
+  @prop({ required: true })
+  private tentCount!: number;
+
+  @prop({ required: true })
+  private personCount!: number;
+
+  @prop({ required: true })
+  private amount!: Schema.Types.Decimal128;
 }
 
-const BookingSchema = new Schema(
-  {
-    code: {
-      type: String,
-      unique: true,
-      default: (): void => nanoid(20),
-      required: true
-    },
-    razorpayPaymentId: { type: String, required: true },
-    isCancelled: { type: Boolean, default: false },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    tents: { type: [Schema.Types.ObjectId], ref: "Tent", required: true },
-    camp: { type: Schema.Types.ObjectId, ref: "Camp", required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
-    tentCount: { type: Number, required: true },
-    personCount: { type: Number, required: true },
-    amount: { type: Schema.Types.Decimal128, required: true }
-  },
-  { timestamps: true }
-);
-
-module.exports = mongoose.model<Booking>("Booking", BookingSchema);
+export var BookingModel = new Booking().getModelForClass(Booking, {
+  schemaOptions: { timestamps: true }
+});

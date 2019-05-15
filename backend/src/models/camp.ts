@@ -1,24 +1,137 @@
-import mongoose, { Schema, Document } from "mongoose";
+import {
+  prop,
+  Typegoose,
+  Ref,
+  index,
+  InstanceType,
+  ModelType
+} from "typegoose";
 import validate from "mongoose-validator";
 import nanoid from "nanoid";
 
-export interface Camp extends Document {
-  name: string;
-  phoneNumber: string;
-  email: string;
-  ownerId: {
-    name: string;
-  };
-  location: string;
+import { TentModel } from "./tent";
+import { User } from "./user";
+
+class BankAccount {
+  @prop()
+  private beneficiary?: string;
+
+  @prop()
+  private accountType?: string;
+
+  @prop()
+  private accountNumber?: string;
+
+  @prop()
+  private IFSCCode?: string;
 }
 
-const CampSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  phoneNumber: {
-    type: String,
+class Amenities {
+  @prop({
+    default: false
+  })
+  private washRoomAttached!: boolean;
+
+  @prop({ default: false })
+  private bonfire!: boolean;
+
+  @prop({ default: false })
+  private hotWater!: boolean;
+
+  @prop({ default: false })
+  private mobileConnectivity!: boolean;
+
+  @prop({ default: false })
+  private mealsInclude!: boolean;
+
+  @prop({ default: false })
+  private petsAllowed!: boolean;
+
+  @prop({ default: false })
+  private chargingPoints!: boolean;
+}
+
+class NearbyActivities {
+  @prop({ default: false })
+  private waterRafting?: boolean;
+
+  @prop({ default: false })
+  private kayaking?: boolean;
+
+  @prop({ default: false })
+  private skiing?: boolean;
+
+  @prop({ default: false })
+  private waterfallRappelling?: boolean;
+
+  @prop({ default: false })
+  private skydiving?: boolean;
+
+  @prop({ default: false })
+  private scubaDiving?: boolean;
+
+  @prop({ default: false })
+  private hotAirBallon?: boolean;
+
+  @prop({ default: false })
+  private caving?: boolean;
+
+  @prop({ default: false })
+  private trekking?: boolean;
+
+  @prop({ default: false })
+  private snorkelling?: boolean;
+
+  @prop({ default: false })
+  private cliffJumping?: boolean;
+
+  @prop({ default: false })
+  private paragliding?: boolean;
+
+  @prop({ default: false })
+  private cycling?: boolean;
+}
+
+class Coordinates {
+  @prop()
+  private lat?: string;
+
+  @prop()
+  private long?: string;
+}
+
+class Terrain {
+  @prop()
+  private glacier?: boolean;
+
+  @prop()
+  private forest?: boolean;
+
+  @prop()
+  private desert?: boolean;
+
+  @prop()
+  private ocean?: boolean;
+
+  @prop()
+  private hill?: boolean;
+
+  @prop()
+  private river?: boolean;
+}
+
+@index({
+  name: "text",
+  shortDescription: "text",
+  tags: "text",
+  location: "text",
+  terrain: "text"
+})
+export class Camp extends Typegoose {
+  @prop({ required: true })
+  private name!: string;
+
+  @prop({
     validate: [
       validate({
         validator: "isMobilePhone",
@@ -26,9 +139,10 @@ const CampSchema = new Schema({
         arguments: ["any", true]
       })
     ]
-  },
-  email: {
-    type: String,
+  })
+  private phoneNumber?: string;
+
+  @prop({
     lowercase: true,
     required: true,
     unique: true,
@@ -39,207 +153,115 @@ const CampSchema = new Schema({
         message: "Not a valid email"
       })
     ]
-  },
-  images: [String],
-  heroImage: String,
-  url: {
-    type: String,
-    unique: true
-  },
-  location: {
-    type: String
-  },
-  isAvailable: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-  shortDescription: {
-    type: String,
-    required: true
-  },
-  longDescription: String,
-  agreementAccepted: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-  gst: {
-    type: String,
-    unique: true,
-    default: (): string => nanoid(20),
-    required: true
-  },
-  bank: {
-    beneficiary: String,
-    accountType: String,
-    accountNumber: String,
-    IFSCCode: String
-  },
-  tags: {
-    type: [String],
-    validate: [(val): boolean => val.length <= 10, "Only 10 tags are allowed"]
-  },
-  amenities: {
-    washRoomAttached: {
-      type: Boolean,
-      default: false
-    },
-    bonfire: {
-      type: Boolean,
-      default: false
-    },
-    hotWater: {
-      type: Boolean,
-      default: false
-    },
-    mobileConnectivity: {
-      type: Boolean,
-      default: false
-    },
-    mealsInclude: {
-      type: Boolean,
-      default: false
-    },
-    petsAllowed: {
-      type: Boolean,
-      default: false
-    },
-    chargingPoints: {
-      type: Boolean,
-      default: false
-    }
-  },
-  razorpayAccountId: String,
-  razorpayCustomerId: String,
-  services: {
-    type: [String]
-  },
-  nearByActivities: {
-    waterRafting: {
-      type: Boolean,
-      default: false
-    },
-    kayaking: {
-      type: Boolean,
-      default: false
-    },
-    skiing: {
-      type: Boolean,
-      default: false
-    },
-    waterfallRappelling: {
-      type: Boolean,
-      default: false
-    },
-    skydiving: {
-      type: Boolean,
-      default: false
-    },
-    scubaDiving: {
-      type: Boolean,
-      default: false
-    },
-    hotAirBallon: {
-      type: Boolean,
-      default: false
-    },
-    caving: {
-      type: Boolean,
-      default: false
-    },
-    trekking: {
-      type: Boolean,
-      default: false
-    },
-    snorkelling: {
-      type: Boolean,
-      default: false
-    },
-    cliffJumping: {
-      type: Boolean,
-      default: false
-    },
-    paragliding: {
-      type: Boolean,
-      default: false
-    },
-    cycling: {
-      type: Boolean,
-      default: false
-    }
-  },
-  temperature: {
-    type: String
-  },
-  temperatureSummary: {
-    type: String
-  },
-  altitude: {
-    type: String
-  },
-  hourDriveFromDelhi: {
-    type: Date
-  },
-  coordinates: {
-    lat: {
-      type: String
-    },
-    lng: {
-      type: String
-    }
-  },
-  ownerId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    unique: true
-  },
-  terrain: {
-    glacier: Boolean,
-    forest: Boolean,
-    desert: Boolean,
-    ocean: Boolean,
-    hill: Boolean,
-    river: Boolean
-  },
-  campDocuments: [String],
-  averageRating: {
-    type: Number,
-    default: 0
-  },
-  ratingsCount: {
-    type: Number,
-    default: 0
-  },
-  credits: {
-    type: Number,
-    default: 0
+  })
+  private email!: string;
+
+  @prop()
+  private image?: string[];
+
+  @prop()
+  private heroImage?: string;
+
+  @prop({ unique: true, required: true })
+  private url!: string;
+
+  @prop()
+  private location?: string;
+
+  @prop({ required: true, default: false })
+  private isAvailable!: boolean;
+
+  @prop({ required: true })
+  private shortDescription!: string;
+
+  @prop()
+  private longDescription?: string;
+
+  @prop({ required: true, default: false })
+  private agreementAccepted!: boolean;
+
+  @prop({ unique: true, default: (): string => nanoid(20), required: true })
+  private gst!: string;
+
+  @prop()
+  private bank?: BankAccount;
+
+  @prop({
+    validate: (val): boolean => val.length <= 10
+  })
+  private tags?: string[];
+
+  @prop()
+  private amenities?: Amenities;
+
+  @prop()
+  private razorpayAccountId?: string;
+
+  @prop()
+  private razorpayCustomerId?: string;
+
+  @prop()
+  private services?: string[];
+
+  @prop()
+  private nearByActivities?: NearbyActivities;
+
+  @prop()
+  private temperature?: string;
+
+  @prop()
+  private temperatureSummary?: string;
+
+  @prop()
+  private altitude?: string;
+
+  @prop()
+  private hourDriveFromDelhi?: Date;
+
+  @prop()
+  private coordinates?: Coordinates;
+
+  @prop({ ref: User, unique: true })
+  private ownerId?: Ref<User>;
+
+  @prop()
+  private terrain?: Terrain;
+
+  @prop()
+  private campDocuments?: string[];
+
+  @prop({ default: 0 })
+  private averageRating!: number;
+
+  @prop({ default: 0 })
+  private ratingsCount!: number;
+
+  @prop({ default: 0 })
+  private credits!: number;
+
+  @prop()
+  private get inventory(this: InstanceType<ModelType<Camp>>): any {
+    return TentModel.find({ camp: this._id });
   }
-});
+}
 
-CampSchema.virtual("inventory", {
-  ref: "Tent",
-  localField: "_id",
-  foreignField: "camp"
-});
+// CampSchema.index(
+//   {
+//     name: "text",
+//     tags: "text",
+//     location: "text",
+//     shortDescription: "text",
+//     terrain: "text"
+//   },
+//   {
+//     weights: {
+//       name: 7,
+//       location: 6,
+//       tags: 3,
+//       terrain: 2,
+//       shortDescription: 1
+//     }
+//   }
+// );
 
-CampSchema.index(
-  {
-    name: "text",
-    tags: "text",
-    location: "text",
-    shortDescription: "text",
-    terrain: "text"
-  },
-  {
-    weights: {
-      name: 7,
-      location: 6,
-      tags: 3,
-      terrain: 2,
-      shortDescription: 1
-    }
-  }
-);
-
-module.exports = mongoose.model<Camp>("Camp", CampSchema);
+export var CampModel = new Camp().getModelForClass(Camp);
