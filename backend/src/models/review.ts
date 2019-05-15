@@ -1,15 +1,25 @@
-import mongoose from "mongoose";
+import { Typegoose, prop, Ref } from "typegoose";
+import { User } from "./user";
+import { Camp } from "./camp";
+import { Booking } from "./booking";
 
-const { Schema } = mongoose;
-const ReviewSchema = new Schema(
-  {
-    stars: { type: Number, required: true },
-    comment: { type: String },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-    camp: { type: Schema.Types.ObjectId, ref: "Camp" },
-    booking: { type: Schema.Types.ObjectId, ref: "Booking" }
-  },
-  { timestamps: true }
-);
+export class Review extends Typegoose {
+  @prop({ required: true })
+  private stars!: number;
 
-module.exports = mongoose.model("Review", ReviewSchema);
+  @prop()
+  private comment?: string;
+
+  @prop({ ref: User })
+  private user!: Ref<User>;
+
+  @prop({ ref: Camp })
+  private camp!: Ref<Camp>;
+
+  @prop({ ref: Booking })
+  private booking!: Ref<Booking>;
+}
+
+export var ReviewModel = new Review().getModelForClass(Review, {
+  schemaOptions: { timestamps: true }
+});
