@@ -1,27 +1,23 @@
-import mongoose from "mongoose";
 import validate from "mongoose-validator";
+import { Typegoose, prop, index } from "typegoose";
 
-const { Schema } = mongoose;
+@index({ name: "text" })
+export class Request extends Typegoose {
+  @prop()
+  private name?: string;
 
-const RequestSchema = new Schema(
-  {
-    name: { type: String },
-    phoneNumber: {
-      type: String,
-      validate: [
-        validate({
-          validator: "isMobilePhone",
-          message: "Not a valid phone number",
-          arguments: ["any", true]
-        })
-      ]
-    }
-  },
-  { timestamps: true }
-);
+  @prop({
+    validate: [
+      validate({
+        validator: "isMobilePhone",
+        message: "Not a valid phone number",
+        arguments: ["any", true]
+      })
+    ]
+  })
+  private phoneNumber?: string;
+}
 
-RequestSchema.index({
-  name: "text"
+export var RequestModel = new Request().getModelForClass(Request, {
+  schemaOptions: { timestamps: true }
 });
-
-module.exports = mongoose.model("Request", RequestSchema);
