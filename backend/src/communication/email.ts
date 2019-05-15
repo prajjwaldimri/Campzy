@@ -135,7 +135,8 @@ const sendCampOwnerBill = async (
           To: [
             {
               Email: camp.email,
-              Name: camp.ownerId.name
+              Name:
+                camp.ownerId instanceof User ? camp.ownerId.name : "Campzy User"
             }
           ],
           TemplateID: 559117,

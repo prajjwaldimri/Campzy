@@ -7,6 +7,9 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 // eslint-disable-next-line @typescript-eslint/camelcase
 @plugin(AutoIncrement, { inc_field: "invoiceNumber" })
 export class Invoice extends Typegoose {
+  @prop({ required: true })
+  public invoiceNumber!: number;
+
   @prop()
   public serviceCharge?: number;
 

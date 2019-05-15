@@ -222,7 +222,7 @@ export class Camp extends Typegoose {
   public coordinates?: Coordinates;
 
   @prop({ ref: User, unique: true })
-  public ownerId?: Ref<User>;
+  public ownerId!: Ref<User>;
 
   @prop()
   public terrain?: Terrain;

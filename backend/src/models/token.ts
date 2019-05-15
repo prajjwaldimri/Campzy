@@ -1,9 +1,8 @@
-import { Typegoose, prop, Ref } from "typegoose";
-import { User } from "./user";
+import { Typegoose, prop } from "typegoose";
 
 export class Token extends Typegoose {
-  @prop({ ref: User, required: true })
-  public user!: Ref<User>;
+  @prop({ required: true })
+  public userId!: string;
 
   @prop({ required: true })
   public tokenValue!: string;

@@ -133,7 +133,7 @@ const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
     if (!token) {
       throw new WrongEmailTokenError();
     }
-    const matchingUser = await UserModel.findById(token.user._id);
+    const matchingUser = await UserModel.findById(token.userId);
     if (!matchingUser) {
       throw new WrongEmailTokenError();
     }
