@@ -1,22 +1,28 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Typegoose, prop, Ref, plugin } from "typegoose";
+import { Booking } from "./booking";
+import { Camp } from "./camp";
+import mongoose from "mongoose";
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-export interface Invoice extends Document {
-  invoiceNumber: number;
+// eslint-disable-next-line @typescript-eslint/camelcase
+@plugin(AutoIncrement, { inc_field: "invoiceNumber" })
+export class Invoice extends Typegoose {
+  @prop()
+  private serviceCharge?: number;
+
+  @prop()
+  private tax?: number;
+
+  @prop()
+  private totalAmount?: number;
+
+  @prop({ ref: Booking })
+  private booking?: Ref<Booking>;
+
+  @prop({ ref: Camp })
+  private camp?: Ref<Camp>;
 }
 
-const InvoiceSchema = new Schema(
-  {
-    serviceCharge: Number,
-    tax: Number,
-    totalAmount: Number,
-    booking: { type: Schema.Types.ObjectId, ref: "Booking" },
-    camp: { type: Schema.Types.ObjectId, ref: "Camp" }
-  },
-  { timestamps: true }
-);
-
-// eslint-disable-next-line @typescript-eslint/camelcase
-InvoiceSchema.plugin(AutoIncrement, { inc_field: "invoiceNumber" });
-
-module.exports = mongoose.model<Invoice>("Invoice", InvoiceSchema);
+export var InvoiceModel = new Invoice().getModelForClass(Invoice, {
+  schemaOptions: { timestamps: true }
+});
