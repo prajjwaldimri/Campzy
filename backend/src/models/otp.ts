@@ -1,19 +1,14 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Typegoose, prop } from "typegoose";
 
-export interface OTP extends Document {
-  phoneNumber: string;
-  otpValue: string;
+export class OTP extends Typegoose {
+  @prop({ required: true })
+  private phoneNumber!: string;
+
+  @prop({ required: true })
+  private otpValue!: string;
+
+  @prop({ required: true, default: Date.now, expires: 300 })
+  private createdAt!: Date;
 }
 
-const OTPSchema = new Schema({
-  phoneNumber: { type: String, required: true },
-  otpValue: { type: String, required: true },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
-    expires: 300
-  }
-});
-
-export var OTPModel = mongoose.model<OTP>("OTP", OTPSchema);
+export var OTPModel = new OTP().getModelForClass(OTP);
