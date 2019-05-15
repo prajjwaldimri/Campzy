@@ -13,7 +13,7 @@ import { Camp } from "./camp";
 @index({ name: "text" })
 export class User extends Typegoose {
   @prop()
-  private name?: string;
+  public name?: string;
 
   @prop({
     lowercase: true,
@@ -22,25 +22,25 @@ export class User extends Typegoose {
     sparse: true,
     validate: [validate({ validator: "isEmail", message: "Not a valid email" })]
   })
-  private email!: string;
+  public email!: string;
 
   @prop({ default: false })
-  private isEmailVerified!: boolean;
+  public isEmailVerified!: boolean;
 
   @prop({ default: false })
-  private gdprConsent!: boolean;
+  public gdprConsent!: boolean;
 
   @prop({ required: true })
-  private password!: string;
+  public password!: string;
 
   @prop()
-  private passwordResetToken?: string;
+  public passwordResetToken?: string;
 
   @prop()
-  private passwordResetExpires?: Date;
+  public passwordResetExpires?: Date;
 
   @prop({ required: true, default: "Camper" })
-  private type!: string;
+  public type!: string;
 
   @prop({
     required: true,
@@ -54,28 +54,28 @@ export class User extends Typegoose {
       })
     ]
   })
-  private phoneNumber!: string;
+  public phoneNumber!: string;
 
   @prop()
-  private facebookToken?: string;
+  public facebookToken?: string;
 
   @prop()
-  private googleToken?: string;
+  public googleToken?: string;
 
   @prop({ default: false })
-  private isBlacklisted?: boolean;
+  public isBlacklisted?: boolean;
 
   @prop()
-  private dateOfBirth?: Date;
+  public dateOfBirth?: Date;
 
   @prop({ ref: Camp, unique: true, sparse: true })
-  private ownedCampId?: Ref<Camp>;
+  public ownedCampId?: Ref<Camp>;
 
   @prop({ ref: Camp })
-  private wishlist?: Camp[];
+  public wishlist?: Camp[];
 
   @instanceMethod
-  private generateJWT(this: InstanceType<User>): string {
+  public generateJWT(this: InstanceType<User>): string {
     const today = new Date();
     const expirationDate = new Date(today);
     expirationDate.setDate(today.getDate() + 60);

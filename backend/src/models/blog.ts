@@ -3,28 +3,28 @@ import { User } from "./user";
 
 export class Blog extends Typegoose {
   @prop({ required: true, trim: true })
-  private title!: string;
+  public title!: string;
 
   @prop({ required: true })
-  private description!: string;
+  public description!: string;
 
   @prop({ required: true, unique: true, trim: true })
-  private url!: true;
+  public url!: true;
 
   @prop({ required: true })
-  private content!: string;
+  public content!: string;
 
   @prop({ required: true })
-  private heroImage!: string;
+  public heroImage!: string;
 
   @prop({ required: true })
-  private heroImageCaption!: string;
+  public heroImageCaption!: string;
 
   @prop({ default: false })
-  private darkTheme!: boolean;
+  public darkTheme!: boolean;
 
   @prop({ ref: User, required: true })
-  private authorId!: Ref<User>;
+  public authorId!: Ref<User>;
 }
 
 export var BlogModel = new Blog().getModelForClass(Blog, {

@@ -3,28 +3,28 @@ import { Camp } from "./camp";
 
 export class Tent extends Typegoose {
   @prop()
-  private capacity?: number;
+  public capacity?: number;
 
   @prop()
-  private type?: number;
+  public type?: number;
 
   @prop()
-  private bookingPrice?: number;
+  public bookingPrice?: number;
 
   @prop()
-  private surgePrice?: number;
+  public surgePrice?: number;
 
   @prop()
-  private preBookPeriod?: number;
+  public preBookPeriod?: number;
 
   @prop({ ref: Camp, required: true })
-  private camp!: Ref<Camp>;
+  public camp!: Ref<Camp>;
 
   @prop({ default: false })
-  private isAvailable!: boolean;
+  public isAvailable!: boolean;
 
   @prop()
-  private disabledDates?: Date[];
+  public disabledDates?: Date[];
 }
 
 export var TentModel = new Tent().getModelForClass(Tent);

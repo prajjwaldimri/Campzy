@@ -7,37 +7,37 @@ import { Camp } from "./camp";
 
 export class Booking extends Typegoose {
   @prop({ unique: true, required: true, default: (): string => nanoid(20) })
-  private code!: string;
+  public code!: string;
 
   @prop({ required: true })
-  private razorpayPaymentId!: string;
+  public razorpayPaymentId!: string;
 
   @prop({ default: false })
-  private isCancelled!: boolean;
+  public isCancelled!: boolean;
 
   @prop({ ref: User, required: true })
-  private user!: Ref<User>;
+  public user!: Ref<User>;
 
   @prop({ ref: Tent, required: true })
-  private tents!: Ref<Tent[]>;
+  public tents!: Ref<Tent[]>;
 
   @prop({ ref: Camp, required: true })
-  private camp!: Ref<Camp>;
+  public camp!: Ref<Camp>;
 
   @prop({ required: true })
-  private startDate!: Date;
+  public startDate!: Date;
 
   @prop({ required: true })
-  private endDate!: Date;
+  public endDate!: Date;
 
   @prop({ required: true })
-  private tentCount!: number;
+  public tentCount!: number;
 
   @prop({ required: true })
-  private personCount!: number;
+  public personCount!: number;
 
   @prop({ required: true })
-  private amount!: Schema.Types.Decimal128;
+  public amount!: Schema.Types.Decimal128;
 }
 
 export var BookingModel = new Booking().getModelForClass(Booking, {

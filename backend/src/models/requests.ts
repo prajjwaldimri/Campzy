@@ -4,7 +4,7 @@ import { Typegoose, prop, index } from "typegoose";
 @index({ name: "text" })
 export class Request extends Typegoose {
   @prop()
-  private name?: string;
+  public name?: string;
 
   @prop({
     validate: [
@@ -15,7 +15,7 @@ export class Request extends Typegoose {
       })
     ]
   })
-  private phoneNumber?: string;
+  public phoneNumber?: string;
 }
 
 export var RequestModel = new Request().getModelForClass(Request, {

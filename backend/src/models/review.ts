@@ -5,19 +5,19 @@ import { Booking } from "./booking";
 
 export class Review extends Typegoose {
   @prop({ required: true })
-  private stars!: number;
+  public stars!: number;
 
   @prop()
-  private comment?: string;
+  public comment?: string;
 
   @prop({ ref: User })
-  private user!: Ref<User>;
+  public user!: Ref<User>;
 
   @prop({ ref: Camp })
-  private camp!: Ref<Camp>;
+  public camp!: Ref<Camp>;
 
   @prop({ ref: Booking })
-  private booking!: Ref<Booking>;
+  public booking!: Ref<Booking>;
 }
 
 export var ReviewModel = new Review().getModelForClass(Review, {

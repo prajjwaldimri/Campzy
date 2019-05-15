@@ -3,13 +3,13 @@ import { User } from "./user";
 
 export class Token extends Typegoose {
   @prop({ ref: User, required: true })
-  private user!: Ref<User>;
+  public user!: Ref<User>;
 
   @prop({ required: true })
-  private tokenValue!: string;
+  public tokenValue!: string;
 
   @prop({ required: true, default: Date.now, expires: 18000 })
-  private createdAt!: Date;
+  public createdAt!: Date;
 }
 
 export var TokenModel = new Token().getModelForClass(Token);

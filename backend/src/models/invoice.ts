@@ -8,19 +8,19 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 @plugin(AutoIncrement, { inc_field: "invoiceNumber" })
 export class Invoice extends Typegoose {
   @prop()
-  private serviceCharge?: number;
+  public serviceCharge?: number;
 
   @prop()
-  private tax?: number;
+  public tax?: number;
 
   @prop()
-  private totalAmount?: number;
+  public totalAmount?: number;
 
   @prop({ ref: Booking })
-  private booking?: Ref<Booking>;
+  public booking?: Ref<Booking>;
 
   @prop({ ref: Camp })
-  private camp?: Ref<Camp>;
+  public camp?: Ref<Camp>;
 }
 
 export var InvoiceModel = new Invoice().getModelForClass(Invoice, {

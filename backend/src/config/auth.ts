@@ -120,7 +120,7 @@ const sendEmailVerificationToken = async (
     return await emailer.sendEmailVerificationToken(
       email,
       token.tokenValue,
-      user.name
+      user.name || "Campzy User"
     );
   } catch (err) {
     throw new EmailSendError();
@@ -133,7 +133,7 @@ const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
     if (!token) {
       throw new WrongEmailTokenError();
     }
-    const matchingUser = await UserModel.findById(token._userId);
+    const matchingUser = await UserModel.findById(token.user._id);
     if (!matchingUser) {
       throw new WrongEmailTokenError();
     }

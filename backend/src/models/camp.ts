@@ -14,110 +14,110 @@ import { User } from "./user";
 
 class BankAccount {
   @prop()
-  private beneficiary?: string;
+  public beneficiary?: string;
 
   @prop()
-  private accountType?: string;
+  public accountType?: string;
 
   @prop()
-  private accountNumber?: string;
+  public accountNumber?: string;
 
   @prop()
-  private IFSCCode?: string;
+  public IFSCCode?: string;
 }
 
 class Amenities {
   @prop({
     default: false
   })
-  private washRoomAttached!: boolean;
+  public washRoomAttached!: boolean;
 
   @prop({ default: false })
-  private bonfire!: boolean;
+  public bonfire!: boolean;
 
   @prop({ default: false })
-  private hotWater!: boolean;
+  public hotWater!: boolean;
 
   @prop({ default: false })
-  private mobileConnectivity!: boolean;
+  public mobileConnectivity!: boolean;
 
   @prop({ default: false })
-  private mealsInclude!: boolean;
+  public mealsInclude!: boolean;
 
   @prop({ default: false })
-  private petsAllowed!: boolean;
+  public petsAllowed!: boolean;
 
   @prop({ default: false })
-  private chargingPoints!: boolean;
+  public chargingPoints!: boolean;
 }
 
 class NearbyActivities {
   @prop({ default: false })
-  private waterRafting?: boolean;
+  public waterRafting?: boolean;
 
   @prop({ default: false })
-  private kayaking?: boolean;
+  public kayaking?: boolean;
 
   @prop({ default: false })
-  private skiing?: boolean;
+  public skiing?: boolean;
 
   @prop({ default: false })
-  private waterfallRappelling?: boolean;
+  public waterfallRappelling?: boolean;
 
   @prop({ default: false })
-  private skydiving?: boolean;
+  public skydiving?: boolean;
 
   @prop({ default: false })
-  private scubaDiving?: boolean;
+  public scubaDiving?: boolean;
 
   @prop({ default: false })
-  private hotAirBallon?: boolean;
+  public hotAirBallon?: boolean;
 
   @prop({ default: false })
-  private caving?: boolean;
+  public caving?: boolean;
 
   @prop({ default: false })
-  private trekking?: boolean;
+  public trekking?: boolean;
 
   @prop({ default: false })
-  private snorkelling?: boolean;
+  public snorkelling?: boolean;
 
   @prop({ default: false })
-  private cliffJumping?: boolean;
+  public cliffJumping?: boolean;
 
   @prop({ default: false })
-  private paragliding?: boolean;
+  public paragliding?: boolean;
 
   @prop({ default: false })
-  private cycling?: boolean;
+  public cycling?: boolean;
 }
 
 class Coordinates {
   @prop()
-  private lat?: string;
+  public lat?: string;
 
   @prop()
-  private long?: string;
+  public long?: string;
 }
 
 class Terrain {
   @prop()
-  private glacier?: boolean;
+  public glacier?: boolean;
 
   @prop()
-  private forest?: boolean;
+  public forest?: boolean;
 
   @prop()
-  private desert?: boolean;
+  public desert?: boolean;
 
   @prop()
-  private ocean?: boolean;
+  public ocean?: boolean;
 
   @prop()
-  private hill?: boolean;
+  public hill?: boolean;
 
   @prop()
-  private river?: boolean;
+  public river?: boolean;
 }
 
 @index({
@@ -129,7 +129,7 @@ class Terrain {
 })
 export class Camp extends Typegoose {
   @prop({ required: true })
-  private name!: string;
+  public name!: string;
 
   @prop({
     validate: [
@@ -140,7 +140,7 @@ export class Camp extends Typegoose {
       })
     ]
   })
-  private phoneNumber?: string;
+  public phoneNumber?: string;
 
   @prop({
     lowercase: true,
@@ -154,93 +154,93 @@ export class Camp extends Typegoose {
       })
     ]
   })
-  private email!: string;
+  public email!: string;
 
   @prop()
-  private image?: string[];
+  public image?: string[];
 
   @prop()
-  private heroImage?: string;
+  public heroImage?: string;
 
   @prop({ unique: true, required: true })
-  private url!: string;
+  public url!: string;
 
   @prop()
-  private location?: string;
+  public location?: string;
 
   @prop({ required: true, default: false })
-  private isAvailable!: boolean;
+  public isAvailable!: boolean;
 
   @prop({ required: true })
-  private shortDescription!: string;
+  public shortDescription!: string;
 
   @prop()
-  private longDescription?: string;
+  public longDescription?: string;
 
   @prop({ required: true, default: false })
-  private agreementAccepted!: boolean;
+  public agreementAccepted!: boolean;
 
   @prop({ unique: true, default: (): string => nanoid(20), required: true })
-  private gst!: string;
+  public gst!: string;
 
   @prop()
-  private bank?: BankAccount;
+  public bank?: BankAccount;
 
   @prop({
     validate: (val): boolean => val.length <= 10
   })
-  private tags?: string[];
+  public tags?: string[];
 
   @prop()
-  private amenities?: Amenities;
+  public amenities?: Amenities;
 
   @prop()
-  private razorpayAccountId?: string;
+  public razorpayAccountId?: string;
 
   @prop()
-  private razorpayCustomerId?: string;
+  public razorpayCustomerId?: string;
 
   @prop()
-  private services?: string[];
+  public services?: string[];
 
   @prop()
-  private nearByActivities?: NearbyActivities;
+  public nearByActivities?: NearbyActivities;
 
   @prop()
-  private temperature?: string;
+  public temperature?: string;
 
   @prop()
-  private temperatureSummary?: string;
+  public temperatureSummary?: string;
 
   @prop()
-  private altitude?: string;
+  public altitude?: string;
 
   @prop()
-  private hourDriveFromDelhi?: Date;
+  public hourDriveFromDelhi?: Date;
 
   @prop()
-  private coordinates?: Coordinates;
+  public coordinates?: Coordinates;
 
   @prop({ ref: User, unique: true })
-  private ownerId?: Ref<User>;
+  public ownerId?: Ref<User>;
 
   @prop()
-  private terrain?: Terrain;
+  public terrain?: Terrain;
 
   @prop()
-  private campDocuments?: string[];
+  public campDocuments?: string[];
 
   @prop({ default: 0 })
-  private averageRating!: number;
+  public averageRating!: number;
 
   @prop({ default: 0 })
-  private ratingsCount!: number;
+  public ratingsCount!: number;
 
   @prop({ default: 0 })
-  private credits!: number;
+  public credits!: number;
 
   @prop()
-  private get inventory(this: InstanceType<ModelType<Camp>>): any {
+  public get inventory(this: InstanceType<ModelType<Camp>>): any {
     return TentModel.find({ camp: this._id });
   }
 }
