@@ -3,7 +3,7 @@ import faker from "faker";
 import { UserModel } from "../../src/models/user";
 
 describe("User Register", (): void => {
-  jest.setTimeout(50000);
+  jest.setTimeout(150000);
 
   it("should create a user", async (): Promise<void> => {
     const registerMutation = `
