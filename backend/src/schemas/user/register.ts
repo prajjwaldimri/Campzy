@@ -34,6 +34,6 @@ export class RegisterResolver {
     });
     const createdUser = await userDocument.save();
     await auth.sendEmailVerificationToken(createdUser._id, email);
-    return JSON.stringify(createdUser.generateJWT());
+    return createdUser.generateJWT();
   }
 }
