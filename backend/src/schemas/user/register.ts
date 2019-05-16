@@ -14,6 +14,7 @@ class CreateUserByEmailInput {
   public email!: string;
 
   @Field()
+  @Length(4)
   public password!: string;
 }
 
@@ -26,6 +27,7 @@ export class RegisterResolver {
     password,
     name
   }: CreateUserByEmailInput): Promise<string> {
+    console.log(email, password);
     const passwordHash = await bcrypt.hash(password, 12);
     const userDocument = new UserModel({
       name: name,
