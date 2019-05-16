@@ -6,7 +6,7 @@ module.exports = {
   testEnvironment: "node",
   collectCoverage: true,
   collectCoverageFrom: [
-    "<rootDir>/src/schemas/**/*.{ts}",
+    "src/**/*.{js,ts}",
     "!**/node_modules/**",
     "!**/vendor/**"
   ]

@@ -3,7 +3,7 @@ import faker from "faker";
 import { UserModel } from "../../src/models/user";
 
 describe("User Register", (): void => {
-  jest.setTimeout(150000);
+  jest.setTimeout(50000);
 
   it("should create a user", async (): Promise<void> => {
     const registerMutation = `
@@ -102,6 +102,7 @@ describe("User Register", (): void => {
         }
       }
     });
+    console.log(response);
     expect(response.data).toBeNull();
   });
 });

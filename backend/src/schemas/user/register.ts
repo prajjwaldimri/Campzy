@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { UserModel } from "../../models/user";
 import * as auth from "../../config/auth";
 import { IsEmail, Length } from "class-validator";
+import { ApolloError, UserInputError } from "apollo-server-core";
 
 @InputType()
 class CreateUserByEmailInput {
@@ -27,14 +28,21 @@ export class RegisterResolver {
     password,
     name
   }: CreateUserByEmailInput): Promise<string> {
-    const passwordHash = await bcrypt.hash(password, 12);
-    const userDocument = new UserModel({
-      name: name,
-      email: email,
-      password: passwordHash
-    });
-    const createdUser = await userDocument.save();
-    await auth.sendEmailVerificationToken(createdUser._id, email);
-    return createdUser.generateJWT();
+    try {
+      if (password.trim().length < 4) {
+        throw new UserInputError("Password is too short!");
+      }
+      const passwordHash = await bcrypt.hash(password, 12);
+      const userDocument = new UserModel({
+        name: name,
+        email: email,
+        password: passwordHash
+      });
+      const createdUser = await userDocument.save();
+      await auth.sendEmailVerificationToken(createdUser._id, email);
+      return createdUser.generateJWT();
+    } catch (err) {
+      return err;
+    }
   }
 }
