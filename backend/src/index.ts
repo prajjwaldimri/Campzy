@@ -17,7 +17,6 @@ import bodyParser from "body-parser";
 import * as Sentry from "@sentry/node";
 import { buildSchema } from "type-graphql";
 
-import { UserResolver } from "./schemas/user/user";
 import {
   deleteImage,
   deleteDocuments,
@@ -78,7 +77,10 @@ async function main(): Promise<void> {
 
   // Creates graphql schemas from resolvers
   const schema = await buildSchema({
-    resolvers: [UserResolver]
+    resolvers: [
+      __dirname + "/schemas/**/*.resolver.ts",
+      __dirname + "/schemas/**/*.ts"
+    ]
   });
 
   // Apollo-Server Configuration

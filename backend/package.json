@@ -10,7 +10,7 @@
     "start": "yarn run build:live",
     "build": "tsc -p .",
     "dev": "tsnd --respawn src/index.ts",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.0",
