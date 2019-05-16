@@ -1,9 +1,10 @@
 import { Resolver, Query, Mutation } from "type-graphql";
+import { User } from "../../models/user";
 
 @Resolver()
 export class UserResolver {
-  @Query(() => String)
-  private async hello(): Promise<string> {
-    return "Hello World!";
+  @Query(() => User)
+  private async hello(): Promise<User> {
+    return new User();
   }
 }

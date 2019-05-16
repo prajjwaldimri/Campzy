@@ -15,9 +15,9 @@ import https, { request } from "https";
 import multer from "multer";
 import bodyParser from "body-parser";
 import * as Sentry from "@sentry/node";
+import { buildSchema } from "type-graphql";
 
 import { UserResolver } from "./schemas/user/user";
-
 import {
   deleteImage,
   deleteDocuments,
@@ -26,7 +26,6 @@ import {
   uploadDocument,
   imageStorage
 } from "./aws";
-import { buildSchema } from "type-graphql";
 
 async function main(): Promise<void> {
   const app = express();
@@ -73,15 +72,11 @@ async function main(): Promise<void> {
   // Connect to MLab Database
   mongoose.connect(process.env.MONGODB_URI || "", {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    autoReconnect: true
   });
-  mongoose.connection.once(
-    "open",
-    (): void => {
-      console.log("Database connected");
-    }
-  );
 
+  // Creates graphql schemas from resolvers
   const schema = await buildSchema({
     resolvers: [UserResolver]
   });

@@ -9,9 +9,12 @@ import {
 import validate from "mongoose-validator";
 import jwt from "jsonwebtoken";
 import { Camp } from "./camp";
+import { ObjectType, Field } from "type-graphql";
 
+@ObjectType()
 @index({ name: "text" })
 export class User extends Typegoose {
+  @Field({ nullable: true })
   @prop()
   public name?: string;
 
