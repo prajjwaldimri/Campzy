@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
 
-      - move: cd backend
+      - run: cd backend
 
       # Download and cache dependencies
       - restore_cache:
