@@ -11,6 +11,7 @@ import nanoid from "nanoid";
 
 import { TentModel } from "./tent";
 import { User } from "./user";
+import { ObjectType, Field } from "type-graphql";
 
 class BankAccount {
   @prop()
@@ -120,6 +121,7 @@ class Terrain {
   public river?: boolean;
 }
 
+@ObjectType()
 @index({
   name: "text",
   shortDescription: "text",
@@ -128,9 +130,11 @@ class Terrain {
   terrain: "text"
 })
 export class Camp extends Typegoose {
+  @Field()
   @prop({ required: true })
   public name!: string;
 
+  @Field()
   @prop({
     validate: [
       validate({

@@ -1,5 +1,12 @@
+import { gCall } from "../test-utils/gCall";
+
 describe("User Register", (): void => {
-  it("should create a user", (): void => {
-    console.log("JEST");
+  const registerMutation = ``;
+  it("should create a user", async (): Promise<void> => {
+    console.log(
+      await gCall({
+        source: registerMutation
+      })
+    );
   });
 });

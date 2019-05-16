@@ -2,19 +2,18 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import mailjet from "node-mailjet";
 
+import { ApolloError, AuthenticationError } from "apollo-server-express";
+
 import { sms } from "../communication/sms";
 import { emailer } from "../communication/email";
-
-import {
-  EmailSendError,
-  WrongEmailTokenError,
-  OTPSendError
-} from "../schema/graphqlErrors";
 
 import { TokenModel } from "../models/token";
 import { OTPModel } from "../models/otp";
 import { UserModel, User } from "../models/user";
 import { Twilio } from "twilio";
+
+const EmailSendError = (): ApolloError =>
+  new ApolloError("Error sending email!");
 
 /**
  * Gets the authentication JWT token from the HTTP header
@@ -96,7 +95,7 @@ const sendResetPasswordToken = async (
     }
     return await emailer.sendResetPasswordToken(email, token);
   } catch (err) {
-    throw new EmailSendError();
+    throw EmailSendError();
   }
 };
 
@@ -115,7 +114,7 @@ const sendEmailVerificationToken = async (
       await token.save();
     }
     if (!user) {
-      throw new EmailSendError();
+      throw EmailSendError();
     }
     return await emailer.sendEmailVerificationToken(
       email,
@@ -123,7 +122,7 @@ const sendEmailVerificationToken = async (
       user.name || "Campzy User"
     );
   } catch (err) {
-    throw new EmailSendError();
+    throw EmailSendError();
   }
 };
 
@@ -131,11 +130,11 @@ const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
   try {
     const token = await TokenModel.findOne({ tokenValue });
     if (!token) {
-      throw new WrongEmailTokenError();
+      throw new AuthenticationError("Wrong/Expired Email token!");
     }
     const matchingUser = await UserModel.findById(token.userId);
     if (!matchingUser) {
-      throw new WrongEmailTokenError();
+      throw new AuthenticationError("Wrong/Expired Email token!");
     }
     if (!matchingUser.isEmailVerified) {
       matchingUser.isEmailVerified = true;
@@ -143,7 +142,7 @@ const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
     }
     return true;
   } catch (err) {
-    throw new WrongEmailTokenError();
+    throw err;
   }
 };
 
@@ -178,7 +177,7 @@ const sendUserOTP = async (
     }
     return await sms.sendSMS(phoneNumber, `${otp.otpValue} is your Campzy OTP`);
   } catch (err) {
-    throw new OTPSendError();
+    throw new ApolloError("Cannot send OTP at this time!");
   }
 };
 
@@ -200,7 +199,7 @@ const verifyUserOTP = async (
   }
 };
 
-module.exports = {
+export {
   getAuthenticatedUser,
   isUserCampOwner,
   isUserAdmin,

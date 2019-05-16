@@ -18,6 +18,7 @@ export class User extends Typegoose {
   @prop()
   public name?: string;
 
+  @Field()
   @prop({
     lowercase: true,
     required: true,
@@ -27,9 +28,11 @@ export class User extends Typegoose {
   })
   public email!: string;
 
+  @Field()
   @prop({ default: false })
   public isEmailVerified!: boolean;
 
+  @Field()
   @prop({ default: false })
   public gdprConsent!: boolean;
 
@@ -42,9 +45,11 @@ export class User extends Typegoose {
   @prop()
   public passwordResetExpires?: Date;
 
+  @Field()
   @prop({ required: true, default: "Camper" })
   public type!: string;
 
+  @Field()
   @prop({
     required: true,
     unique: true,
@@ -65,9 +70,11 @@ export class User extends Typegoose {
   @prop()
   public googleToken?: string;
 
+  @Field()
   @prop({ default: false })
   public isBlacklisted?: boolean;
 
+  @Field()
   @prop()
   public dateOfBirth?: Date;
 

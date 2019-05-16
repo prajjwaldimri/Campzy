@@ -25,6 +25,7 @@ import {
   uploadDocument,
   imageStorage
 } from "./aws";
+import consola from "consola";
 
 async function main(): Promise<void> {
   const app = express();
@@ -96,12 +97,13 @@ async function main(): Promise<void> {
     app.use(Sentry.Handlers.errorHandler());
   }
 
-  if (process.env.ENVIRONMENT === "development") {
+  if (process.env.NODE_ENV === "development") {
     // HTTPS on localhost
     const certOptions = {
       key: fs.readFileSync(path.resolve(__dirname, "certs/server.key")),
       cert: fs.readFileSync(path.resolve(__dirname, "certs/server.crt"))
     };
+    consola.success("Server up!");
     https.createServer(certOptions, app).listen(443);
   } else {
     app.listen(process.env.PORT || 4444);
