@@ -4,7 +4,6 @@ import "../../src/models/user";
 
 beforeEach(
   (done): void => {
-    console.log("DB!!!");
     function clearDB(): void {
       for (let i in mongoose.connection.collections) {
         mongoose.connection.collections[i].remove((): void => {});

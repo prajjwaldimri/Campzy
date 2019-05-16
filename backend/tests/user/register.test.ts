@@ -1,12 +1,23 @@
 import { gCall } from "../test-utils/gCall";
+import faker from "faker";
 
 describe("User Register", (): void => {
-  const registerMutation = ``;
+  jest.setTimeout(10000);
+  const registerMutation = `mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
+  createUserByEmail(data: $data)
+}
+`;
   it("should create a user", async (): Promise<void> => {
-    console.log(
-      await gCall({
-        source: registerMutation
-      })
-    );
+    const response = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: {
+          name: faker.name.firstName(),
+          email: faker.internet.email(),
+          password: faker.hacker.adjective()
+        }
+      }
+    });
+    expect(response.data.createUserByEmail).toBeDefined();
   });
 });

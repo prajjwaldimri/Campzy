@@ -104,11 +104,11 @@ const sendEmailVerificationToken = async (
   email: string
 ): Promise<mailjet.Email.Response> => {
   try {
-    let token = await TokenModel.findOne({ _userId: userId });
+    let token = await TokenModel.findOne({ userId: userId });
     const user: User | null = await UserModel.findById(userId).select("name");
     if (!token) {
       token = new TokenModel({
-        _userId: userId,
+        userId: userId,
         tokenValue: crypto.randomBytes(16).toString("hex")
       });
       await token.save();
@@ -122,6 +122,7 @@ const sendEmailVerificationToken = async (
       user.name || "Campzy User"
     );
   } catch (err) {
+    console.log(err);
     throw EmailSendError();
   }
 };

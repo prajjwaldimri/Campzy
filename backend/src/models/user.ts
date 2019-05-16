@@ -51,7 +51,6 @@ export class User extends Typegoose {
 
   @Field()
   @prop({
-    required: true,
     unique: true,
     sparse: true,
     validate: [
@@ -62,7 +61,7 @@ export class User extends Typegoose {
       })
     ]
   })
-  public phoneNumber!: string;
+  public phoneNumber?: string;
 
   @prop()
   public facebookToken?: string;
