@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-import "../../src/models/user";
+import "../../models/user";
 
 beforeEach(
   (done): void => {

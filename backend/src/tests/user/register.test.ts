@@ -1,6 +1,6 @@
 import { gCall } from "../test-utils/gCall";
 import faker from "faker";
-import { UserModel } from "../../src/models/user";
+import { UserModel } from "../../models/user";
 
 describe("User Register", (): void => {
   jest.setTimeout(50000);
