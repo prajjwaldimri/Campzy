@@ -16,8 +16,8 @@ export const gCall = async ({
   if (!schema) {
     schema = await buildSchema({
       resolvers: [
-        __dirname + "/../../src/schemas/**/*.resolver.ts",
-        __dirname + "/../../src/schemas/**/*.ts"
+        __dirname + "/../../schemas/**/*.resolver.ts",
+        __dirname + "/../../schemas/**/*.ts"
       ]
     });
   }
