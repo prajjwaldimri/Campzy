@@ -52,6 +52,7 @@ describe("User Login", (): void => {
       }
     });
     console.log(response);
+    expect(response.errors).toBeDefined();
   });
 
   it("should not Logged In (Invalid Password or Email)", async (): Promise<
@@ -73,5 +74,6 @@ describe("User Login", (): void => {
       }
     });
     console.log(response);
+    expect(response.errors).toBeDefined();
   });
 });
