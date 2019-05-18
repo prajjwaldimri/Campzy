@@ -27,6 +27,8 @@ describe("User Phone Verification", (): void => {
       }
     });
 
+    console.log(responseRegister);
+
     const jwtToken = responseRegister.data.createUserByEmail;
 
     const otpMutation = `
@@ -67,6 +69,8 @@ describe("User Phone Verification", (): void => {
       }
     });
 
+    console.log(responseRegister);
+
     const jwtToken = responseRegister.data.createUserByEmail;
 
     const otpMutation = `
@@ -77,7 +81,7 @@ describe("User Phone Verification", (): void => {
 
     await UserModel.create({
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: faker.internet.password(20),
       phoneNumber: "+917830304050"
     });
 
