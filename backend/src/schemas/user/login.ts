@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 import { UserModel } from "../../models/user";
 import { IsEmail } from "class-validator";
-import { ApolloError, UserInputError } from "apollo-server-core";
+import { UserInputError } from "apollo-server-core";
 
 @InputType()
 class LoginUserByEmailInput {
