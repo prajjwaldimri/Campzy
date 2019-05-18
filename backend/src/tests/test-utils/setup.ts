@@ -3,13 +3,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import "../../models/user";
+import { UserModel } from "../../models/user";
+import faker = require("faker");
 
 beforeEach(
-  (done): void => {
-    function clearDB(): void {
+  async (done): Promise<void> => {
+    async function clearDB(): Promise<void> {
       for (let i in mongoose.connection.collections) {
         mongoose.connection.collections[i].remove((): void => {});
       }
+      await UserModel.create({
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        phoneNumber: "+917830304050"
+      });
       return done();
     }
 
@@ -21,7 +28,7 @@ beforeEach(
           useCreateIndex: true,
           autoReconnect: true
         },
-        (err): void => {
+        (err): Promise<void> => {
           if (err) throw err;
           return clearDB();
         }
@@ -34,13 +41,13 @@ beforeEach(
 
 afterEach(
   (done): void => {
-    mongoose.disconnect();
     return done();
   }
 );
 
 afterAll(
   (done): void => {
+    mongoose.disconnect();
     return done();
   }
 );
