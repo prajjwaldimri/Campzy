@@ -6,6 +6,24 @@ describe("User Phone Verification", (): void => {
   jest.setTimeout(50000);
 
   it("should send an OTP to user's phoneNumber", async (): Promise<void> => {
+    const registerMutation = `
+    mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
+      createUserByEmail(data: $data)
+    }
+    `;
+
+    const user = {
+      name: faker.name.firstName(),
+      email: faker.internet.email(),
+      password: "validPassword"
+    };
+    const responseRegister = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: user
+      }
+    });
+
     const otpMutation = `
     mutation sendOTPtoPhoneNumber($phoneNumber: String!) {
       sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
@@ -30,6 +48,12 @@ describe("User Phone Verification", (): void => {
       sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
     }
     `;
+
+    await UserModel.create({
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      phoneNumber: "+917830304050"
+    });
 
     const response = await gCall({
       source: otpMutation,

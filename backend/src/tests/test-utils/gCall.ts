@@ -25,7 +25,10 @@ export const gCall = async ({
     return graphql({
       schema,
       source,
-      variableValues
+      variableValues,
+      contextValue: {
+        req: {}
+      }
     });
   } catch (error) {
     console.log(error);
