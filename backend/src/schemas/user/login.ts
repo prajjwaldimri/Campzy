@@ -21,7 +21,7 @@ export class LoginResolver {
   {
     email,
     password
-  }: LoginUserByEmailInput): Promise<any> {
+  }: LoginUserByEmailInput): Promise<string> {
     try {
       if (!email || !password) {
         throw new UserInputError("Invalid Email or Password");
@@ -39,7 +39,8 @@ export class LoginResolver {
       if (!passwordsMatch) {
         throw new UserInputError("Invalid Password");
       }
-      return { jwt: JSON.stringify(userDocument.generateJWT()) };
+      const jwt = JSON.stringify(userDocument.generateJWT());
+      return jwt;
     } catch (err) {
       return err;
     }
