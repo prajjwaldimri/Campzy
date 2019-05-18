@@ -34,4 +34,46 @@ describe("User Login", (): void => {
     console.log(dbUser);
     expect(dbUser).toBeDefined();
   });
+
+  it("should not Logged In (Invalid Email)", async (): Promise<void> => {
+    const LoginQuery = `
+      query login($data: LoginUserByEmailInput!) {
+      login(data: $data )
+    }
+    `;
+
+    const response = await gCall({
+      source: LoginQuery,
+      variableValues: {
+        data: {
+          email: "abc@test.com",
+          password: "validPassword"
+        }
+      }
+    });
+    console.log(response);
+    expect(response.errors).toBeDefined();
+  });
+
+  it("should not Logged In (Invalid Password or Email)", async (): Promise<
+    void
+  > => {
+    const LoginQuery = `
+      query login($data: LoginUserByEmailInput!) {
+      login(data: $data )
+    }
+    `;
+
+    const response = await gCall({
+      source: LoginQuery,
+      variableValues: {
+        data: {
+          email: "abc@test.com",
+          password: "InvalidPassword"
+        }
+      }
+    });
+    console.log(response);
+    expect(response.errors).toBeDefined();
+  });
 });
