@@ -31,8 +31,15 @@ const getTokenFromHeaders = (req: any): string => {
   return "";
 };
 
+interface DecryptedUser {
+  email: string;
+  id: string;
+  exp: number;
+  iat: number;
+}
+
 // Retrieves the authenticated user details from JWT
-const getAuthenticatedUser = (req: Express.Request): Promise<object | string> =>
+const getAuthenticatedUser = (req: Express.Request): Promise<DecryptedUser> =>
   new Promise(
     (resolve, reject): void => {
       const token = getTokenFromHeaders(req);
@@ -43,7 +50,7 @@ const getAuthenticatedUser = (req: Express.Request): Promise<object | string> =>
           if (err) {
             reject(new Error("NotLoggedInError"));
           }
-          resolve(payload);
+          resolve(payload as DecryptedUser);
         }
       );
     }
@@ -122,7 +129,6 @@ const sendEmailVerificationToken = async (
       user.name || "Campzy User"
     );
   } catch (err) {
-    console.log(err);
     throw EmailSendError();
   }
 };
@@ -165,12 +171,14 @@ function generateRandomNumbers(n: number): string {
 }
 
 const sendUserOTP = async (
-  phoneNumber: string
+  phoneNumber: string,
+  userId: string
 ): Promise<Twilio.TwilioClientOptions> => {
   try {
     let otp = await OTPModel.findOne({ phoneNumber });
     if (!otp) {
       otp = new OTPModel({
+        user: userId,
         phoneNumber,
         otpValue: `${generateRandomNumbers(6)}`
       });

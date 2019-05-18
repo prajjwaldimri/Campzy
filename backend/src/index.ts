@@ -88,7 +88,7 @@ async function main(): Promise<void> {
   const server = new ApolloServer({
     playground: true,
     schema,
-    context: { req: request, passport }
+    context: { req: request }
   });
   server.applyMiddleware({ app });
 

@@ -5,13 +5,15 @@ import Maybe from "graphql/tsutils/Maybe";
 interface Options {
   source: string;
   variableValues?: Maybe<{ [key: string]: any }>;
+  jwtToken?: string;
 }
 
 let schema: GraphQLSchema;
 
 export const gCall = async ({
   source,
-  variableValues
+  variableValues,
+  jwtToken
 }: Options): Promise<any> => {
   if (!schema) {
     schema = await buildSchema({
@@ -27,7 +29,11 @@ export const gCall = async ({
       source,
       variableValues,
       contextValue: {
-        req: {}
+        req: {
+          headers: {
+            authorization: `Bearer ${jwtToken}`
+          }
+        }
       }
     });
   } catch (error) {
