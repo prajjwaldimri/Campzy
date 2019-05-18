@@ -1,6 +1,10 @@
-import { Typegoose, prop } from "typegoose";
+import { Typegoose, prop, Ref } from "typegoose";
+import { User } from "./user";
 
 export class OTP extends Typegoose {
+  @prop({ required: true })
+  public user!: Ref<User>;
+
   @prop({ required: true })
   public phoneNumber!: string;
 

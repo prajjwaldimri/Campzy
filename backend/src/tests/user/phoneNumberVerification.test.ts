@@ -80,7 +80,18 @@ describe("User Phone Verification", (): void => {
   });
 
   it("should verify user's phoneNumber", async (): Promise<void> => {
-    throw new Error();
+    const otpMutation = `
+    mutation sendOTPtoPhoneNumber($phoneNumber: String!) {
+      sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
+    }
+    `;
+
+    const response = await gCall({
+      source: otpMutation,
+      variableValues: {
+        phoneNumber: `+${faker.phone.phoneNumber("91##########")}`
+      }
+    });
   });
 
   it("should not verify user's phoneNumber (Wrong OTP)", async (): Promise<

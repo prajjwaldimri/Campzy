@@ -182,24 +182,6 @@ const sendUserOTP = async (
   }
 };
 
-const verifyUserOTP = async (
-  otpValue: string,
-  phoneNumber: string
-): Promise<boolean> => {
-  try {
-    const otp = await OTPModel.findOne({ otpValue });
-    if (!otp) {
-      return false;
-    }
-    if (`${phoneNumber}` === otp.phoneNumber) {
-      return true;
-    }
-    return false;
-  } catch (err) {
-    return false;
-  }
-};
-
 export {
   getAuthenticatedUser,
   isUserCampOwner,
@@ -207,7 +189,6 @@ export {
   isUserBlogger,
   verifyUserToken,
   sendUserOTP,
-  verifyUserOTP,
   sendResetPasswordToken,
   sendEmailVerificationToken
 };
