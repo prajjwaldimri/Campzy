@@ -4,7 +4,8 @@ import {
   Ref,
   index,
   InstanceType,
-  instanceMethod
+  instanceMethod,
+  arrayProp
 } from "typegoose";
 import validate from "mongoose-validator";
 import jwt from "jsonwebtoken";
@@ -80,8 +81,9 @@ export class User extends Typegoose {
   @prop({ ref: Camp, unique: true, sparse: true })
   public ownedCampId?: Ref<Camp>;
 
-  @prop({ ref: Camp })
-  public wishlist?: Camp[];
+  @Field(() => [Camp])
+  @arrayProp({ itemsRef: Camp })
+  public wishlist?: Ref<Camp>[];
 
   @instanceMethod
   public generateJWT(this: InstanceType<User>): string {
