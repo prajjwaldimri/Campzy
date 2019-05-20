@@ -41,7 +41,7 @@ export class AddCampResolver {
   ): Promise<any> {
     try {
       const user = await auth.getAuthenticatedUser(ctx.req);
-      const userData = await UserModel.findById(user.id);
+      const userData = await UserModel.findById(user.id).exec();
       const isUserAdmin = auth.isUserAdmin(userData);
       if (userData === null) {
         throw new AuthenticationError("You need to be logged in!");
@@ -64,7 +64,7 @@ export class AddCampResolver {
       return await UserModel.findByIdAndUpdate(ownerId, {
         ownedCampId: createdCamp.id,
         type: "CampOwner"
-      });
+      }).exec();
     } catch (err) {
       return err;
     }

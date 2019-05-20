@@ -16,7 +16,7 @@ export class CurrentUserResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      return await UserModel.findById(loggedInUser.id);
+      return await UserModel.findById(loggedInUser.id).exec();
     } catch (err) {
       return err;
     }

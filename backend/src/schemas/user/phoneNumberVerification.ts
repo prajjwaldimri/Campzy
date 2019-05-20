@@ -29,7 +29,7 @@ export class PhoneNumberVerificationResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      const user = await UserModel.findOne({ phoneNumber });
+      const user = await UserModel.findOne({ phoneNumber }).exec();
       if (user) {
         throw new ApolloError("Phone number is already in use!");
       }
@@ -46,7 +46,7 @@ export class PhoneNumberVerificationResolver {
     @Arg("otp") otp: string
   ): Promise<boolean> {
     try {
-      const otpDocument = await OTPModel.findOne({ otpValue: otp });
+      const otpDocument = await OTPModel.findOne({ otpValue: otp }).exec();
       if (!otpDocument) {
         throw new ApolloError("Wrong otp provided!");
       }
@@ -54,7 +54,7 @@ export class PhoneNumberVerificationResolver {
       if (phoneNumber !== otpDocument.phoneNumber) {
         throw new UserInputError("OTP and phone number do not match");
       }
-      const user = await UserModel.findById(otpDocument.user);
+      const user = await UserModel.findById(otpDocument.user).exec();
       if (!user) {
         throw new ApolloError(
           "Cannot find user associated with this phone number!"

@@ -21,9 +21,9 @@ export class WishlistResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      const userData = await UserModel.findById(loggedInUser.id).select(
-        "wishlist"
-      );
+      const userData = await UserModel.findById(loggedInUser.id)
+        .select("wishlist")
+        .exec();
       if (!userData || userData.wishlist === undefined) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -47,9 +47,9 @@ export class WishlistResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      const userData = await UserModel.findById(loggedInUser.id).select(
-        "wishlist"
-      );
+      const userData = await UserModel.findById(loggedInUser.id)
+        .select("wishlist")
+        .exec();
       if (!userData || userData.wishlist === undefined) {
         throw new AuthenticationError("You need to be logged in!");
       }

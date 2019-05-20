@@ -27,7 +27,7 @@ export class LoginResolver {
         throw new UserInputError("Invalid Email or Password");
       }
 
-      const userDocument = await UserModel.findOne({ email });
+      const userDocument = await UserModel.findOne({ email }).exec();
       if (!userDocument) {
         throw new UserInputError("Invalid Email or Password");
       }
