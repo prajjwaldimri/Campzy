@@ -25,8 +25,8 @@ class AddCampInput {
   @Field()
   public url!: string;
 
-  @Field()
-  public tags!: string[];
+  @Field(() => [String])
+  public tags!: [string];
 
   @Field()
   public ownerId!: string;
