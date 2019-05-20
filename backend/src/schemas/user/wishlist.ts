@@ -24,10 +24,15 @@ export class WishlistResolver {
       const userData = await UserModel.findById(loggedInUser.id)
         .select("wishlist")
         .exec();
-      if (!userData || userData.wishlist === undefined) {
+      console.log(userData);
+      if (!userData) {
         throw new AuthenticationError("You need to be logged in!");
       }
-      userData.wishlist.push(campId);
+      if (userData.wishlist === undefined) {
+        userData.wishlist = [campId];
+      } else {
+        userData.wishlist.push(campId);
+      }
       await userData.save();
 
       return true;
