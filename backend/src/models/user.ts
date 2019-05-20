@@ -82,7 +82,7 @@ export class User extends Typegoose {
   public ownedCampId?: Ref<Camp>;
 
   @Field(() => [Camp])
-  @arrayProp({ itemsRef: Camp })
+  @prop({ ref: Camp })
   public wishlist?: Ref<Camp>[];
 
   @instanceMethod
