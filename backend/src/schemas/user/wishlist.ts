@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { ObjectId } from "mongodb";
 import { Mutation, Resolver, Ctx, Arg } from "type-graphql";
-import { AuthenticationError } from "apollo-server-core";
+import { AuthenticationError, UserInputError } from "apollo-server-core";
 import { GraphContext } from "graphcontext";
 
 import { UserModel } from "../../models/user";
@@ -21,14 +21,16 @@ export class WishlistResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      const userData = await UserModel.findById(loggedInUser.id)
-        .select("wishlist")
-        .exec();
-      if (!userData || userData.wishlist === undefined) {
-        throw new AuthenticationError("You need to be logged in!");
+      const userData = await UserModel.findByIdAndUpdate(
+        loggedInUser.id,
+        {
+          $push: { wishlist: campId }
+        },
+        { new: true }
+      ).exec();
+      if (!userData) {
+        throw new UserInputError("Wrong camp id");
       }
-      userData.wishlist.push(campId);
-      await userData.save();
 
       return true;
     } catch (err) {
@@ -47,16 +49,16 @@ export class WishlistResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      const userData = await UserModel.findById(loggedInUser.id)
-        .select("wishlist")
-        .exec();
-      if (!userData || userData.wishlist === undefined) {
-        throw new AuthenticationError("You need to be logged in!");
+      const userData = await UserModel.findByIdAndUpdate(
+        loggedInUser.id,
+        {
+          $pull: { wishlist: campId }
+        },
+        { new: true }
+      ).exec();
+      if (!userData) {
+        throw new UserInputError("Wrong camp id");
       }
-      if (userData.wishlist.indexOf(campId) > -1) {
-        userData.wishlist.splice(userData.wishlist.indexOf(campId), 1);
-      }
-      await userData.save();
 
       return true;
     } catch (err) {
