@@ -6,7 +6,7 @@ import { GraphContext } from "graphcontext";
 
 import { UserModel } from "../../models/user";
 import * as auth from "../../config/auth";
-import { ObjectIdScalar } from "../../../types/objectIdScalar";
+import { ObjectIdScalar } from "../../types/objectIdScalar";
 
 @Resolver()
 export class WishlistResolver {

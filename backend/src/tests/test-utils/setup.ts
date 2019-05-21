@@ -4,7 +4,7 @@ dotenv.config();
 
 import "../../models/user";
 
-beforeAll(
+beforeEach(
   async (done): Promise<void> => {
     async function clearDB(): Promise<void> {
       for (let i in mongoose.connection.collections) {

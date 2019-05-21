@@ -1,10 +1,11 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import { UserModel } from "../../models/user";
 import { CampModel } from "../../models/camp";
 
 describe("Current User Tests", (): void => {
   jest.setTimeout(50000);
+  let chance = new Chance();
 
   it("should add camp to user's wishlist", async (): Promise<void> => {
     const registerMutation = `
@@ -14,8 +15,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -32,10 +33,10 @@ describe("Current User Tests", (): void => {
     }
 
     const camp = await CampModel.create({
-      name: faker.address.streetName(),
-      email: faker.internet.email(),
-      url: faker.random.alphaNumeric(10),
-      shortDescription: faker.lorem.sentence(),
+      name: chance.street(),
+      email: chance.email(),
+      url: chance.string(),
+      shortDescription: chance.sentence(),
       ownerId: createdUser._id
     });
 
@@ -68,8 +69,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     await gCall({
@@ -85,10 +86,10 @@ describe("Current User Tests", (): void => {
       throw new Error("User not created!");
     }
     const camp = await CampModel.create({
-      name: faker.address.streetName(),
-      email: faker.internet.email(),
-      url: faker.random.alphaNumeric(10),
-      shortDescription: faker.lorem.sentence(),
+      name: chance.street(),
+      email: chance.email(),
+      url: chance.string(),
+      shortDescription: chance.sentence(),
       ownerId: createdUser._id
     });
 
@@ -103,7 +104,7 @@ describe("Current User Tests", (): void => {
       variableValues: {
         campId: camp._id
       },
-      jwtToken: faker.random.alphaNumeric(20)
+      jwtToken: chance.string()
     });
 
     expect(response.errors).toBeDefined();
@@ -119,8 +120,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -147,7 +148,7 @@ describe("Current User Tests", (): void => {
     const response = await gCall({
       source: addWishlistMutation,
       variableValues: {
-        campId: faker.random.alphaNumeric(20)
+        campId: chance.string()
       },
       jwtToken
     });
@@ -163,8 +164,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -181,10 +182,10 @@ describe("Current User Tests", (): void => {
     }
 
     const camp = await CampModel.create({
-      name: faker.address.streetName(),
-      email: faker.internet.email(),
-      url: faker.random.alphaNumeric(10),
-      shortDescription: faker.lorem.sentence(),
+      name: chance.street(),
+      email: chance.email(),
+      url: chance.string(),
+      shortDescription: chance.sentence(),
       ownerId: createdUser._id
     });
 
@@ -231,8 +232,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     await gCall({
@@ -249,10 +250,10 @@ describe("Current User Tests", (): void => {
     }
 
     const camp = await CampModel.create({
-      name: faker.address.streetName(),
-      email: faker.internet.email(),
-      url: faker.random.alphaNumeric(10),
-      shortDescription: faker.lorem.sentence(),
+      name: chance.street(),
+      email: chance.email(),
+      url: chance.string(),
+      shortDescription: chance.sentence(),
       ownerId: createdUser._id
     });
 
@@ -267,7 +268,7 @@ describe("Current User Tests", (): void => {
       variableValues: {
         campId: camp._id
       },
-      jwtToken: faker.random.alphaNumeric(20)
+      jwtToken: chance.string()
     });
 
     expect(responseRemove.errors).toBeDefined();
@@ -283,8 +284,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -301,10 +302,10 @@ describe("Current User Tests", (): void => {
     }
 
     const camp = await CampModel.create({
-      name: faker.address.streetName(),
-      email: faker.internet.email(),
-      url: faker.random.alphaNumeric(10),
-      shortDescription: faker.lorem.sentence(),
+      name: chance.street(),
+      email: chance.email(),
+      url: chance.string(),
+      shortDescription: chance.sentence(),
       ownerId: createdUser._id
     });
 
@@ -333,7 +334,7 @@ describe("Current User Tests", (): void => {
     const responseRemove = await gCall({
       source: removeWishlistMutation,
       variableValues: {
-        campId: faker.random.alphaNumeric(20)
+        campId: chance.string()
       },
       jwtToken
     });

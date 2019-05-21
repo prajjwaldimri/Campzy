@@ -1,12 +1,11 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import { UserModel } from "../../models/user";
 import { OTPModel } from "../../models/otp";
 
 describe("User Phone Verification", (): void => {
   jest.setTimeout(50000);
-
-  const toBeVerifiedPhoneNumber = `+917830207022`;
+  let chance = new Chance();
 
   it("should send an OTP to user's phoneNumber", async (): Promise<void> => {
     const registerMutation = `
@@ -16,8 +15,8 @@ describe("User Phone Verification", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -26,8 +25,6 @@ describe("User Phone Verification", (): void => {
         data: user
       }
     });
-
-    console.log(responseRegister);
 
     const jwtToken = responseRegister.data.createUserByEmail;
 
@@ -40,7 +37,7 @@ describe("User Phone Verification", (): void => {
     const response = await gCall({
       source: otpMutation,
       variableValues: {
-        phoneNumber: toBeVerifiedPhoneNumber
+        phoneNumber: `+917830207022`
       },
       jwtToken
     });
@@ -58,8 +55,8 @@ describe("User Phone Verification", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -80,8 +77,8 @@ describe("User Phone Verification", (): void => {
     `;
 
     await UserModel.create({
-      email: faker.internet.email(),
-      password: faker.internet.password(20),
+      email: chance.email(),
+      password: chance.string({ length: 10 }),
       phoneNumber: "+917830304050"
     });
 
@@ -106,8 +103,8 @@ describe("User Phone Verification", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -146,8 +143,8 @@ describe("User Phone Verification", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -196,6 +193,40 @@ describe("User Phone Verification", (): void => {
   });
 
   it("should verify user's phoneNumber", async (): Promise<void> => {
+    const registerMutation = `
+    mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
+      createUserByEmail(data: $data)
+    }
+    `;
+
+    const user = {
+      name: chance.name(),
+      email: chance.email(),
+      password: "validPassword"
+    };
+    const responseRegister = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: user
+      }
+    });
+
+    const jwtToken = responseRegister.data.createUserByEmail;
+
+    const otpMutation = `
+    mutation sendOTPtoPhoneNumber($phoneNumber: String!) {
+      sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
+    }
+    `;
+
+    await gCall({
+      source: otpMutation,
+      variableValues: {
+        phoneNumber: "+919690046216"
+      },
+      jwtToken
+    });
+
     const verificationMutation = `
     mutation verifyOTP($phoneNumber: String!, $otp: String!) {
       verifyOTP(phoneNumber: $phoneNumber, otp: $otp)
@@ -203,7 +234,7 @@ describe("User Phone Verification", (): void => {
     `;
 
     const otpDocument = await OTPModel.findOne({
-      phoneNumber: toBeVerifiedPhoneNumber
+      phoneNumber: "+919690046216"
     });
 
     if (!otpDocument) {
@@ -213,10 +244,12 @@ describe("User Phone Verification", (): void => {
     const response = await gCall({
       source: verificationMutation,
       variableValues: {
-        phoneNumber: toBeVerifiedPhoneNumber,
+        phoneNumber: "+919690046216",
         otp: otpDocument.otpValue
       }
     });
+
+    console.log(response);
 
     expect(response.data.verifyOTP).toEqual(true);
   });
@@ -224,6 +257,40 @@ describe("User Phone Verification", (): void => {
   it("should not verify user's phoneNumber (Wrong OTP)", async (): Promise<
     void
   > => {
+    const registerMutation = `
+    mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
+      createUserByEmail(data: $data)
+    }
+    `;
+
+    const user = {
+      name: chance.name(),
+      email: chance.email(),
+      password: "validPassword"
+    };
+    const responseRegister = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: user
+      }
+    });
+
+    const jwtToken = responseRegister.data.createUserByEmail;
+
+    const otpMutation = `
+    mutation sendOTPtoPhoneNumber($phoneNumber: String!) {
+      sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
+    }
+    `;
+
+    await gCall({
+      source: otpMutation,
+      variableValues: {
+        phoneNumber: "+919810325245"
+      },
+      jwtToken
+    });
+
     const verificationMutation = `
     mutation verifyOTP($phoneNumber: String!, $otp: String!) {
       verifyOTP(phoneNumber: $phoneNumber, otp: $otp)
@@ -233,7 +300,7 @@ describe("User Phone Verification", (): void => {
     const response = await gCall({
       source: verificationMutation,
       variableValues: {
-        phoneNumber: toBeVerifiedPhoneNumber,
+        phoneNumber: "+919810325245",
         otp: "a2891371"
       }
     });
@@ -244,6 +311,40 @@ describe("User Phone Verification", (): void => {
   it("should not verify user's phoneNumber (Blank OTP)", async (): Promise<
     void
   > => {
+    const registerMutation = `
+    mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
+      createUserByEmail(data: $data)
+    }
+    `;
+
+    const user = {
+      name: chance.name(),
+      email: chance.email(),
+      password: "validPassword"
+    };
+    const responseRegister = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: user
+      }
+    });
+
+    const jwtToken = responseRegister.data.createUserByEmail;
+
+    const otpMutation = `
+    mutation sendOTPtoPhoneNumber($phoneNumber: String!) {
+      sendOTPtoPhoneNumber(phoneNumber: $phoneNumber)
+    }
+    `;
+
+    await gCall({
+      source: otpMutation,
+      variableValues: {
+        phoneNumber: "+919690046216"
+      },
+      jwtToken
+    });
+
     const verificationMutation = `
     mutation verifyOTP($phoneNumber: String!, $otp: String!) {
       verifyOTP(phoneNumber: $phoneNumber, otp: $otp)
@@ -253,7 +354,7 @@ describe("User Phone Verification", (): void => {
     const response = await gCall({
       source: verificationMutation,
       variableValues: {
-        phoneNumber: toBeVerifiedPhoneNumber,
+        phoneNumber: "+919690046216",
         otp: "           "
       }
     });

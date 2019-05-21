@@ -1,9 +1,10 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import { UserModel } from "../../models/user";
 
 describe("User Register", (): void => {
   jest.setTimeout(50000);
+  let chance = new Chance();
 
   it("should create a user", async (): Promise<void> => {
     const registerMutation = `
@@ -13,8 +14,8 @@ describe("User Register", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const response = await gCall({
@@ -39,9 +40,9 @@ describe("User Register", (): void => {
       source: registerMutation,
       variableValues: {
         data: {
-          name: faker.name.firstName(),
+          name: chance.name(),
           email: "gibberishASDKLja.com",
-          password: faker.hacker.adjective()
+          password: chance.string({ length: 10 })
         }
       }
     });
@@ -58,9 +59,9 @@ describe("User Register", (): void => {
       source: registerMutation,
       variableValues: {
         data: {
-          name: faker.name.firstName(),
+          name: chance.name(),
           email: "         ",
-          password: faker.hacker.adjective()
+          password: chance.string({ length: 10 })
         }
       }
     });
@@ -77,8 +78,8 @@ describe("User Register", (): void => {
       source: registerMutation,
       variableValues: {
         data: {
-          name: faker.name.firstName(),
-          email: faker.internet.email(),
+          name: chance.name(),
+          email: chance.email(),
           password: "1"
         }
       }
@@ -96,8 +97,8 @@ describe("User Register", (): void => {
       source: registerMutation,
       variableValues: {
         data: {
-          name: faker.name.firstName(),
-          email: faker.internet.email(),
+          name: chance.name(),
+          email: chance.email(),
           password: "                     "
         }
       }
