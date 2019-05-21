@@ -28,10 +28,7 @@ describe("User Login", (): void => {
         }
       }
     });
-    expect(response).toBeDefined();
-
-    const dbUser = await UserModel.findOne({ email: user.email });
-    expect(dbUser).toBeDefined();
+    expect(response.data.login).toBeDefined();
   });
 
   it("should not Logged In (Invalid Email)", async (): Promise<void> => {
