@@ -1,6 +1,5 @@
 import { gCall } from "../test-utils/gCall";
 import Chance from "chance";
-import { UserModel } from "../../models/user";
 
 describe("Current User Tests", (): void => {
   jest.setTimeout(50000);
@@ -24,8 +23,6 @@ describe("Current User Tests", (): void => {
         data: user
       }
     });
-
-    console.log(responseRegister);
 
     const jwtToken = responseRegister.data.createUserByEmail;
 

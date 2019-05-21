@@ -48,7 +48,7 @@ const getAuthenticatedUser = (req: Express.Request): Promise<DecryptedUser> =>
         process.env.JWT_SECRET || "",
         (err, payload): void => {
           if (err) {
-            reject(new Error("NotLoggedInError"));
+            reject(err);
           }
           resolve(payload as DecryptedUser);
         }
