@@ -24,6 +24,8 @@ describe("Current User Tests", (): void => {
       }
     });
 
+    console.log(responseRegister);
+
     const jwtToken = responseRegister.data.createUserByEmail;
 
     const currentUserQuery = `
