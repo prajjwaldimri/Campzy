@@ -1,10 +1,11 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import bcrypt from "bcrypt";
 import { UserModel } from "../../models/user";
 
 describe("User Login", (): void => {
   jest.setTimeout(50000);
+  let chance = new Chance();
 
   it("should Logged In", async (): Promise<void> => {
     const LoginQuery = `
@@ -14,8 +15,8 @@ describe("User Login", (): void => {
     `;
     const passwordHash = await bcrypt.hash("validPassword", 12);
     const user = await new UserModel({
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: passwordHash
     }).save();
     const response = await gCall({
@@ -27,11 +28,9 @@ describe("User Login", (): void => {
         }
       }
     });
-    console.log(response);
     expect(response).toBeDefined();
 
     const dbUser = await UserModel.findOne({ email: user.email });
-    console.log(dbUser);
     expect(dbUser).toBeDefined();
   });
 
@@ -51,7 +50,6 @@ describe("User Login", (): void => {
         }
       }
     });
-    console.log(response);
     expect(response.errors).toBeDefined();
   });
 
@@ -73,7 +71,6 @@ describe("User Login", (): void => {
         }
       }
     });
-    console.log(response);
     expect(response.errors).toBeDefined();
   });
 });

@@ -1,9 +1,10 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import { UserModel } from "../../models/user";
 
 describe("Current User Tests", (): void => {
   jest.setTimeout(50000);
+  let chance = new Chance();
 
   it("should return current user", async (): Promise<void> => {
     const registerMutation = `
@@ -13,8 +14,8 @@ describe("Current User Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: "validPassword"
     };
     const responseRegister = await gCall({
@@ -65,7 +66,7 @@ describe("Current User Tests", (): void => {
 
     const response = await gCall({
       source: currentUserQuery,
-      jwtToken: faker.random.alphaNumeric(20).toString()
+      jwtToken: chance.string({ length: 20 })
     });
 
     expect(response.errors).toBeDefined();
