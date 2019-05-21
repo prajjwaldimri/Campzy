@@ -39,8 +39,7 @@ export class LoginResolver {
       if (!passwordsMatch) {
         throw new UserInputError("Invalid Password");
       }
-      const jwt = JSON.stringify(userDocument.generateJWT());
-      return jwt;
+      return userDocument.generateJWT();
     } catch (err) {
       return err;
     }

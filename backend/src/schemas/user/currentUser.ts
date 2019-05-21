@@ -8,7 +8,7 @@ import * as auth from "../../config/auth";
 @Resolver()
 export class CurrentUserResolver {
   @Query(() => User)
-  private async getCurrentUser(@Ctx() ctx: GraphContext): Promise<any> {
+  private async getCurrentUser(@Ctx() ctx: GraphContext): Promise<User | null> {
     try {
       const loggedInUser = await auth.getAuthenticatedUser(ctx.req);
 
