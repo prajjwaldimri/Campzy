@@ -1,10 +1,11 @@
 import { gCall } from "../test-utils/gCall";
-import faker from "faker";
+import Chance from "chance";
 import bcrypt from "bcrypt";
 import { UserModel } from "../../models/user";
 
 describe("Add Camp Tests", (): void => {
   jest.setTimeout(50000);
+  let chance = new Chance();
   const campPhoneNumber = `+919690046216`;
   const campTags = ["Mountain", "Leh", "Chopta"];
 
@@ -17,8 +18,8 @@ describe("Add Camp Tests", (): void => {
     `;
 
     const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: passwordHash
     };
     const responseRegister = await gCall({
@@ -37,8 +38,8 @@ describe("Add Camp Tests", (): void => {
     const jwtToken = responseRegister.data.createUserByEmail;
 
     const campOwner = await new UserModel({
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: passwordHash
     }).save();
 
@@ -51,10 +52,10 @@ describe("Add Camp Tests", (): void => {
     }
     `;
     const camp = {
-      name: faker.name.findName(),
+      name: chance.street(),
       phoneNumber: campPhoneNumber,
-      email: faker.internet.email(),
-      url: faker.internet.url(),
+      email: chance.email(),
+      url: chance.url(),
       tags: campTags,
       location: "Chopta",
       ownerId: campOwner.id
@@ -74,8 +75,8 @@ describe("Add Camp Tests", (): void => {
     const passwordHash = await bcrypt.hash("validPassword", 12);
 
     const campOwner = await new UserModel({
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
+      name: chance.name(),
+      email: chance.email(),
       password: passwordHash
     }).save();
 
@@ -88,10 +89,10 @@ describe("Add Camp Tests", (): void => {
     }
     `;
     const camp = {
-      name: faker.name.findName(),
+      name: chance.street(),
       phoneNumber: campPhoneNumber,
-      email: faker.internet.email(),
-      url: faker.internet.url(),
+      email: chance.email(),
+      url: chance.url(),
       tags: campTags,
       location: "Chopta",
       ownerId: campOwner.id
@@ -102,7 +103,7 @@ describe("Add Camp Tests", (): void => {
       variableValues: {
         data: camp
       },
-      jwtToken: faker.random.alphaNumeric(20).toString()
+      jwtToken: chance.string({ length: 10 })
     });
     expect(campResponse.errors).toBeDefined();
   });
