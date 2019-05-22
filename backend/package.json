@@ -10,9 +10,11 @@
     "start": "yarn run build:live",
     "build": "tsc -p .",
     "dev": "tsnd --respawn src/index.ts",
+    "docs": "sudo dev && export NODE_TLS_REJECT_UNAUTHORIZED=0 && graphdoc -e https://localhost/graphql -o ./docs --force",
     "test": "jest --detectOpenHandles"
   },
   "devDependencies": {
+    "@2fd/graphdoc": "^2.4.0",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/chance": "^1.0.4",
