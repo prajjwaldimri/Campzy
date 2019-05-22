@@ -64,10 +64,12 @@ export class AddCampResolver {
       });
 
       const createdCamp = await camp.save();
-      return await UserModel.findByIdAndUpdate(ownerId, {
+      await UserModel.findByIdAndUpdate(ownerId, {
         ownedCampId: createdCamp.id,
         type: "CampOwner"
       }).exec();
+
+      return createdCamp;
     } catch (err) {
       return err;
     }

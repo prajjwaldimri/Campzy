@@ -131,6 +131,9 @@ class Terrain {
 })
 export class Camp extends Typegoose {
   @Field()
+  public id?: string;
+
+  @Field()
   @prop({ required: true })
   public name!: string;
 
