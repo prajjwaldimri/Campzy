@@ -67,7 +67,7 @@ const isUserCampOwner = (user: User): boolean => {
   return false;
 };
 
-const isUserAdmin = (user: User | null): boolean => {
+const isUserAdmin = (user: User): boolean => {
   if (!user) {
     return false;
   }
