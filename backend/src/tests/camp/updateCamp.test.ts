@@ -70,6 +70,7 @@ describe("Update Camp Tests", (): void => {
       },
       jwtToken
     });
+    console.log(campResponse);
     expect(campResponse.data.addCamp.id).toBeDefined();
     expect(campResponse.data.addCamp.name).toEqual(camp.name);
     const campId = campResponse.data.addCamp.id;
