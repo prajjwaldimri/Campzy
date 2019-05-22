@@ -90,9 +90,9 @@ const isUserBlogger = (user: User): boolean => {
 const sendResetPasswordToken = async (
   userId: string,
   email: string
-): Promise<mailjet.Email.Response> => {
+): Promise<mailjet.Email.Response | boolean> => {
   try {
-    let token = await TokenModel.findOne({ _userId: userId });
+    let token = await TokenModel.findOne({ _userId: userId }).exec();
     if (!token) {
       token = new TokenModel({
         _userId: userId,
@@ -100,7 +100,11 @@ const sendResetPasswordToken = async (
       });
       await token.save();
     }
-    return await emailer.sendResetPasswordToken(email, token);
+    if (process.env.NODE_ENV == "testing") {
+      return true;
+    } else {
+      return await emailer.sendResetPasswordToken(email, token);
+    }
   } catch (err) {
     throw EmailSendError();
   }
@@ -109,10 +113,12 @@ const sendResetPasswordToken = async (
 const sendEmailVerificationToken = async (
   userId: string,
   email: string
-): Promise<mailjet.Email.Response> => {
+): Promise<mailjet.Email.Response | boolean> => {
   try {
-    let token = await TokenModel.findOne({ userId: userId });
-    const user: User | null = await UserModel.findById(userId).select("name");
+    let token = await TokenModel.findOne({ userId: userId }).exec();
+    const user: User | null = await UserModel.findById(userId)
+      .select("name")
+      .exec();
     if (!token) {
       token = new TokenModel({
         userId: userId,
@@ -123,11 +129,15 @@ const sendEmailVerificationToken = async (
     if (!user) {
       throw EmailSendError();
     }
-    return await emailer.sendEmailVerificationToken(
-      email,
-      token.tokenValue,
-      user.name || "Campzy User"
-    );
+    if (process.env.NODE_ENV === "testing") {
+      return true;
+    } else {
+      return await emailer.sendEmailVerificationToken(
+        email,
+        token.tokenValue,
+        user.name || "Campzy User"
+      );
+    }
   } catch (err) {
     throw EmailSendError();
   }
@@ -135,11 +145,11 @@ const sendEmailVerificationToken = async (
 
 const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
   try {
-    const token = await TokenModel.findOne({ tokenValue });
+    const token = await TokenModel.findOne({ tokenValue }).exec();
     if (!token) {
       throw new AuthenticationError("Wrong/Expired Email token!");
     }
-    const matchingUser = await UserModel.findById(token.userId);
+    const matchingUser = await UserModel.findById(token.userId).exec();
     if (!matchingUser) {
       throw new AuthenticationError("Wrong/Expired Email token!");
     }
@@ -173,9 +183,9 @@ function generateRandomNumbers(n: number): string {
 const sendUserOTP = async (
   phoneNumber: string,
   userId: string
-): Promise<Twilio.TwilioClientOptions> => {
+): Promise<Twilio.TwilioClientOptions | boolean> => {
   try {
-    let otp = await OTPModel.findOne({ phoneNumber });
+    let otp = await OTPModel.findOne({ phoneNumber }).exec();
     if (!otp) {
       otp = new OTPModel({
         user: userId,
@@ -184,7 +194,14 @@ const sendUserOTP = async (
       });
       await otp.save();
     }
-    return await sms.sendSMS(phoneNumber, `${otp.otpValue} is your Campzy OTP`);
+    if (process.env.NODE_ENV === "testing") {
+      return true;
+    } else {
+      return await sms.sendSMS(
+        phoneNumber,
+        `${otp.otpValue} is your Campzy OTP`
+      );
+    }
   } catch (err) {
     throw new ApolloError("Cannot send OTP at this time!");
   }
