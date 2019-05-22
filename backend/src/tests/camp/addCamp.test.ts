@@ -68,7 +68,7 @@ describe("Add Camp Tests", (): void => {
       },
       jwtToken
     });
-    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
+    expect(campResponse.data.addCamp.name).toEqual(camp.name);
   });
 
   it("should not return camp(Invlaid JWT)", async (): Promise<void> => {
