@@ -155,7 +155,7 @@ describe("Current User Tests", (): void => {
     });
 
     expect(response.errors).toBeDefined();
-    expect(response.data).toBeNull();
+    expect(response.data).toBeUndefined();
   });
 
   it("should remove camp from user's wishlist", async (): Promise<void> => {
@@ -343,6 +343,6 @@ describe("Current User Tests", (): void => {
     });
 
     expect(responseRemove.errors).toBeDefined();
-    expect(responseRemove.data).toBeNull();
+    expect(responseRemove.data).toBeUndefined();
   });
 });

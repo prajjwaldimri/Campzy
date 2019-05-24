@@ -164,6 +164,6 @@ describe("Get User by Id", (): void => {
     });
 
     expect(userResponse.errors).toBeDefined();
-    expect(userResponse.data).toBeNull();
+    expect(userResponse.data).toBeUndefined();
   });
 });
