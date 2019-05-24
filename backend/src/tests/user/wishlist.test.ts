@@ -108,6 +108,7 @@ describe("Current User Tests", (): void => {
     });
 
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 
   it("should not add camp to user's wishlist (Wrong camp id)", async (): Promise<
@@ -154,6 +155,7 @@ describe("Current User Tests", (): void => {
     });
 
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 
   it("should remove camp from user's wishlist", async (): Promise<void> => {
@@ -272,6 +274,7 @@ describe("Current User Tests", (): void => {
     });
 
     expect(responseRemove.errors).toBeDefined();
+    expect(responseRemove.data).toBeNull();
   });
 
   it("should not remove camp from user's wishlist (Wrong camp id)", async (): Promise<
@@ -340,5 +343,6 @@ describe("Current User Tests", (): void => {
     });
 
     expect(responseRemove.errors).toBeDefined();
+    expect(responseRemove.data).toBeNull();
   });
 });

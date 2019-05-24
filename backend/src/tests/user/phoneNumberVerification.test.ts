@@ -306,6 +306,7 @@ describe("User Phone Verification", (): void => {
     });
 
     expect(response.errors).toBeTruthy();
+    expect(response.data).toBeNull();
   });
 
   it("should not verify user's phoneNumber (Blank OTP)", async (): Promise<
@@ -360,5 +361,6 @@ describe("User Phone Verification", (): void => {
     });
 
     expect(response.errors).toBeTruthy();
+    expect(response.data).toBeNull();
   });
 });

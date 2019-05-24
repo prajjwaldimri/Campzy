@@ -117,6 +117,7 @@ describe("Get User by Id", (): void => {
     });
 
     expect(userResponse.errors).toBeDefined();
+    expect(userResponse.data).toBeNull();
   });
 
   it("should not return a user by id (Wrong user Id)", async (): Promise<
@@ -163,5 +164,6 @@ describe("Get User by Id", (): void => {
     });
 
     expect(userResponse.errors).toBeDefined();
+    expect(userResponse.data).toBeNull();
   });
 });

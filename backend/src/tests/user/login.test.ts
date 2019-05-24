@@ -7,7 +7,7 @@ describe("User Login", (): void => {
   jest.setTimeout(50000);
   let chance = new Chance();
 
-  it("should Logged In", async (): Promise<void> => {
+  it("should Log In", async (): Promise<void> => {
     const LoginQuery = `
       query login($data: LoginUserByEmailInput!) {
       login(data: $data )
@@ -31,7 +31,7 @@ describe("User Login", (): void => {
     expect(response.data.login).toBeDefined();
   });
 
-  it("should not Logged In (Invalid Email)", async (): Promise<void> => {
+  it("should not Log In (Invalid Email)", async (): Promise<void> => {
     const LoginQuery = `
       query login($data: LoginUserByEmailInput!) {
       login(data: $data )
@@ -48,6 +48,7 @@ describe("User Login", (): void => {
       }
     });
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 
   it("should not Logged In (Invalid Password or Email)", async (): Promise<
@@ -69,5 +70,6 @@ describe("User Login", (): void => {
       }
     });
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 });

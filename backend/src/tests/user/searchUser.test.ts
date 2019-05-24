@@ -65,18 +65,6 @@ describe("Current User Tests", (): void => {
   it("should not return list of users (Not logged in!)", async (): Promise<
     void
   > => {
-    const toBeSearchedUser = await new UserModel({
-      name: "Test name",
-      email: chance.email(),
-      password: "asdkaskljsad"
-    }).save();
-
-    const LoginQuery = `
-      query login($data: LoginUserByEmailInput!) {
-      login(data: $data )
-    }
-    `;
-
     const searchUserQuery = `
       query searchUser($searchTerm: String!, $first: Float!, $offset: Float!) {
         searchUser(searchTerm: $searchTerm, first: $first, offset: $offset) {
@@ -95,6 +83,7 @@ describe("Current User Tests", (): void => {
       jwtToken: chance.string({ length: 10 })
     });
     expect(searchUserResponse.errors).toBeDefined();
+    expect(searchUserResponse.data).toBeNull();
   });
 
   it("should not return list of users (Not an admin!)", async (): Promise<
@@ -107,7 +96,7 @@ describe("Current User Tests", (): void => {
       password: passwordHash
     }).save();
 
-    const toBeSearchedUser = await new UserModel({
+    await new UserModel({
       name: "Test name",
       email: chance.email(),
       password: passwordHash
