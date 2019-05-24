@@ -14,7 +14,7 @@ export class EmailAvailableResolver {
       if (!validator.isEmail(email)) {
         throw new UserInputError("Email is not valid!");
       }
-      const user = await UserModel.findOne({ email: email });
+      const user = await UserModel.findOne({ email: email }).exec();
       if (user) {
         return false;
       } else {
