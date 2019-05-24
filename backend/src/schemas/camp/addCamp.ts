@@ -43,12 +43,10 @@ export class AddCampResolver {
       const user = await auth.getAuthenticatedUser(ctx.req);
       const userData = await UserModel.findById(user.id).exec();
       if (!userData) {
-        throw new AuthenticationError("You are not authorised for this!");
-      }
-      const isUserAdmin = auth.isUserAdmin(userData);
-      if (userData === null) {
         throw new AuthenticationError("You need to be logged in!");
       }
+      const isUserAdmin = auth.isUserAdmin(userData);
+
       if (!isUserAdmin) {
         throw new AuthenticationError("You are not authorised for this!");
       }
