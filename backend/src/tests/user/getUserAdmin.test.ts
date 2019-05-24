@@ -8,11 +8,6 @@ describe("Get User by Id", (): void => {
   let chance = new Chance();
 
   it("should return a user by id", async (): Promise<void> => {
-    const LoginQuery = `
-      query login($data: LoginUserByEmailInput!) {
-      login(data: $data )
-    }
-    `;
     const passwordHash = await bcrypt.hash("validPassword", 12);
     const user = await new UserModel({
       name: chance.name(),
@@ -20,6 +15,12 @@ describe("Get User by Id", (): void => {
       password: passwordHash,
       type: "Admin"
     }).save();
+
+    const LoginQuery = `
+      query login($data: LoginUserByEmailInput!) {
+      login(data: $data )
+    }
+    `;
 
     const response = await gCall({
       source: LoginQuery,
