@@ -3,7 +3,7 @@ import Chance from "chance";
 import bcrypt from "bcrypt";
 import { UserModel } from "../../models/user";
 
-describe("Current User Tests", (): void => {
+describe("All Users Admin Tests", (): void => {
   jest.setTimeout(50000);
   let chance = new Chance();
 
@@ -136,6 +136,7 @@ describe("Current User Tests", (): void => {
       },
       jwtToken: chance.string({ length: 10 })
     });
+    expect(getAllUsersAdminResponse.errors).toBeDefined();
     expect(getAllUsersAdminResponse.data).toBeNull();
   });
 
@@ -188,6 +189,7 @@ describe("Current User Tests", (): void => {
       },
       jwtToken
     });
+    expect(getAllUsersAdminResponse.errors).toBeDefined();
     expect(getAllUsersAdminResponse.data).toBeNull();
   });
 });
