@@ -17,7 +17,7 @@ export class GetCurrentUserCampResolver {
         throw new AuthenticationError("You need to be logged in!");
       }
 
-      return await CampModel.findById({ id: userData.ownedCampId })
+      return await CampModel.findById({ _id: userData.ownedCampId })
         .populate("ownerId", "name")
         .exec();
     } catch (err) {
