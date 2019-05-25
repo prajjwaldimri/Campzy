@@ -67,5 +67,6 @@ describe("Current User Tests", (): void => {
     });
 
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 });

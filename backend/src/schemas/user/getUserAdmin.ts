@@ -31,7 +31,9 @@ export class GetUserAdminResolver {
       if (!user) {
         throw new AuthenticationError("You need to be logged in!");
       }
-      if (user.type !== "Admin") {
+
+      const isUserAdmin = await auth.isUserAdmin(user);
+      if (!isUserAdmin) {
         throw new ForbiddenError("Not allowed to perform this action");
       }
 

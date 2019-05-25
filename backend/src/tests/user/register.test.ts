@@ -46,6 +46,7 @@ describe("User Register", (): void => {
         }
       }
     });
+    expect(response.errors).toBeDefined();
     expect(response.data).toBeNull();
   });
 
@@ -65,6 +66,7 @@ describe("User Register", (): void => {
         }
       }
     });
+    expect(response.errors).toBeDefined();
     expect(response.data).toBeNull();
   });
 
@@ -84,6 +86,7 @@ describe("User Register", (): void => {
         }
       }
     });
+    expect(response.errors).toBeDefined();
     expect(response.data).toBeNull();
   });
 
@@ -103,7 +106,7 @@ describe("User Register", (): void => {
         }
       }
     });
-    console.log(response);
+    expect(response.errors).toBeDefined();
     expect(response.data).toBeNull();
   });
 });

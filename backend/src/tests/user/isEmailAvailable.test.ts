@@ -66,5 +66,6 @@ describe("Email Availability Tests", (): void => {
     });
 
     expect(response.errors).toBeDefined();
+    expect(response.data).toBeNull();
   });
 });
