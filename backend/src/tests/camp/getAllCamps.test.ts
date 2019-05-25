@@ -75,17 +75,15 @@ describe("Get All Camp Tests", (): void => {
     // Get All Camps
     const getAllCampsQuery = `query getAllCamps{
       getAllCamps(page: 1){
-        id
-        name
+        id,
+        name,
         email
+        
       }
     }`;
 
     const getCampResponse = await gCall({
       source: getAllCampsQuery,
-      variableValues: {
-        page: 1
-      },
       jwtToken
     });
 
