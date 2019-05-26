@@ -16,11 +16,11 @@ const EmailSendError = (): ApolloError =>
   new ApolloError("Error sending email!");
 
 enum UserType {
-  Admin,
-  Moderator,
-  CampOwner,
-  Blogger,
-  Camper
+  Admin = "Admin",
+  Moderator = "Moderator",
+  CampOwner = "CampOwner",
+  Blogger = "Blogger",
+  Camper = "Camper"
 }
 
 /**
@@ -66,21 +66,21 @@ const getAuthenticatedUser = (req: Express.Request): Promise<DecryptedUser> =>
 
 // Checks if a user owns any camps
 const isUserCampOwner = (user: User): boolean => {
-  if (user.type === UserType.CampOwner.toString()) {
+  if (user.type === UserType.CampOwner) {
     return true;
   }
   return false;
 };
 
 const isUserAdmin = (user: User): boolean => {
-  if (user.type === UserType.Admin.toString()) {
+  if (user.type === UserType.Admin) {
     return true;
   }
   return false;
 };
 
 const isUserBlogger = (user: User): boolean => {
-  if (user.type === UserType.Blogger.toString()) {
+  if (user.type === UserType.Blogger) {
     return true;
   }
   return false;
