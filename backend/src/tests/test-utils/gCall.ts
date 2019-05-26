@@ -24,7 +24,7 @@ export const gCall = async ({
     });
   }
   try {
-    return graphql({
+    return await graphql({
       schema,
       source,
       variableValues,
