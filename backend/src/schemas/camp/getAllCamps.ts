@@ -24,13 +24,11 @@ export class GetAllCampsResolver {
       if (!isUserAdmin) {
         throw new AuthenticationError("You are not authorised for this!");
       }
-      const camps = await CampModel.find({})
+
+      return await CampModel.find({})
         .limit(10)
         .skip((page - 1) * 10)
         .exec();
-
-      console.log(camps);
-      return camps;
     } catch (err) {
       return err;
     }
