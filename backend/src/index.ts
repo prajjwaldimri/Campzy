@@ -47,6 +47,8 @@ async function main(): Promise<void> {
     })
   );
 
+  app.use("/", express.static("docs"));
+
   // Upload CampOwner's Documents
   app.post(
     "/uploadCampOwnerDocuments",
