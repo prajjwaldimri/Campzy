@@ -67,7 +67,7 @@ describe("Add Camp Tests", (): void => {
       },
       jwtToken
     });
-    expect(campResponse.data.addCamp.name).toEqual(camp.name);
+    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
 
     const loginQuery = `query login($data: LoginUserByEmailInput!){
       login(data: $data)
@@ -156,7 +156,7 @@ describe("Add Camp Tests", (): void => {
       },
       jwtToken
     });
-    expect(campResponse.data.addCamp.name).toEqual(camp.name);
+    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
 
     const getCurrentUserCampQuery = `query getCurrentUserCamp{
       getCurrentUserCamp{
