@@ -16,6 +16,10 @@ export class GetCurrentUserCampResolver {
       if (!userData) {
         throw new AuthenticationError("You need to be logged in!");
       }
+      const isUserCampOwner = await auth.isUserCampOwner(userData);
+      if (!isUserCampOwner) {
+        throw new AuthenticationError("You are not authorised for this!");
+      }
 
       return await CampModel.findById({ _id: userData.ownedCampId })
         .populate("ownerId", "name")
