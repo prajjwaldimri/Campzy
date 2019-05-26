@@ -73,12 +73,11 @@ describe("Get All Camp Tests", (): void => {
     }
 
     // Get All Camps
-    const getAllCampsQuery = `query getAllCamps{
-      getAllCamps(page: 1){
+    const getAllCampsQuery = `query getAllCamps($page : Float!){
+      getAllCamps(page: $page){
         id,
         name,
         phoneNumber,
-        email
         
         
       }
@@ -86,6 +85,9 @@ describe("Get All Camp Tests", (): void => {
 
     const getCampResponse = await gCall({
       source: getAllCampsQuery,
+      variableValues: {
+        page: 1
+      },
       jwtToken
     });
     console.log(getCampResponse);
