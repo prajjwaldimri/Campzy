@@ -17,7 +17,10 @@ export class GetUserAdminResolver {
   @Query(() => User)
   private async getUserAdmin(
     @Ctx() ctx: GraphContext,
-    @Arg("userId", () => ObjectIdScalar) userId: ObjectId
+    @Arg("userId", () => ObjectIdScalar, {
+      description: "MongoDB Id of the user"
+    })
+    userId: ObjectId
   ): Promise<User> {
     try {
       const loggedInUser = await auth.getAuthenticatedUser(ctx.req);

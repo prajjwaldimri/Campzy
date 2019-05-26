@@ -7,7 +7,7 @@ import { UserInputError } from "apollo-server-core";
 export class EmailAvailableResolver {
   @Query(() => Boolean)
   private async isEmailAvailable(
-    @Arg("email") email: string
+    @Arg("email", { description: "Email to check" }) email: string
   ): Promise<boolean> {
     try {
       let validator = new Validator();
