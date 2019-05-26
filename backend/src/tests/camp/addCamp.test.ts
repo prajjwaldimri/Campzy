@@ -72,7 +72,7 @@ describe("Add Camp Tests", (): void => {
     expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
   });
 
-  it("should not return camp(Invlaid JWT)", async (): Promise<void> => {
+  it("should not return camp(Invalid JWT)", async (): Promise<void> => {
     const passwordHash = await bcrypt.hash("validPassword", 12);
 
     const campOwner = await new UserModel({
