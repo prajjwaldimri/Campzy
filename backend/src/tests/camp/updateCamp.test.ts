@@ -2,6 +2,7 @@ import { gCall } from "../test-utils/gCall";
 import Chance from "chance";
 import bcrypt from "bcrypt";
 import { UserModel } from "../../models/user";
+import { CampModel } from "../../models/camp";
 
 describe("Update Camp Tests", (): void => {
   jest.setTimeout(50000);
@@ -72,8 +73,11 @@ describe("Update Camp Tests", (): void => {
     });
     console.log(campResponse);
     expect(campResponse.data.addCamp.id).toBeDefined();
-    expect(campResponse.data.addCamp.name).toEqual(camp.name);
-    const campId = campResponse.data.addCamp.id;
+    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
+    const campOwnerId = campResponse.data.addCamp.id;
+
+    const campData = await CampModel.find({ ownerId: campOwnerId });
+    const campId = campData[0].id;
 
     const updateCampMutation = `mutation updateCamp($data: UpdateCampInput!){
       updateCamp(data: $data){
@@ -103,7 +107,7 @@ describe("Update Camp Tests", (): void => {
     expect(updatedCampResponse.data.updateCamp.name).toEqual(campOwner.name);
   });
 
-  it("should not update camp(Invlaid JWT)", async (): Promise<void> => {
+  it("should not update camp (Invalid JWT)", async (): Promise<void> => {
     const passwordHash = await bcrypt.hash("validPassword", 12);
     const registerMutation = `
     mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
@@ -162,8 +166,11 @@ describe("Update Camp Tests", (): void => {
       },
       jwtToken
     });
-    expect(campResponse.data.addCamp.name).toEqual(camp.name);
-    const campId = campResponse.data.addCamp.id;
+    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
+    const campOwnerId = campResponse.data.addCamp.id;
+
+    const campData = await CampModel.find({ ownerId: campOwnerId });
+    const campId = campData[0].id;
 
     const updateCampMutation = `mutation updateCamp($data: UpdateCampInput!){
       updateCamp(data: $data){
@@ -193,7 +200,7 @@ describe("Update Camp Tests", (): void => {
     expect(updatedCampResponse.errors).toBeDefined();
   });
 
-  it("should not update camp(Invlaid Camp Id)", async (): Promise<void> => {
+  it("should not update camp (Invalid Camp Id)", async (): Promise<void> => {
     const passwordHash = await bcrypt.hash("validPassword", 12);
     const registerMutation = `
     mutation CreateUserByEmail($data: CreateUserByEmailInput!) {
@@ -252,8 +259,7 @@ describe("Update Camp Tests", (): void => {
       },
       jwtToken
     });
-    expect(campResponse.data.addCamp.name).toEqual(camp.name);
-    const campId = campResponse.data.addCamp.id;
+    expect(campResponse.data.addCamp.name).toEqual(campOwner.name);
 
     const updateCampMutation = `mutation updateCamp($data: UpdateCampInput!){
       updateCamp(data: $data){
