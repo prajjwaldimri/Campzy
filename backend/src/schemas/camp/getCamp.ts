@@ -25,9 +25,7 @@ export class GetCampResolver {
         throw new AuthenticationError("You are not authorised for this!");
       }
 
-      return await CampModel.findById(id)
-        .populate("ownerId", "name")
-        .exec();
+      return await CampModel.findById(id).exec();
     } catch (err) {
       return err;
     }

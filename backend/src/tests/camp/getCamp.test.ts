@@ -83,7 +83,12 @@ describe("Get Camp Tests", (): void => {
       getCamp(id: $id){
         id,
         name,
+        tags,
         phoneNumber,
+        email,
+        location,
+        url,
+        ownerId
 
       }
     }`;
@@ -95,8 +100,9 @@ describe("Get Camp Tests", (): void => {
       },
       jwtToken
     });
-    console.log(getCampResponse);
-    console.log(getCampResponse.data.getCamp);
+    expect(getCampResponse.data.getCamp.ownerId).toEqual(
+      campResponse.data.addCamp.id
+    );
   });
 
   it("should not return camp (Invalid JWT)", async (): Promise<void> => {
@@ -171,7 +177,11 @@ describe("Get Camp Tests", (): void => {
       getCamp(id: $id){
         id,
         name,
+        tags,
         phoneNumber,
+        email,
+        location,
+        url,
 
       }
     }`;
@@ -183,7 +193,6 @@ describe("Get Camp Tests", (): void => {
       },
       jwtToken: chance.string({ length: 20 })
     });
-    console.log(getCampResponse);
     expect(getCampResponse.errors).toBeDefined();
   });
 
@@ -255,8 +264,11 @@ describe("Get Camp Tests", (): void => {
       getCamp(id: $id){
         id,
         name,
+        tags,
         phoneNumber,
-
+        email,
+        location,
+        url,
       }
     }`;
 
@@ -267,7 +279,6 @@ describe("Get Camp Tests", (): void => {
       },
       jwtToken
     });
-    console.log(getCampResponse);
     expect(getCampResponse.errors).toBeDefined();
   });
 });
