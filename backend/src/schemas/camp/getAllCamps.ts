@@ -9,7 +9,7 @@ import * as auth from "../../config/auth";
 @Resolver()
 export class GetAllCampsResolver {
   @Query(() => [Camp])
-  private async getAllCamps(
+  private async allCamps(
     @Ctx() ctx: GraphContext,
     @Arg("page") page: number
   ): Promise<any> {
@@ -24,7 +24,6 @@ export class GetAllCampsResolver {
       if (!isUserAdmin) {
         throw new AuthenticationError("You are not authorised for this!");
       }
-
       return await CampModel.find({})
         .limit(10)
         .skip((page - 1) * 10)

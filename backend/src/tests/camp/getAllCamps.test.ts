@@ -73,13 +73,16 @@ describe("Get All Camp Tests", (): void => {
     }
 
     // Get All Camps
-    const getAllCampsQuery = `query getAllCamps($page : Float!){
-      getAllCamps(page: $page){
+    const getAllCampsQuery = `query allCamps($page : Float!){
+      allCamps(page: $page){
         id,
         name,
+        tags,
         phoneNumber,
-        
-        
+        email,
+        location,
+        url,
+        ownerId
       }
     }`;
 
@@ -90,6 +93,7 @@ describe("Get All Camp Tests", (): void => {
       },
       jwtToken
     });
+    console.log(getCampResponse);
     expect(getCampResponse.data).toBeDefined();
   });
 
@@ -157,13 +161,15 @@ describe("Get All Camp Tests", (): void => {
     }
 
     // Get All Camps
-    const getAllCampsQuery = `query getAllCamps($page : Float!){
-      getAllCamps(page: $page){
+    const getAllCampsQuery = `query allCamps($page : Float!){
+      allCamps(page: $page){
         id,
         name,
         phoneNumber,
-        
-        
+        email,
+        location,
+        url,
+        ownerId
       }
     }`;
 

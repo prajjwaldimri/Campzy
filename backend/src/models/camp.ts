@@ -200,13 +200,12 @@ export class Camp extends Typegoose {
   @prop()
   public bank?: BankAccount;
 
-  @Field()
+  @Field(() => [String])
   @prop({
     validate: (val): boolean => val.length <= 10
   })
   public tags?: string[];
 
-  @Field()
   @prop()
   public amenities?: Amenities;
 
@@ -234,11 +233,10 @@ export class Camp extends Typegoose {
   @prop()
   public hourDriveFromDelhi?: Date;
 
-  @Field()
   @prop()
   public coordinates?: Coordinates;
 
-  @Field()
+  @Field(() => String)
   @prop({ ref: User, unique: true })
   public ownerId!: Ref<User>;
 
