@@ -15,6 +15,14 @@ import { Twilio } from "twilio";
 const EmailSendError = (): ApolloError =>
   new ApolloError("Error sending email!");
 
+enum UserType {
+  Admin = "Admin",
+  Moderator = "Moderator",
+  CampOwner = "CampOwner",
+  Blogger = "Blogger",
+  Camper = "Camper"
+}
+
 /**
  * Gets the authentication JWT token from the HTTP header
  * @param  {Object} req Express's request object
@@ -58,30 +66,21 @@ const getAuthenticatedUser = (req: Express.Request): Promise<DecryptedUser> =>
 
 // Checks if a user owns any camps
 const isUserCampOwner = (user: User): boolean => {
-  if (!user) {
-    return false;
-  }
-  if (user.type === "CampOwner") {
+  if (user.type === UserType.CampOwner) {
     return true;
   }
   return false;
 };
 
 const isUserAdmin = (user: User): boolean => {
-  if (!user) {
-    return false;
-  }
-  if (user.type === "Admin") {
+  if (user.type === UserType.Admin) {
     return true;
   }
   return false;
 };
 
 const isUserBlogger = (user: User): boolean => {
-  if (!user) {
-    return false;
-  }
-  if (user.type === "Blogger") {
+  if (user.type === UserType.Blogger) {
     return true;
   }
   return false;
@@ -159,7 +158,7 @@ const verifyUserToken = async (tokenValue: string): Promise<boolean> => {
     }
     return true;
   } catch (err) {
-    throw err;
+    return err;
   }
 };
 

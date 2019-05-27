@@ -10,9 +10,14 @@ export class GetAllUsersAdminResolver {
   @Query(() => [User])
   private async getAllUsersAdmin(
     @Ctx() ctx: GraphContext,
-    @Arg("first") first: number,
-    @Arg("offset") offset: number,
-    @Arg("searchTerm", { nullable: true }) searchTerm: string
+    @Arg("first", { description: "Number of results to fetch" }) first: number,
+    @Arg("offset", { description: "Offset the result by how many?" })
+    offset: number,
+    @Arg("searchTerm", {
+      nullable: true,
+      description: "(Optional) Filter users by their names"
+    })
+    searchTerm: string
   ): Promise<User[] | null> {
     const user = await auth.getAuthenticatedUser(ctx.req);
     const userData = await UserModel.findById(user.id).exec();

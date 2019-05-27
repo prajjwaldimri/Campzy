@@ -17,7 +17,9 @@ class LoginUserByEmailInput {
 @Resolver()
 export class LoginResolver {
   @Query(() => String)
-  private async login(@Arg("data")
+  private async login(@Arg("data", {
+    description: "Email and password of the user"
+  })
   {
     email,
     password

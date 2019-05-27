@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="./styles/graphdoc.css" />
-    <title>Query</title>
+    <title>Float</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet"><link type="text/css" rel="stylesheet" href="./assets/code.css" /><link type="text/css" rel="stylesheet" href="./assets/require-by.css" />
 </head>
 <body class="slds-scrollable--y">
@@ -25,7 +25,7 @@
 <div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
     <h4 class="slds-text-title--caps slds-p-around--medium">Schema</h4>
     <ul>
-        <li class="slds-is-active" title="Query">
+        <li  title="Query">
             <a href="query.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Query
             </a>
@@ -50,7 +50,7 @@
                 DateTime
             </a>
         </li>
-        <li  title="Float">
+        <li class="slds-is-active" title="Float">
             <a href="float.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Float
             </a>
@@ -195,9 +195,10 @@
         </div>
     </div>
     <div class="container">
-        <p class="slds-text-title--caps slds-text-color--weak">OBJECT</p>
-        <h1 class="slds-text-heading--large">Query</h1>
-        <div class="slds-text-body--regular"></div>
+        <p class="slds-text-title--caps slds-text-color--weak">SCALAR</p>
+        <h1 class="slds-text-heading--large">Float</h1>
+        <div class="slds-text-body--regular"><p>The <code>Float</code> scalar type represents signed double-precision fractional values as specified by <a href="https://en.wikipedia.org/wiki/IEEE_floating_point">IEEE 754</a>. </p>
+</div>
     </div>
 </section>
 <section>
@@ -208,7 +209,7 @@
             </a>
             GraphQL Schema definition
         </h2>
-        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">Query</span> {</li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>page</strong>: [<strong>Not documented</strong>]</span></span></li><li><span class="tab"><span class="meta">getAllCamps</span>(<span class="meta">page</span>: <a class="support type" href="float.doc.html">Float</a>!): [<a class="support type" href="camp.doc.html">Camp</a>!]! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>id</strong>: [<strong>Not documented</strong>]</span></span></li><li><span class="tab"><span class="meta">getCamp</span>(<span class="meta">id</span>: <a class="support type" href="string.doc.html">String</a>!): <a class="support type" href="camp.doc.html">Camp</a>! </span></li><li></li><li><span class="tab"><span class="meta">getCurrentUserCamp</span>: <a class="support type" href="camp.doc.html">Camp</a>! </span></li><li></li><li><span class="tab"><span class="meta">countTotalUsersAdmin</span>: <a class="support type" href="float.doc.html">Float</a>! </span></li><li></li><li><span class="tab"><span class="meta">getCurrentUser</span>: <a class="support type" href="user.doc.html">User</a>! </span></li><li></li><li><span class="tab"><span class="meta">getCurrentUserBlogs</span>: [<a class="support type" href="blog.doc.html">Blog</a>!]! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>searchTerm</strong>: (Optional) Filter users by their names</span></span></li><li><span class="tab"><span class="comment line">#   <strong>offset</strong>: Offset the result by how many?</span></span></li><li><span class="tab"><span class="comment line">#   <strong>first</strong>: Number of results to fetch</span></span></li><li><span class="tab"><span class="meta">getAllUsersAdmin</span>(<span class="meta">searchTerm</span>: <a class="support type" href="string.doc.html">String</a>, <span class="meta">offset</span>: <a class="support type" href="float.doc.html">Float</a>!, <span class="meta">first</span>: <a class="support type" href="float.doc.html">Float</a>!): [<a class="support type" href="user.doc.html">User</a>!]! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>userId</strong>: MongoDB Id of the user</span></span></li><li><span class="tab"><span class="meta">getUserAdmin</span>(<span class="meta">userId</span>: <a class="support type" href="objectid.doc.html">ObjectId</a>!): <a class="support type" href="user.doc.html">User</a>! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>email</strong>: Email to check</span></span></li><li><span class="tab"><span class="meta">isEmailAvailable</span>(<span class="meta">email</span>: <a class="support type" href="string.doc.html">String</a>!): <a class="support type" href="boolean.doc.html">Boolean</a>! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>data</strong>: Email and password of the user</span></span></li><li><span class="tab"><span class="meta">login</span>(<span class="meta">data</span>: <a class="support type" href="loginuserbyemailinput.doc.html">LoginUserByEmailInput</a>!): <a class="support type" href="string.doc.html">String</a>! </span></li><li></li><li><span class="tab"><span class="comment line"># Arguments</span></span></li><li><span class="tab"><span class="comment line">#   <strong>offset</strong>: Offset the result by how many?</span></span></li><li><span class="tab"><span class="comment line">#   <strong>first</strong>: Number of results to fetch</span></span></li><li><span class="tab"><span class="comment line">#   <strong>searchTerm</strong>: (Optional) Filter users by their names</span></span></li><li><span class="tab"><span class="meta">searchUser</span>(<span class="meta">offset</span>: <a class="support type" href="float.doc.html">Float</a>!, <span class="meta">first</span>: <a class="support type" href="float.doc.html">Float</a>!, <span class="meta">searchTerm</span>: <a class="support type" href="string.doc.html">String</a>): [<a class="support type" href="user.doc.html">User</a>!]! </span></li><li>}</li></ul></code>
+        <code class="highlight"><ul class="code" style="padding-left:28px"><li><span class="keyword operator ts">scalar</span> <span class="identifier">Float</span></li></ul></code>
     </div>
 </section>
 <section>
@@ -219,7 +220,7 @@
             </a>
             Require by
         </h2>
-        <div class="require-by anyone">This element is not required by anyone</div>
+        <ul class="require-by"><li><a href="query.doc.html" title="Query - ">Query<em>null</em></a><li></ul>
     </div>
 </section>
 <footer>

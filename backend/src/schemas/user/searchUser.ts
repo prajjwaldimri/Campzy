@@ -10,9 +10,14 @@ export class SearchUserResolver {
   @Query(() => [User])
   private async searchUser(
     @Ctx() ctx: GraphContext,
-    @Arg("searchTerm") searchTerm: string,
-    @Arg("first") first: number,
-    @Arg("offset") offset: number
+    @Arg("searchTerm", {
+      nullable: true,
+      description: "(Optional) Filter users by their names"
+    })
+    searchTerm: string,
+    @Arg("first", { description: "Number of results to fetch" }) first: number,
+    @Arg("offset", { description: "Offset the result by how many?" })
+    offset: number
   ): Promise<User[] | null> {
     try {
       const user = await auth.getAuthenticatedUser(ctx.req);
