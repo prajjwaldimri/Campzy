@@ -240,6 +240,9 @@ export class Camp extends Typegoose {
   @prop({ ref: User, unique: true })
   public ownerId!: Ref<User>;
 
+  @Field()
+  public count?: number;
+
   @prop()
   public terrain?: Terrain;
 
