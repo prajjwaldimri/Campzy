@@ -149,6 +149,7 @@ export class Camp extends Typegoose {
   })
   public phoneNumber?: string;
 
+  @Field()
   @prop({
     lowercase: true,
     required: true,
@@ -169,35 +170,43 @@ export class Camp extends Typegoose {
   @prop()
   public heroImage?: string;
 
+  @Field()
   @prop({ unique: true, required: true })
   public url!: string;
 
+  @Field()
   @prop()
   public location?: string;
 
   @prop({ required: true, default: false })
   public isAvailable!: boolean;
 
+  @Field()
   @prop({ required: true })
   public shortDescription!: string;
 
+  @Field()
   @prop()
   public longDescription?: string;
 
+  @Field()
   @prop({ required: true, default: false })
   public agreementAccepted!: boolean;
 
+  @Field()
   @prop({ unique: true, default: (): string => nanoid(20), required: true })
   public gst!: string;
 
   @prop()
   public bank?: BankAccount;
 
+  @Field()
   @prop({
     validate: (val): boolean => val.length <= 10
   })
   public tags?: string[];
 
+  @Field()
   @prop()
   public amenities?: Amenities;
 
@@ -225,9 +234,11 @@ export class Camp extends Typegoose {
   @prop()
   public hourDriveFromDelhi?: Date;
 
+  @Field()
   @prop()
   public coordinates?: Coordinates;
 
+  @Field()
   @prop({ ref: User, unique: true })
   public ownerId!: Ref<User>;
 
@@ -237,6 +248,7 @@ export class Camp extends Typegoose {
   @prop()
   public campDocuments?: string[];
 
+  @Field()
   @prop({ default: 0 })
   public averageRating!: number;
 
