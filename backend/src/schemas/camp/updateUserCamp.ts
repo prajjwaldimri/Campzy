@@ -8,7 +8,7 @@ import { UserModel } from "../../models/user";
 import * as auth from "../../config/auth";
 
 @InputType()
-class UpdateCampInput {
+class UpdateUserCampInput {
   @Field()
   public id!: string;
 
@@ -58,7 +58,7 @@ export class UpdateCampResolver {
       latitude,
       longitude,
       tags
-    }: UpdateCampInput
+    }: UpdateUserCampInput
   ): Promise<any> {
     try {
       const user = await auth.getAuthenticatedUser(ctx.req);
@@ -72,19 +72,28 @@ export class UpdateCampResolver {
         throw new AuthenticationError("You are not authorised for this!");
       }
 
-      return await CampModel.findByIdAndUpdate(id, {
-        name: name,
-        phoneNumber: phoneNumber,
-        email: email,
-        shortDescription: shortDescription,
-        longDescription: longDescription,
-        tags: tags,
-        url: url,
-        coordinates: {
-          lat: latitude,
-          lng: longitude
+      const campData = await CampModel.findByIdAndUpdate(
+        id,
+        {
+          name: name,
+          phoneNumber: phoneNumber,
+          email: email,
+          shortDescription: shortDescription,
+          longDescription: longDescription,
+          tags: tags,
+          url: url,
+          coordinates: {
+            lat: latitude,
+            long: longitude
+          }
+        },
+        {
+          new: true
         }
-      }).exec();
+      ).exec();
+
+      console.log(campData);
+      return campData;
     } catch (err) {
       return err;
     }
