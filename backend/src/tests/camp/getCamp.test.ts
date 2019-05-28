@@ -100,6 +100,7 @@ describe("Get Camp Tests", (): void => {
       },
       jwtToken
     });
+
     expect(getCampResponse.data.getCamp.ownerId).toEqual(
       campResponse.data.addCamp.id
     );
