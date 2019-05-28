@@ -21,7 +21,7 @@ export class CountCampsResolver {
       if (!isUserAdmin) {
         throw new AuthenticationError("You are not authorised for this!");
       }
-      const count = await CampModel.estimatedDocumentCount({});
+      const count = await CampModel.estimatedDocumentCount({}).exec();
       return {
         count
       };
