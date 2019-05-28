@@ -72,7 +72,7 @@ export class UpdateCampResolver {
         throw new AuthenticationError("You are not authorised for this!");
       }
 
-      const campData = await CampModel.findByIdAndUpdate(
+      return await CampModel.findByIdAndUpdate(
         id,
         {
           name: name,
@@ -91,9 +91,6 @@ export class UpdateCampResolver {
           new: true
         }
       ).exec();
-
-      console.log(campData);
-      return campData;
     } catch (err) {
       return err;
     }
