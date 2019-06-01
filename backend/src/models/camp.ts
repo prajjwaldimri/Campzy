@@ -236,9 +236,9 @@ export class Camp extends Typegoose {
   @prop()
   public coordinates?: Coordinates;
 
-  @Field(() => String)
+  @Field(() => User)
   @prop({ ref: User, unique: true })
-  public ownerId!: Ref<User>;
+  public owner!: Ref<User>;
 
   @Field()
   public count?: number;
