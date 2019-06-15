@@ -7,9 +7,12 @@
       data-vv-name="campName" v-validate="'min:4|required|alpha_spaces'"
       :error-messages="errors.collect('campName')")
 
-      v-text-field(v-model="camp.location" label="Location"
-      prepend-icon="edit_location" clearable  data-vv-name="campLocation"
-      v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
+      //- v-text-field(v-model="camp.location" label="Location"
+      //- prepend-icon="edit_location" clearable  data-vv-name="campLocation"
+      //- v-validate="'min:4|required'" :error-messages="errors.collect('campLocation')")
+
+      v-select(v-model="state" :items="states" label="Select State" prepend-icon="map")
+      v-select(v-model="place" :items="places" label="Select Place" prepend-icon="map")
 
       v-text-field(v-model="url" label="Url" prepend-icon="link" clearable
        data-vv-name="url" v-validate="'required|alpha_dash'"
@@ -70,10 +73,31 @@ export default {
       isOwnerSelected: false,
       searchUsers: null,
       isUrlAlreadyinUse: false,
-      phoneNumber: ''
+      phoneNumber: '',
+      states: ['Uttarakhand'],
+      state: '',
+      places: [],
+      place: ''
     }
   },
   watch: {
+    state(val) {
+      if (val === 'Uttarakhand') {
+        this.places = [
+          'Auli',
+          'Chopta',
+          'Dhanaulti',
+          'Guptkashi',
+          'Jim Corbett',
+          'Kanatal',
+          'Lansdowne',
+          'Mussorie',
+          'Nanital',
+          'Rishikesh',
+          'Tehri'
+        ]
+      }
+    },
     camp(val) {
       if (val.owner && val.owner.length > 1) {
         this.isOwnerSelected = true
@@ -140,6 +164,8 @@ export default {
       EventBus.$emit('admin-close-add-camp-dialog')
     },
     saveCamp() {
+      const campLocation = `${this.place}, ${this.state}`
+
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           if (!this.$cookie.get('sessionToken')) {
@@ -161,7 +187,7 @@ export default {
             name: this.camp.name,
             phoneNumber: this.phoneNumber.replace(/\s/g, ''),
             email: this.camp.email,
-            location: this.camp.location,
+            location: campLocation,
             url: this.url,
             ownerId: this.camp.owner
           }
