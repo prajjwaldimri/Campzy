@@ -14,11 +14,11 @@
 
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
-    //- div     
-    //-   v-container(fluid)
-    //-     v-flex.more_btn
-    //-       v-btn(icon large color='green' dark @click='showContent')
-    //-         v-icon keyboard_arrow_down
+    div     
+      v-container(fluid)
+        v-flex.more_btn
+          v-btn(icon large color='green' dark @click='getFeaturedCamps')
+            v-icon keyboard_arrow_down
     //-     v-flex.why_campzy(v-html='whyCmapzycontent')
     //-   v-container.content_container(fluid)
     //-     v-layout(row wrap)
@@ -42,9 +42,11 @@
 </template>
 
 <script>
+import { request } from 'graphql-request'
 import anime from 'animejs'
 import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
+import { getFeaturedCamps } from '../queries/queries'
 
 export default {
   name: 'Home',
@@ -148,6 +150,30 @@ export default {
     //     '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
     //     '<img class="camp_img" src="/android-chrome-192x192.png"/>'
     // },
+
+    scrollToLoadContent() {
+      window.onscroll = () => {
+        if (document.documentElement.scrollTop > 0) {
+          console.log('hey')
+        }
+
+        if (document.documentElement.scrollTop === 0) {
+          console.log('top')
+        }
+      }
+    },
+
+    getFeaturedCamps() {
+      request('https://api.campzy.in/graphql', getFeaturedCamps)
+        .then(data => {
+          // eslint-disable-next-line
+          console.log(data)
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
+        })
+    },
 
     searchClick() {
       if (this.searchInput === '') {

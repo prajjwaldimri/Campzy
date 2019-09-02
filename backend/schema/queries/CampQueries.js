@@ -486,6 +486,25 @@ const getCampsInPlace = {
   },
 };
 
+const getFeaturedCamps = {
+
+  // Returns all Featured camps
+  type: new GraphQLList(CampType),
+  args: {
+
+  },
+  async resolve(parent, args, context) {
+    try {
+      console.log("hit")
+      return await CampModel.find({});
+
+    } catch (err) {
+      return err;
+    }
+  },
+
+};
+
 module.exports = {
   getCamp,
   getCurrentUserCamp,
@@ -498,4 +517,5 @@ module.exports = {
   isCampUrlAvailable,
   getCampsInPlace,
   getCampsLocation,
+  getFeaturedCamps
 };

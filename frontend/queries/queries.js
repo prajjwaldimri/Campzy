@@ -498,6 +498,12 @@ const getCampRequests = `query getAllRequests{
   }
 }`
 
+const getFeaturedCamps = `query getFeaturedCamps{
+  getFeaturedCamps{
+    id
+  }
+}`
+
 module.exports = {
   sendUserCredentials,
   getAllUsers,
@@ -534,5 +540,6 @@ module.exports = {
   getBankDetails,
   getCampRequests,
   countAdminPastBookings,
-  countCampPastBookings
+  countCampPastBookings,
+  getFeaturedCamps
 }

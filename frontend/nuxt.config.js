@@ -1,6 +1,8 @@
 import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin'
 import pkg from './package'
 
+
+
 export default {
   // mode: 'universal',
   // server: {
@@ -34,6 +36,7 @@ export default {
         type: 'image/x-icon',
         href: '/favicon.ico'
       },
+
       {
         rel: 'stylesheet',
         media: 'screen',
@@ -45,6 +48,8 @@ export default {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       }
+
+
     ],
     script: [{
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
