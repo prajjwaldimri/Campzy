@@ -374,9 +374,7 @@ export default {
       request('https://api.campzy.in/graphql', getCampByUrl, variables)
         .then(data => {
           this.camp = data.campUser
-          this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${
-            this.camp.coordinates.lat
-          },${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
+          this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.lat},${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
         })
         .catch(() => {
           this.$router.go(-1)

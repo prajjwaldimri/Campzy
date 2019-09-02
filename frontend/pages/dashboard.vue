@@ -222,9 +222,7 @@ export default {
         .request(query)
         .then(data => {
           this.user = data.currentUser
-          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${
-            this.user.name
-          }`
+          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${this.user.name}`
 
           this.isLoggedIn = true
           if (

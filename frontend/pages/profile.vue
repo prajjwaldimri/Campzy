@@ -135,9 +135,7 @@ export default {
           if (this.userName === null) {
             this.userName = 'Unnamed User'
           }
-          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${
-            this.userName
-          }`
+          this.userProfileImage = `https://ui-avatars.com/api/?size=256&name=${this.userName}`
         })
         .catch(err => {
           EventBus.$emit(

@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "11.x.x",
+    "node": "12.x.x",
     "yarn": "1.x.x"
   },
   "scripts": {
