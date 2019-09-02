@@ -2271,11 +2271,6 @@ autoprefixer@^9.5.0, autoprefixer@^9.6.1:
     postcss "^7.0.17"
     postcss-value-parser "^4.0.0"
 
-awesome-phonenumber@^2.15.0:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-2.17.0.tgz#e26af5be3396322f0de66ef83fb21a0b72f54469"
-  integrity sha512-SKw7o7+LWR/M02iWImJJ19M5I5eR+Nyi0umoi0NdNMB1wIS3SeR878yr5v1tsqqylP9kZday1DcVcT3Tvm2weg==
-
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
@@ -6974,6 +6969,14 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libphonenumber-js@^1.7.18:
+  version "1.7.23"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.7.23.tgz#7263e5eaed0c8b3340cdc7af08f664efb8c8479e"
+  integrity sha512-PoL4q+VyljlBE5VBC0GegDYnBAYPAvoa6uihi5GmqlKGAC3bf4ha4KXiHOl3+6VvClgTnmiqHQUZcj/+SswnCQ==
+  dependencies:
+    minimist "^1.2.0"
+    xml2js "^0.4.17"
+
 load-bmfont@^1.3.1, load-bmfont@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/load-bmfont/-/load-bmfont-1.4.0.tgz#75f17070b14a8c785fe7f5bee2e6fd4f98093b6b"
@@ -11636,12 +11639,12 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-tel-input@^3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-3.1.6.tgz#8d32825b994dc0363463fd50d0fbc78435e1264f"
-  integrity sha512-HWV99ovdFBb28QJtuzw9Nr6owOivJnXulz+21LpRM/ueMzzj//zsCk1M6Qg1QaGF2P0gwlwFMorlc6zlZ9sfJQ==
+vue-tel-input@^2.0.21:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-2.5.0.tgz#8713b6e5754c0a7b9262b982b7671433481c1c1b"
+  integrity sha512-SHlg5sOWz+yix76SCjNMrsGOe7army7tpRxRI8eYx8fvnZikxXrO17zRrCnwEKUcdZBwXK05i8ElJW9qnmS7cA==
   dependencies:
-    awesome-phonenumber "^2.15.0"
+    libphonenumber-js "^1.7.18"
 
 vue-template-compiler@^2.6.10:
   version "2.6.10"
@@ -12070,7 +12073,7 @@ xml-parse-from-string@^1.0.0:
   resolved "https://registry.yarnpkg.com/xml-parse-from-string/-/xml-parse-from-string-1.0.1.tgz#a9029e929d3dbcded169f3c6e28238d95a5d5a28"
   integrity sha1-qQKekp09vN7RafPG4oI42VpdWig=
 
-xml2js@^0.4.5:
+xml2js@^0.4.17, xml2js@^0.4.5:
   version "0.4.20"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.20.tgz#f388b2ad23b092c41f81bbba080186b0acc0f6f1"
   integrity sha512-5+6o7cEzGZerpxm1WspA2C5ylzcvmNpyGyt8Q5GJtaMzXOmKgxNhsatXGXozHFinzT1fQVZoQIq+zgJd1QsjZA==
