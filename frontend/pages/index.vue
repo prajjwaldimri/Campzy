@@ -154,10 +154,12 @@ export default {
     scrollToLoadContent() {
       window.onscroll = () => {
         if (document.documentElement.scrollTop > 0) {
+          // eslint-disable-next-line
           console.log('hey')
         }
 
         if (document.documentElement.scrollTop === 0) {
+          // eslint-disable-next-line
           console.log('top')
         }
       }

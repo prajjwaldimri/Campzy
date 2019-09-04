@@ -2,7 +2,7 @@
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" absolute flat
   prominent color="transparent" app )
     v-spacer
-    v-toolbar-items.hidden-sm-and-down
+    v-toolbar-items.hidden-md-and-down
       v-btn.btn_margin(flat @click="$router.push({name: 'addYourCamp'})") Add your Camp
       v-btn.btn_margin(flat) Support
       v-btn.btn_margin(flat @click="$router.push('blogs')") Blogs
@@ -12,7 +12,7 @@
         v-icon(color='blue') account_circle
       v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
     
-    v-toolbar-items.hidden-md-and-up
+    v-toolbar-items.hidden-lg-and-up
       v-menu(transition="slide-y-transition" bottom)
         template(v-slot:activator="{ on }")
           v-btn(icon flat v-on='on')
