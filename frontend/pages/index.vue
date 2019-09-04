@@ -19,23 +19,20 @@
         v-flex.more_btn
           v-btn(icon large color='green' dark @click='getFeaturedCamps')
             v-icon keyboard_arrow_down
-    //-     v-flex.why_campzy(v-html='whyCmapzycontent')
-    //-   v-container.content_container(fluid)
-    //-     v-layout(row wrap)
-    //-       v-flex.text_content(xs12 md5 v-html='valueForMoney')
-    //-       v-flex.scroll_image(xs12 md7 v-html='valueForMoneyImg')
-    //-   v-container.content_container_right(fluid)
-    //-     v-layout(row wrap)
-    //-       v-flex.scroll_image(xs12 md7 v-html='exoticLocationsImg')
-    //-       v-flex.text_content(xs12 md5 v-html='exoticLocations')
-    //-   v-container.content_container(fluid)
-    //-     v-layout(row wrap)
-    //-       v-flex.text_content(xs12 md5 v-html='paymentOptions')
-    //-       v-flex.scroll_image(xs12 md7 v-html='paymentOptionsImg')
-    //-   v-container.why_campzy(fluid)
-    //-     v-flex(v-html='featuredBtnText')
-    //-     v-flex(v-html='featuredBtn')
-          
+      
+
+      .featuredCamps(v-show="isFeaturedCamps")
+        h1 Our Featured Camps
+        .camps-grid.mt-4
+          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
+            .card-container
+              v-card-title.camp-title.fill-height.align-end(primary-title)
+                .div(style="display:flex;flex-direction:column")
+                  h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+                  h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+                  h2.main-card-title.white--text(style="line-height: 1.5 !important") Chopta
+      .loading-div.mt-1
+        v-btn(v-show="loadingCamps" large flat :loading='isLoadingCamps') 
 
 
     Footer
@@ -47,6 +44,7 @@ import anime from 'animejs'
 import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
 import { getFeaturedCamps } from '../queries/queries'
+import { EventBus } from '../layouts/event-bus'
 
 export default {
   name: 'Home',
@@ -61,15 +59,12 @@ export default {
     return {
       searchInput: '',
       searchClicked: false,
-      whyCmapzycontent: '',
-      valueForMoney: '',
-      valueForMoneyImg: '',
-      exoticLocations: '',
-      exoticLocationsImg: '',
-      paymentOptions: '',
-      paymentOptionsImg: '',
+      allCamps: [],
       featuredBtn: '',
-      featuredBtnText: ''
+      featuredBtnText: '',
+      isFeaturedCamps: false,
+      isLoadingCamps: true,
+      loadingCamps: false
     }
   },
   mounted() {
@@ -93,87 +88,37 @@ export default {
       }
     })
 
-    // this.scrollToLoadContent()
+    this.scrollToLoadContent()
   },
   methods: {
-    // scrollToLoadContent() {
-    //   window.onscroll = () => {
-    //     if (document.documentElement.scrollTop > 0) {
-    //       this.whyCmapzycontent =
-    //         '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
-    //         '<img class="camp_img" src="/android-chrome-192x192.png"/>'
-
-    //       this.valueForMoney =
-    //         '<h2 class="main_headings" > 💸 Get the best deals everytime </h2>' +
-    //         '<h2 class="light_headings"> Here at campzy, we don’t trick users into buying something using price manupulation. Every price you see will be fair to the camp owners and you</h2>'
-
-    //       this.valueForMoneyImg =
-    //         '<img class="scroll_image" src="/vectors/money.svg"/>'
-
-    //       this.exoticLocations =
-    //         '<h2 class="main_headings" > Exotic Locations 🏔️ </h2>' +
-    //         '<h2 class="light_headings"> Locations like you have never seen before including famous hotspots like Chopta, Rishikesh, Himachal, Caribbean etc.</h2>'
-
-    //       this.exoticLocationsImg =
-    //         '<img class="scroll_image" src="/vectors/mountain.svg"/>'
-
-    //       this.paymentOptions =
-    //         '<h2 class="main_headings" > 💳 Every payment option available </h2>' +
-    //         '<h2 class="light_headings"> Whether you like UPI, credit card, debit card, online banking we accept everything.</h2>'
-
-    //       this.paymentOptionsImg =
-    //         '<img class="scroll_image" src="/vectors/payment.svg"/>'
-
-    //       this.featuredBtnText =
-    //         '<h2 class="large_heading" > Convinced yet? </h2>' +
-    //         '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
-
-    //       this.featuredBtn =
-    //         '<button type="button" class="featured_btn">Show our featured camps</button>'
-    //     }
-
-    //     if (document.documentElement.scrollTop === 0) {
-    //       this.whyCmapzycontent = ''
-    //       this.valueForMoney = ''
-    //       this.valueForMoneyImg = ''
-    //       this.exoticLocations = ''
-    //       this.exoticLocationsImg = ''
-    //       this.paymentOptions = ''
-    //       this.paymentOptionsImg = ''
-    //       this.featuredBtn = ''
-    //       this.featuredBtnText = ''
-    //     }
-    //   }
-    // },
-    // showContent() {
-    //   this.whyCmapzycontent =
-    //     '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>' +
-    //     '<img class="camp_img" src="/android-chrome-192x192.png"/>'
-    // },
-
     scrollToLoadContent() {
       window.onscroll = () => {
         if (document.documentElement.scrollTop > 0) {
-          // eslint-disable-next-line
-          console.log('hey')
+          if (this.allCamps.length === 0) {
+            this.getFeaturedCamps()
+          }
         }
 
         if (document.documentElement.scrollTop === 0) {
-          // eslint-disable-next-line
-          console.log('top')
+          this.allCamps = []
+          this.isFeaturedCamps = false
         }
       }
     },
 
     getFeaturedCamps() {
+      this.loadingCamps = true
       request('https://api.campzy.in/graphql', getFeaturedCamps)
         .then(data => {
-          // eslint-disable-next-line
-          console.log(data)
+          this.isFeaturedCamps = true
+          this.allCamps = data.getFeaturedCamps
+          this.loadingCamps = false
         })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err)
+        .catch(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Cannot get blogs at this time. Please try again.'
+          )
         })
     },
 
@@ -204,17 +149,20 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: 80vh;
   max-height: 100vh;
+  @media screen and (max-width: 960px) {
+    max-height: 40vh !important;
+  }
   .search-flex {
     margin-top: auto;
     margin-bottom: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // @media screen and (max-width: 960px) {
-    //   margin-top: 8rem;
-    // }
+    @media screen and (max-width: 960px) {
+      margin-top: 8rem;
+    }
 
     .v-input {
       min-width: 40vw;
@@ -272,36 +220,6 @@ export default {
   }
 }
 
-.why_campzy {
-  text-align: center;
-  margin-top: 10rem;
-  @media screen and (max-width: 960px) {
-    margin-top: 4rem;
-  }
-  .details_tagline {
-    font-weight: normal;
-    font-size: 25px;
-    text-align: center;
-    color: gray;
-    animation: fadeInFadeOut 2s;
-    @media screen and (max-width: 960px) {
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: 1px;
-    }
-  }
-  .camp_img {
-    height: 80px;
-    width: 75px;
-    margin-top: 1rem;
-    animation: fadeInFadeOut 2s;
-    @media screen and (max-width: 960px) {
-      height: 70px;
-      width: 65px;
-    }
-  }
-}
-
 .more_btn {
   text-align: center;
   padding-top: 6rem;
@@ -311,67 +229,53 @@ export default {
   }
 }
 
-.content_container {
-  padding-left: 12rem;
-  margin-top: 12rem;
-  @media screen and (max-width: 960px) {
-    padding: 1rem;
-    margin-top: 4rem;
-  }
+.featuredCamps {
+  margin: 8rem 5rem;
 }
 
-.content_container_right {
-  padding-right: 12rem;
-  margin-top: 12rem;
-  @media screen and (max-width: 960px) {
-    padding: 1rem;
-    margin-top: 4rem;
-  }
-}
-.text_content {
-  padding: 5rem 0 0 10rem;
-  @media screen and (max-width: 960px) {
-    padding: 0;
-  }
-
-  .light_headings {
-    font-weight: normal;
-    font-size: 25px;
-    text-align: left;
-    color: gray;
-    animation: fadeInFadeOut 2s;
-    @media screen and (max-width: 960px) {
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: 1px;
-    }
-  }
-
-  .main_headings {
-    font-weight: bold;
-    font-size: 25px;
-    text-align: left;
-    animation: fadeInFadeOut 2s;
-    @media screen and (max-width: 960px) {
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: 1px;
-    }
-  }
+.camps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  grid-gap: 2rem;
 }
 
-.scroll_image {
-  margin: 0px;
+.wide-card {
   height: 300px;
-  width: 450px;
-  animation: fadeInFadeOut 2s;
-  text-align: center;
-  @media screen and (max-width: 960px) {
-    height: 200px;
-    width: 300px;
-    margin: 1rem 0 1rem 0;
+  transition: transform 1s;
+  border-radius: 5px;
+  &:hover {
+    transform: translateY(-15px);
   }
 }
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.camp-title {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.align-end {
+  align-items: flex-end !important;
+}
+
+.main-card-title {
+  text-shadow: 0px 0px 20px grey;
+}
+.loading-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .featured_btn {
   background-color: #4caf50;
   color: white;

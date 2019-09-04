@@ -501,6 +501,10 @@ const getCampRequests = `query getAllRequests{
 const getFeaturedCamps = `query getFeaturedCamps{
   getFeaturedCamps{
     id
+    name
+    location
+    heroImage
+    url
   }
 }`
 
