@@ -30,10 +30,15 @@
                 .div(style="display:flex;flex-direction:column")
                   h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
                   h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
-                  h2.main-card-title.white--text(style="line-height: 1.5 !important") Chopta
       .loading-div.mt-1
-        v-btn(v-show="loadingCamps" large flat :loading='isLoadingCamps') 
+        v-btn(v-show="loadingCamps" large flat :loading='isLoadingCamps')
+      v-container.why_campzy(fluid v-show="isFeaturedCamps")
+        v-flex(v-html='featuredBtnText')
+        v-flex(v-html='featuredBtn')
+        
+       
 
+      
 
     Footer
 </template>
@@ -97,6 +102,13 @@ export default {
           if (this.allCamps.length === 0) {
             this.getFeaturedCamps()
           }
+
+          this.featuredBtnText =
+            '<h2 class="large_heading" > Convinced yet? </h2>' +
+            '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
+
+          this.featuredBtn =
+            '<button type="button" class="featured_btn">Wanna Know More?</button>'
         }
 
         if (document.documentElement.scrollTop === 0) {
@@ -274,6 +286,36 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.why_campzy {
+  text-align: center;
+  margin-top: 10rem;
+  @media screen and (max-width: 960px) {
+    margin-top: 4rem;
+  }
+  .details_tagline {
+    font-weight: normal;
+    font-size: 25px;
+    text-align: center;
+    color: gray;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      font-size: 14px;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+  }
+  .camp_img {
+    height: 80px;
+    width: 75px;
+    margin-top: 1rem;
+    animation: fadeInFadeOut 2s;
+    @media screen and (max-width: 960px) {
+      height: 70px;
+      width: 65px;
+    }
+  }
 }
 
 .featured_btn {
