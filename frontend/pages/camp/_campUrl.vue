@@ -116,90 +116,63 @@
         h1.headline.mt-5.pt-3.px-1.font-weight-bold Nearby Attractions
         v-container(grid-list-lg fluid v-if="camp.nearByActivities").mt-2.px-0
           v-layout(row wrap)
-            v-flex(xs6 md3 v-if="camp.nearByActivities.waterRafting").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.waterRafting").text-xs-center
               v-img.activities_icon(src="/vectors/rafting.svg" height="24" width="24") 
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Water Rafting
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/rafting_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Water Rafting
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.kayaking").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.kayaking").text-xs-center
               v-img.activities_icon(src="/vectors/kayaking.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Kayaking
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/kayaking_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Kayaking
+           
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.skiing").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.skiing").text-xs-center
               v-img.activities_icon(src="/vectors/skking.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Skiing
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/skiing_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Skking
+           
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.waterfallRappelling").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.waterfallRappelling").text-xs-center
               v-img.activities_icon(src="/vectors/waterfall.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Waterfall Rappel
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/waterfall_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Waterfall Rappel
+           
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.skydiving").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.skydiving").text-xs-center
               v-img.activities_icon(src="/vectors/skydiving.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Sky Diving
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/skydiving_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Sky Diving
+           
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.scubaDiving").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.scubaDiving").text-xs-center
               v-img.activities_icon(src="/vectors/scuba.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Scuba Diving
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/scuba_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Scuba Diving
+           
 
-            v-flex(xs6 md3 v-if="camp.nearByActivities.hotAirBallon").text-xs-center
+            v-flex(xs6 md3 v-show="camp.nearByActivities.hotAirBallon").text-xs-center
               v-img.activities_icon(src="/vectors/hotair.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Air Ballon
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/hotair_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Hot Air Ballon
-            v-flex(xs6 md3 v-if="camp.nearByActivities.caving").text-xs-center
+           
+            v-flex(xs6 md3 v-show="camp.nearByActivities.caving").text-xs-center
               v-img.activities_icon(src="/vectors/caving.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Caving
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/caving_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Caving
-            v-flex(xs6 md3 v-if="camp.nearByActivities.trekking").text-xs-center
+          
+            v-flex(xs6 md3 v-show="camp.nearByActivities.trekking").text-xs-center
               v-img.activities_icon(src="/vectors/trekking.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Trekking
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/trekking_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Trekking
-            v-flex(xs6 md3 v-if="camp.nearByActivities.snorkelling").text-xs-center
+          
+            v-flex(xs6 md3 v-show="camp.nearByActivities.snorkelling").text-xs-center
               v-img.activities_icon(src="/vectors/snorkel.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Snorkelling
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/snorkel_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Snorkelling
-            v-flex(xs6 md3 v-if="camp.nearByActivities.cliffJumping").text-xs-center
+           
+            v-flex(xs6 md3 v-show="camp.nearByActivities.cliffJumping").text-xs-center
               v-img.activities_icon(src="/vectors/cliff.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cliff Jumping
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/cliff_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Cliff Jumping
-            v-flex(xs6 md3 v-if="camp.nearByActivities.paragliding").text-xs-center
+           
+            v-flex(xs6 md3 v-show="camp.nearByActivities.paragliding").text-xs-center
               v-img.activities_icon(src="/vectors/paragliding.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Paragliding
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/paragliding_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Paragliding
-            v-flex(xs6 md3 v-if="camp.nearByActivities.cycling").text-xs-center
+            
+            v-flex(xs6 md3 v-show="camp.nearByActivities.cycling").text-xs-center
               v-img.activities_icon(src="/vectors/bicycle.svg" height="24" width="24")
               .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cycling
-            v-flex(xs6 md3 v-else).text-xs-center
-              v-img.activities_icon(src="/vectors/bicycle_black.svg" height="24" width="24")
-              .subheading.grey--text.font-weight-regular.mt-1 Cycling
+           
             
 
       v-divider(inset vertical).mx-3
