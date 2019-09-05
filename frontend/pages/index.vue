@@ -99,10 +99,6 @@ export default {
     scrollToLoadContent() {
       window.onscroll = () => {
         if (document.documentElement.scrollTop > 0) {
-          if (this.allCamps.length === 0) {
-            this.getFeaturedCamps()
-          }
-
           this.featuredBtnText =
             '<h2 class="large_heading" > Convinced yet? </h2>' +
             '<h2 class="details_tagline"> Just think how many people you need to call to plan a camping trip right now? </br> Campzy books camps in one click!</h2>'
