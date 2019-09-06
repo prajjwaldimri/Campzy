@@ -6,7 +6,7 @@
         span Camp
         span.green--text zy
     v-spacer
-    v-toolbar-items.hidden-sm-and-down
+    v-toolbar-items.hidden-md-and-down
       v-btn(flat @click="$router.push('/')") HOME
       v-btn(flat @click="$router.push('/profile/wishlist')") WISH LIST
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="100")
@@ -40,7 +40,7 @@
               v-list-tile-content
                 v-list-tile-title Sign out
 
-    v-toolbar-items.hidden-md-and-up
+    v-toolbar-items.hidden-lg-and-up
       v-btn(icon @click="$router.push('/')")
         v-icon home
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
@@ -202,7 +202,8 @@ export default {
 }
 
 .places-card {
-  height: 700px;
+  height: 400px;
+  width: 360px;
   overflow: scroll;
   @media screen and (max-width: 966px) {
     height: 450px;
