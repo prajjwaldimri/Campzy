@@ -29,6 +29,21 @@ export default {
   components: {
     CookieLaw
   },
+  metaInfo: {
+    meta: [
+      {
+        charset: 'utf-8'
+      },
+      {
+        name: 'theme-color',
+        content: '#2ecc71'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      }
+    ]
+  },
   data() {
     return {
       snackbarSuccess: false,
