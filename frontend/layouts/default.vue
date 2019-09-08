@@ -22,6 +22,7 @@
 
 <script>
 import CookieLaw from 'vue-cookie-law'
+import pkg from '../package'
 import { EventBus } from './event-bus'
 
 export default {
@@ -41,6 +42,11 @@ export default {
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: pkg.description
       }
     ],
     link: [
