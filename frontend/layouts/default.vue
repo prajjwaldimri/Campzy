@@ -42,6 +42,35 @@ export default {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1'
       }
+    ],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      },
+
+      {
+        rel: 'stylesheet',
+        media: 'screen',
+        href: 'https://fontlibrary.org/face/glacial-indifference',
+        type: 'text/css'
+      },
+
+      {
+        rel: 'stylesheet',
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      }
+    ],
+    script: [
+      {
+        src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
+      },
+      {
+        src: 'https://apis.google.com/js/api:client.js',
+        defer: true
+      }
     ]
   },
   data() {
