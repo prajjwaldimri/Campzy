@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    no-ssr
+    client-only
       cookie-law(theme="dark-lime" buttonText="ACCEPT COOKIES")
       div(slot="message")
         h3 This website uses cookies to ensure you get the best experience on our website. For more info
