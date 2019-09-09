@@ -13,7 +13,7 @@
 
 
         v-flex(sm12 md10).text-xs-center
-          v-btn(flat dark ) About
+          v-btn(flat dark @click="$router.push('/aboutUs')" ) About
           v-btn(flat dark @click="$router.push('/termsAndConditions')") Terms and Conditions
           v-btn(flat dark @click="$router.push('/privacyPolicy')") Privacy Policy
           v-btn(flat dark @click="$router.push({name: 'addYourCamp'})") Add your camp

@@ -80,7 +80,8 @@
                             v-btn(block color="green" :loading='isSignedup' @click="regUser"
                             :disabled="!isOTPSent").white--text.mt-3
                               | Verify
-    Footer 
+    Footer(style="margin-top:5.1rem;")
+
 
 
 </template>
@@ -380,7 +381,6 @@ export default {
   }
 
   display: flex;
-  align-items: center;
 
   .login-content {
     @media screen and (min-width: 960px) {
