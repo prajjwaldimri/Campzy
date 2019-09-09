@@ -34,7 +34,7 @@
         v-btn(v-show="loadingCamps" large flat :loading='isLoadingCamps')
       v-container.why_campzy(fluid v-show="isFeaturedCamps")
         v-flex(v-html='featuredBtnText')
-        v-flex(v-html='featuredBtn')
+        v-flex(v-html='featuredBtn' @click="$router.push('/aboutUs')")
         
        
 
