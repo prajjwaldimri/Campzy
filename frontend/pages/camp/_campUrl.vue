@@ -31,7 +31,7 @@
       style="align-items: center; display: flex")
         tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
         :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
-        :autoplay="true" :autoplay-button-output="false" v-if="camp.images")
+        :autoplay="true" :autoplay-button-output="false" v-if="camp.images" :autoHeight="true")
           v-responsive(v-for="image in camp.images" :key="image")
             v-card
               v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")

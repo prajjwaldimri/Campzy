@@ -241,7 +241,7 @@ export default {
 .featuredCamps {
   margin: 4rem 5rem;
   @media screen and (max-width: 960px) {
-    margin: 3rem 1rem;
+    margin: 3rem 2rem;
   }
 }
 

@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss">
-.v-carousel__item {
+.v-window-item {
   @media screen and (min-width: 960px) {
     height: 100vh !important;
   }
