@@ -15,10 +15,10 @@
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
     div     
-      v-container(fluid)
-        v-flex.more_btn
-          v-btn(icon large color='green' dark @click='getFeaturedCamps')
-            v-icon keyboard_arrow_down
+      //- v-container(fluid)
+      //-   v-flex.more_btn
+      //-     v-btn(icon large color='green' dark @click='getFeaturedCamps')
+      //-       v-icon keyboard_arrow_down
       
 
       .featuredCamps(v-show="isFeaturedCamps")
@@ -40,7 +40,7 @@
 
       
 
-    Footer
+    Footer(style="margin-top:13rem")
 </template>
 
 <script>
@@ -94,6 +94,7 @@ export default {
     })
 
     this.scrollToLoadContent()
+    this.getFeaturedCamps()
   },
   methods: {
     scrollToLoadContent() {
@@ -107,10 +108,10 @@ export default {
             '<button type="button" class="featured_btn">Wanna Know More?</button>'
         }
 
-        if (document.documentElement.scrollTop === 0) {
-          this.allCamps = []
-          this.isFeaturedCamps = false
-        }
+        // if (document.documentElement.scrollTop === 0) {
+        //   this.allCamps = []
+        //   this.isFeaturedCamps = false
+        // }
       }
     },
 
@@ -238,7 +239,10 @@ export default {
 }
 
 .featuredCamps {
-  margin: 8rem 5rem;
+  margin: 4rem 5rem;
+  @media screen and (max-width: 960px) {
+    margin: 3rem 1rem;
+  }
 }
 
 .camps-grid {
