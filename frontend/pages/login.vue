@@ -34,8 +34,9 @@
                       v-flex(sm12 lg6)
                         g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
                       v-flex(sm12 lg6)
-                        v-btn(color="#4267b2")
-                          fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError") Continue with Facebook
+                        //- v-btn(color="#4267b2")
+                        //-   fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError") Continue with Facebook
+                        v-facebook-login(app-id="1400869453414688" version="v4.0" @login="onSignInSuccessFacebook")
 
                   .signup-content(v-else-if="loginState == 1" key="signup")
                     v-card-title(align-center justify-center).d-flex
@@ -90,6 +91,7 @@
 /* global NProgress FB */
 import { setTimeout } from 'timers'
 import { request } from 'graphql-request'
+import VFacebookLogin from 'vue-facebook-login-component'
 import navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import { EventBus } from '../layouts/event-bus'
@@ -119,7 +121,8 @@ export default {
   },
   components: {
     navbar,
-    Footer
+    Footer,
+    VFacebookLogin
   },
   data() {
     return {
@@ -214,6 +217,9 @@ export default {
         token: response.authResponse.accessToken
       }
       NProgress.start()
+
+      // eslint-disable-next-line
+      console.log(variables)
       request('https://api.campzy.in/graphql', facebookAuth, variables)
         .then(data => {
           const jwt = JSON.parse(data.facebookAuth.jwt)
