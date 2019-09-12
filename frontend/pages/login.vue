@@ -36,7 +36,8 @@
                       v-flex(sm12 lg6)
                         //- v-btn(color="#4267b2")
                         //-   fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError") Continue with Facebook
-                        v-facebook-login(app-id="1400869453414688" version="v4.0" @login="onSignInSuccessFacebook")
+                        client-only
+                          facebook-login(style="padding:6px;" app-id="1400869453414688" version="v4.0" @login="onSignInSuccessFacebook" logoutLabel='Logged In to Facebook')
 
                   .signup-content(v-else-if="loginState == 1" key="signup")
                     v-card-title(align-center justify-center).d-flex
@@ -91,7 +92,7 @@
 /* global NProgress FB */
 import { setTimeout } from 'timers'
 import { request } from 'graphql-request'
-import VFacebookLogin from 'vue-facebook-login-component'
+import facebookLogin from 'facebook-login-vuejs'
 import navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import { EventBus } from '../layouts/event-bus'
@@ -122,7 +123,7 @@ export default {
   components: {
     navbar,
     Footer,
-    VFacebookLogin
+    facebookLogin
   },
   data() {
     return {
@@ -214,12 +215,10 @@ export default {
     },
     onSignInSuccessFacebook(response) {
       const variables = {
-        token: response.authResponse.accessToken
+        token: response.response.authResponse.accessToken
       }
       NProgress.start()
 
-      // eslint-disable-next-line
-      console.log(variables)
       request('https://api.campzy.in/graphql', facebookAuth, variables)
         .then(data => {
           const jwt = JSON.parse(data.facebookAuth.jwt)
@@ -246,6 +245,7 @@ export default {
           NProgress.done()
         })
     },
+
     onSignInError() {
       EventBus.$emit(
         'show-error-notification-short',

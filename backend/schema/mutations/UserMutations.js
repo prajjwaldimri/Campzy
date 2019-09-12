@@ -1,8 +1,12 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id", "_userId"] }] */
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
-const { OAuth2Client } = require('google-auth-library');
-const { FB } = require('fb');
+const {
+  OAuth2Client
+} = require('google-auth-library');
+const {
+  FB
+} = require('fb');
 const UserType = require('../types/UserType');
 const auth = require('../../config/auth');
 const {
@@ -15,18 +19,34 @@ const {
 const UserModel = require('../../models/user.js');
 const TokenModel = require('../../models/token');
 
-const { GraphQLString } = graphql;
+const {
+  GraphQLString
+} = graphql;
 
 const registerUser = {
   type: UserType,
   args: {
-    email: { type: GraphQLString },
-    password: { type: GraphQLString },
-    phoneNumber: { type: GraphQLString },
-    otp: { type: GraphQLString },
-    name: { type: GraphQLString },
-    googleToken: { type: GraphQLString },
-    facebookToken: { type: GraphQLString },
+    email: {
+      type: GraphQLString
+    },
+    password: {
+      type: GraphQLString
+    },
+    phoneNumber: {
+      type: GraphQLString
+    },
+    otp: {
+      type: GraphQLString
+    },
+    name: {
+      type: GraphQLString
+    },
+    googleToken: {
+      type: GraphQLString
+    },
+    facebookToken: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args) {
     try {
@@ -45,7 +65,9 @@ const registerUser = {
       });
       const createdUser = await userDocument.save();
       await auth.sendEmailVerificationToken(createdUser._id, args.email);
-      return { jwt: JSON.stringify(createdUser.generateJWT()) };
+      return {
+        jwt: JSON.stringify(createdUser.generateJWT())
+      };
     } catch (err) {
       return err;
     }
@@ -58,7 +80,9 @@ const client = new OAuth2Client(clientID);
 const googleAuth = {
   type: UserType,
   args: {
-    token: { type: GraphQLString },
+    token: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args) {
     try {
@@ -67,12 +91,16 @@ const googleAuth = {
         audience: clientID,
       });
 
-      const user = await UserModel.findOne({ email: ticket.payload.email });
+      const user = await UserModel.findOne({
+        email: ticket.payload.email
+      });
       if (user) {
         // User already exists in database. Link user's account to google OAuth Token
         user.googleToken = args.token;
         await user.save();
-        return { jwt: JSON.stringify(user.generateJWT()) };
+        return {
+          jwt: JSON.stringify(user.generateJWT())
+        };
       }
       throw new UserNotFoundError();
     } catch (err) {
@@ -85,7 +113,9 @@ const googleAuth = {
 const facebookAuth = {
   type: UserType,
   args: {
-    token: { type: GraphQLString },
+    token: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args) {
     try {
@@ -94,12 +124,16 @@ const facebookAuth = {
       if (!res || res.error) {
         throw new Error('Wrong Access Token');
       }
-      const user = await UserModel.findOne({ email: res.email });
+      const user = await UserModel.findOne({
+        email: res.email
+      });
       if (user) {
         // User already exists in system
         user.facebookToken = args.token;
         await user.save();
-        return { jwt: JSON.stringify(user.generateJWT()) };
+        return {
+          jwt: JSON.stringify(user.generateJWT())
+        };
       }
       throw new UserNotFoundError();
     } catch (err) {
@@ -111,13 +145,21 @@ const facebookAuth = {
 const resetPassword = {
   type: UserType,
   args: {
-    newPassword: { type: GraphQLString },
-    confirmNewPassword: { type: GraphQLString },
-    resetToken: { type: GraphQLString },
+    newPassword: {
+      type: GraphQLString
+    },
+    confirmNewPassword: {
+      type: GraphQLString
+    },
+    resetToken: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args) {
     try {
-      const token = await TokenModel.findOne({ tokenValue: args.resetToken });
+      const token = await TokenModel.findOne({
+        tokenValue: args.resetToken
+      });
       if (!token) {
         throw new WrongEmailTokenError();
       }
@@ -138,9 +180,15 @@ const resetPassword = {
 const updateUser = {
   type: UserType,
   args: {
-    name: { type: GraphQLString },
-    currentPassword: { type: GraphQLString },
-    newPassword: { type: GraphQLString },
+    name: {
+      type: GraphQLString
+    },
+    currentPassword: {
+      type: GraphQLString
+    },
+    newPassword: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args, context) {
     try {
@@ -155,15 +203,20 @@ const updateUser = {
         if (args.newPassword) {
           const password = await bcrypt.hash(args.newPassword, 10);
           userData = await UserModel.findByIdAndUpdate(
-            user.id,
-            { name: args.name, password },
-            { select: 'email name' },
+            user.id, {
+              name: args.name,
+              password
+            }, {
+              select: 'email name'
+            },
           );
         } else {
           userData = await UserModel.findByIdAndUpdate(
-            user.id,
-            { name: args.name },
-            { select: 'email name' },
+            user.id, {
+              name: args.name
+            }, {
+              select: 'email name'
+            },
           );
         }
         return userData;
@@ -178,7 +231,9 @@ const updateUser = {
 const addCampToWishlist = {
   type: UserType,
   args: {
-    campId: { type: GraphQLString },
+    campId: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
@@ -195,7 +250,9 @@ const addCampToWishlist = {
 const removeFromWishlist = {
   type: UserType,
   args: {
-    campId: { type: GraphQLString },
+    campId: {
+      type: GraphQLString
+    },
   },
   async resolve(parent, args, context) {
     const user = await auth.getAuthenticatedUser(context.req);
@@ -217,5 +274,5 @@ module.exports = {
   googleAuth,
   facebookAuth,
   addCampToWishlist,
-  removeFromWishlist,
+  removeFromWishlist
 };
