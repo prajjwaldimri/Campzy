@@ -67,7 +67,7 @@
                       v-flex(align-center).d-flex
                         v-layout(row)
                           v-flex(md6)
-                            vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
+                            vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)
                           v-flex(md5 offset-md1)
                             v-btn(block @click="sendOTP" color="info" :disabled="phoneNumber.length < 10" :loading="!isSendOTPButtonEnabled") Send OTP
                       v-flex(align-center).d-flex

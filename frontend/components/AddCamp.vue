@@ -31,7 +31,7 @@
         v-flex(xs12)
           span Phone Number
         v-flex(xs12)
-          vue-tel-input.mobile-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" required)
+          vue-tel-input.mobile-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)
 
       v-flex.d-flex(align-center)
         v-autocomplete(label="Owner" prepend-icon="account_box"
