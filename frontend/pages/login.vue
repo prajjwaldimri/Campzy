@@ -34,10 +34,8 @@
                       v-flex(sm12 lg6)
                         g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
                       v-flex(sm12 lg6)
-                        //- v-btn(color="#4267b2")
-                        //-   fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError") Continue with Facebook
-                        client-only
-                          facebook-login(style="padding:6px;" app-id="1400869453414688" version="v4.0" @login="onSignInSuccessFacebook" logoutLabel='Logged In to Facebook')
+                        v-btn(color="#4267b2" dark)
+                          fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError" data-longtitle="true" data-theme="dark") Continue with Facebook
 
                   .signup-content(v-else-if="loginState == 1" key="signup")
                     v-card-title(align-center justify-center).d-flex
@@ -92,7 +90,6 @@
 /* global NProgress FB */
 import { setTimeout } from 'timers'
 import { request } from 'graphql-request'
-import facebookLogin from 'facebook-login-vuejs'
 import navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import { EventBus } from '../layouts/event-bus'
@@ -122,8 +119,7 @@ export default {
   },
   components: {
     navbar,
-    Footer,
-    facebookLogin
+    Footer
   },
   data() {
     return {
@@ -180,6 +176,16 @@ export default {
       EventBus.$emit('success', 'Already logged in!')
       this.$router.go(-1)
     }
+
+    const fbSDK = document.createElement('script')
+    fbSDK.async = 'async'
+    fbSDK.defer = 'defer'
+    fbSDK.setAttribute('crossorigin', 'anonymous')
+    fbSDK.setAttribute(
+      'src',
+      'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0&appId=1400869453414688&autoLogAppEvents=1'
+    )
+    document.body.appendChild(fbSDK)
   },
   methods: {
     onSignInSuccessGoogle(googleUser) {
@@ -215,7 +221,7 @@ export default {
     },
     onSignInSuccessFacebook(response) {
       const variables = {
-        token: response.response.authResponse.accessToken
+        token: response.authResponse.accessToken
       }
       NProgress.start()
 
@@ -317,6 +323,8 @@ export default {
       const variables = {
         phoneNumber: this.phoneNumber.replace(/\s/g, '')
       }
+      // eslint-disable-next-line
+      console.log(variables)
       setTimeout(() => {
         this.isSendOTPButtonEnabled = true
       }, 15000)
