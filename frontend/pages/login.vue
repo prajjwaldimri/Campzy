@@ -323,8 +323,6 @@ export default {
       const variables = {
         phoneNumber: this.phoneNumber.replace(/\s/g, '')
       }
-      // eslint-disable-next-line
-      console.log(variables)
       setTimeout(() => {
         this.isSendOTPButtonEnabled = true
       }, 15000)
