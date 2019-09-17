@@ -276,17 +276,11 @@ export default {
 
   watch: {
     fromDate() {
-      if (!this.fromDate && !this.toDate) {
-        this.dateLabel = `${this.$moment().format('DD MMMM')} - ${this.$moment()
-          .add(1, 'days')
-          .format('DD MMMM')}`
-        sessionStorage.setItem('fromDate', this.fromDate)
-      } else {
-        this.dateLabel = `${this.$moment(this.fromDate).format(
-          'DD MMMM'
-        )} - ${this.$moment(this.toDate).format('DD MMMM')}`
-        sessionStorage.setItem('fromDate', this.fromDate)
-      }
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM'
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`
+      sessionStorage.setItem('fromDate', this.fromDate)
+
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
         this.toDate = this.$moment(this.fromDate)
           .add(1, 'days')
@@ -296,17 +290,11 @@ export default {
       this.calculatePrice()
     },
     toDate() {
-      if (!this.fromDate && !this.toDate) {
-        this.dateLabel = `${this.$moment().format('DD MMMM')} - ${this.$moment()
-          .add(1, 'days')
-          .format('DD MMMM')}`
-        sessionStorage.setItem('toDate', this.toDate)
-      } else {
-        this.dateLabel = `${this.$moment(this.fromDate).format(
-          'DD MMMM'
-        )} - ${this.$moment(this.toDate).format('DD MMMM')}`
-        sessionStorage.setItem('toDate', this.toDate)
-      }
+      this.dateLabel = `${this.$moment(this.fromDate).format(
+        'DD MMMM'
+      )} - ${this.$moment(this.toDate).format('DD MMMM')}`
+      sessionStorage.setItem('toDate', this.toDate)
+
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
         this.toDate = this.$moment(this.fromDate)
           .add(1, 'days')
@@ -328,8 +316,21 @@ export default {
 
     this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2
-    this.fromDate = sessionStorage.getItem('fromDate')
-    this.toDate = sessionStorage.getItem('toDate')
+    if (
+      sessionStorage.getItem('fromDate') &&
+      sessionStorage.getItem('toDate')
+    ) {
+      this.fromDate = sessionStorage.getItem('fromDate')
+      this.toDate = sessionStorage.getItem('toDate')
+      // eslint-disable-next-line
+      console.log(this.toDate)
+    } else {
+      this.fromDate = `${this.$moment().format('YYYY-MM-DD')}`
+      this.toDate = `${this.$moment()
+        .add(1, 'days')
+        .format('YYYY-MM-DD')}`
+    }
+
     this.getUser()
   },
   methods: {

@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-window-item {
   @media screen and (min-width: 960px) {
     height: 100vh !important;
