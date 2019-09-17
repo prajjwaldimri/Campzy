@@ -276,24 +276,37 @@ export default {
 
   watch: {
     fromDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format(
-        'DD MMMM'
-      )} - ${this.$moment(this.toDate).format('DD MMMM')}`
-      sessionStorage.setItem('fromDate', this.fromDate)
-
+      if (!this.fromDate && !this.toDate) {
+        this.dateLabel = `${this.$moment().format('DD MMMM')} - ${this.$moment()
+          .add(1, 'days')
+          .format('DD MMMM')}`
+        sessionStorage.setItem('fromDate', this.fromDate)
+      } else {
+        this.dateLabel = `${this.$moment(this.fromDate).format(
+          'DD MMMM'
+        )} - ${this.$moment(this.toDate).format('DD MMMM')}`
+        sessionStorage.setItem('fromDate', this.fromDate)
+      }
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
         this.toDate = this.$moment(this.fromDate)
           .add(1, 'days')
           .format('YYYY-MM-DD')
       }
+
       this.calculatePrice()
     },
     toDate() {
-      this.dateLabel = `${this.$moment(this.fromDate).format(
-        'DD MMMM'
-      )} - ${this.$moment(this.toDate).format('DD MMMM')}`
-      sessionStorage.setItem('toDate', this.toDate)
-
+      if (!this.fromDate && !this.toDate) {
+        this.dateLabel = `${this.$moment().format('DD MMMM')} - ${this.$moment()
+          .add(1, 'days')
+          .format('DD MMMM')}`
+        sessionStorage.setItem('toDate', this.toDate)
+      } else {
+        this.dateLabel = `${this.$moment(this.fromDate).format(
+          'DD MMMM'
+        )} - ${this.$moment(this.toDate).format('DD MMMM')}`
+        sessionStorage.setItem('toDate', this.toDate)
+      }
       if (this.$moment(this.toDate).diff(this.fromDate, 'days') < 1) {
         this.toDate = this.$moment(this.fromDate)
           .add(1, 'days')

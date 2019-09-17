@@ -158,7 +158,7 @@ export default {
   }
 }
 .left_img {
-  margin-left: 20rem !important;
+  margin-left: 20rem;
   @media screen and (max-width: 959px) {
     margin-left: 0 !important;
   }
