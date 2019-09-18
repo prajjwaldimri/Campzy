@@ -505,6 +505,7 @@ const getFeaturedCamps = `query getFeaturedCamps{
     location
     heroImage
     url
+    averageRating
   }
 }`
 

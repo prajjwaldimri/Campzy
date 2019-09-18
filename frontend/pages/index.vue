@@ -27,20 +27,34 @@
         .camps-grid.mt-4
           v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
             .card-container
+              
               v-card-title.camp-title.fill-height.align-end(primary-title)
-                .div(style="display:flex;flex-direction:column")
-                  h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
-                  h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+                v-layout(row)
+                  .div(style="display:flex;flex-direction:column")
+                    h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+                    h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+                  v-spacer
+                  .d-flex(style="text-align:right;")
+                    span.align-right.pt-1(style='width:100%;')
+                      v-icon(dark color="green") star
+                      span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+                      
       
       .wishListCamps(v-show="isFeaturedCamps")
         h1 Camps from Your Wishlist
         .camps-grid.mt-4
-          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
+          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in wishList' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
             .card-container
               v-card-title.camp-title.fill-height.align-end(primary-title)
-                .div(style="display:flex;flex-direction:column")
-                  h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
-                  h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+                v-layout(row)
+                  .div(style="display:flex;flex-direction:column")
+                    h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+                    h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+                  v-spacer
+                  .d-flex(style="text-align:right;")
+                    span.align-right.pt-1(style='width:100%;')
+                      v-icon(dark color="green") star
+                      span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
       
       v-container.why_campzy(fluid v-show="isFeaturedCamps")
         v-flex(v-html='featuredBtnText')
@@ -79,7 +93,8 @@ export default {
       featuredBtnText: '',
       isFeaturedCamps: false,
       isLoadingCamps: true,
-      loadingCamps: true
+      loadingCamps: true,
+      wishList: []
     }
   },
   mounted() {
@@ -147,7 +162,7 @@ export default {
           url,
           location,
           averageRating,
-          heroImage
+          heroImage,
             }
           }
         }`
@@ -161,7 +176,8 @@ export default {
         .request(getWishlistInIndex)
         .then(data => {
           // eslint-disable-next-line
-          console.log(data)
+          console.log(data.getWishlistInProfile)
+          this.wishList = data.getWishlistInProfile.localWishlist
         })
         .catch(err => {
           // eslint-disable-next-line
@@ -317,6 +333,13 @@ export default {
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.7),
+    rgba(255, 255, 255, 0)
+  );
+}
+.rating-bar {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3),
     rgba(255, 255, 255, 0)
   );
 }
