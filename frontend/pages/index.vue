@@ -20,7 +20,8 @@
       //-     v-btn(icon large color='green' dark @click='getFeaturedCamps')
       //-       v-icon keyboard_arrow_down
       
-
+      .loading-div.mt-1
+        vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
       .featuredCamps(v-show="isFeaturedCamps")
         h1 Our Featured Camps
         .camps-grid.mt-4
@@ -30,8 +31,17 @@
                 .div(style="display:flex;flex-direction:column")
                   h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
                   h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
-      .loading-div.mt-1
-        vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
+      
+      .wishListCamps(v-show="isFeaturedCamps")
+        h1 Camps from Your Wishlist
+        .camps-grid.mt-4
+          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
+            .card-container
+              v-card-title.camp-title.fill-height.align-end(primary-title)
+                .div(style="display:flex;flex-direction:column")
+                  h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+                  h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+      
       v-container.why_campzy(fluid v-show="isFeaturedCamps")
         v-flex(v-html='featuredBtnText')
         v-flex(v-html='featuredBtn' @click="$router.push('/aboutUs')")
@@ -44,7 +54,7 @@
 </template>
 
 <script>
-import { request } from 'graphql-request'
+import { GraphQLClient, request } from 'graphql-request'
 import anime from 'animejs'
 import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
@@ -95,6 +105,7 @@ export default {
 
     this.scrollToLoadContent()
     this.getFeaturedCamps()
+    this.getCampsFromWishList()
   },
   methods: {
     scrollToLoadContent() {
@@ -107,11 +118,6 @@ export default {
           this.featuredBtn =
             '<button type="button" class="featured_btn">Wanna Know More?</button>'
         }
-
-        // if (document.documentElement.scrollTop === 0) {
-        //   this.allCamps = []
-        //   this.isFeaturedCamps = false
-        // }
       }
     },
 
@@ -129,6 +135,37 @@ export default {
         })
         .finally(() => {
           this.loadingCamps = false
+        })
+    },
+
+    getCampsFromWishList() {
+      const getWishlistInIndex = `query getWishlistInProfile{
+      getWishlistInProfile{
+        localWishlist{
+          id,
+          name,
+          url,
+          location,
+          averageRating,
+          heroImage
+            }
+          }
+        }`
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+        }
+      })
+
+      client
+        .request(getWishlistInIndex)
+        .then(data => {
+          // eslint-disable-next-line
+          console.log(data)
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
         })
     },
 
@@ -241,6 +278,14 @@ export default {
 
 .featuredCamps {
   margin: 4rem 5rem;
+  @media screen and (max-width: 960px) {
+    margin: 3rem 2rem;
+  }
+}
+
+.wishListCamps {
+  margin: 4rem 5rem;
+  margin-top: 12rem;
   @media screen and (max-width: 960px) {
     margin: 3rem 2rem;
   }
