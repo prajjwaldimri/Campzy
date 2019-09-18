@@ -40,7 +40,7 @@
                       span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                       
       
-      .wishListCamps(v-show="isFeaturedCamps")
+      .wishListCamps(v-show="isWishListCamps")
         h1 Camps from Your Wishlist
         .camps-grid.mt-4
           v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in wishList' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
@@ -94,7 +94,8 @@ export default {
       isFeaturedCamps: false,
       isLoadingCamps: true,
       loadingCamps: true,
-      wishList: []
+      wishList: [],
+      isWishListCamps: false
     }
   },
   mounted() {
@@ -145,7 +146,7 @@ export default {
         .catch(() => {
           EventBus.$emit(
             'show-info-notification-short',
-            'Cannot get blogs at this time. Please try again.'
+            'Cannot get featured camps at this time. Please try later.'
           )
         })
         .finally(() => {
@@ -175,13 +176,14 @@ export default {
       client
         .request(getWishlistInIndex)
         .then(data => {
-          // eslint-disable-next-line
-          console.log(data.getWishlistInProfile)
+          this.isWishListCamps = true
           this.wishList = data.getWishlistInProfile.localWishlist
         })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err)
+        .catch(() => {
+          EventBus.$emit(
+            'show-info-notification-short',
+            'Cannot get wishlist camps at this time. Please try later.'
+          )
         })
     },
 
