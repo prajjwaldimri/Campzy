@@ -31,7 +31,7 @@
                   h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
                   h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
       .loading-div.mt-1
-        v-btn(v-show="loadingCamps" large flat :loading='isLoadingCamps')
+        vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
       v-container.why_campzy(fluid v-show="isFeaturedCamps")
         v-flex(v-html='featuredBtnText')
         v-flex(v-html='featuredBtn' @click="$router.push('/aboutUs')")
@@ -69,7 +69,7 @@ export default {
       featuredBtnText: '',
       isFeaturedCamps: false,
       isLoadingCamps: true,
-      loadingCamps: false
+      loadingCamps: true
     }
   },
   mounted() {
@@ -116,18 +116,19 @@ export default {
     },
 
     getFeaturedCamps() {
-      this.loadingCamps = true
       request('https://api.campzy.in/graphql', getFeaturedCamps)
         .then(data => {
           this.isFeaturedCamps = true
           this.allCamps = data.getFeaturedCamps
-          this.loadingCamps = false
         })
         .catch(() => {
           EventBus.$emit(
             'show-info-notification-short',
             'Cannot get blogs at this time. Please try again.'
           )
+        })
+        .finally(() => {
+          this.loadingCamps = false
         })
     },
 
@@ -284,7 +285,6 @@ export default {
 }
 .loading-div {
   display: flex;
-  flex-direction: row;
   justify-content: center;
 }
 

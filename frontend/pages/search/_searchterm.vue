@@ -3,7 +3,7 @@
     navbar
 
     transition(name="fade-transition" appear)
-      line-scale-pulse-out-rapid-loader(color="green" size="40px" v-if="!searchComplete")
+      vue-loaders-ball-pulse(color="green" scale="1.2" v-if="!searchComplete")
     v-container(fluid).top-container
       SearchImagesDialog
       v-layout(row wrap align-start)
@@ -336,9 +336,6 @@ export default {
     }
     this.searchInput = this.$route.params.searchterm
 
-    // eslint-disable-next-line no-console
-    console.log(this.searchInput)
-
     this.tentCount = parseInt(sessionStorage.getItem('tentCount'), 10) || 1
     this.personCount = parseInt(sessionStorage.getItem('personCount'), 10) || 2
 
@@ -347,6 +344,7 @@ export default {
     this.toDate = this.$moment()
       .add(1, 'days')
       .format('YYYY-MM-DD')
+    this.searchComplete = false
     this.search()
   },
 
@@ -432,8 +430,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.line-scale-pulse-out-rapid {
+<style lang="scss" scoped>
+.ball-pulse {
   position: absolute;
   top: 50%;
   left: 60%;

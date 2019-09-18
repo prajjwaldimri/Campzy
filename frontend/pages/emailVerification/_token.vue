@@ -1,7 +1,7 @@
 <template lang="pug">
   .home-flex
     .loading-flex
-      line-scale-pulse-out-rapid-loader(color="green" size="80px" v-if="!emailVerified")
+      vue-loaders-ball-pulse(color="green" scale="1.4" v-if="!emailVerified")
 
 
 </template>
