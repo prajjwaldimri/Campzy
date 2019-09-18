@@ -5,7 +5,7 @@
       v-layout(column)
         .content.pt-4
           .d-flex.justify-center
-            img(src='/vectors/Campzy-logo-black.svg' height='60' width='60')
+            img(src='/vectors/Campzy-logo-black.svg' height='60' width='60' style="margin:1rem;")
           v-flex.mt-5
             h2.headline.font-weight-bold.grey--text.text--darken-3 Terms And Conditions
             p.mt-4.font-weight-bold.grey--text.text--darken-3 By proceeding with the reservation you accept and agree with Campzy Travel Solutions Pvt. Ltd. that the reservation, if accepted by us, shall be on the terms and conditions as follows:
