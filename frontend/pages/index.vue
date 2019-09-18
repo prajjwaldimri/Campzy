@@ -144,10 +144,7 @@ export default {
           this.allCamps = data.getFeaturedCamps
         })
         .catch(() => {
-          EventBus.$emit(
-            'show-info-notification-short',
-            'Cannot get featured camps at this time. Please try later.'
-          )
+          this.isFeaturedCamps = false
         })
         .finally(() => {
           this.loadingCamps = false
@@ -180,10 +177,7 @@ export default {
           this.wishList = data.getWishlistInProfile.localWishlist
         })
         .catch(() => {
-          EventBus.$emit(
-            'show-info-notification-short',
-            'Cannot get wishlist camps at this time. Please try later.'
-          )
+          this.isWishListCamps = false
         })
     },
 
