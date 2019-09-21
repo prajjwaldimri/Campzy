@@ -67,6 +67,10 @@ export default {
         rel: 'stylesheet',
         href:
           'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/nprogress@0.2.0/nprogress.css'
       }
     ],
     script: [
@@ -93,6 +97,7 @@ export default {
     // N-Progress
     /* global NProgress */
     EventBus.$on('show-progress-bar', () => {
+      NProgress.configure({ showSpinner: false })
       NProgress.start()
     })
     EventBus.$on('hide-progress-bar', () => {

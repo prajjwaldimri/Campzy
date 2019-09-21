@@ -10,7 +10,7 @@
         v-icon account_circle
       v-btn.btn_margin(v-else flat icon to="/profile")
         v-icon(color='blue') account_circle
-      v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
+      //- v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
     
     v-toolbar-items.hidden-lg-and-up
       v-menu(transition="slide-y-transition" bottom)
@@ -41,12 +41,12 @@
               v-icon chrome_reader_mode
             v-list-tile-content
               v-list-tile-title Blogs
-          v-divider
-          v-list-tile
-            v-list-tile-action
-              v-icon pages
-            v-list-tile-content
-              v-list-tile-title Featured Camps
+          //- v-divider
+          //- v-list-tile
+          //-   v-list-tile-action
+          //-     v-icon pages
+          //-   v-list-tile-content
+          //-     v-list-tile-title Featured Camps
           v-divider
           v-list-tile
             v-list-tile-action

@@ -73,7 +73,6 @@ import anime from 'animejs'
 import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
 import { getFeaturedCamps } from '../queries/queries'
-import { EventBus } from '../layouts/event-bus'
 
 export default {
   name: 'Home',
