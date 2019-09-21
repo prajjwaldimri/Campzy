@@ -165,6 +165,9 @@ export default {
   @media screen and (max-width: 1264px) and (min-width: 960px) {
     margin-left: 2rem !important;
   }
+  @media screen and (max-width: 1900px) and (min-width: 1264px) {
+    margin-left: 5rem !important;
+  }
 }
 
 .meet_team {
