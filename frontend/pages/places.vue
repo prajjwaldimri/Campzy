@@ -61,7 +61,7 @@
 
 </template>
 <script>
-import { GraphQLClient } from 'graphql-request'
+import { request } from 'graphql-request'
 import { EventBus } from '../layouts/event-bus'
 
 import Navbar from '../components/Navbar.vue'
@@ -89,11 +89,6 @@ export default {
 
   methods: {
     getCampByPlaces() {
-      const client = new GraphQLClient('https://api.campzy.in/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-        }
-      })
       const getCampByPlace = `query($place: String!){
         getCampsInPlace(place: $place){
           luxuryCamps{
@@ -137,9 +132,7 @@ export default {
       const variables = {
         place: this.$route.params.place
       }
-
-      client
-        .request(getCampByPlace, variables)
+      request('https://api.campzy.in/graphql', getCampByPlace, variables)
         .then(data => {
           this.allCamps = data.getCampsInPlace
         })

@@ -183,7 +183,7 @@ export default {
     },
     sendPlaces(placeName) {
       this.$router.push(`/places/${placeName}`)
-      EventBus.$emit('reload-place')
+      // EventBus.$emit('reload-place')
     }
   }
 }
