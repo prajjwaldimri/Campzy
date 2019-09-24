@@ -4,7 +4,7 @@
     v-spacer
     v-toolbar-items.hidden-md-and-down
       v-btn.btn_margin(flat @click="$router.push({name: 'addYourCamp'})") Add your Camp
-      v-btn.btn_margin(flat) Support
+      //- v-btn.btn_margin(flat) Support
       v-btn.btn_margin(flat @click="$router.push('blogs')") Blogs
       v-btn.btn_margin(v-if='!isLoggedIn' flat icon to="/login")
         v-icon account_circle
@@ -47,12 +47,12 @@
           //-     v-icon pages
           //-   v-list-tile-content
           //-     v-list-tile-title Featured Camps
-          v-divider
-          v-list-tile
-            v-list-tile-action
-              v-icon contact_support
-            v-list-tile-content
-              v-list-tile-title Support
+          //- v-divider
+          //- v-list-tile
+          //-   v-list-tile-action
+          //-     v-icon contact_support
+          //-   v-list-tile-content
+          //-     v-list-tile-title Support
         
      
     
