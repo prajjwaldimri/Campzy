@@ -6,11 +6,11 @@
         v-btn(dark large @click.native="showDialog=false")
           v-icon close
       //- v-carousel(dark style="height: 100vh" v-if="imagesLoaded")
-      //-   v-carousel-item(v-for="(image,i) in images" :key="i" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image")
-      //-     //- .d-flex
-      //-     //-   v-responsive
-      //-     //-     v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
-      //-     //-     :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+        //- v-carousel-item(v-for="(image,i) in images" :key="i" :src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image")
+          //- .d-flex
+          //-   v-responsive
+          //-     v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image"
+          //-     :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
       div
         transition-group(name="fade" tag="div")
           div.img-container(v-for="i in [currentIndex]" :key="i")
@@ -90,7 +90,7 @@ export default {
               `https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/${img}`
             )
           })
-          this.startSlide()
+          // this.startSlide()
         })
         // eslint-disable-next-line handle-callback-err
         .catch(err => {
@@ -144,11 +144,11 @@ export default {
 
 img {
   height: 100vh;
-  width: 90%;
+  max-width: 90%;
 
   @media screen and (max-width: 960px) {
-    height: 45vh;
-    width: 100%;
+    height: 60vh;
+    max-width: 100%;
   }
 }
 
