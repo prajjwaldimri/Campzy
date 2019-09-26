@@ -15,8 +15,8 @@
         transition-group(name="fade" tag="div")
           div.img-container(v-for="i in [currentIndex]" :key="i")
             img(:src="currentImg")
-        a(class="prev" @click="prev" href="#") &#10094;
-        a(class="next" @click="next" href="#") &#10095;
+        a.prev(@click="prev" href="#") &#10094;
+        a.next(@click="next" href="#") &#10095;
           
 
 </template>
@@ -123,7 +123,24 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  bottom: 0;
+  left: 0;
   height: 100vh;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  @media screen and (max-width: 960px) {
+    left: 0;
+    height: 100vh;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    width: 100%;
+  }
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -143,12 +160,11 @@ export default {
 }
 
 img {
-  height: 100vh;
+  max-height: 100vh;
   max-width: 90%;
 
   @media screen and (max-width: 960px) {
-    height: 60vh;
-    max-width: 100%;
+    min-width: 100% !important;
   }
 }
 
