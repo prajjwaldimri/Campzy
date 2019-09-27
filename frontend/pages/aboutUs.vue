@@ -24,7 +24,7 @@
           v-flex.text_content(xs12 md5 )
             h2.main_headings 💳 Every payment option available
             h2.light_headings Whether you like UPI, credit card, debit card, online banking we accept everything.
-          v-flex.scroll_image(xs12 md7)
+          v-flex(xs12 md7)
             v-img.scroll_image(src='/vectors/payment.svg')
       
       v-container.meet_team(fluid)
@@ -44,7 +44,7 @@
               h2.designation CEO
             v-layout.avt_container(column style="flex: 0 0 auto;")
               v-avatar.avatar
-                v-img(src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John")
+                v-img(src="/myPic.jpg" alt="Ayush Bahuguna")
               h2 Ayush Bahuguna
               h2.designation Developer
           
@@ -146,7 +146,7 @@ export default {
 }
 
 .scroll_image {
-  margin: 0px;
+  margin-left: 6.5rem;
   height: 350px;
   width: 470px;
   animation: fadeInFadeOut 2s;

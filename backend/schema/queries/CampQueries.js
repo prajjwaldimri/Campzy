@@ -465,8 +465,6 @@ const getCampsInPlace = {
             $meta: 'textScore',
           },
         });
-      // eslint-disable-next-line
-      console.log(results)
       await forEach(results, async (result) => {
         if (result.inventory[0]) {
           if (result.inventory[0].bookingPrice > 40000) {
