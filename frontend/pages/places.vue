@@ -135,8 +135,12 @@ export default {
       request('https://api.campzy.in/graphql', getCampByPlace, variables)
         .then(data => {
           this.allCamps = data.getCampsInPlace
+          // // eslint-disable-next-line
+          // console.log(data)
         })
         .catch(() => {
+          // // eslint-disable-next-line
+          // console.log(err)
           EventBus.$emit(
             'show-error-notification-short',
             'Unable to get Camps rigth now!'
