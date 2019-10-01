@@ -440,6 +440,7 @@ const getCampsInPlace = {
         normalCamps: [],
         cheapCamps: [],
       };
+      console.log(args.place)
       const results = await CampModel.find({
           $text: {
             $search: args.place,
@@ -465,6 +466,7 @@ const getCampsInPlace = {
             $meta: 'textScore',
           },
         });
+      console.log(results)
       await forEach(results, async (result) => {
         if (result.inventory[0]) {
           if (result.inventory[0].bookingPrice > 40000) {
@@ -494,8 +496,7 @@ const getFeaturedCamps = {
   },
   async resolve(parent, args, context) {
     try {
-      console.log("hit")
-      return await CampModel.find({});
+      return await CampModel.find({}).limit(8);
 
     } catch (err) {
       return err;

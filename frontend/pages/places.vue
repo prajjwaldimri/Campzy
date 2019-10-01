@@ -89,7 +89,7 @@ export default {
 
   methods: {
     getCampByPlaces() {
-      const getCampByPlace = `query($place: String!){
+      const getCampByPlace = `query getCampsInPlace($place: String!){
         getCampsInPlace(place: $place){
           luxuryCamps{
             name
@@ -135,12 +135,12 @@ export default {
       request('https://api.campzy.in/graphql', getCampByPlace, variables)
         .then(data => {
           this.allCamps = data.getCampsInPlace
-          // // eslint-disable-next-line
-          // console.log(data)
+          // eslint-disable-next-line
+          console.log(data)
         })
-        .catch(() => {
-          // // eslint-disable-next-line
-          // console.log(err)
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
           EventBus.$emit(
             'show-error-notification-short',
             'Unable to get Camps rigth now!'
