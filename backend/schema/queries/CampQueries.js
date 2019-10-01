@@ -467,7 +467,8 @@ const getCampsInPlace = {
           },
         });
       await forEach(results, async (result) => {
-        console.log(result.inventory[0])
+        console.log(result)
+        console.log("next Camp")
         if (result.inventory[0]) {
           if (result.inventory[0].bookingPrice > 40000) {
             console.log("luxury camp")
