@@ -466,20 +466,24 @@ const getCampsInPlace = {
             $meta: 'textScore',
           },
         });
-      console.log(results)
       await forEach(results, async (result) => {
         if (result.inventory[0]) {
           if (result.inventory[0].bookingPrice > 40000) {
+            console.log("luxury camp")
             place.luxuryCamps.push(result);
           } else if (result.inventory[0].bookingPrice > 20000) {
+            console.log("preminum camp")
             place.premiumCamps.push(result);
           } else if (result.inventory[0].bookingPrice > 5000) {
+            console.log("normal camp")
             place.normalCamps.push(result);
           } else {
+            console.log("cheap camp")
             place.cheapCamps.push(result);
           }
         }
       });
+      console.log(place)
       return place;
     } catch (err) {
       return err;
