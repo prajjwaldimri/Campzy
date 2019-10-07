@@ -33,7 +33,7 @@
             v-btn(icon flat @click='openDatePicker(props.item.id)')
               v-icon date_range
       v-flex.hidden-md-and-up(xs12)
-        v-card.my-2(v-for='tent in tents' :key="tent")
+        v-card.my-2(v-for='(tent,index) in tents' :key="index")
           v-layout(row)
             v-flex(xs12 md8).d-flex
               v-card-title.title {{tent.type}}
