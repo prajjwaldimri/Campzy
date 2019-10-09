@@ -456,8 +456,7 @@ const getCampsInPlace = {
           options: {
             sort: {
               bookingPrice: -1,
-            },
-            limit: 1,
+            }
           },
         })
         .limit(20)
