@@ -466,9 +466,11 @@ const getCampsInPlace = {
             $meta: 'textScore',
           },
         });
+      console.log(results)
+      console.log("**************************************next Camp********************************")
       await forEach(results, async (result) => {
-        console.log(result)
-        console.log("*************next Camp**************")
+        console.log(result.inventory[0])
+        console.log("***************************New Line********************************************")
         if (result.inventory[0]) {
           if (result.inventory[0].bookingPrice > 40000) {
             console.log("luxury camp")

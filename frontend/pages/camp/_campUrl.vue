@@ -322,8 +322,6 @@ export default {
     ) {
       this.fromDate = sessionStorage.getItem('fromDate')
       this.toDate = sessionStorage.getItem('toDate')
-      // eslint-disable-next-line
-      console.log(this.toDate)
     } else {
       this.fromDate = `${this.$moment().format('YYYY-MM-DD')}`
       this.toDate = `${this.$moment()
