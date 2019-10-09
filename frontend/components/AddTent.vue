@@ -108,9 +108,7 @@ export default {
                   'Successfully added!'
                 )
               })
-              .catch(err => {
-                // eslint-disable-next-line
-                console.log(err)
+              .catch(() => {
                 EventBus.$emit(
                   'show-error-notification-short',
                   'Failed to add!'

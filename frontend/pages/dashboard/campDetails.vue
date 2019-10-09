@@ -434,7 +434,9 @@ export default {
           this.storeImages = []
           this.updateImagesToCamp()
         })
-        .catch(() => {
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
           EventBus.$emit('show-error-notification-long', 'Failed to Upload')
         })
         .finally(() => {
@@ -466,6 +468,8 @@ export default {
             )
           })
           .catch(err => {
+            // eslint-disable-next-line
+            console.log(err)
             EventBus.$emit(
               'show-error-notification-short',
               err.response.errors[0].message
@@ -633,7 +637,9 @@ export default {
             'Successfully Updated '
           )
         })
-        .catch(() => {
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
           EventBus.$emit('show-error-notification-short', 'Failed to update')
         })
         .finally(() => {
@@ -664,7 +670,9 @@ export default {
       client
         .request(addAmenities, variables)
         .then(() => {})
-        .catch(() => {
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
           EventBus.$emit(
             'show-info-notification-short',
             'Failed to Update Amenities'

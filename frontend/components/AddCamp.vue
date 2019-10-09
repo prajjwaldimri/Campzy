@@ -203,8 +203,6 @@ export default {
               this.isOwnerSelected = false
             })
             .catch(err => {
-              // eslint-disable-next-line no-console
-              console.log(err)
               EventBus.$emit(
                 'show-error-notification-short',
                 err.response.errors[0].message
