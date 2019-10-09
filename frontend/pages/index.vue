@@ -174,6 +174,9 @@ export default {
         .then(data => {
           this.isWishListCamps = true
           this.wishList = data.getWishlistInProfile.localWishlist
+          if (this.wishList.length === 0) {
+            this.isWishListCamps = false
+          }
         })
         .catch(() => {
           this.isWishListCamps = false
