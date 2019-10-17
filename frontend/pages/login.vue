@@ -1,85 +1,89 @@
 <template lang="pug">
   .login_container
     navbar
-    v-container(text-xs-center).card-container
-      v-layout(row)
-        v-flex(xs12)
-          v-card
-            v-layout(row)
-              v-flex(md6).hidden-sm-and-down.right-image
-              v-flex(xs12 md6)
-                transition(name="fade-transition" appear key="login" mode="out-in")
-                  .login-content(v-if="loginState == 0")
-                    v-card-title(align-center justify-center).d-flex
-                      h1.display-1.pb-4 Login
-                    v-form(ref="form" v-model="isLoginValid")
-                      v-text-field(label="Email" color='green accent-4'
-                      v-validate="'required|email'" required
-                        v-model="email" clearable data-vv-name="email"
-                        :error-messages="errors.collect('email')")
-                      v-text-field(label="Current Password" color='green accent-4'
-                      v-model="password" clearable @keyup.enter="login"
-                      type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
-                        :error-messages="errors.collect('currentPassword')")
-                    v-flex(justify-space-between).d-flex.mt-3
-                      v-btn(block color="green" @click="login"
-                      :loading='isLoggedin').white--text.mr-1 Login
-                      v-btn(block dark @click="resetPassword").white--text.ml-1 Forgot Password?
-                    v-flex.d-flex(reverse align-center).mt-3
-                      h4.font-weight-light Need an account?
-                      v-btn(flat @click="loginState = 1")
-                        h4 Sign up here!
+    v-container(text-xs-center).card-containerr
+      v-card.login-card
+        v-flex(xs12 md12)
+          transition(name="fade-transition" appear key="login" mode="out-in")
+            .login-content(v-if="loginState == 0")
+              v-card-title(align-center justify-center style="padding:0px").d-flex
+                v-layout(column)
+                  .campzy-logo.pb-4
+                    span.display-1 Welcome to&nbsp
+                    span.display-1 Camp
+                    span.display-1.green--text zy
+                  h1.display-1.pb-4 Login
+              v-form(ref="form" v-model="isLoginValid")
+                v-text-field(label="Email" color='green accent-4'
+                v-validate="'required|email'" required
+                  v-model="email" clearable data-vv-name="email"
+                  :error-messages="errors.collect('email')")
+                v-text-field(label="Current Password" color='green accent-4'
+                v-model="password" clearable @keyup.enter="login"
+                type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
+                  :error-messages="errors.collect('currentPassword')")
+              v-flex(justify-space-between).d-flex.mt-3
+                v-btn(block color="green" @click="login"
+                :loading='isLoggedin').white--text.mr-1 Login
+                v-btn(block dark @click="resetPassword").white--text.ml-1 Forgot Password?
+              v-flex.d-flex(reverse align-center).mt-3
+                h4.font-weight-light Need an account?
+                v-btn(flat @click="loginState = 1")
+                  h4 Sign up here!
 
-                    v-layout(row wrap).mt-4
-                      v-flex(sm12 lg6)
-                        g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
-                      v-flex(sm12 lg6)
-                        v-btn(color="#4267b2" dark)
-                          fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError" data-longtitle="true" data-theme="dark") Continue with Facebook
+              v-layout(row wrap).mt-4
+                v-flex(sm12 lg6)
+                  g-signin-button(:params="googleSignInParams" @success="onSignInSuccessGoogle" @error="onSignInError" data-longtitle="true" data-theme="dark").g-signin2 Login With Google
+                v-flex(sm12 lg6)
+                  v-btn(color="#4267b2" dark)
+                    fb-signin-button(:params="fbSignInParams" @success="onSignInSuccessFacebook" @error="onSignInError" data-longtitle="true" data-theme="dark") Continue with Facebook
 
-                  .signup-content(v-else-if="loginState == 1" key="signup")
-                    v-card-title(align-center justify-center).d-flex
-                      h1.display-1.pb-4 Create an Account
-                    v-form(ref="form" v-model="isLoginValid")
-                    v-text-field(label="Name" color='green accent-4'
-                    v-validate="'required|alpha_spaces'" required
-                      v-model="name" clearable data-vv-name="name"
-                      :error-messages="errors.collect('name')")
-                    v-text-field(label="Email" color='green accent-4'
-                    v-validate="'required|email'" required
-                      v-model="email2" clearable data-vv-name="email2"
-                      :error-messages="errors.collect('email2')")
-                    v-text-field(label="Password" color='green accent-4' v-model="password" clearable
-                    type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
-                      :error-messages="errors.collect('currentPassword')")
-                    v-btn(v-if="fields.email2" block color="green" :loading='isSignedup' @click="loginState = 2"
-                    :disabled="email2 === '' || password === '' || isEmailAlreadyinUse || fields.email2.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
-                      | Create your account
-                    v-flex.d-flex(reverse align-center).mt-3
-                      h4.font-weight-light Already have an account?
-                      v-btn(flat @click="loginState = 0")
-                        h4 LOGIN
+            .signup-content(v-else-if="loginState == 1" key="signup")
+              v-card-title(align-center justify-center style="padding:0px;").d-flex
+                v-layout(column)
+                  .campzy-logo.pb-3
+                    span.display-1 Register Here!
+                  h1.display-1.pb-4 Create an Account
+              v-form(ref="form" v-model="isLoginValid")
+              v-text-field(label="Name" color='green accent-4'
+              v-validate="'required|alpha_spaces'" required
+                v-model="name" clearable data-vv-name="name"
+                :error-messages="errors.collect('name')")
+              v-text-field(label="Email" color='green accent-4'
+              v-validate="'required|email'" required
+                v-model="email2" clearable data-vv-name="email2"
+                :error-messages="errors.collect('email2')")
+              v-text-field(label="Password" color='green accent-4' v-model="password" clearable
+              type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
+                :error-messages="errors.collect('currentPassword')")
+              v-btn(v-if="fields.email2" block color="green" :loading='isSignedup' @click="loginState = 2"
+              :disabled="email2 === '' || password === '' || isEmailAlreadyinUse || fields.email2.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
+                | Create your account
+              v-flex.d-flex(reverse align-center).mt-3
+                h4.font-weight-light Already have an account?
+                v-btn(flat @click="loginState = 0")
+                  h4 LOGIN
 
-                  .phone-otp-content(v-else key="phone-otp")
-                    v-card-title(align-center justify-center).d-flex
-                      h1.display-1.pb-4 Verify your Phone Number
-                    v-form(ref="form" v-model="isLoginValid")
-                      v-flex(align-center).d-flex
-                        v-layout(row)
-                          v-flex(md6)
-                            vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)
-                          v-flex(md5 offset-md1)
-                            v-btn(block @click="sendOTP" color="info" :disabled="phoneNumber.length < 10" :loading="!isSendOTPButtonEnabled") Send OTP
-                      v-flex(align-center).d-flex
-                        v-layout(row)
-                          v-flex(md6)
-                            v-text-field(label="One Time Password" color='green accent-4'
-                            v-model="otp" clearable data-vv-name="OTP" v-validate="'digits:6'"
-                              :error-messages="errors.collect('OTP')" @keyup.enter="regUser" )
-                          v-flex(md5 offset-md1)
-                            v-btn(block color="green" :loading='isSignedup' @click="regUser"
-                            :disabled="!isOTPSent").white--text.mt-3
-                              | Verify
+            .phone-otp-content(v-else key="phone-otp")
+              v-card-title(align-center justify-center).d-flex
+                h1.display-1.pb-4 Verify your Phone Number
+              v-form(ref="form" v-model="isLoginValid")
+                v-flex(align-center).d-flex
+                  v-layout(row)
+                    v-flex(md6)
+                      vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)
+                    v-flex(md5 offset-md1)
+                      v-btn(block @click="sendOTP" color="info" :disabled="phoneNumber.length < 10" :loading="!isSendOTPButtonEnabled") Send OTP
+                v-flex(align-center).d-flex
+                  v-layout(row)
+                    v-flex(md6)
+                      v-text-field(label="One Time Password" color='green accent-4'
+                      v-model="otp" clearable data-vv-name="OTP" v-validate="'digits:6'"
+                        :error-messages="errors.collect('OTP')" @keyup.enter="regUser" )
+                    v-flex(md5 offset-md1)
+                      v-btn(block color="green" :loading='isSignedup' @click="regUser"
+                      :disabled="!isOTPSent").white--text.mt-3
+                        | Verify
     Footer(style="margin-top:5.1rem;")
 
 
@@ -387,16 +391,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-container {
+.card-containerr {
   @media screen and (min-width: 961px) {
     padding: 2rem 2rem;
   }
 
   display: flex;
+  justify-content: center;
+
+  .login-card {
+    border-top-style: solid;
+    border-top-width: 5px;
+    border-top-color: green;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .display-1 {
+    font-size: 34px !important;
+    font-weight: 400;
+    line-height: 40px !important;
+    letter-spacing: normal !important;
+    font-family: 'Roboto', sans-serif !important;
+    @media screen and (max-width: 960px) {
+      font-size: 25px !important;
+    }
+  }
 
   .login-content {
     @media screen and (min-width: 960px) {
-      padding: 7rem 4rem;
+      padding: 4rem 4rem 7rem 4rem;
     }
     @media screen and (max-width: 960px) {
       padding: 1rem;
@@ -405,7 +428,7 @@ export default {
 
   .signup-content {
     @media screen and (min-width: 960px) {
-      padding: 7rem 4rem;
+      padding: 4rem 4rem 7rem 4rem;
     }
     @media screen and (max-width: 960px) {
       padding: 1rem;
@@ -452,6 +475,7 @@ export default {
   width: 100%;
   background-color: #4267b2;
   color: #fff;
+  font-weight: 500;
 }
 </style>
 
