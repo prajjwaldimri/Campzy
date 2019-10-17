@@ -474,7 +474,7 @@ export default {
           that.bookButtonLoading = true
           // Implement razorpay API
           const razorOptions = {
-            key: 'rzp_test_7nPC922fL6RkVG',
+            key: 'rzp_live_8WKqvYktwfxYIe',
             amount: data.bookCampCheck.amount * 100, // Razorpay counts money in paise
             name: 'Campzy',
             description: 'Purchase Description',
