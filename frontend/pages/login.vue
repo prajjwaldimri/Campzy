@@ -367,7 +367,7 @@ export default {
       } else {
         EventBus.$emit(
           'show-error-notification-short',
-          'Invalid Credentials or Verify yourself first!'
+          'Please Verify yourself first!'
         )
         this.$refs.recaptcha.reset()
       }
