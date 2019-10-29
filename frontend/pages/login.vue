@@ -23,6 +23,8 @@
                 type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                   :error-messages="errors.collect('currentPassword')")
               v-flex(justify-space-between).d-flex.mt-3
+                vue-recaptcha(ref="recaptcha" sitekey="6LeY-78UAAAAADzgKX53vXkDvS8_j-t-MQ7UfRMl" @verify="verifyCaptcha")
+              v-flex(justify-space-between).d-flex.mt-3
                 v-btn(block color="green" @click="login"
                 :loading='isLoggedin').white--text.mr-1 Login
                 v-btn(block dark @click="resetPassword").white--text.ml-1 Forgot Password?
@@ -56,7 +58,9 @@
               v-text-field(label="Password" color='green accent-4' v-model="password" clearable
               type="password" counter data-vv-name="currentPassword" v-validate="'min:8'"
                 :error-messages="errors.collect('currentPassword')")
-              v-btn(v-if="fields.email2" block color="green" :loading='isSignedup' @click="loginState = 2"
+              v-flex(justify-space-between).d-flex.mt-3
+                vue-recaptcha(ref="recaptcha" sitekey="6LeY-78UAAAAADzgKX53vXkDvS8_j-t-MQ7UfRMl" @verify="verifyCaptcha")
+              v-btn(v-if="fields.email2" block color="green" :loading='isSignedup' @click="createUserAccount"
               :disabled="email2 === '' || password === '' || isEmailAlreadyinUse || fields.email2.invalid || fields.currentPassword.invalid || fields.name.invalid").white--text.mt-3
                 | Create your account
               v-flex.d-flex(reverse align-center).mt-3
@@ -94,6 +98,7 @@
 /* global NProgress FB */
 import { setTimeout } from 'timers'
 import { request } from 'graphql-request'
+import VueRecaptcha from 'vue-recaptcha'
 import navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import { EventBus } from '../layouts/event-bus'
@@ -112,7 +117,15 @@ export default {
   },
   metaInfo: {
     title: 'Login to Campzy',
-    script: [{ src: 'https://apis.google.com/js/platform.js' }],
+    script: [
+      { src: 'https://apis.google.com/js/platform.js' },
+      {
+        src:
+          'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit',
+        async: true,
+        defer: true
+      }
+    ],
     meta: [
       {
         name: 'google-signin-client_id',
@@ -123,7 +136,8 @@ export default {
   },
   components: {
     navbar,
-    Footer
+    Footer,
+    VueRecaptcha
   },
   data() {
     return {
@@ -150,7 +164,8 @@ export default {
         return_scopes: true
       },
       googleToken: '',
-      facebookToken: ''
+      facebookToken: '',
+      isCaptchaVerified: false
     }
   },
   watch: {
@@ -262,6 +277,25 @@ export default {
         'Cannot login you right now. Try another login method!'
       )
     },
+    verifyCaptcha(response) {
+      if (response) {
+        this.isCaptchaVerified = true
+      } else {
+        this.$refs.recaptcha.reset()
+      }
+    },
+    createUserAccount() {
+      if (this.isCaptchaVerified) {
+        this.loginState = 2
+      } else {
+        EventBus.$emit(
+          'show-error-notification-short',
+          'Please Verify yourself first!'
+        )
+        this.$refs.recaptcha.reset()
+      }
+    },
+
     regUser() {
       this.isSignedup = true
       const variables = {
@@ -295,33 +329,46 @@ export default {
           NProgress.done()
         })
     },
+
     login() {
-      this.isLoggedin = true
-      const variables = {
-        loginEmail: this.email,
-        loginPassword: this.password
-      }
-      NProgress.start()
-      request('https://api.campzy.in/graphql', sendUserCredentials, variables)
-        .then(data => {
-          const jwt = JSON.parse(data.loginUser.jwt)
-          this.$cookie.set('sessionToken', jwt, { secure: true })
-          this.$router.go(-1)
-          EventBus.$emit('show-success-notification-short', 'Login Successful')
-          this.isLoggedin = false
-        })
-        .catch(err => {
-          if (err) {
+      if (this.isCaptchaVerified) {
+        this.isLoggedin = true
+        const variables = {
+          loginEmail: this.email,
+          loginPassword: this.password
+        }
+        NProgress.start()
+        request('https://api.campzy.in/graphql', sendUserCredentials, variables)
+          .then(data => {
+            const jwt = JSON.parse(data.loginUser.jwt)
+            this.$cookie.set('sessionToken', jwt, { secure: true })
+            this.$router.go(-1)
             EventBus.$emit(
-              'show-error-notification-short',
-              err.response.errors[0].message
+              'show-success-notification-short',
+              'Login Successful'
             )
             this.isLoggedin = false
-          }
-        })
-        .finally(() => {
-          NProgress.done()
-        })
+          })
+          .catch(err => {
+            if (err) {
+              EventBus.$emit(
+                'show-error-notification-short',
+                err.response.errors[0].message
+              )
+              this.isLoggedin = false
+              this.$refs.recaptcha.reset()
+            }
+          })
+          .finally(() => {
+            NProgress.done()
+          })
+      } else {
+        EventBus.$emit(
+          'show-error-notification-short',
+          'Invalid Credentials or Verify yourself first!'
+        )
+        this.$refs.recaptcha.reset()
+      }
     },
     sendOTP() {
       const variables = {
