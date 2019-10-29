@@ -44,8 +44,10 @@
               v-card-title(align-center justify-center style="padding:0px;").d-flex
                 v-layout(column)
                   .campzy-logo.pb-3
-                    span.display-1 Register Here!
-                  h1.display-1.pb-4 Create an Account
+                    span.display-1 Welcome to&nbsp
+                    span.display-1 Camp
+                    span.display-1.green--text zy
+                  h1.display-1.pb-4 Register Here
               v-form(ref="form" v-model="isLoginValid")
               v-text-field(label="Name" color='green accent-4'
               v-validate="'required|alpha_spaces'" required
