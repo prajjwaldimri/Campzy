@@ -301,13 +301,13 @@ export default {
   margin: 4rem 5rem;
   margin-top: 12rem;
   @media screen and (max-width: 960px) {
-    margin: 3rem 2rem;
+    margin: 3rem 1rem;
   }
 }
 
 .camps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
   grid-gap: 2rem;
 }
 
