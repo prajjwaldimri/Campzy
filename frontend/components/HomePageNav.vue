@@ -10,6 +10,9 @@
         v-icon account_circle
       v-btn.btn_margin(v-else flat icon to="/profile")
         v-icon(color='blue') account_circle
+      v-btn(small flat href="tel: +919582421554")
+        v-icon call
+        span(style="font-size:20px") +91-9582421554
       //- v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
     
     v-toolbar-items.hidden-lg-and-up
@@ -41,6 +44,12 @@
               v-icon chrome_reader_mode
             v-list-tile-content
               v-list-tile-title Blogs
+          v-divider
+          v-list-tile(href="tel: +919582421554")
+            v-list-tile-content
+              v-list-tile-title.text-xs-center Call Us
+              v-list-tile-title.text-xs-center +91-9582421554
+         
           //- v-divider
           //- v-list-tile
           //-   v-list-tile-action
