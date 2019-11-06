@@ -43,8 +43,8 @@
               v-list-tile-content
                 v-list-tile-title Sign out
       v-btn(small flat href="tel: +919582421554")
-        v-icon call
-        span(style="font-size:20px") &nbsp; +91-9582421554
+        v-icon(style="font-size:19px") call
+        span(style="font-size:16px") &nbsp; +91-9582421554
 
     v-toolbar-items.hidden-lg-and-up
       v-btn(icon @click="$router.push('/')")
