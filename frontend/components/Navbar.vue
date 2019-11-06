@@ -18,6 +18,9 @@
               v-list-tile-content
                 v-list-tile-title {{place}}
 
+      v-btn.btn_margin(flat @click="$router.push({name: 'addYourCamp'})") Add your Camp
+      v-btn.btn_margin(flat @click="$router.push('blogs')") Blogs
+
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="true" :nudge-width="200")
         v-btn(flat slot="activator" v-show="isLoggedIn")
@@ -41,7 +44,7 @@
                 v-list-tile-title Sign out
       v-btn(small flat href="tel: +919582421554")
         v-icon call
-        span(style="font-size:20px") +91-9582421554
+        span(style="font-size:20px") &nbsp; +91-9582421554
 
     v-toolbar-items.hidden-lg-and-up
       v-btn(icon @click="$router.push('/')")
