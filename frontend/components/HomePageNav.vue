@@ -1,6 +1,6 @@
 <template lang="pug">
   v-toolbar(:clipped-left="$vuetify.breakpoint.lgAndUp" absolute flat
-  prominent color="transparent" app )
+  prominent color="transparent" app :dark="dark" )
     v-spacer
     v-toolbar-items
       v-btn.hidden-lg-and-up(small icon flat href="tel: +919582421554")
@@ -18,6 +18,10 @@
 </template>
 <script>
 export default {
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    dark: Boolean
+  },
   data: () => ({
     isLoggedIn: false
   }),

@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    HomeNav
+    HomeNav(:dark="false")
     .home-flex
       .search-flex
         .campzy-logo.pb-4.pt-4
