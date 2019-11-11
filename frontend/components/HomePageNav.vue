@@ -12,7 +12,8 @@
       v-btn.hidden-md-and-down(small flat href="tel: +919582421554")
         v-icon(style="font-size:19px") call
         span(style="font-size:16px") &nbsp; +91-9582421554
-     
+      //- v-container.py-0(fluid)
+      //-   v-btn(href="https://wa.me/+919582421554?text=Hello" color="success" outline ) Contact Us on Whatsapp
       //- v-btn.btn_margin.featured__btn(round depressed color='green' dark ) Featured Camps 
 
 </template>
