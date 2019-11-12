@@ -108,7 +108,10 @@ export default {
         '.home-flex .actions-flex',
         '.more_btn'
       ],
-      translateY: [{ value: 100, duration: 0 }, { value: 0, duration: 500 }],
+      translateY: [
+        { value: 100, duration: 0 },
+        { value: 0, duration: 500 }
+      ],
       opacity: [0, 1],
       easing: 'easeInOutQuad',
       duration: 500,
