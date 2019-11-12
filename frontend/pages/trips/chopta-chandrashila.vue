@@ -123,7 +123,7 @@
         
     v-tooltip(top)
       template(v-slot:activator="{on}")
-        v-btn(href="https://wa.me/+919582421554?text=Hi%20Campzy" fab style="position: fixed; top: 82vh; right: 1vw;margin-bottom:5rem;" v-on="on")
+        v-btn.whatsapp-btn(href="https://wa.me/+919810325245?text=Hi%20Campzy!" fab v-on="on")
           v-img(src="/vectors/whatsapp.svg")
       span Contact us on Whatsapp
     Footer
@@ -302,5 +302,12 @@ export default {
 
 .notes-li {
   text-align: justify;
+}
+
+.whatsapp-btn {
+  position: fixed;
+  top: 82vh;
+  right: 1vw;
+  margin-bottom: 5rem;
 }
 </style>
