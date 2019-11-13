@@ -6,6 +6,9 @@
       v-text-field(v-model="name" label="Name" prepend-icon="subject" clearable
       data-vv-name="name" v-validate="'required|alpha_spaces'"
       :error-messages="errors.collect('name')")
+      v-text-field(v-model="email" label="Email" prepend-icon="subject" clearable
+      data-vv-name="email" v-validate="'required'"
+      :error-messages="errors.collect('email')")
       v-select(v-model="tripDate" :items="tripDates" label="Select Trip Date" prepend-icon="today")
       v-select(v-model="packageType" :items="packageTypes" label="Select Your Package" prepend-icon="map")
       v-select(v-model="totalPerson" :items="totalPersons" label="Number of Person" prepend-icon="supervised_user_circle")
@@ -70,7 +73,8 @@ export default {
       amount: 0,
       payableAmount: 0,
       amountPerPerson: 0,
-      isBookTrip: false
+      isBookTrip: false,
+      email: ''
     }
   },
   watch: {
@@ -78,18 +82,12 @@ export default {
       switch (val) {
         case 'Double Sharing':
           this.amountPerPerson = 7500
-          // eslint-disable-next-line
-          console.log(this.amountPerPerson)
           break
         case 'Triple Sharing':
           this.amountPerPerson = 7000
-          // eslint-disable-next-line
-          console.log(this.amountPerPerson)
           break
         case 'Quad Sharing':
           this.amountPerPerson = 6500
-          // eslint-disable-next-line
-          console.log(this.amountPerPerson)
           break
         default:
           this.amountPerPerson = 0
@@ -99,8 +97,6 @@ export default {
       this.amount = val * this.amountPerPerson
       // Only 30% of the total amount to be paid
       this.payableAmount = (this.amount * 30) / 100
-      // eslint-disable-next-line
-      console.log(this.amount)
     }
   },
   methods: {
@@ -147,8 +143,6 @@ export default {
                   EventBus.$emit('close-book-trip-dialog')
                 })
                 .catch(err => {
-                  // eslint-disable-next-line
-                  console.log(err)
                   EventBus.$emit(
                     'show-error-notification-short',
                     err.response.errors[0].message
@@ -161,6 +155,7 @@ export default {
             },
             prefill: {
               name: this.name,
+              email: this.email,
               contact: this.phoneNumber
             }
           }
