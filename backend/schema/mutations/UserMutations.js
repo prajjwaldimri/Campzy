@@ -306,7 +306,7 @@ const bookTrip = {
     const razorpayAmount = args.payableAmount * 100; // Razorpay processes amount in paise
 
     const payment = await instance.payments.capture(
-      args.razorpayPaymentId,
+      args.transactionId,
       razorpayAmount,
     );
     if (payment.status !== 'captured' || payment.error_code !== null) {
