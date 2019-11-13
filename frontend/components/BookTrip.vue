@@ -112,7 +112,7 @@ export default {
           // Implement razorpay API
           const razorOptions = {
             key: 'rzp_live_8WKqvYktwfxYIe',
-            amount: 2 * 100, // Razorpay counts money in paise
+            amount: this.payableAmount * 100, // Razorpay counts money in paise
             name: 'Campzy',
             description: 'Purchase Description',
             handler(response) {
@@ -129,7 +129,7 @@ export default {
                 tripDate: that.tripDate,
                 packageType: that.packageType,
                 totalPerson: that.totalPerson.toString(),
-                payableAmount: 2
+                payableAmount: this.payableAmount
               }
               const client = new GraphQLClient('https://api.campzy.in/graphql')
               client
