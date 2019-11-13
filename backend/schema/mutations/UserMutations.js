@@ -288,10 +288,10 @@ const bookTrip = {
       Trip Manager
       Mob: +919810325245. 
       Enjoy!`,
-    )
+    );
 
+    return;
   }
-  return
 }
 
 module.exports = {

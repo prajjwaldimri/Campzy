@@ -108,9 +108,10 @@ export default {
             return
           }
           this.isBookTrip = true
+
           const bookYourTrip = `mutation bookTrip($name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: String!){
-          bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount)
-        }`
+            bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount)
+          }`
           const variables = {
             name: this.name,
             phoneNumber: this.phoneNumber,
@@ -119,6 +120,8 @@ export default {
             totalPerson: this.totalPerson,
             payableAmount: this.payableAmount
           }
+          // eslint-disable-next-line
+          console.log(variables)
           const client = new GraphQLClient('https://api.campzy.in/graphql')
           client
             .request(bookYourTrip, variables)
