@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id", "_userId"] }] */
 const graphql = require('graphql');
 const bcrypt = require('bcrypt');
+const Razorpay = require('razorpay');
 const {
   OAuth2Client
 } = require('google-auth-library');

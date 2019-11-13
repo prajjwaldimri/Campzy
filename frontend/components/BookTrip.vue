@@ -116,12 +116,12 @@ export default {
           // Implement razorpay API
           const razorOptions = {
             key: 'rzp_live_8WKqvYktwfxYIe',
-            amount: 4 * 100, // Razorpay counts money in paise
+            amount: 2 * 100, // Razorpay counts money in paise
             name: 'Campzy',
             description: 'Purchase Description',
             handler(response) {
               // Use data.bookCampCheck.amount to get the amount from user
-              const bookYourTrip = `mutation bookTrip(transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!){
+              const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!){
                 bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount){
                   id
                 }
@@ -133,7 +133,7 @@ export default {
                 tripDate: that.tripDate,
                 packageType: that.packageType,
                 totalPerson: that.totalPerson.toString(),
-                payableAmount: that.payableAmount
+                payableAmount: 2
               }
               const client = new GraphQLClient('https://api.campzy.in/graphql')
               client
