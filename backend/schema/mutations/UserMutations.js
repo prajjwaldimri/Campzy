@@ -296,18 +296,17 @@ const bookTrip = {
       `Hey! ${
         args.name
       }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. For further assistance contact details are given below.
-  Priyanshu Agarwal
-  Trip Manager
-  Mob: +919810325245. 
-  Enjoy!`,
+Priyanshu Agarwal
+Mob: +919810325245. 
+Enjoy!`,
     );
     await sms.sendSMS(
-      "+919910816340",
+      "+919810325245",
       `Hey! ${
         args.name
       }, has successfully booked Chopta-Chandrashila Trek for ${args.totalPerson} people with Campzy. Trip will starts on ${args.tripDate}. For further assistance contact details are given below.
-  Package: ${args.packageType}
-  Mob: ${args.phoneNumber}.`,
+Package: ${args.packageType}
+Mob: ${args.phoneNumber}.`,
     );
     console.log("Sms Hit");
     return "Booked";
