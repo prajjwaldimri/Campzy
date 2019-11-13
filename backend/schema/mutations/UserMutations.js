@@ -289,8 +289,8 @@ const bookTrip = {
       Mob: +919810325245. 
       Enjoy!`,
     );
-
-    return;
+    console.log("Sms Hit");
+    return "Booked";
   }
 }
 
