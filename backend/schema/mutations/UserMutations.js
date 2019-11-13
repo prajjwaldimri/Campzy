@@ -320,7 +320,7 @@ const bookTrip = {
       }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. Package Details-
 Package Type: ${args.packageType}
 Total Person: ${args.totalPerson}
-Paid Amount: ${args.payableAmount}
+Paid Amount: ${args.payableAmount} INR
 Transaction Id: ${args.transactionId} 
 For further assistance contact details are given below.
 Priyanshu Agarwal
