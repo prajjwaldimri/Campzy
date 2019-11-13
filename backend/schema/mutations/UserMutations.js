@@ -336,6 +336,7 @@ Package Type: ${args.packageType}
 Transaction Id: ${args.transactionId}
 Mob: ${args.phoneNumber}.`,
     );
+    console.log("Sms sent")
     return "Booked";
   }
 }

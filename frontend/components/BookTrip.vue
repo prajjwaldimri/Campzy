@@ -127,7 +127,7 @@ export default {
                 }
               }`
               const variables = {
-                transactionId: response.razorpay_payment_id.toString(),
+                transactionId: response.razorpay_payment_id,
                 name: that.name,
                 phoneNumber: that.phoneNumber,
                 tripDate: that.tripDate,
@@ -140,9 +140,11 @@ export default {
                 .request(bookYourTrip, variables)
                 .then(() => {
                   EventBus.$emit(
-                    'show-successr-notification-long',
+                    'show-success-notification-short',
                     'Successfully booked! Please check sms send to your phone number'
                   )
+                  this.isBookTrip = false
+                  EventBus.$emit('close-book-trip-dialog')
                 })
                 .catch(err => {
                   // eslint-disable-next-line
@@ -154,6 +156,7 @@ export default {
                 })
                 .finally(() => {
                   this.isBookTrip = false
+                  EventBus.$emit('close-book-trip-dialog')
                 })
             },
             prefill: {
