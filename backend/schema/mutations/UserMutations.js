@@ -271,12 +271,24 @@ const removeFromWishlist = {
 const bookTrip = {
   type: UserType,
   args: {
-    name: GraphQLString,
-    phoneNumber: GraphQLString,
-    tripDate: GraphQLString,
-    packageType: GraphQLString,
-    totalPerson: GraphQLString,
-    payableAmount: GraphQLString
+    name: {
+      type: GraphQLString
+    },
+    phoneNumber: {
+      type: GraphQLString
+    },
+    tripDate: {
+      type: GraphQLString
+    },
+    packageType: {
+      type: GraphQLString
+    },
+    totalPerson: {
+      type: GraphQLString
+    },
+    payableAmount: {
+      type: GraphQLString
+    }
   },
   async resolve(parent, args, context) {
     await sms.sendSMS(

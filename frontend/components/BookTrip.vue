@@ -23,7 +23,7 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click.native="bookTrip" :loading="isBookTrip" ).white--text Book Trip
+      v-btn(color="green" @click="bookTrip").white--text Book Trip
 
 </template>
 
@@ -98,15 +98,11 @@ export default {
     }
   },
   methods: {
-    closeDialog() {
-      EventBus.$emit('close-book-trip-dialog')
-    },
     bookTrip() {
+      // eslint-disable-next-line
+      console.log(typeof this.name)
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          if (!this.camp || !isValid) {
-            return
-          }
           this.isBookTrip = true
 
           const bookYourTrip = `mutation bookTrip($name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: String!){
@@ -117,8 +113,8 @@ export default {
             phoneNumber: this.phoneNumber,
             tripDate: this.tripDate,
             packageType: this.packageType,
-            totalPerson: this.totalPerson,
-            payableAmount: this.payableAmount
+            totalPerson: this.totalPerson.toString(),
+            payableAmount: this.payableAmount.toString()
           }
           // eslint-disable-next-line
           console.log(variables)
