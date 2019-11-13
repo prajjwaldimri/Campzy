@@ -98,6 +98,10 @@ export default {
     }
   },
   methods: {
+    closeDialog() {
+      EventBus.$emit('close-book-trip-dialog')
+    },
+
     bookTrip() {
       // eslint-disable-next-line
       console.log(typeof this.name)
