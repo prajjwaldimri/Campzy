@@ -1,0 +1,154 @@
+<template lang="pug">
+  v-card
+    v-card-title
+      span.headline Book Your Trip
+    v-card-text
+      v-text-field(v-model="name" label="Name" prepend-icon="subject" clearable
+      data-vv-name="name" v-validate="'required|alpha_spaces'"
+      :error-messages="errors.collect('name')")
+      v-select(v-model="tripDate" :items="tripDates" label="Select Trip Date" prepend-icon="today")
+      v-select(v-model="packageType" :items="packageTypes" label="Select Your Package" prepend-icon="map")
+      v-select(v-model="totalPerson" :items="totalPersons" label="Number of Person" prepend-icon="supervised_user_circle")
+      v-text-field(v-model="amount" label="Total Amount" prepend-icon="money" hint="*GST Included" persistent-hint readonly)
+      v-text-field(v-model="payableAmount" label="Payable Amount" prepend-icon="money"  hint="*30% of Total Amount" persistent-hint readonly)
+      div(style="margin-left:33px;")
+        span(style="text-align: justify;color:gray;") * You have to pay only 30% of total amount online, remaining amount will be paid before starting the trip.
+      v-layout(column).mt-3.phone-number
+        v-flex(xs12)
+          span Phone Number
+        v-flex(xs12)
+          vue-tel-input.mobile-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)  
+
+    v-card-actions
+      v-spacer
+      v-btn(color="grey darken-1" flat @click.native="closeDialog")
+        | Cancel
+      v-btn(color="green" @click.native="bookTrip" :loading="isBookTrip" ).white--text Book Trip
+
+</template>
+
+<script>
+import { GraphQLClient } from 'graphql-request'
+import { EventBus } from '../layouts/event-bus'
+
+export default {
+  name: 'BookTrip',
+  $_veeValidate: {
+    validator: 'new'
+  },
+  data() {
+    return {
+      name: '',
+      phoneNumber: '',
+      totalPersons: [1, 2, 3, 4, 5],
+      totalPerson: '',
+      packageTypes: ['Double Sharing', 'Triple Sharing', 'Quad Sharing'],
+      packageType: '',
+      tripDates: [
+        '21 Nov, 2019',
+        '28 Nov, 2019',
+        '05 Dec, 2019',
+        '12 Dec, 2019',
+        '21 Dec, 2019',
+        '28 Dec, 2019',
+        '09 Jan, 2020',
+        '16 Jan, 2020',
+        '23 Jan, 2020',
+        '30 Jan, 2020',
+        '06 Feb, 2020',
+        '13 Feb, 2020',
+        '20 Feb, 2020',
+        '27 Feb, 2020'
+      ],
+      tripDate: '',
+      amount: 0,
+      payableAmount: 0,
+      amountPerPerson: 0,
+      isBookTrip: false
+    }
+  },
+  watch: {
+    packageType(val) {
+      switch (val) {
+        case 'Double Sharing':
+          this.amountPerPerson = 7500
+          // eslint-disable-next-line
+          console.log(this.amountPerPerson)
+          break
+        case 'Triple Sharing':
+          this.amountPerPerson = 7000
+          // eslint-disable-next-line
+          console.log(this.amountPerPerson)
+          break
+        case 'Quad Sharing':
+          this.amountPerPerson = 6500
+          // eslint-disable-next-line
+          console.log(this.amountPerPerson)
+          break
+        default:
+          this.amountPerPerson = 0
+      }
+    },
+    totalPerson(val) {
+      this.amount = val * this.amountPerPerson
+      // Only 30% of the total amount to be paid
+      this.payableAmount = (this.amount * 30) / 100
+      // eslint-disable-next-line
+      console.log(this.amount)
+    }
+  },
+  methods: {
+    closeDialog() {
+      EventBus.$emit('close-book-trip-dialog')
+    },
+    bookTrip() {
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          if (!this.camp || !isValid) {
+            return
+          }
+          this.isBookTrip = true
+          const bookYourTrip = `mutation bookTrip($name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: String!){
+          bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount)
+        }`
+          const variables = {
+            name: this.name,
+            phoneNumber: this.phoneNumber,
+            tripDate: this.tripDate,
+            packageType: this.packageType,
+            totalPerson: this.totalPerson,
+            payableAmount: this.payableAmount
+          }
+          const client = new GraphQLClient('https://api.campzy.in/graphql')
+          client
+            .request(bookYourTrip, variables)
+            .then(() => {
+              // eslint-disable-next-line
+              console.log('Hit')
+            })
+            .catch(err => {
+              // eslint-disable-next-line
+              console.log(err)
+              EventBus.$emit(
+                'show-error-notification-short',
+                err.response.errors[0].message
+              )
+            })
+            .finally(() => {
+              this.isBookTrip = false
+            })
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.mobile-input {
+  border-style: none none solid none;
+}
+.phone-number {
+  margin-left: 2rem;
+}
+</style>

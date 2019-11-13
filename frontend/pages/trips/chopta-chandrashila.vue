@@ -105,7 +105,9 @@
     v-container.text-xs-center(fluid)
       v-layout.align-center(column)
         h2 Ready for Trip?
-        v-btn.book_btn(color="green" large  dark)  Book Your Package Now!
+        v-dialog(v-model="isBookTrip" persistent max-width="500px")
+          v-btn.book_btn(slot="activator" color="green" large  dark )  Book Your Package Now! 
+          BookTrip
       
     v-container(fluid)
       h2.display-1.mx-5 Important Notes*
@@ -134,8 +136,10 @@
 </template>
 
 <script>
+import { EventBus } from '../../layouts/event-bus'
 import HomeNav from '../../components/HomePageNav.vue'
 import Footer from '../../components/Footer.vue'
+import BookTrip from '../../components/BookTrip.vue'
 export default {
   name: 'Trips',
   metaInfo: {
@@ -143,7 +147,18 @@ export default {
   },
   components: {
     HomeNav,
-    Footer
+    Footer,
+    BookTrip
+  },
+  data() {
+    return {
+      isBookTrip: false
+    }
+  },
+  mounted() {
+    EventBus.$on('close-book-trip-dialog', () => {
+      this.isBookTrip = false
+    })
   }
 }
 </script>

@@ -18,6 +18,7 @@ const {
 } = require('../graphqlErrors');
 const UserModel = require('../../models/user.js');
 const TokenModel = require('../../models/token');
+const sms = require('../../communication/sms');
 
 const {
   GraphQLString
@@ -267,6 +268,32 @@ const removeFromWishlist = {
   },
 };
 
+const bookTrip = {
+  type: UserType,
+  args: {
+    name: GraphQLString,
+    phoneNumber: GraphQLString,
+    tripDate: GraphQLString,
+    packageType: GraphQLString,
+    totalPerson: GraphQLString,
+    payableAmount: GraphQLString
+  },
+  async resolve(parent, args, context) {
+    await sms.sendSMS(
+      args.phoneNumber,
+      `Hey! ${
+        args.name
+      }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. For further assistance contact details are given below.
+      Priyanshu Agarwal
+      Trip Manager
+      Mob: +919810325245. 
+      Enjoy!`,
+    )
+
+  }
+  return
+}
+
 module.exports = {
   registerUser,
   resetPassword,
@@ -274,5 +301,6 @@ module.exports = {
   googleAuth,
   facebookAuth,
   addCampToWishlist,
-  removeFromWishlist
+  removeFromWishlist,
+  bookTrip
 };
