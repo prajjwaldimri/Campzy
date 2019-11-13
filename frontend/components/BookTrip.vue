@@ -23,11 +23,12 @@
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click="bookTrip").white--text Book Trip
+      v-btn(color="green" @click="bookTrip" :loading="isBookTrip").white--text Book Trip
 
 </template>
 
 <script>
+/* global Razorpay */
 import { GraphQLClient } from 'graphql-request'
 import { EventBus } from '../layouts/event-bus'
 
@@ -35,6 +36,11 @@ export default {
   name: 'BookTrip',
   $_veeValidate: {
     validator: 'new'
+  },
+  metaInfo() {
+    return {
+      script: [{ src: 'https://checkout.razorpay.com/v1/checkout.js' }]
+    }
   },
   data() {
     return {
@@ -103,45 +109,61 @@ export default {
     },
 
     bookTrip() {
-      // eslint-disable-next-line
-      console.log(typeof this.name)
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
+          const that = this
           this.isBookTrip = true
-
-          const bookYourTrip = `mutation bookTrip($name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: String!){
-            bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount){
-              id
+          // Implement razorpay API
+          const razorOptions = {
+            key: 'rzp_live_8WKqvYktwfxYIe',
+            amount: 4 * 100, // Razorpay counts money in paise
+            name: 'Campzy',
+            description: 'Purchase Description',
+            handler(response) {
+              // Use data.bookCampCheck.amount to get the amount from user
+              const bookYourTrip = `mutation bookTrip(transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!){
+                bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount){
+                  id
+                }
+              }`
+              const variables = {
+                transactionId: response.razorpay_payment_id.toString(),
+                name: that.name,
+                phoneNumber: that.phoneNumber,
+                tripDate: that.tripDate,
+                packageType: that.packageType,
+                totalPerson: that.totalPerson.toString(),
+                payableAmount: that.payableAmount
+              }
+              const client = new GraphQLClient('https://api.campzy.in/graphql')
+              client
+                .request(bookYourTrip, variables)
+                .then(() => {
+                  EventBus.$emit(
+                    'show-successr-notification-long',
+                    'Successfully booked! Please check sms send to your phone number'
+                  )
+                })
+                .catch(err => {
+                  // eslint-disable-next-line
+                  console.log(err)
+                  EventBus.$emit(
+                    'show-error-notification-short',
+                    err.response.errors[0].message
+                  )
+                })
+                .finally(() => {
+                  this.isBookTrip = false
+                })
+            },
+            prefill: {
+              name: this.name,
+              contact: this.phoneNumber
             }
-          }`
-          const variables = {
-            name: this.name,
-            phoneNumber: this.phoneNumber,
-            tripDate: this.tripDate,
-            packageType: this.packageType,
-            totalPerson: this.totalPerson.toString(),
-            payableAmount: this.payableAmount.toString()
           }
-          // eslint-disable-next-line
-          console.log(variables)
-          const client = new GraphQLClient('https://api.campzy.in/graphql')
-          client
-            .request(bookYourTrip, variables)
-            .then(() => {
-              // eslint-disable-next-line
-              console.log('Hit')
-            })
-            .catch(err => {
-              // eslint-disable-next-line
-              console.log(err)
-              EventBus.$emit(
-                'show-error-notification-short',
-                err.response.errors[0].message
-              )
-            })
-            .finally(() => {
-              this.isBookTrip = false
-            })
+          const rzpl = new Razorpay(razorOptions)
+          rzpl.open()
+          this.bookButtonLoading = false
         }
       })
     }

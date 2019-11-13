@@ -21,7 +21,8 @@ const TokenModel = require('../../models/token');
 const sms = require('../../communication/sms');
 
 const {
-  GraphQLString
+  GraphQLString,
+  GraphQLInt
 } = graphql;
 
 const registerUser = {
@@ -271,6 +272,9 @@ const removeFromWishlist = {
 const bookTrip = {
   type: UserType,
   args: {
+    transactionId: {
+      type: GraphQLString
+    },
     name: {
       type: GraphQLString
     },
@@ -287,15 +291,37 @@ const bookTrip = {
       type: GraphQLString
     },
     payableAmount: {
-      type: GraphQLString
+      type: GraphQLInt
     }
   },
   async resolve(parent, args, context) {
+    // Verify Razorpay Id and collect money
+
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_API_KEY,
+      key_secret: process.env.RAZORPAY_API_SECRET,
+    });
+
+    const razorpayAmount = args.payableAmount * 100; // Razorpay processes amount in paise
+
+    const payment = await instance.payments.capture(
+      args.razorpayPaymentId,
+      razorpayAmount,
+    );
+    if (payment.status !== 'captured' || payment.error_code !== null) {
+      throw new AmountNotCapturedError();
+    }
+
     await sms.sendSMS(
       args.phoneNumber,
       `Hey! ${
         args.name
-      }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. For further assistance contact details are given below.
+      }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. Package Details-
+Package Type: ${args.packageType}
+Total Person: ${args.totalPerson}
+Paid Amount: ${args.payableAmount}
+Transaction Id: ${args.transactionId} 
+For further assistance contact details are given below.
 Priyanshu Agarwal
 Mob: +919810325245. 
 Enjoy!`,
@@ -305,10 +331,10 @@ Enjoy!`,
       `Hey! ${
         args.name
       }, has successfully booked Chopta-Chandrashila Trek for ${args.totalPerson} people with Campzy. Trip will starts on ${args.tripDate}. For further assistance contact details are given below.
-Package: ${args.packageType}
+Package Type: ${args.packageType}
+Transaction Id: ${args.transactionId}
 Mob: ${args.phoneNumber}.`,
     );
-    console.log("Sms Hit");
     return "Booked";
   }
 }
