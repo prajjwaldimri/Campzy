@@ -61,8 +61,8 @@
           v-layout(column)
             .bed-img
               v-layout(row style="margin-top:6.1rem")
-                v-img.mx-3(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-3(src="/vectors/bed.svg" style="height:40px; width:40px;")
+                v-img.single-bed-img.mx-3(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-3(src="/vectors/bed.svg")
             .d-flex
               span.cost-text Double Sharing
             .d-flex
@@ -70,9 +70,9 @@
         .cost-div
           .bed-img
             v-layout(row style="margin-top:6.1rem")
-                v-img.mx-2(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-2(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-2(src="/vectors/bed.svg" style="height:40px; width:40px;")
+                v-img.single-bed-img.mx-2(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-2(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-2(src="/vectors/bed.svg")
           .d-flex
               span.cost-text Triple Sharing
           .d-flex
@@ -80,10 +80,10 @@
         .cost-div
           .bed-img
             v-layout(row style="margin-top:6.1rem")
-                v-img.mx-1(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-1(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-1(src="/vectors/bed.svg" style="height:40px; width:40px;")
-                v-img.mx-1(src="/vectors/bed.svg" style="height:40px; width:40px;")
+                v-img.single-bed-img.mx-1(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-1(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-1(src="/vectors/bed.svg")
+                v-img.single-bed-img.mx-1(src="/vectors/bed.svg")
           .d-flex
               span.cost-text Quad Sharing
           .d-flex
@@ -203,12 +203,14 @@ export default {
 }
 .paragraphs {
   margin: 1.5rem 3rem;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 600;
   text-align: left;
+  line-height: 2.9rem;
   color: gray;
   @media screen and (max-width: 960px) {
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 2.4rem;
     margin: 1.5rem 0.5rem;
     text-align: justify;
   }
@@ -223,61 +225,70 @@ export default {
 .brief-flex {
   margin: 5rem 8rem;
   max-width: 100% !important;
+  animation: fadeInFadeOut 2s;
   @media screen and (max-width: 960px) {
     margin: 2rem 5rem;
+  }
+  @media screen and (max-width: 1440px) and (min-width: 961px) {
+    margin: 2rem 4rem;
   }
 }
 .brief-img {
   height: 150px;
   width: 150px;
+  animation: fadeInFadeOut 2s;
   @media screen and (max-width: 960px) {
     height: 110px;
     width: 110px;
     margin: auto;
   }
 }
-.v-stepper {
-  box-shadow: none !important;
-  background-color: rgba(255, 255, 255, 0);
-}
-.v-stepper__step__step .v-stepper__step .v-stepper {
-  height: 110px !important;
-  width: 110px !important;
-  font-size: 25px;
-}
+
 .display-1 {
-  font-size: 27px !important;
+  font-size: 22px !important;
   font-weight: 300 !important;
   line-height: 100px !important;
   font-family: 'GlacialIndifferenceRegular', sans-serif !important;
   @media screen and (max-width: 960px) {
-    font-size: 20px !important;
+    font-size: 18px !important;
   }
 }
 .display-2 {
-  font-size: 50px !important;
+  font-size: 40px !important;
   font-family: 'GlacialIndifferenceRegular', sans-serif !important;
   @media screen and (max-width: 960px) {
-    font-size: 35px !important;
+    font-size: 30px !important;
   }
 }
 .cost-div {
   border: 0.1px solid rgba(0, 128, 0, 0.5);
-  width: 350px;
-  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.2),
-    0 6px 20px 0 rgba(0, 128, 0, 0.2);
+  width: 380px;
+  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.17),
+    0 6px 20px 0 rgba(0, 128, 0, 0.17);
   margin: 2rem 3rem;
+  animation: fadeInFadeOut 4s;
   @media screen and (max-width: 960px) {
     margin: 1rem 0.5rem;
+  }
+  @media screen and (max-width: 1440px) and (min-width: 961px) {
+    margin: 2rem 1rem;
+  }
+  &:hover {
+    transform: translateY(-15px);
+    cursor: pointer;
   }
 }
 .bed-img {
   border: 2px solid rgba(0, 128, 0, 0.6);
   border-radius: 50%;
-  width: 220px;
-  height: 220px;
+  width: 260px;
+  height: 260px;
   margin: 2.5rem auto;
   text-align: center;
+}
+.single-bed-img {
+  height: 50px;
+  width: 50px;
 }
 .book_btn {
   background-color: #4caf50;
@@ -302,6 +313,7 @@ export default {
 
 .notes-li {
   text-align: justify;
+  line-height: 2rem;
 }
 
 .whatsapp-btn {
@@ -309,5 +321,14 @@ export default {
   top: 82vh;
   right: 1vw;
   margin-bottom: 5rem;
+}
+@keyframes fadeInFadeOut {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>
