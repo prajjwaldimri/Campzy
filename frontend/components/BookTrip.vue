@@ -106,7 +106,9 @@ export default {
           this.isBookTrip = true
 
           const bookYourTrip = `mutation bookTrip($name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: String!){
-            bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount)
+            bookTrip(name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount){
+              id
+            }
           }`
           const variables = {
             name: this.name,

@@ -296,10 +296,10 @@ const bookTrip = {
       `Hey! ${
         args.name
       }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. For further assistance contact details are given below.
-      Priyanshu Agarwal
-      Trip Manager
-      Mob: +919810325245. 
-      Enjoy!`,
+    Priyanshu Agarwal
+    Trip Manager
+    Mob: +919810325245. 
+    Enjoy!`,
     );
     console.log("Sms Hit");
     return "Booked";
