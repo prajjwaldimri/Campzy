@@ -319,34 +319,7 @@ export default {
     text-align: justify;
   }
 }
-.itinerary-para {
-  margin: 1rem 1rem 1rem 2rem;
-  font-size: 20px;
-  text-align: left;
-  line-height: 0.2rem;
-  color: gray;
-  @media screen and (max-width: 960px) {
-    font-size: 18px;
-    line-height: 1.5rem;
-    margin: 0.5rem 0.5rem 0.5rem 2rem;
-    text-align: justify;
-  }
-}
-.right-arrow {
-  clip-path: polygon(
-    0% 20%,
-    60% 20%,
-    60% 0%,
-    100% 50%,
-    60% 100%,
-    60% 80%,
-    0 79%
-  );
-  background-color: black;
-  width: 100px;
-  height: 50px;
-  margin: 5rem;
-}
+
 .cost-text {
   font-size: 25px;
   font-weight: 600;
@@ -462,6 +435,7 @@ export default {
   clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
   box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.9),
     0 6px 20px 0 rgba(0, 128, 0, 0.9);
+  animation: fadeInFadeOut 2s;
 }
 .breif-card-inner {
   position: absolute;
