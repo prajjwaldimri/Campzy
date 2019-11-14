@@ -15,18 +15,6 @@
     v-container(fluid)
       h1.display-2.headings About Trek
       p.paragraphs Chopta is one of the prettiest spot on the Ukhimath-Chamoli road that connects kedarnath and Badrinath via a more picturesque, somewhat shorter route. This sleepy place, 35 kms form Ukimath, is really just a bend in a very narrow, thick forrest mountain road. It’s the quaintest place you are likely to see en route, along with the famed bugyals (meadows) of the state peeking through towering tress, framed by snowy mountains in the distance. Chopta is the springboard for a 5km trek to Chandrashilla Peak and Tungnath - one of the Panch Kedar (Sacred Shiva Temples).
-    //- v-container(fluid)
-    //-   h1.display-2.mt-5.headings Brief Itinerary
-    //-   div
-    //-     v-stepper(alt-labels non-linear)
-    //-       v-stepper-header
-    //-         v-stepper-step(step="Day 0") Depart to Chopta
-    //-         v-divider
-    //-         v-stepper-step(step="Day 1") Depart to Chopta
-    //-         v-divider
-    //-         v-stepper-step(step="Day 2") Depart to Chopta
-    //-         v-divider
-    //-         v-stepper-step(step="Day 3") Depart to Chopta
     v-container(fluid)
       h1.display-2.headings Your Travel Kit
       v-layout.justify-center.my-5(row wrap)
@@ -54,6 +42,94 @@
         v-flex.brief-flex(xs12 md1).text-xs-center
           v-img.brief-img(src="/vectors/wallet.svg")
           span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Cash, ATMs etc
+    v-container(fluid)
+      h1.display-2.headings Breif Itinerary
+      v-layout.my-5.justify-center.hidden-sm-and-down(row wrap) 
+        .breif-card.ma-4
+          .breif-card-inner
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 0
+                  v-img.mx-2(src="/vectors/bus.svg" style="width:90px;height:90px;")
+            .d-flex
+              ul
+                li.breif-text Depart from Delhi for Chopta in AC bus/Tempo Traveller
+        .breif-card.ma-4
+          .breif-card-inner
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 1
+                  v-img.mx-2(src="/vectors/tent2.svg" style="width:80px;height:80px;")
+            .d-flex
+              ul
+                li.breif-text Reach Chopta, Check in at campsite, Lunch & Relax
+                li.breif-text Self Explore the surroundings, Dinner and sleep
+        .breif-card.ma-4
+          .breif-card-inner
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 2
+                  v-img.mx-2(src="/vectors/trek.svg" style="width:80px;height:80px;")
+            .d-flex
+              ul
+                li.breif-text Early morning Breakfast, Depart for the starting point of Trek
+                li.breif-text Trek to Tungnath and Chandershilla, Enjoy the 360 Degree view (If weather permits)
+                li.breif-text Return to Chopta by evening
+        .breif-card.ma-4
+          .breif-card-inner
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 3
+                  v-img.mx-2(src="/vectors/photo.svg" style="width:80px;height:80px;")
+            .d-flex
+              ul
+                li.breif-text Wake Early Morning, Breakfast and Campsite
+                li.breif-text Departure for Delhi with wonderful trip memories
+
+      // Breif Mobile View
+      v-layout.my-5.justify-center.hidden-md-and-up(column) 
+        .breif-card-mobile.ma-4
+          .breif-card-inner-mobile
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 0
+                  v-img.mx-2(src="/vectors/bus.svg" style="width:90px;height:90px;")
+            .d-flex.mt-4
+              ul
+                li.breif-text Depart from Delhi for Chopta in AC bus/Tempo Traveller
+        .breif-card-mobile.ma-4
+          .breif-card-inner-mobile
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 1
+                  v-img.mx-2(src="/vectors/tent2.svg" style="width:80px;height:80px;")
+            .d-flex.mt-4
+              ul
+                li.breif-text Reach Chopta, Check in at campsite, Lunch & Relax
+                li.breif-text Self Explore the surroundings, Dinner and sleep
+        .breif-card-mobile.ma-4
+          .breif-card-inner-mobile
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 2
+                  v-img.mx-2(src="/vectors/trek.svg" style="width:80px;height:80px;")
+            .d-flex.mt-4
+              ul
+                li.breif-text Early morning Breakfast, Depart for the starting point of Trek
+                li.breif-text Trek to Tungnath and Chandershilla, Enjoy the 360 Degree view (If weather permits)
+                li.breif-text Return to Chopta by evening
+        .breif-card-mobile.ma-4
+          .breif-card-inner-mobile
+            .breif-img
+              v-layout.breif-layout(column)
+                  span.itinerary-text Day 3
+                  v-img.mx-2(src="/vectors/photo.svg" style="width:80px;height:80px;")
+            .d-flex.mt-4
+              ul
+                li.breif-text Wake Early Morning, Breakfast and Campsite
+                li.breif-text Departure for Delhi with wonderful trip memories
+              
+          
     v-container(fluid)
       h1.display-2.headings Affordable Prices
       v-layout.my-5.justify-center(row wrap)
@@ -230,6 +306,47 @@ export default {
     text-align: justify;
   }
 }
+.itinerary-text {
+  margin: 1.5rem 1rem;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: left;
+  line-height: 1.9rem;
+  @media screen and (max-width: 960px) {
+    font-size: 24px;
+    line-height: 2.4rem;
+    margin: 1.5rem 0.5rem;
+    text-align: justify;
+  }
+}
+.itinerary-para {
+  margin: 1rem 1rem 1rem 2rem;
+  font-size: 20px;
+  text-align: left;
+  line-height: 0.2rem;
+  color: gray;
+  @media screen and (max-width: 960px) {
+    font-size: 18px;
+    line-height: 1.5rem;
+    margin: 0.5rem 0.5rem 0.5rem 2rem;
+    text-align: justify;
+  }
+}
+.right-arrow {
+  clip-path: polygon(
+    0% 20%,
+    60% 20%,
+    60% 0%,
+    100% 50%,
+    60% 100%,
+    60% 80%,
+    0 79%
+  );
+  background-color: black;
+  width: 100px;
+  height: 50px;
+  margin: 5rem;
+}
 .cost-text {
   font-size: 25px;
   font-weight: 600;
@@ -337,6 +454,61 @@ export default {
   right: 1vw;
   margin-bottom: 5rem;
 }
+.breif-card {
+  width: 300px;
+  height: 380px;
+  position: relative;
+  background: rgba(0, 128, 0, 0.9);
+  clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.9),
+    0 6px 20px 0 rgba(0, 128, 0, 0.9);
+}
+.breif-card-inner {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: #fff;
+  clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+}
+.breif-layout {
+  margin-left: 5rem;
+  @media screen and (max-width: 960px) {
+    margin: 0 !important;
+    align-items: center !important;
+  }
+}
+.breif-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: gray;
+  margin: 1.5rem 2.5rem 1.5rem 0.5rem;
+  text-align: left;
+  @media screen and (max-width: 960px) {
+    margin: 1rem 2.5rem 0.5rem 0.5rem;
+  }
+}
+
+.breif-card-mobile {
+  width: 300px;
+  height: 450px;
+  position: relative;
+  background: rgba(0, 128, 0, 0.9);
+  clip-path: polygon(54% 0, 100% 0, 100% 75%, 50% 100%, 0% 75%, 0 0);
+  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.9),
+    0 6px 20px 0 rgba(0, 128, 0, 0.9);
+}
+.breif-card-inner-mobile {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: #fff;
+  clip-path: polygon(54% 0, 100% 0, 100% 75%, 50% 100%, 0% 75%, 0 0);
+}
+
 @keyframes fadeInFadeOut {
   0% {
     opacity: 0;
