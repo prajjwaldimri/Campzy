@@ -20,13 +20,13 @@
         v-flex(xs12)
           span Phone Number
         v-flex(xs12)
-          vue-tel-input.mobile-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)  
+          vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)  
 
     v-card-actions
       v-spacer
       v-btn(color="grey darken-1" flat @click.native="closeDialog")
         | Cancel
-      v-btn(color="green" @click="bookTrip" :loading="isBookTrip").white--text Book Trip
+      v-btn(color="green" @click="bookTrip" :loading="isBookingTrip").white--text Book Trip
 
 </template>
 
@@ -71,7 +71,7 @@ export default {
       amount: 0,
       payableAmount: 0,
       amountPerPerson: 0,
-      isBookTrip: false,
+      isBookingTrip: false,
       email: ''
     }
   },
@@ -106,13 +106,13 @@ export default {
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           const that = this
-          this.isBookTrip = true
+          this.isBookingTrip = true
           // Implement razorpay API
           const razorOptions = {
             key: 'rzp_live_8WKqvYktwfxYIe',
             amount: this.payableAmount * 100, // Razorpay counts money in paise
             name: 'Campzy',
-            description: 'Purchase Description',
+            description: 'Campzy Trips',
             handler(response) {
               // Use data.bookCampCheck.amount to get the amount from user
               const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!){
@@ -137,7 +137,7 @@ export default {
                     'show-success-notification-short',
                     'Successfully booked! Please check sms send to your phone number'
                   )
-                  this.isBookTrip = false
+                  this.isBookingTrip = false
                   EventBus.$emit('close-book-trip-dialog')
                 })
                 .catch(err => {
@@ -147,7 +147,7 @@ export default {
                   )
                 })
                 .finally(() => {
-                  this.isBookTrip = false
+                  this.isBookingTrip = false
                   EventBus.$emit('close-book-trip-dialog')
                 })
             },

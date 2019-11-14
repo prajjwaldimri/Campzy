@@ -46,7 +46,7 @@
     "vue-moment": "^4.0.0",
     "vue-recaptcha": "^1.2.0",
     "vue-resource": "^1.5.1",
-    "vue-tel-input": "^3.1.8",
+    "vue-tel-input": "^4.0.0",
     "vue-tiny-slider": "^0.1.35",
     "vue-tour": "^1.1.0",
     "vue2-google-maps": "^0.10.6",
