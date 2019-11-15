@@ -258,7 +258,7 @@ export default {
       rgba(0, 0, 0, 0.8),
       rgba(0, 0, 0, 0.8)
     ),
-    url('/vectors/chandrashila2.jpg');
+    url('/vectors/chandrashila3.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
