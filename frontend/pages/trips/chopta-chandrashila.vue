@@ -228,7 +228,7 @@ export default {
       {
         name: 'keywords',
         content:
-          'chopta, chandrashila, uttarakhand trips,Chopta Chandrashila Trips, chopta trips,camping, tungnath'
+          'chopta, chandrashila, uttarakhand trips,Chopta Chandrashila Trips, chopta trips,camping, tungnath, campzy trips, campzy in chopta'
       }
     ]
   },
