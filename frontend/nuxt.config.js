@@ -93,10 +93,7 @@ export default {
     '@/plugins/googleSignin',
     '@/plugins/facebookSignin',
     '@/plugins/vue-loaders',
-    {
-      src: '@/plugins/vue-tel-input',
-      ssr: false
-    },
+    '@/plugins/vue-tel-input',
     {
       src: '@/plugins/vue-google-maps',
       ssr: true

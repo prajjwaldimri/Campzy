@@ -219,7 +219,18 @@ import BookTrip from '../../components/BookTrip.vue'
 export default {
   name: 'Trips',
   metaInfo: {
-    title: 'Campzy Trips'
+    title: 'Chopta-Chandrashila Trips',
+    meta: [
+      {
+        name: 'description',
+        content: 'Chopta-Chandrashila Trips Provided by campzy'
+      },
+      {
+        name: 'keywords',
+        content:
+          'chopta, chandrashila, uttarakhand trips,Chopta Chandrashila Trips, chopta trips,camping, tungnath'
+      }
+    ]
   },
   components: {
     HomeNav,

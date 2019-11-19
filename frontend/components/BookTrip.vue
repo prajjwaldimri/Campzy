@@ -20,7 +20,8 @@
         v-flex(xs12)
           span Phone Number
         v-flex(xs12)
-          vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)  
+          client-only
+            vue-tel-input(v-model="phoneNumber" :preferredCountries="['in', 'us', 'en']" :enabledCountryCode="true" mode="international" required)  
 
     v-card-actions
       v-spacer
@@ -58,6 +59,8 @@ export default {
         '28 Nov, 2019',
         '05 Dec, 2019',
         '12 Dec, 2019',
+        '19 Dec, 2019',
+        '26 Dec, 2019',
         '09 Jan, 2020',
         '16 Jan, 2020',
         '23 Jan, 2020',
