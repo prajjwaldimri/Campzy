@@ -182,7 +182,7 @@
       v-layout.align-center(column)
         h2 Ready for Trip?
         v-dialog(v-model="isBookTrip" persistent max-width="500px")
-          v-btn.book_btn(slot="activator" color="green" large  dark )  Book Your Package Now! 
+          v-btn.book_btn(slot="activator" color="green" large  dark)  Book Your Package Now!
           BookTrip
       
     v-container(fluid)
