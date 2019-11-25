@@ -27,26 +27,26 @@
           v-flex(xs12 md7)
             v-img.scroll_image(src='/vectors/payment.svg')
       
-      v-container.meet_team(fluid)
-        v-flex
-          h2.large_heading Meet Our Team
-        v-flex
-          v-layout.avt_container(row)
-            v-layout.avt_container(column style="flex: 0 0 auto;")
-              v-avatar.avatar
-                v-img(src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John")
-              h2 Priyanshu Agarwal
-              h2.designation CEO
-            v-layout.avt_container(column style="flex: 0 0 auto;")
-              v-avatar.avatar
-                v-img(src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John")
-              h2 Manish Bharadwaj
-              h2.designation CEO
-            v-layout.avt_container(column style="flex: 0 0 auto;")
-              v-avatar.avatar
-                v-img(src="/myPic.jpg" alt="Ayush Bahuguna")
-              h2 Ayush Bahuguna
-              h2.designation Developer
+      //- v-container.meet_team(fluid)
+      //-   v-flex
+      //-     h2.large_heading Meet Our Team
+      //-   v-flex
+      //-     v-layout.avt_container(row)
+      //-       v-layout.avt_container(column style="flex: 0 0 auto;")
+      //-         v-avatar.avatar
+      //-           v-img(src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John")
+      //-         h2 Priyanshu Agarwal
+      //-         h2.designation CEO
+      //-       v-layout.avt_container(column style="flex: 0 0 auto;")
+      //-         v-avatar.avatar
+      //-           v-img(src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John")
+      //-         h2 Manish Bharadwaj
+      //-         h2.designation CEO
+      //-       v-layout.avt_container(column style="flex: 0 0 auto;")
+      //-         v-avatar.avatar
+      //-           v-img(src="/myPic.jpg" alt="Ayush Bahuguna")
+      //-         h2 Ayush Bahuguna
+      //-         h2.designation Developer
           
     Footer
 </template>
