@@ -55,8 +55,6 @@ export default {
       packageTypes: ['Double Sharing', 'Triple Sharing', 'Quad Sharing'],
       packageType: '',
       tripDates: [
-        '21 Nov, 2019',
-        '28 Nov, 2019',
         '05 Dec, 2019',
         '12 Dec, 2019',
         '19 Dec, 2019',
@@ -130,8 +128,8 @@ export default {
                 tripDate: that.tripDate,
                 packageType: that.packageType,
                 totalPerson: that.totalPerson.toString(),
-                payableAmount: this.payableAmount,
-                email: this.email
+                payableAmount: that.payableAmount,
+                email: that.email
               }
               const client = new GraphQLClient('https://api.campzy.in/graphql')
               client
@@ -145,6 +143,8 @@ export default {
                   EventBus.$emit('close-book-trip-dialog')
                 })
                 .catch(err => {
+                  // eslint-disable-next-line
+                  console.log(err)
                   EventBus.$emit(
                     'show-error-notification-short',
                     err.response.errors[0].message
