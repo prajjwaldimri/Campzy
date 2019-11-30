@@ -118,8 +118,8 @@ export default {
             description: 'Campzy Trips',
             handler(response) {
               // Use data.bookCampCheck.amount to get the amount from user
-              const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!){
-                bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount){
+              const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!, $email: String!){
+                bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount, email: $email){
                   id
                 }
               }`
@@ -130,7 +130,8 @@ export default {
                 tripDate: that.tripDate,
                 packageType: that.packageType,
                 totalPerson: that.totalPerson.toString(),
-                payableAmount: this.payableAmount
+                payableAmount: this.payableAmount,
+                email: this.email
               }
               const client = new GraphQLClient('https://api.campzy.in/graphql')
               client

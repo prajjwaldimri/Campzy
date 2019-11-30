@@ -20,6 +20,7 @@ const {
 const UserModel = require('../../models/user.js');
 const TokenModel = require('../../models/token');
 const sms = require('../../communication/sms');
+const emailer = require('../../communication/email');
 
 const {
   GraphQLString,
@@ -293,6 +294,9 @@ const bookTrip = {
     },
     payableAmount: {
       type: GraphQLInt
+    },
+    email: {
+      type: GraphQLString
     }
   },
   async resolve(parent, args, context) {
@@ -335,6 +339,16 @@ Enjoy!`,
 Package Type: ${args.packageType}
 Transaction Id: ${args.transactionId}
 Mob: ${args.phoneNumber}.`,
+    );
+
+    // Send email to user
+    await emailer.sendSuccessTripBookingEmail(
+      args.name,
+      args.email,
+      args.payableAmount,
+      args.tripDate,
+      args.transactionId,
+      args.packageType
     );
     return "Booked";
   }
