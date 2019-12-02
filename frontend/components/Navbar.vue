@@ -17,9 +17,9 @@
             v-list-tile(v-for="(place, index) in places" @click='sendPlaces(place)' :key="index")
               v-list-tile-content
                 v-list-tile-title {{place}}
-
-      v-btn.btn_margin(flat @click="$router.push({name: 'addYourCamp'})") Add your Camp
-      v-btn.btn_margin(flat @click="$router.push('blogs')") Blogs
+      v-btn.btn_margin(flat @click="$router.push('/trips/chopta-chandrashila')") Campzy-Trips
+      v-btn.btn_margin(flat @click="$router.push('/addYourCamp')") Add your Camp
+      v-btn.btn_margin(flat @click="$router.push('/blogs')") Blogs
 
       v-btn(flat v-show="!isLoggedIn" to="/login") LOGIN/SIGNUP
       v-menu(offset-y  :close-on-content-click="true" :nudge-width="200")
