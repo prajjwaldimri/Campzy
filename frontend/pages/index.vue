@@ -15,52 +15,53 @@
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
     div     
-      .loading-div.mt-1
-        vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
-      .featuredCamps(v-show="isFeaturedCamps")
-        h1.headings Our Featured Camps
-        .camps-grid.mt-4
-          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
-            .card-container
+      //- .loading-div.mt-1
+      //-   vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
+      //- .featuredCamps(v-show="isFeaturedCamps")
+      //-   h1.headings Our Featured Camps
+      //-   .camps-grid.mt-4
+      //-     v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
+      //-       .card-container
               
-              v-card-title.camp-title.fill-height.align-end(primary-title)
-                v-layout(row)
-                  .div(style="display:flex;flex-direction:column")
-                    h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
-                    h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
-                  v-spacer
-                  .d-flex(style="text-align:right;")
-                    span.align-right.pt-1(style='width:100%;')
-                      v-icon(dark color="green") star
-                      span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+      //-         v-card-title.camp-title.fill-height.align-end(primary-title)
+      //-           v-layout(row)
+      //-             .div(style="display:flex;flex-direction:column")
+      //-               h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+      //-               h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+      //-             v-spacer
+      //-             .d-flex(style="text-align:right;")
+      //-               span.align-right.pt-1(style='width:100%;')
+      //-                 v-icon(dark color="green") star
+      //-                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
                       
       
-      .wishListCamps(v-show="isWishListCamps")
-        h1.headings Camps from Your Wishlist
-        .camps-grid.mt-4
-          v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in wishList' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
-            .card-container
-              v-card-title.camp-title.fill-height.align-end(primary-title)
-                v-layout(row)
-                  .div(style="display:flex;flex-direction:column")
-                    h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
-                    h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
-                  v-spacer
-                  .d-flex(style="text-align:right;")
-                    span.align-right.pt-1(style='width:100%;')
-                      v-icon(dark color="green") star
-                      span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+      //- .wishListCamps(v-show="isWishListCamps")
+      //-   h1.headings Camps from Your Wishlist
+      //-   .camps-grid.mt-4
+      //-     v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in wishList' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
+      //-       .card-container
+      //-         v-card-title.camp-title.fill-height.align-end(primary-title)
+      //-           v-layout(row)
+      //-             .div(style="display:flex;flex-direction:column")
+      //-               h2.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.location}}
+      //-               h1.main-card-title.white--text(style="line-height: 1.5 !important") {{camp.name}}
+      //-             v-spacer
+      //-             .d-flex(style="text-align:right;")
+      //-               span.align-right.pt-1(style='width:100%;')
+      //-                 v-icon(dark color="green") star
+      //-                 span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
       
-      v-container.trip-container(fluid v-show="isFeaturedCamps")
-        div.trip-div
+      v-container.trip-container(fluid)
+        .d-flex.trip-div
           v-flex
             h2.large_heading(style="color:white") Take a Trip with us!
-            h2.details_tagline(style="color:white") Campzy provides a 3 days 4 nights Chopta-Chandrashila Trip from Delhi for you,
-            .details_tagline(style="color:white") with first-rated facilities on affordable prices.
+            h2.details_tagline.hidden-sm-and-down(style="color:white") Campzy provides a 3 days 3 nights Chopta-Chandrashila Trip from Delhi for you, 
+            .details_tagline.hidden-sm-and-down(style="color:white") with first-rated facilities on affordable prices.
+            h2.details_tagline.hidden-md-and-up(style="color:white") Campzy provides a 3 days 3 nights Chopta-Chandrashila Trip from Delhi for you, with first-rated facilities on affordable prices.
           v-flex
             v-btn.featured_btn(large @click="$router.push('/trips/chopta-chandrashila')") Know More about Trips
       
-      v-container.why_campzy(fluid v-show="isFeaturedCamps")
+      v-container.why_campzy(fluid)
         v-flex(v-html='featuredBtnText')
         v-flex(v-html='featuredBtn' @click="$router.push('/aboutUs')")
         
@@ -72,11 +73,11 @@
 </template>
 
 <script>
-import { GraphQLClient, request } from 'graphql-request'
+// import { GraphQLClient, request } from 'graphql-request'
 import anime from 'animejs'
 import HomeNav from '../components/HomePageNav.vue'
 import Footer from '../components/Footer.vue'
-import { getFeaturedCamps } from '../queries/queries'
+// import { getFeaturedCamps } from '../queries/queries'
 
 export default {
   name: 'Home',
@@ -94,11 +95,11 @@ export default {
       allCamps: [],
       featuredBtn: '',
       featuredBtnText: '',
-      isFeaturedCamps: false,
+      // isFeaturedCamps: false,
       isLoadingCamps: true,
       loadingCamps: true,
-      wishList: [],
-      isWishListCamps: false
+      wishList: []
+      // isWishListCamps: false
     }
   },
   mounted() {
@@ -143,52 +144,52 @@ export default {
       }
     },
 
-    getFeaturedCamps() {
-      request('https://api.campzy.in/graphql', getFeaturedCamps)
-        .then(data => {
-          this.isFeaturedCamps = true
-          this.allCamps = data.getFeaturedCamps
-        })
-        .catch(() => {
-          this.isFeaturedCamps = false
-        })
-        .finally(() => {
-          this.loadingCamps = false
-        })
-    },
+    // getFeaturedCamps() {
+    //   request('https://api.campzy.in/graphql', getFeaturedCamps)
+    //     .then(data => {
+    //       this.isFeaturedCamps = true
+    //       this.allCamps = data.getFeaturedCamps
+    //     })
+    //     .catch(() => {
+    //       this.isFeaturedCamps = false
+    //     })
+    //     .finally(() => {
+    //       this.loadingCamps = false
+    //     })
+    // },
 
-    getCampsFromWishList() {
-      const getWishlistInIndex = `query getWishlistInProfile{
-      getWishlistInProfile{
-        localWishlist{
-          id,
-          name,
-          url,
-          location,
-          averageRating,
-          heroImage,
-            }
-          }
-        }`
-      const client = new GraphQLClient('https://api.campzy.in/graphql', {
-        headers: {
-          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
-        }
-      })
+    // getCampsFromWishList() {
+    //   const getWishlistInIndex = `query getWishlistInProfile{
+    //   getWishlistInProfile{
+    //     localWishlist{
+    //       id,
+    //       name,
+    //       url,
+    //       location,
+    //       averageRating,
+    //       heroImage,
+    //         }
+    //       }
+    //     }`
+    //   const client = new GraphQLClient('https://api.campzy.in/graphql', {
+    //     headers: {
+    //       Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+    //     }
+    //   })
 
-      client
-        .request(getWishlistInIndex)
-        .then(data => {
-          this.isWishListCamps = true
-          this.wishList = data.getWishlistInProfile.localWishlist
-          if (this.wishList.length === 0) {
-            this.isWishListCamps = false
-          }
-        })
-        .catch(() => {
-          this.isWishListCamps = false
-        })
-    },
+    //   client
+    //     .request(getWishlistInIndex)
+    //     .then(data => {
+    //       this.isWishListCamps = true
+    //       this.wishList = data.getWishlistInProfile.localWishlist
+    //       if (this.wishList.length === 0) {
+    //         this.isWishListCamps = false
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.isWishListCamps = false
+    //     })
+    // },
 
     searchClick() {
       if (this.searchInput === '') {
@@ -392,7 +393,7 @@ export default {
 }
 
 .trip-container {
-  height: 40vh;
+  height: 70vh;
   text-align: center;
   margin-top: 10rem;
   padding: 0;
@@ -410,11 +411,13 @@ export default {
   }
 
   .trip-div {
-    width: 100%;
-    height: 100%;
-    padding: 5rem;
-    @media screen and (max-width: 960px) {
-      padding: 2rem;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    justify-content: center;
+    margin: auto;
+    & > * {
+      flex-grow: 0 !important;
     }
   }
 }
@@ -445,6 +448,7 @@ export default {
   font-size: 25px !important;
   margin-top: 3rem;
   @media screen and (max-width: 960px) {
+    font-size: 18px !important;
     height: 45px;
     width: 280px;
     font-size: 20px;
