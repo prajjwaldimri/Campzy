@@ -15,15 +15,10 @@
         .d-flex.actions-flex.py-2
           h2.tagline Bringing camping 🏕 to your doorstep 🚪
     div     
-      //- v-container(fluid)
-      //-   v-flex.more_btn
-      //-     v-btn(icon large color='green' dark @click='getFeaturedCamps')
-      //-       v-icon keyboard_arrow_down
-      
       .loading-div.mt-1
         vue-loaders-ball-pulse(color="green" scale="0.8" v-if="loadingCamps")
       .featuredCamps(v-show="isFeaturedCamps")
-        h1 Our Featured Camps
+        h1.headings Our Featured Camps
         .camps-grid.mt-4
           v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in allCamps' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
             .card-container
@@ -41,7 +36,7 @@
                       
       
       .wishListCamps(v-show="isWishListCamps")
-        h1 Camps from Your Wishlist
+        h1.headings Camps from Your Wishlist
         .camps-grid.mt-4
           v-card.wide-card(:href="'/camp/' + camp.url" v-for='(camp, index) in wishList' :img="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" :key="index")
             .card-container
@@ -55,6 +50,15 @@
                     span.align-right.pt-1(style='width:100%;')
                       v-icon(dark color="green") star
                       span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+      
+      v-container.trip-container(fluid v-show="isFeaturedCamps")
+        div.trip-div
+          v-flex
+            h2.large_heading(style="color:white") Take a Trip with us!
+            h2.details_tagline(style="color:white") Campzy provides a 3 days 4 nights Chopta-Chandrashila Trip from Delhi for you,
+            .details_tagline(style="color:white") with first-rated facilities on affordable prices.
+          v-flex
+            v-btn.featured_btn(large @click="$router.push('/trips/chopta-chandrashila')") Know More about Trips
       
       v-container.why_campzy(fluid v-show="isFeaturedCamps")
         v-flex(v-html='featuredBtnText')
@@ -363,43 +367,92 @@ export default {
   @media screen and (max-width: 960px) {
     margin-top: 4rem;
   }
-  .details_tagline {
+}
+.details_tagline {
+  font-weight: normal;
+  font-size: 25px;
+  text-align: center;
+  color: gray;
+  animation: fadeInFadeOut 2s;
+  @media screen and (max-width: 960px) {
+    font-size: 14px;
     font-weight: normal;
-    font-size: 25px;
-    text-align: center;
-    color: gray;
-    animation: fadeInFadeOut 2s;
-    @media screen and (max-width: 960px) {
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: 1px;
-    }
+    letter-spacing: 1px;
   }
-  .camp_img {
-    height: 80px;
-    width: 75px;
-    margin-top: 1rem;
-    animation: fadeInFadeOut 2s;
+}
+.camp_img {
+  height: 80px;
+  width: 75px;
+  margin-top: 1rem;
+  animation: fadeInFadeOut 2s;
+  @media screen and (max-width: 960px) {
+    height: 70px;
+    width: 65px;
+  }
+}
+
+.trip-container {
+  height: 40vh;
+  text-align: center;
+  margin-top: 10rem;
+  padding: 0;
+  background-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.8),
+      rgba(0, 0, 0, 0.8)
+    ),
+    url('/vectors/chandrashila3.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  @media screen and (max-width: 960px) {
+    margin-top: 4rem;
+  }
+
+  .trip-div {
+    width: 100%;
+    height: 100%;
+    padding: 5rem;
     @media screen and (max-width: 960px) {
-      height: 70px;
-      width: 65px;
+      padding: 2rem;
     }
   }
 }
 
+.headings {
+  font-weight: 600;
+  display: inline-block;
+  position: relative;
+  padding: 20px 0;
+}
+.headings::after {
+  content: '';
+  width: 50%;
+  height: 6px;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 9;
+  background: linear-gradient(to right, green 100%, white 0%);
+}
+
 .featured_btn {
-  background-color: #4caf50;
-  color: white;
+  background-color: #4caf50 !important;
+  color: white !important;
   border-radius: 40px;
   height: 60px;
-  width: 350px;
-  font-size: 25px;
+  width: 370px;
+  font-size: 25px !important;
   margin-top: 3rem;
   @media screen and (max-width: 960px) {
     height: 45px;
     width: 280px;
     font-size: 20px;
   }
+}
+
+.featured_btn:hover {
+  transform: scale(1.1);
 }
 
 .large_heading {
