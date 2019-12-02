@@ -399,8 +399,8 @@ export default {
   padding: 0;
   background-image: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.8),
-      rgba(0, 0, 0, 0.8)
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
     ),
     url('/vectors/chandrashila3.jpg');
   background-position: center;
