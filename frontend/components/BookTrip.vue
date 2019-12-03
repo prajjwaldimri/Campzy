@@ -50,7 +50,7 @@ export default {
     return {
       name: '',
       phoneNumber: '',
-      totalPersons: [1, 2, 3, 4, 5],
+      totalPersons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       totalPerson: '',
       packageTypes: ['Double Sharing', 'Triple Sharing', 'Quad Sharing'],
       packageType: '',
@@ -170,8 +170,6 @@ export default {
                   EventBus.$emit('close-book-trip-dialog')
                 })
                 .catch(err => {
-                  // eslint-disable-next-line
-                  console.log(err)
                   EventBus.$emit(
                     'show-error-notification-short',
                     err.response.errors[0].message
