@@ -54,7 +54,7 @@
       v-container.trip-container(fluid)
         .d-flex.trip-div
           v-flex
-            h2.large_heading(style="color:white") Take a Trip with us!
+            h2.large_heading.glacial-font(style="color:white") Take a Trip with us!
             h2.details_tagline.hidden-sm-and-down(style="color:white") Campzy provides a 3 days 3 nights Chopta-Chandrashila Trip from Delhi for you, 
             .details_tagline.hidden-sm-and-down(style="color:white") with first-rated facilities on affordable prices.
             h2.details_tagline.hidden-md-and-up(style="color:white") Campzy provides a 3 days 3 nights Chopta-Chandrashila Trip from Delhi for you, with first-rated facilities on affordable prices.
@@ -214,6 +214,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 .home-flex {
   display: flex;
   flex-direction: column;
@@ -399,8 +400,8 @@ export default {
   padding: 0;
   background-image: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.6)
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2)
     ),
     url('/vectors/chandrashila3.jpg');
   background-position: center;
@@ -420,6 +421,10 @@ export default {
       flex-grow: 0 !important;
     }
   }
+}
+
+.glacial-font {
+  font-family: 'Permanent Marker', cursive !important;
 }
 
 .headings {
@@ -460,7 +465,7 @@ export default {
 }
 
 .large_heading {
-  font-size: 40px;
+  font-size: 60px;
   @media screen and (max-width: 960px) {
     font-size: 30px;
   }
