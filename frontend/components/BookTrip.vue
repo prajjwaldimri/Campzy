@@ -12,6 +12,7 @@
       v-select(v-model="tripDate" :items="tripDates" label="Select Trip Date" prepend-icon="today")
       v-select(v-model="packageType" :items="packageTypes" label="Select Your Package" prepend-icon="map")
       v-select(v-model="totalPerson" :items="totalPersons" label="Number of Person" prepend-icon="supervised_user_circle")
+      v-text-field(v-model="amountPerPerson" label="Amount Per Person" prepend-icon="supervised_user_circle" readonly)
       v-text-field(v-model="amount" label="Total Amount" prepend-icon="money" hint="*GST Included" persistent-hint readonly)
       v-text-field(v-model="payableAmount" label="Payable Amount" prepend-icon="money"  hint="*30% of Total Amount" persistent-hint readonly)
       div(style="margin-left:33px;")

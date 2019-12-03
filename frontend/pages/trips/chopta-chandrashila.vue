@@ -266,8 +266,8 @@ export default {
   background: black;
   background-image: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.8),
-      rgba(0, 0, 0, 0.8)
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
     ),
     url('/vectors/chandrashila3.jpg');
   background-position: center;
@@ -419,6 +419,10 @@ export default {
     width: 290px;
     font-size: 20px;
   }
+}
+
+.book_btn:hover {
+  transform: scale(1.1);
 }
 
 .mx-5 {
