@@ -155,7 +155,7 @@ const sendBookingCancelUser = async (user) => {
   }
 };
 
-const sendSuccessTripBookingEmail = async (name, email, payableAmount, tripDate, transactionId, packageType) => {
+const sendSuccessTripBookingEmail = async (name, email, payableAmount, tripDate, transactionId, packageType, dueAmount, totalAmount) => {
   try {
     return await mailjet.post('send', {
       version: 'v3.1'
@@ -177,7 +177,9 @@ const sendSuccessTripBookingEmail = async (name, email, payableAmount, tripDate,
           transactionId: transactionId,
           packageType: packageType,
           tripDate: tripDate,
-          payableAmount: payableAmount
+          payableAmount: payableAmount,
+          dueAmount: dueAmount,
+          totalAmount: totalAmount
         }
       }]
     })

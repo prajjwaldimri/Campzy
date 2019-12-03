@@ -297,6 +297,12 @@ const bookTrip = {
     },
     email: {
       type: GraphQLString
+    },
+    dueAmount: {
+      type: GraphQLInt
+    },
+    totalAmount: {
+      type: GraphQLInt
     }
   },
   async resolve(parent, args, context) {
@@ -324,7 +330,9 @@ const bookTrip = {
       }, your trip is successfully booked with Campzy. Your trip will starts from ${args.tripDate}. Package Details-
 Package Type: ${args.packageType}
 Total Person: ${args.totalPerson}
+Total Amount: ${args.totalAmount}
 Paid Amount: ${args.payableAmount} INR
+Due Amount: ${args.dueAmount}
 Transaction Id: ${args.transactionId} 
 For further assistance contact details are given below.
 Priyanshu Agarwal
@@ -337,6 +345,9 @@ Enjoy!`,
         args.name
       }, has successfully booked Chopta-Chandrashila Trek for ${args.totalPerson} people with Campzy. Trip will starts on ${args.tripDate}. For further assistance contact details are given below.
 Package Type: ${args.packageType}
+Total Amount: ${args.totalAmount} INR
+Paid Amount: ${args.payableAmount} INR
+Due Amount: ${args.dueAmount} INR
 Transaction Id: ${args.transactionId}
 Mob: ${args.phoneNumber}.`,
     );
@@ -348,7 +359,9 @@ Mob: ${args.phoneNumber}.`,
       args.payableAmount,
       args.tripDate,
       args.transactionId,
-      args.packageType
+      args.packageType,
+      args.dueAmount,
+      args.totalAmount
     );
     return "Booked";
   }

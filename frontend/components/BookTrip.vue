@@ -58,7 +58,9 @@ export default {
         '05 Dec, 2019',
         '12 Dec, 2019',
         '19 Dec, 2019',
+        '23 Dec, 2019 (Christmas Batch)',
         '26 Dec, 2019',
+        '28 Dec, 2019 (New Year Batch)',
         '09 Jan, 2020',
         '16 Jan, 2020',
         '23 Jan, 2020',
@@ -73,20 +75,44 @@ export default {
       payableAmount: 0,
       amountPerPerson: 0,
       isBookingTrip: false,
-      email: ''
+      email: '',
+      christmasBatch: false,
+      newYearBatch: false
     }
   },
   watch: {
+    tripDate(selectedDate) {
+      if (selectedDate === '23 Dec, 2019 (Christmas Batch)') {
+        this.christmasBatch = true
+      } else if (selectedDate === '28 Dec, 2019 (New Year Batch)') {
+        this.newYearBatch = true
+      } else {
+        this.newYearBatch = false
+        this.christmasBatch = false
+      }
+    },
     packageType(val) {
       switch (val) {
         case 'Double Sharing':
-          this.amountPerPerson = 7500
+          if (this.christmasBatch || this.newYearBatch) {
+            this.amountPerPerson = 11500
+          } else {
+            this.amountPerPerson = 7500
+          }
           break
         case 'Triple Sharing':
-          this.amountPerPerson = 7000
+          if (this.christmasBatch || this.newYearBatch) {
+            this.amountPerPerson = 11000
+          } else {
+            this.amountPerPerson = 7000
+          }
           break
         case 'Quad Sharing':
-          this.amountPerPerson = 6500
+          if (this.christmasBatch || this.newYearBatch) {
+            this.amountPerPerson = 9500
+          } else {
+            this.amountPerPerson = 6500
+          }
           break
         default:
           this.amountPerPerson = 0
@@ -115,9 +141,8 @@ export default {
             name: 'Campzy',
             description: 'Campzy Trips',
             handler(response) {
-              // Use data.bookCampCheck.amount to get the amount from user
-              const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!, $email: String!){
-                bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount, email: $email){
+              const bookYourTrip = `mutation bookTrip($transactionId: String!,$name: String!, $phoneNumber: String!, $tripDate: String!,$packageType: String!, $totalPerson: String!, $payableAmount: Int!, $email: String!,$dueAmount: Int!, $totalAmount: Int!){
+                bookTrip(transactionId: $transactionId, name: $name, phoneNumber: $phoneNumber, tripDate:$tripDate, packageType: $packageType, totalPerson:$totalPerson,payableAmount: $payableAmount, email: $email, dueAmount: $dueAmount, totalAmount: $totalAmount){
                   id
                 }
               }`
@@ -129,7 +154,9 @@ export default {
                 packageType: that.packageType,
                 totalPerson: that.totalPerson.toString(),
                 payableAmount: that.payableAmount,
-                email: that.email
+                email: that.email,
+                dueAmount: that.amount - that.payableAmount,
+                totalAmount: that.amount
               }
               const client = new GraphQLClient('https://api.campzy.in/graphql')
               client
