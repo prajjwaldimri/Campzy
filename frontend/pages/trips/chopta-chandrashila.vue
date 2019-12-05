@@ -44,7 +44,7 @@
           span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Cash, ATMs etc
     v-container(fluid)
       h1.display-2.headings Breif Itinerary
-      v-layout.my-5.justify-center.hidden-sm-and-down(row wrap) 
+      .itinerary-grid.my-5.justify-center(row wrap) 
         .breif-card.ma-4
           .breif-card-inner
             .breif-img
@@ -87,7 +87,7 @@
                 li.breif-text Departure for Delhi with wonderful trip memories
 
       // Breif Mobile View
-      v-layout.my-5.justify-center.hidden-md-and-up(column) 
+      .itinerary-grid-mobile.my-5.justify-center(column) 
         .breif-card-mobile.ma-4
           .breif-card-inner-mobile
             .breif-img
@@ -132,7 +132,7 @@
           
     v-container(fluid)
       h1.display-2.headings Affordable Prices
-      v-layout.my-5.justify-center(row wrap)
+      div.cost-grid
         .cost-div
           v-layout(column)
             .bed-img
@@ -317,6 +317,30 @@ export default {
     text-align: justify;
   }
 }
+.itinerary-grid {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(4, 20%);
+  grid-gap: 1rem;
+  @media screen and (max-width: 959px) {
+    display: none;
+  }
+  @media screen and (min-width: 960px) and (max-width: 1249px) {
+    grid-template-columns: repeat(2, 40%);
+  }
+  @media screen and (min-width: 1250px) and (max-width: 1600px) {
+    grid-template-columns: repeat(4, 25%);
+  }
+}
+.itinerary-grid-mobile {
+  display: grid;
+  justify-content: center;
+  grid-template-rows: repeat(4, 25%);
+  grid-gap: 1rem;
+  @media screen and (min-width: 960px) {
+    display: none;
+  }
+}
 .itinerary-text {
   margin: 1.5rem 1rem;
   font-size: 28px;
@@ -376,19 +400,27 @@ export default {
     font-size: 30px !important;
   }
 }
-.cost-div {
-  border: 0.1px solid rgba(0, 128, 0, 0.5);
-  width: 380px;
-  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.17),
-    0 6px 20px 0 rgba(0, 128, 0, 0.17);
-  margin: 2rem 3rem;
-  animation: fadeInFadeOut 4s;
+.cost-grid {
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 20%);
+  grid-gap: 2rem;
+  margin-top: 5rem;
   @media screen and (max-width: 960px) {
-    margin: 1rem 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    margin-top: 2.5rem;
   }
-  @media screen and (max-width: 1440px) and (min-width: 961px) {
-    margin: 2rem 1rem;
+  @media screen and (min-width: 961px) and (max-width: 1420px) {
+    grid-template-columns: repeat(3, 30%);
+    margin-top: 2.5rem;
   }
+}
+.cost-div {
+  border: 0.1px solid rgba(0, 128, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 128, 0, 0.1),
+    0 6px 20px 0 rgba(0, 128, 0, 0.1);
+  animation: fadeInFadeOut 4s;
+
   &:hover {
     transform: translateY(-15px);
     cursor: pointer;
@@ -405,6 +437,7 @@ export default {
 .single-bed-img {
   height: 50px;
   width: 50px;
+  margin: 0.2rem;
 }
 .book_btn {
   background-color: #4caf50;
