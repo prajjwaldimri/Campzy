@@ -316,6 +316,7 @@ export default {
     line-height: 2.4rem;
     margin: 1.5rem 0.5rem;
     text-align: justify;
+    font-weight: 400;
   }
 }
 
@@ -385,8 +386,8 @@ export default {
   }
 }
 .brief-img {
-  height: 150px;
-  width: 150px;
+  height: 120px;
+  width: 120px;
   margin: auto;
   animation: fadeInFadeOut 2s;
   @media screen and (max-width: 1440px) {
