@@ -17,10 +17,11 @@
       p.paragraphs Chopta is one of the prettiest spot on the Ukhimath-Chamoli road that connects kedarnath and Badrinath via a more picturesque, somewhat shorter route. This sleepy place, 35 kms form Ukimath, is really just a bend in a very narrow, thick forrest mountain road. It’s the quaintest place you are likely to see en route, along with the famed bugyals (meadows) of the state peeking through towering tress, framed by snowy mountains in the distance. Chopta is the springboard for a 5km trek to Chandrashilla Peak and Tungnath - one of the Panch Kedar (Sacred Shiva Temples).
     v-container(fluid)
       h1.display-2.headings Your Travel Kit
-      v-layout.justify-center.my-5(row wrap)
+      .travel-kit-grid.justify-center.my-5
         v-flex.brief-flex(xs12 md1).text-xs-center
-          v-img.brief-img(src="/vectors/bag.svg")
-          span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Rucksack
+          v-layout(column)
+            v-img.brief-img(src="/vectors/bag.svg")
+            span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Rucksack
         v-flex.brief-flex(xs12 md1).text-xs-center
           v-img.brief-img(src="/vectors/jacket.svg")
           span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Adequate amount of warm clothes
@@ -44,7 +45,7 @@
           span.text--darken-3.font-weight-regular.mt-3(style="font-size:25px") Cash, ATMs etc
     v-container(fluid)
       h1.display-2.headings Breif Itinerary
-      .itinerary-grid.my-5.justify-center(row wrap) 
+      .itinerary-grid.my-5.justify-center
         .breif-card.ma-4
           .breif-card-inner
             .breif-img
@@ -87,7 +88,7 @@
                 li.breif-text Departure for Delhi with wonderful trip memories
 
       // Breif Mobile View
-      .itinerary-grid-mobile.my-5.justify-center(column) 
+      .itinerary-grid-mobile.my-5.justify-center 
         .breif-card-mobile.ma-4
           .breif-card-inner-mobile
             .breif-img
@@ -317,6 +318,16 @@ export default {
     text-align: justify;
   }
 }
+
+.travel-kit-grid {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(4, 20%);
+  grid-gap: 1rem;
+  @media screen and (max-width: 959px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
 .itinerary-grid {
   display: grid;
   justify-content: center;
@@ -363,21 +374,22 @@ export default {
   margin: 0.8rem 0;
 }
 .brief-flex {
-  margin: 5rem 8rem;
+  margin: 5rem;
   max-width: 100% !important;
   animation: fadeInFadeOut 2s;
   @media screen and (max-width: 960px) {
     margin: 2rem 5rem;
   }
   @media screen and (max-width: 1440px) and (min-width: 961px) {
-    margin: 2rem 4rem;
+    margin: 2rem;
   }
 }
 .brief-img {
   height: 150px;
   width: 150px;
+  margin: auto;
   animation: fadeInFadeOut 2s;
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 1440px) {
     height: 110px;
     width: 110px;
     margin: auto;
@@ -404,15 +416,17 @@ export default {
   justify-content: center;
   display: grid;
   grid-template-columns: repeat(3, 20%);
-  grid-gap: 2rem;
+  grid-gap: 2rem 3rem;
   margin-top: 5rem;
   @media screen and (max-width: 960px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     margin-top: 2.5rem;
+    grid-gap: 2rem 1rem;
   }
   @media screen and (min-width: 961px) and (max-width: 1420px) {
     grid-template-columns: repeat(3, 30%);
     margin-top: 2.5rem;
+    grid-gap: 2rem 1.5rem;
   }
 }
 .cost-div {
