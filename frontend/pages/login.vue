@@ -8,11 +8,12 @@
             .login-content(v-if="loginState == 0")
               v-card-title(align-center justify-center style="padding:0px").d-flex
                 v-layout(column)
-                  .campzy-logo.pb-4
-                    span.display-1 Welcome to&nbsp
-                    span.display-1 Camp
-                    span.display-1.green--text zy
-                  h1.display-1.pb-4 Login
+                  .login-text.pb-4
+                    span.display-1 Welcome back,
+                    h1.sub-heading.gray-text sign in to continue to
+                    h1.sub-heading
+                      span.sub-heading.gray-text Camp
+                      span.sub-heading.green--text zy
               v-form(ref="form" v-model="isLoginValid")
                 v-text-field(label="Email" color='green accent-4'
                 v-validate="'required|email'" required
@@ -43,11 +44,12 @@
             .signup-content(v-else-if="loginState == 1" key="signup")
               v-card-title(align-center justify-center style="padding:0px;").d-flex
                 v-layout(column)
-                  .campzy-logo.pb-3
-                    span.display-1 Welcome to&nbsp
-                    span.display-1 Camp
-                    span.display-1.green--text zy
-                  h1.display-1.pb-4 Register Here
+                  .login-text.pb-3
+                    span.display-1 Welcome,
+                    h1.sub-heading.gray-text create an account for
+                    h1.sub-heading
+                      span.sub-heading.gray-text Camp
+                      span.sub-heading.green--text zy
               v-form(ref="form" v-model="isLoginValid")
               v-text-field(label="Name" color='green accent-4'
               v-validate="'required|alpha_spaces'" required
@@ -456,14 +458,35 @@ export default {
     border-top-right-radius: 5px;
   }
   .display-1 {
-    font-size: 34px !important;
+    font-size: 40px !important;
     font-weight: 400;
     line-height: 40px !important;
-    letter-spacing: normal !important;
+    letter-spacing: 1px !important;
     font-family: 'Roboto', sans-serif !important;
     @media screen and (max-width: 960px) {
       font-size: 25px !important;
     }
+  }
+  .sub-heading {
+    font-size: 28px !important;
+    font-weight: 400;
+    line-height: 40px !important;
+    letter-spacing: 4px !important;
+    font-family: 'Roboto', sans-serif !important;
+    @media screen and (max-width: 960px) {
+      font-size: 20px !important;
+      letter-spacing: 1px !important;
+    }
+  }
+  .gray-text {
+    color: gray;
+  }
+
+  .login-text {
+    font-family: 'GlacialIndifferenceRegular' !important;
+    font-size: 2rem;
+    cursor: pointer;
+    text-align: left;
   }
 
   .login-content {
