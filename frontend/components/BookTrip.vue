@@ -184,7 +184,7 @@ export default {
             prefill: {
               name: this.name,
               email: this.email,
-              contact: this.phoneNumber
+              contact: this.phoneNumber.replace(/ +/g, '')
             }
           }
           const rzpl = new Razorpay(razorOptions)
