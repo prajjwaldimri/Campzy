@@ -22,7 +22,8 @@ export default {
    */
   head: {
     title: 'Campzy: The complete camping solution',
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8'
       },
       {
@@ -39,7 +40,8 @@ export default {
         content: pkg.description
       }
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
@@ -54,12 +56,12 @@ export default {
 
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       }
-
-
     ],
-    script: [{
+    script: [
+      {
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
       },
       {
@@ -109,7 +111,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap', '@nuxtjs/component-cache'],
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap'],
 
   // router: {
   //   middleware: 'i18n'
@@ -131,11 +133,13 @@ export default {
     description: 'The complete camping solution',
     lang: 'en',
     theme_color: '#2ecc71',
-    icons: [{
-      src: '/android-chrome-192x192.png',
-      sizes: '192x192',
-      type: 'image/png'
-    }]
+    icons: [
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      }
+    ]
   },
   icon: {
     iconSrc: '/android-chrome-512x512.png'
@@ -164,7 +168,6 @@ export default {
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
-
       }
     }
   }
