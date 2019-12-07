@@ -109,7 +109,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap'],
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap', '@nuxtjs/component-cache'],
 
   // router: {
   //   middleware: 'i18n'
