@@ -7,7 +7,7 @@
           //- img(src="/vectors/Campzy-logo-black.svg")
           span.display-3 Camp
           span.display-3.green--text zy
-        v-text-field( append-icon="search"
+        v-text-field(append-icon="search"
         @click:append="searchClick" autofocus color="green" solo single-line required ticks
         v-model="searchInput" @keyup.enter="searchClick"
         hint="You can search for Nature, Leh, Mountains, etc.").mb-0
@@ -127,8 +127,8 @@ export default {
     })
 
     this.scrollToLoadContent()
-    this.getFeaturedCamps()
-    this.getCampsFromWishList()
+    // this.getFeaturedCamps()
+    // this.getCampsFromWishList()
   },
   methods: {
     scrollToLoadContent() {
@@ -213,7 +213,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 .home-flex {
   display: flex;
