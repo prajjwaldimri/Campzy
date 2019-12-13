@@ -295,7 +295,7 @@ export default {
     width: 290px;
     margin-top: 1.8rem;
   }
-  @media screen and (min-width: 321px) and (max-width: 360) {
+  @media screen and (min-width: 321px) and (max-width: 360px) {
     width: 350px;
     margin-top: 1.8rem;
   }
