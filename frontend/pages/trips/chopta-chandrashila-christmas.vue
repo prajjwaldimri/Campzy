@@ -8,9 +8,10 @@
             v-layout.camp-container(column)
               h1.camp-name Chopta-Chandrashila Trek
               h1.camp-name-para Campzy is bringing you a trip of Chopta-Chandrashila Trek (3 days and 3 nights) for Chritmas Eve, to enjoy the festival eve with with your friends, family members and love ones on beautiful hills of Chopta Uttarakhand.
-              v-dialog(v-model="isBookTrip" persistent max-width="500px")
-                v-btn.camp-name-btn(slot="activator" color="green" dark round large) Book Now!
-                BookTripChristmas
+              v-flex.btn-flex
+                v-dialog(v-model="isBookTrip" persistent max-width="500px")
+                  v-btn.camp-name-btn(slot="activator" color="green" dark round large) Book Now!
+                  BookTripChristmas
             .d-flex.camp-container.align-self-center
               v-img.chritmas-img(src="/vectors/xmas2.svg")
       
@@ -290,7 +291,11 @@ export default {
 .chritmas-img {
   width: 1000px;
   margin-top: 1rem;
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 320px) {
+    width: 290px;
+    margin-top: 1.8rem;
+  }
+  @media screen and (min-width: 321px) and (max-width: 360) {
     width: 350px;
     margin-top: 1.8rem;
   }
@@ -344,7 +349,11 @@ export default {
   text-shadow: 0px 0px 20px black;
   text-align: left;
   font-size: 50px;
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 320px) {
+    font-size: 20px;
+    text-align: center;
+  }
+  @media screen and (min-width: 321px) and (max-width: 360px) {
     font-size: 25px;
     text-align: center;
   }
@@ -370,7 +379,11 @@ export default {
   font-size: 25px;
   text-align: justify;
   font-weight: 200;
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 320px) {
+    font-size: 10px;
+    text-align: center;
+  }
+  @media screen and (min-width: 321px) and (max-width: 360px) {
     font-size: 13px;
     text-align: center;
   }
@@ -391,11 +404,17 @@ export default {
     text-align: justify;
   }
 }
+.btn-flex {
+  @media screen and (max-width: 960px) {
+    text-align: center;
+  }
+}
 .camp-name-btn {
   width: 200px;
   margin-top: 2rem;
   @media screen and (max-width: 960px) {
-    width: 100%;
+    width: 250px;
+    height: 38px;
     margin: 2rem auto;
   }
 }
