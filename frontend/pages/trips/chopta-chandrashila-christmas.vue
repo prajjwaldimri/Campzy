@@ -5,12 +5,14 @@
       div
         v-layout.lightbox.white--text.pt-5.mt-5(column fill-height)
           .d-flex.text-flex
-            v-layout.ml-5(column)
+            v-layout.camp-container(column)
               h1.camp-name Chopta-Chandrashila Trek
               h1.camp-name-para Campzy is bringing you a trip of Chopta-Chandrashila Trek (3 days and 3 nights) for Chritmas Eve, to enjoy the festival eve with with your friends, family members and love ones on beautiful hills of Chopta Uttarakhand.
-              v-btn(color="green" dark round large style="width:200px;margin-top:2rem") Book Now!
-            .d-flex.ml-5.align-self-center
-              v-img(src="/vectors/xmas2.svg" width="1000")
+              v-dialog(v-model="isBookTrip" persistent max-width="500px")
+                v-btn.camp-name-btn(slot="activator" color="green" dark round large href="#book-div") Book Now!
+                BookTripChristmas
+            .d-flex.camp-container.align-self-center
+              v-img.chritmas-img(src="/vectors/xmas2.svg")
       
     v-container(fluid)
       h1.display-2.headings About Trek
@@ -143,7 +145,7 @@
             .d-flex
               span.cost-text Double Sharing
             .d-flex
-              span.cost-text Rs. 7500/- per person
+              span.cost-text Rs. 11500/- per person
         .cost-div
           .bed-img
             v-layout(row style="margin-top:6.1rem")
@@ -153,7 +155,7 @@
           .d-flex
               span.cost-text Triple Sharing
           .d-flex
-            span.cost-text Rs. 7000/- per person
+            span.cost-text Rs. 11000/- per person
         .cost-div
           .bed-img
             v-layout(row style="margin-top:6.1rem")
@@ -164,32 +166,32 @@
           .d-flex
               span.cost-text Quad Sharing
           .d-flex
-            span.cost-text Rs. 6500/- per person
+            span.cost-text Rs. 9500/- per person
+    v-container.mt-5(fluid)
+      h1.display-2.headings Package Details
+      v-layout.package-container.mt-5(row)
+        v-container(fluid style="margin:0")
+          h1.package-headings Things included in Packages
+          ul.my-5
+            li.paragraphs Entire travel as per the itinerary by tempo traveller.
+            li.paragraphs 6 meals will be provided throughout the trip. 2 meals (Day 1) + 3 Meals (Day 2) + 1 Meal (Day 3)
+            li.paragraphs Accommodation for 2 nights in Camps at Chopta.
+            li.paragraphs Trek guide charges for the trek.
+            li.paragraphs GST 5 %
+        v-divider(vertical)
+        v-container(fluid style="margin:0")
+          h1.package-headings Things not included in Packages
+          ul.my-5
+            li.paragraphs Any other food and beverages other than the the provided meals.
+            li.paragraphs Any permit and entry tickets to the view points.
+            li.paragraphs Anything not mention in included column.
+    
     v-container(fluid)
-      h1.display-2.headings Things included in Packages
-      ul.my-5
-        li.paragraphs Entire travel as per the itinerary by tempo traveller.
-        li.paragraphs 6 meals will be provided throughout the trip. 2 meals (Day 1) + 3 Meals (Day 2) + 1 Meal (Day 3)
-        li.paragraphs Accommodation for 2 nights in Camps at Chopta.
-        li.paragraphs Trek guide charges for the trek.
-        li.paragraphs GST 5 %
-    v-container(fluid)
-      h1.display-2.mt-5.headings Things not included in Packages
-      ul.my-5
-        li.paragraphs Any other food and beverages other than the the provided meals.
-        li.paragraphs Any permit and entry tickets to the view points.
-        li.paragraphs Anything not mention in included column.
-    v-container(fluid)
-      //- v-layout.align-center(column)
-      //-   h2 Ready for Trip?
-      //-   v-dialog(v-model="isBookTrip" persistent max-width="500px")
-      //-     v-btn.book_btn(slot="activator" color="green" large  dark)  Book Your Package Now!
-      //-     BookTrip
-      v-layout(column)
-        h2 Book Your Trip!
-        v-layout(row)
-          v-flex(xs12 md6)
-            v-text-field
+      v-layout.align-center(column)
+        h2 Ready for Trip?
+        v-dialog(v-model="isBookTrip" persistent max-width="500px")
+          v-btn.book_btn(slot="activator" color="green" large  dark)  Book Your Package Now!
+          BookTripChristmas
       
     v-container(fluid)
       h2.display-1.mx-5 Important Notes*
@@ -221,7 +223,7 @@
 import { EventBus } from '../../layouts/event-bus'
 import HomeNav from '../../components/HomePageNav.vue'
 import Footer from '../../components/Footer.vue'
-import BookTrip from '../../components/BookTrip.vue'
+import BookTripChristmas from '../../components/BookTripChristmas.vue'
 export default {
   name: 'Trips',
   metaInfo: {
@@ -241,11 +243,12 @@ export default {
   components: {
     HomeNav,
     Footer,
-    BookTrip
+    BookTripChristmas
   },
   data() {
     return {
-      isBookTrip: false
+      isBookTrip: false,
+      dates: ['23 Dec, 2019']
     }
   },
   mounted() {
@@ -259,9 +262,13 @@ export default {
 <style lang="scss" scoped>
 .text-flex {
   flex-direction: row;
+
   align-items: center;
   height: 55%;
   justify-content: center;
+  @media screen and (max-width: 960px) {
+    flex-wrap: wrap;
+  }
   & > * {
     flex-grow: 0 !important;
     // margin-top: auto;
@@ -280,6 +287,45 @@ export default {
   background-size: cover;
   position: relative;
 }
+.chritmas-img {
+  width: 1000px;
+  margin-top: 1rem;
+  @media screen and (max-width: 960px) {
+    width: 400px;
+  }
+  @media screen and (min-width: 961px) and (max-width: 1200px) {
+    width: 650px;
+    margin-top: 13.5rem;
+  }
+  @media screen and (min-width: 1201px) and (max-width: 1299px) {
+    width: 750px;
+    margin-top: 8.1rem;
+  }
+  @media screen and (min-width: 1300px) and (max-width: 1440px) {
+    width: 800px;
+    margin-top: 5.5rem;
+  }
+  @media screen and (min-width: 1441px) and (max-width: 1800px) {
+    width: 889px;
+  }
+}
+.camp-container {
+  margin-left: 3rem;
+  @media screen and (max-width: 960px) {
+    margin-left: 0;
+  }
+}
+.package-container {
+  @media screen and (max-width: 960px) {
+    flex-wrap: wrap !important;
+  }
+}
+.package-headings {
+  margin-left: 3rem;
+  @media screen and (max-width: 960px) {
+    margin-left: 0rem;
+  }
+}
 .cost-cont {
   background: white;
   width: 80vw;
@@ -295,6 +341,19 @@ export default {
   font-size: 50px;
   @media screen and (max-width: 960px) {
     font-size: 35px;
+    text-align: center;
+  }
+  @media screen and (min-width: 961px) and (max-width: 1299px) {
+    font-size: 30px;
+    text-align: left;
+  }
+  @media screen and (min-width: 1300px) and (max-width: 1440px) {
+    font-size: 34px;
+    text-align: left;
+  }
+  @media screen and (min-width: 1441px) and (max-width: 1800px) {
+    font-size: 36px;
+    text-align: left;
   }
 }
 .camp-name-para {
@@ -304,6 +363,27 @@ export default {
   font-weight: 200;
   @media screen and (max-width: 960px) {
     font-size: 15px;
+    text-align: center;
+  }
+  @media screen and (min-width: 961px) and (max-width: 1299px) {
+    font-size: 18px;
+    text-align: left;
+  }
+  @media screen and (min-width: 1300px) and (max-width: 1440px) {
+    font-size: 20px;
+    text-align: justify;
+  }
+  @media screen and (min-width: 1441px) and (max-width: 1800px) {
+    font-size: 22px;
+    text-align: justify;
+  }
+}
+.camp-name-btn {
+  width: 200px;
+  margin-top: 2rem;
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    margin: 2rem auto;
   }
 }
 .headings {
