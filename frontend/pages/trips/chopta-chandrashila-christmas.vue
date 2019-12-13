@@ -290,7 +290,11 @@ export default {
 .chritmas-img {
   width: 1000px;
   margin-top: 1rem;
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 360px) {
+    width: 350px;
+    margin-top: 1.8rem;
+  }
+  @media screen and (min-width: 361px) and (max-width: 960px) {
     width: 400px;
     margin-top: 0rem;
   }
@@ -340,7 +344,11 @@ export default {
   text-shadow: 0px 0px 20px black;
   text-align: left;
   font-size: 50px;
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 360px) {
+    font-size: 25px;
+    text-align: center;
+  }
+  @media screen and (min-width: 361px) and (max-width: 960px) {
     font-size: 35px;
     text-align: center;
   }
@@ -362,7 +370,11 @@ export default {
   font-size: 25px;
   text-align: justify;
   font-weight: 200;
-  @media screen and (max-width: 960px) {
+  @media screen and (max-width: 360px) {
+    font-size: 13px;
+    text-align: center;
+  }
+  @media screen and (min-width: 361px) and (max-width: 960px) {
     font-size: 15px;
     text-align: center;
   }
