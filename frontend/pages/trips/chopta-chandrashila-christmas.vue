@@ -9,7 +9,7 @@
               h1.camp-name Chopta-Chandrashila Trek
               h1.camp-name-para Campzy is bringing you a trip of Chopta-Chandrashila Trek (3 days and 3 nights) for Chritmas Eve, to enjoy the festival eve with with your friends, family members and love ones on beautiful hills of Chopta Uttarakhand.
               v-dialog(v-model="isBookTrip" persistent max-width="500px")
-                v-btn.camp-name-btn(slot="activator" color="green" dark round large href="#book-div") Book Now!
+                v-btn.camp-name-btn(slot="activator" color="green" dark round large) Book Now!
                 BookTripChristmas
             .d-flex.camp-container.align-self-center
               v-img.chritmas-img(src="/vectors/xmas2.svg")
@@ -292,6 +292,7 @@ export default {
   margin-top: 1rem;
   @media screen and (max-width: 960px) {
     width: 400px;
+    margin-top: 0rem;
   }
   @media screen and (min-width: 961px) and (max-width: 1200px) {
     width: 650px;
