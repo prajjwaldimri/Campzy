@@ -9,9 +9,12 @@
       v-text-field(v-model="email" label="Email" prepend-icon="subject" clearable
       data-vv-name="email" v-validate="'required'"
       :error-messages="errors.collect('email')")
-      v-select(v-model="tripDate" :items="tripDates" label="Select Trip Date" prepend-icon="today")
-      v-select(v-model="packageType" :items="packageTypes" label="Select Your Package" prepend-icon="map")
-      v-select(v-model="totalPerson" :items="totalPersons" label="Number of Person" prepend-icon="supervised_user_circle")
+      v-select(v-model="tripDate" :items="tripDates" label="Select Trip Date" prepend-icon="today" data-vv-name="tripDate" v-validate="'required'"
+      :error-messages="errors.collect('tripDate')")
+      v-select(v-model="packageType" :items="packageTypes" label="Select Your Package" prepend-icon="map" data-vv-name="packageType" v-validate="'required'"
+      :error-messages="errors.collect('packageType')")
+      v-select(v-model="totalPerson" :items="totalPersons" label="Number of Person" prepend-icon="supervised_user_circle" data-vv-name="totalPerson" v-validate="'required'"
+      :error-messages="errors.collect('totalPerson')")
       v-text-field(v-model="amountPerPerson" label="Amount Per Person" prepend-icon="supervised_user_circle" readonly)
       v-text-field(v-model="amount" label="Total Amount" prepend-icon="money" hint="*GST Included" persistent-hint readonly)
       v-text-field(v-model="payableAmount" label="Payable Amount" prepend-icon="money"  hint="*30% of Total Amount" persistent-hint readonly)
