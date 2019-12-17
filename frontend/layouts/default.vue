@@ -74,18 +74,17 @@ export default {
       }
     ],
     script: [
-      {
-        src: 'https://www.googletagmanager.com/gtag/js?id=UA-154683504-1',
-        async: true
-      },
-      {
-        innerHTML: `window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+      // {
+      //   src: 'https://www.googletagmanager.com/gtag/js?id=UA-154683504-1',
+      //   async: true
+      // },
+      // {
+      //   innerHTML: `window.dataLayer = window.dataLayer || [];
+      //   function gtag(){dataLayer.push(arguments);}
+      //   gtag('js', new Date());
+      //   gtag('config', 'UA-154683504-1');`
+      // },
 
-        gtag('config', 'UA-154683504-1');`,
-        type: 'text/javascript'
-      },
       {
         src: 'https://unpkg.com/nprogress@0.2.0/nprogress.js'
       },
