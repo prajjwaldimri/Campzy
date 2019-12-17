@@ -111,27 +111,22 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    '@nuxtjs/proxy',
-    '@nuxtjs/pwa',
-    '@nuxtjs/sitemap',
-    '@nuxtjs/google-gtag'
+  modules: ['@nuxtjs/proxy', '@nuxtjs/pwa', '@nuxtjs/sitemap'],
+  // 'google-gtag': {
+  //   id: 'UA-154683504-1',
+  //   config: {
+  //     send_page_view: false // might be necessary to avoid duplicated page track on page reload
+  //   },
+  //   debug: true
+  // },
+  buildModules: [
+    [
+      '@nuxtjs/google-analytics',
+      {
+        id: 'UA-154683504-1'
+      }
+    ]
   ],
-  'google-gtag': {
-    id: 'UA-154683504-1',
-    config: {
-      send_page_view: false // might be necessary to avoid duplicated page track on page reload
-    },
-    debug: true
-  },
-  // buildModules: [
-  //   [
-  //     '@nuxtjs/google-analytics',
-  //     {
-  //       id: 'UA-154683504-1'
-  //     }
-  //   ]
-  // ],
 
   // router: {
   //   middleware: 'i18n'
