@@ -115,30 +115,15 @@ export default {
     '@nuxtjs/proxy',
     '@nuxtjs/pwa',
     '@nuxtjs/sitemap',
-    [
-      '@nuxtjs/google-gtag',
-      {
-        id: 'UA-154683504-1',
-        config: {
-          send_page_view: false // might be necessary to avoid duplicated page track on page reload
-        }
-      }
-    ]
+    '@nuxtjs/google-gtag'
   ],
-  // 'google-gtag': {
-  //   id: 'UA-154683504-1',
-  //   config: {
-  //     send_page_view: false // might be necessary to avoid duplicated page track on page reload
-  //   }
-  // },
-  // buildModules: [
-  //   [
-  //     '@nuxtjs/google-analytics',
-  //     {
-  //       id: 'UA-154683504-1'
-  //     }
-  //   ]
-  // ],
+
+  'google-gtag': {
+    id: 'UA-154683504-1',
+    config: {
+      send_page_view: false // might be necessary to avoid duplicated page track on page reload
+    }
+  },
 
   // router: {
   //   middleware: 'i18n'

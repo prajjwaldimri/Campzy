@@ -161,13 +161,6 @@ export default {
       this.message = message
       this.snackbarWarning = true
     })
-
-    // if (process.browser) {
-    //   this.$gtag('config', 'UA-154683504-1', {
-    //     page_title: this.$metaInfo.title,
-    //     page_path: this.$route.fullPath
-    //   })
-    // }
   }
 }
 </script>
