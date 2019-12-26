@@ -115,22 +115,40 @@ export default {
     '@nuxtjs/proxy',
     '@nuxtjs/pwa',
     '@nuxtjs/sitemap',
-    '@nuxtjs/google-gtag'
+    [
+      '@nuxtjs/google-gtag',
+      {
+        id: 'UA-154683504-1',
+        config: {
+          send_page_view: false, // might be necessary to avoid duplicated page track on page reload
+          debug: true
+        }
+      }
+    ]
   ],
 
-  'google-gtag': {
-    id: 'UA-154683504-1',
-    config: {
-      send_page_view: false, // might be necessary to avoid duplicated page track on page reload
-      linker: {
-        domains: ['campzy.in']
-      }
-    }
-  },
+  // 'google-gtag': {
+  //   id: 'UA-154683504-1',
+  //   config: {
+  //     send_page_view: false, // might be necessary to avoid duplicated page track on page reload
+  //     linker: {
+  //       domains: ['campzy.in']
+  //     }
+  //   }
+  // },
 
   // router: {
   //   middleware: 'i18n'
   // },
+
+  buildModules: [
+    [
+      '@nuxtjs/google-analytics',
+      {
+        id: 'UA-154683504-1'
+      }
+    ]
+  ],
 
   sitemap: {
     path: '/sitemap.xml',
