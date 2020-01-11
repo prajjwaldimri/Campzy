@@ -47,8 +47,6 @@
         span(style="font-size:16px") &nbsp; +91-9560653378
 
     v-toolbar-items.hidden-lg-and-up
-      v-btn(icon @click="$router.push('/')")
-        v-icon home
       v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
         v-btn(icon slot='activator')
           v-icon room
@@ -81,6 +79,41 @@
                 v-list-tile-title Sign out
       v-btn(icon flat small href="tel: +919560653378" )
         v-icon call
+      v-menu(offset-y  :close-on-content-click="false" :nudge-width="200")
+        v-btn(icon flat slot='activator')
+          v-icon more_vert
+        v-card
+          v-list
+            v-list-tile(@click="$router.push('/')")
+              v-list-tile-action
+                v-icon home
+              v-list-tile-content
+                v-list-tile-title Home
+            v-divider
+            v-list-tile(@click="$router.push('/profile/wishlist')")
+              v-list-tile-action
+                v-icon add_shopping_cart
+              v-list-tile-content
+                v-list-tile-title Wishlist
+            v-divider
+            v-list-tile(@click="$router.push('/blogs')")
+              v-list-tile-action
+                v-icon menu_book
+              v-list-tile-content
+                v-list-tile-title Blogs
+            v-divider
+            v-list-tile(@click="$router.push('/trips/chopta-chandrashila')")
+              v-list-tile-action
+                v-icon directions_car
+              v-list-tile-content
+                v-list-tile-title Campzy-Trips
+            v-divider
+            v-list-tile(@click="$router.push('/addYourCamp')")
+              v-list-tile-action
+                v-icon library_add
+              v-list-tile-content
+                v-list-tile-title Add Your Camp
+            
 
 
 </template>
