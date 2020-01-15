@@ -1,10 +1,10 @@
 <template lang="pug">
   .newPage
     Navbar
-    v-container(fluid)
+    v-container.px-0(fluid)
       v-layout.pr-4(row wrap)
         v-flex(sm12 md8)
-          v-layout(row wrap)
+          v-layout.pl-4(row wrap)
             hooper.ml-2(group="group1" :vertical="true" style="height: 600px; width:200px;" :itemsToShow="4" :centerMode="true" :infiniteScroll="true")
               slide.sliderr.pb-2
                 img.slide-img(src="https://images.pexels.com/photos/717988/pexels-photo-717988.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
@@ -57,29 +57,35 @@
                     v-icon(color="red") whatshot
                   v-flex.mx-3.mt-3(xs6 md12).text-xs-center
                     v-icon(color="brown") pets
-
+      .iframe-container.mt-5
+        iframe(:src="mapUri" allowfullscreen)
       
-      
+    Footer
 </template>
 
 <script>
 import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css'
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 export default {
   name: 'NewCamp',
   components: {
     Navbar,
+    Footer,
     Hooper,
     Slide,
     HooperNavigation
   },
-  methods: {
-    setImage(index) {
-      // eslint-disable-next-line
-      console.log('index')
+  data() {
+    return {
+      mapUri: ''
     }
-  }
+  },
+  mounted() {
+    this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${28.58829},${77.216747}&zoom=18&maptype=satellite`
+  },
+  methods: {}
 }
 </script>
 
@@ -103,5 +109,21 @@ export default {
 .camp-name {
   font-family: 'Permanent Marker', cursive !important;
   text-align: center;
+}
+.iframe-container {
+  overflow: hidden;
+  padding-top: 21.25%;
+  position: relative;
+  border-style: solid;
+  border-color: rgba($color: gray, $alpha: 0.4);
+  border-width: 1px;
+  iframe {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }
 </style>
