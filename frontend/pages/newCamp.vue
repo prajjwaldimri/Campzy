@@ -59,6 +59,8 @@
                     v-icon(color="brown") pets
       .iframe-container.mt-5
         iframe(:src="mapUri" allowfullscreen)
+      v-container(fluid)
+        h1 Activities
       
     Footer
 </template>
