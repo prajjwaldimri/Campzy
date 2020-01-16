@@ -67,83 +67,137 @@
           v-card.activity-card 
             v-img(src="/activities/cave.jpg" style="height:200px") 
             v-card-title.headline Caving
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-text.text-primary(style="padding-top:0") Caving, also known as 'spelunking' and or 'potholing', is the recreational activity of exploring wild, non-man-made, cave systems.
         slide.px-2(v-if="activities.cliffJumping")
           v-card.activity-card 
             v-img(src="/activities/cliff.jpg" style="height:200px") 
             v-card-title.headline Cliff Jumping
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+            v-card-text.text-primary(style="padding-top:0") Cliff jumping is a milder version of this adventure sport. Get ready for some adrenaline pumping action as you climb up a cliff and ready yourself to jump off.  
         slide.px-2(v-if="activities.cycling")
           v-card.activity-card 
             v-img(src="/activities/cycling.jpg" style="height:200px")
             v-card-title.headline Cycling
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+            v-card-text.text-primary(style="padding-top:0") Cycling is mainly an aerobic activity, which means that your heart, blood vessels and lungs all get a workout, which will improve your overall fitness level.  
         slide.px-2(v-if="activities.hotAirBallon")
           v-card.activity-card 
             v-img(src="/activities/hotair.jpg" style="height:200px") 
             v-card-title.headline Hotair Ballon
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+            v-card-text.text-primary(style="padding-top:0") Hot air ballooning is the activity of flying hot air balloons.Since the balloon moves with the direction of the winds, the passengers will feel absolutely no wind.  
         slide.px-2(v-if="activities.kayaking")
           v-card.activity-card 
             v-img(src="/activities/kayaking.jpg" style="height:200px") 
             v-card-title.headline Kayaking
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+            v-card-text.text-primary(style="padding-top:0") Kayaking is a fun activity that involves moving through water in a small water vessel with the aid of a double-bladed paddle.
         slide.px-2(v-if="activities.paragliding")
           v-card.activity-card 
             v-img(src="/activities/paragliding.jpg" style="height:200px")
             v-card-title.headline Paragliding 
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-text.text-primary(style="padding-top:0") Paragliding is the recreational and competitive adventure sport of flying paragliders: lightweight, free-flying foot-launched glider aircraft with no rigid primary structure.
         slide.px-2(v-if="activities.waterRafting")
           v-card.activity-card 
             v-img(src="/activities/rafting.jpg" style="height:200px")
             v-card-title.headline River Rafting 
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-text.text-primary(style="padding-top:0") Rafting and white water rafting are recreational outdoor activities which use an inflatable raft to navigate a river or other body of water. 
 
         slide.px-2(v-if="activities.waterfallRappelling")
           v-card.activity-card 
             v-img(src="/activities/rappling.jpg" style="height:200px") 
             v-card-title.headline Waterfall Rappeling
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-text.text-primary(style="padding-top:0") Abseiling or Rappelling is a well-known adventure sport, Waterfall Rappelling is similar to Rappelling except here the participants slide down through a waterfall with the help of a rope.
         slide.px-2(v-if="activities.scubaDiving")
           v-card.activity-card 
             v-img(src="/activities/scuba.jpg" style="height:200px") 
             v-card-title.headline Scuba Diving
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-text.text-primary(style="padding-top:0") Scuba diving is a mode of underwater diving where the diver uses a self-contained underwater breathing apparatus (scuba).
         slide.px-2(v-if="activities.skking")
           v-card.activity-card 
             v-img(src="/activities/skiing.jpg" style="height:200px") 
-            v-card-title.headline SkKing
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-card-title.headline Skiing
+            v-card-text.text-primary(style="padding-top:0") Skiing is a means of transport using skis to glide on snow. Variations of purpose include basic transport, a recreational activity.
         slide.px-2(v-if="activities.skydiving")
           v-card.activity-card 
             v-img(src="/activities/skydiving.jpg" style="height:200px") 
             v-card-title.headline Sky Diving
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+            v-card-text.text-primary(style="padding-top:0") Skydiving also called parachuting is jumping from an aircraft and safely returning to the ground with the help of a parachute.  
         slide.px-2(v-if="activities.snorkelling")
           v-card.activity-card 
             v-img(src="/activities/snorkelling.jpg" style="height:200px") 
             v-card-title.headline Snorkelling
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+            v-card-text.text-primary(style="padding-top:0") Snorkelling is an activity in which a person swims using a mask, snorkel and swimming aids such as fins, but without using self-contained underwater breathing apparatus (SCUBA).    
         slide.px-2(v-if="activities.trekking")
           v-card.activity-card 
             v-img(src="/activities/trekking.jpg" style="height:200px") 
             v-card-title.headline Trekking
-            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.    
+            v-card-text.text-primary(style="padding-top:0") Trekking is a form of walking, undertaken with the specific purpose of exploring and enjoying the scenery.It usually takes place on trails in areas of relatively unspoiled wilderness.    
         hooper-navigation(slot="hooper-addons")
       // Mobile Activity Slider
       hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
-        slide
+        slide(v-if="activities.caving")
           v-card.activity-card 
-            v-img(src="/activities/cave.jpg")
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
-        slide
+            v-img(src="/activities/cave.jpg" style="height:200px") 
+            v-card-title.headline Caving
+            v-card-text.text-primary(style="padding-top:0") Caving, also known as 'spelunking' and or 'potholing', is the recreational activity of exploring wild, non-man-made, cave systems.
+        slide(v-if="activities.cliffJumping")
           v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
-        slide
+            v-img(src="/activities/cliff.jpg" style="height:200px") 
+            v-card-title.headline Cliff Jumping
+            v-card-text.text-primary(style="padding-top:0") Cliff jumping is a milder version of this adventure sport. Get ready for some adrenaline pumping action as you climb up a cliff and ready yourself to jump off.  
+        slide(v-if="activities.cycling")
           v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            v-img(src="/activities/cycling.jpg" style="height:200px")
+            v-card-title.headline Cycling
+            v-card-text.text-primary(style="padding-top:0") Cycling is mainly an aerobic activity, which means that your heart, blood vessels and lungs all get a workout, which will improve your overall fitness level.  
+        slide(v-if="activities.hotAirBallon")
+          v-card.activity-card 
+            v-img(src="/activities/hotair.jpg" style="height:200px") 
+            v-card-title.headline Hotair Ballon
+            v-card-text.text-primary(style="padding-top:0") Hot air ballooning is the activity of flying hot air balloons.Since the balloon moves with the direction of the winds, the passengers will feel absolutely no wind.  
+        slide(v-if="activities.kayaking")
+          v-card.activity-card 
+            v-img(src="/activities/kayaking.jpg" style="height:200px") 
+            v-card-title.headline Kayaking
+            v-card-text.text-primary(style="padding-top:0") Kayaking is a fun activity that involves moving through water in a small water vessel with the aid of a double-bladed paddle.
+        slide(v-if="activities.paragliding")
+          v-card.activity-card 
+            v-img(src="/activities/paragliding.jpg" style="height:200px")
+            v-card-title.headline Paragliding 
+            v-card-text.text-primary(style="padding-top:0") Paragliding is the recreational and competitive adventure sport of flying paragliders: lightweight, free-flying foot-launched glider aircraft with no rigid primary structure.
+        slide(v-if="activities.waterRafting")
+          v-card.activity-card 
+            v-img(src="/activities/rafting.jpg" style="height:200px")
+            v-card-title.headline River Rafting 
+            v-card-text.text-primary(style="padding-top:0") Rafting and white water rafting are recreational outdoor activities which use an inflatable raft to navigate a river or other body of water. 
+
+        slide(v-if="activities.waterfallRappelling")
+          v-card.activity-card 
+            v-img(src="/activities/rappling.jpg" style="height:200px") 
+            v-card-title.headline Waterfall Rappeling
+            v-card-text.text-primary(style="padding-top:0") Abseiling or Rappelling is a well-known adventure sport, Waterfall Rappelling is similar to Rappelling except here the participants slide down through a waterfall with the help of a rope.
+        slide(v-if="activities.scubaDiving")
+          v-card.activity-card 
+            v-img(src="/activities/scuba.jpg" style="height:200px") 
+            v-card-title.headline Scuba Diving
+            v-card-text.text-primary(style="padding-top:0") Scuba diving is a mode of underwater diving where the diver uses a self-contained underwater breathing apparatus (scuba).
+        slide(v-if="activities.skking")
+          v-card.activity-card 
+            v-img(src="/activities/skiing.jpg" style="height:200px") 
+            v-card-title.headline Skiing
+            v-card-text.text-primary(style="padding-top:0") Skiing is a means of transport using skis to glide on snow. Variations of purpose include basic transport, a recreational activity.
+        slide(v-if="activities.skydiving")
+          v-card.activity-card 
+            v-img(src="/activities/skydiving.jpg" style="height:200px") 
+            v-card-title.headline Sky Diving
+            v-card-text.text-primary(style="padding-top:0") Skydiving also called parachuting is jumping from an aircraft and safely returning to the ground with the help of a parachute.  
+        slide(v-if="activities.snorkelling")
+          v-card.activity-card 
+            v-img(src="/activities/snorkelling.jpg" style="height:200px") 
+            v-card-title.headline Snorkelling
+            v-card-text.text-primary(style="padding-top:0") Snorkelling is an activity in which a person swims using a mask, snorkel and swimming aids such as fins, but without using self-contained underwater breathing apparatus (SCUBA).    
+        slide(v-if="activities.trekking")
+          v-card.activity-card 
+            v-img(src="/activities/trekking.jpg" style="height:200px") 
+            v-card-title.headline Trekking
+            v-card-text.text-primary(style="padding-top:0") Trekking is a form of walking, undertaken with the specific purpose of exploring and enjoying the scenery.It usually takes place on trails in areas of relatively unspoiled wilderness.
         hooper-pagination(slot="hooper-addons")   
     v-divider.mt-4
     v-container.mt-4(fluid)
