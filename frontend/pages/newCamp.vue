@@ -38,7 +38,7 @@
               img.slide-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
             hooper-pagination(slot="hooper-addons")
         v-flex(sm12 md5)
-          v-layout.px-5.lightbox.justify-center(column fill-height)
+          v-layout.lightbox.justify-center(column fill-height)
             .d-flex.image-flex
               .d-flex.align-self-center
                 h1.display-3.camp-name Camp Name
@@ -76,34 +76,34 @@
         h1.page-headings Camp's Activities
         hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" :infiniteScroll="true" )
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.   
           hooper-navigation(slot="hooper-addons")
         // Mobile Activity Slider
         hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
           slide
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
           slide
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
           slide
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
           hooper-pagination(slot="hooper-addons")   
@@ -112,7 +112,7 @@
         h1.page-headings Our Customers Reviews
         v-carousel(hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
           v-carousel-item(v-for="(slide,i) in slides" :key="i")
-            v-layout(column style="align-items: center;width:65%; margin: 4rem auto auto auto;")
+            v-layout.review-layout(column)
               v-avatar(color="orange" size="62")
                 span AB
               h1 Ayush Bahuguna
@@ -121,24 +121,39 @@
       v-divider.mt-4
       v-container.mt-4(fluid)
         h1.page-headings Similar Camps
-        hooper.mt-5.activities-slider(:itemsToShow="4" :infiniteScroll="true" )
+        hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" :infiniteScroll="true" )
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
           slide.px-2
-            v-card(max-width="400") 
+            v-card.activity-card 
               v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
               v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.   
           hooper-navigation(slot="hooper-addons")
+        // Mobile Similar Camps Slider
+        hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
+          slide
+            v-card.activity-card 
+              v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+              v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+          slide
+            v-card.activity-card 
+              v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+              v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+          slide
+            v-card.activity-card 
+              v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+              v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+          hooper-pagination(slot="hooper-addons")
              
     Footer
 </template>
@@ -194,6 +209,13 @@ export default {
     margin-top: auto;
   }
 }
+
+.lightbox {
+  padding: 0rem 2.5rem;
+  @media screen and (max-width: 960px) {
+    padding: 0rem 1.5rem;
+  }
+}
 .small-slider {
   height: 100%;
   width: 18%;
@@ -216,6 +238,10 @@ export default {
   border-style: solid;
   border-color: rgba($color: gray, $alpha: 0.4);
   border-width: 1px;
+  @media screen and (max-width: 960px) {
+    height: 280px;
+  }
+
   iframe {
     border: 0;
     height: 100%;
@@ -229,6 +255,14 @@ export default {
 .activities-slider {
   width: 100%;
   height: 100%;
+}
+.activity-card {
+  width: 400px;
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    padding: 0rem 1rem;
+    margin-top: 2rem;
+  }
 }
 
 .page-headings {
@@ -244,7 +278,17 @@ export default {
   color: gray;
   font-weight: 400;
   @media screen and (max-width: 960px) {
-    font-size: 14px;
+    font-size: 15px;
+  }
+}
+
+.review-layout {
+  align-items: center;
+  width: 65%;
+  margin: 4rem auto auto auto;
+  @media screen and (max-width: 960px) {
+    margin: 4rem 0rem;
+    width: 100%;
   }
 }
 </style>

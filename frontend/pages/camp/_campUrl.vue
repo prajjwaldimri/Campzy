@@ -1,182 +1,311 @@
 <template lang="pug">
   .camp-view
-    navbar(:app="true" :absolute="true" :dark="true")
+    navbar(:dark="true")
 
     SearchImagesDialog
     ReviewCampDialog
+    v-container.px-0(fluid)
+      v-layout(row wrap)
+        v-flex(sm12 md7)
+          v-layout.hidden-sm-and-down.pl-4(row style="height:100%")
+            hooper.small-slider.ml-2(group="group1" :vertical="true" :itemsToShow="4" :centerMode="true" :infiniteScroll="true")
+              slide.pb-2(v-for="image in camp.images" :key="image")
+                img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+              hooper-navigation( slot="hooper-addons")
 
-    v-responsive(height="90vh")
-      v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center" v-if="camp.heroImage"
-      :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + camp.heroImage")
-        v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
-          .d-flex.image-flex
-            .d-flex.align-self-center
-              h1.display-4.camp-name.hidden-sm-and-down {{camp.name}}
-              h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
-
-            .d-flex.align-self-start.pb-4.px-4(style='width:100%')
-              span.pt-1(style='width:100%')
-                v-icon(dark color="green") star
-                span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
-                span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
-              .d-flex.align-self-end
-                v-btn(v-if='!isInWishList' dark @click='addToWishList(camp.id)')
-                  span Add To Wishlist
-                  v-icon(color='green').pl-1 bookmarks
-                v-btn(v-else dark @click='removeFromWishList(camp.id)')
-                  span Remove from Wishlist
-                  v-icon(color='error').pl-1 close
-    v-responsive(height="40vh").hidden-sm-and-down
-      v-card(color="grey darken-4" flat height="100%" tile
-      style="align-items: center; display: flex")
-        tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
-        :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
-        :autoplay="true" :autoplay-button-output="false" v-if="camp.images" :autoHeight="true")
-          v-responsive(v-for="image in camp.images" :key="image")
-            v-card
-              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-      //- For Mobile
-    v-responsive(height="40vh").hidden-md-and-up
-      v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
-        tiny-slider(:mouse-drag="true" :loop="true" items="1"
-        :nav="false" :controls="false" :lazyload="true" v-if="camp.images"
-        :autoplay="true" :autoplay-button-output="false")
-          v-responsive(height="50vh" v-for="image in camp.images" :key="image")
-            v-card
-              v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-
-    v-layout(row wrap style="min-height: 90vh").py-4
-      v-flex(sm12 md5 offset-md1).py-4.content-flex
-        h1.display-1.pb-3 About {{camp.name}}
-        v-divider
-        p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
-
-        h1.headline.mt-5.px-1.font-weight-bold Amenities
-        v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
-          v-layout(row wrap)
-            v-flex(xs6 md3).text-xs-center
-              v-icon wb_cloudy
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
-              .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
-
-            v-flex(xs6 md3 v-show="camp.amenities.bonfire").text-xs-center
-              v-icon(color="red") whatshot
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Bonfire
-           
-
-            v-flex(xs6 md3 v-show="camp.amenities.petsAllowed").text-xs-center
-              v-icon(color="brown") pets
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Pets Allowed
-            
-
-            v-flex(xs6 md3 v-show="camp.amenities.chargingPoints").text-xs-center
-              v-icon(color="blue") battery_charging_full
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Charging Points
-            
-
-            v-flex(xs6 md3 v-show="camp.amenities.mobileConnectivity").text-xs-center
-              v-icon(color="blue") signal_cellular_4_bar
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Mobile Connectivity
-            
-
-            v-flex(xs6 md3 v-show="camp.amenities.washRoomAttached").text-xs-center
-              v-icon(color="pink") meeting_room
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
-            
-
-            v-flex(xs6 md3 v-show="camp.amenities.mealsInclude").text-xs-center
-              v-icon(color="orange darken-4") room_service
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
-           
-
-            v-flex(xs6 md3 v-show="camp.amenities.hotWater").text-xs-center
-              v-icon(color="red darken-4") hot_tub
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Water
-           
-
-
-        h1.headline.mt-5.px-1.font-weight-bold Location
-        .iframe-container.mt-4
-          iframe(v-if="camp" :src="mapUri" allowfullscreen)
-
-        h1.headline.mt-5.pt-3.px-1.font-weight-bold Nearby Attractions
-        v-container(grid-list-lg fluid v-if="camp.nearByActivities").mt-2.px-0
-          v-layout(row wrap)
-            v-flex(xs6 md3 v-show="camp.nearByActivities.waterRafting").text-xs-center
-              v-img.activities_icon(src="/vectors/rafting.svg" height="24" width="24") 
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Water Rafting
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.kayaking").text-xs-center
-              v-img.activities_icon(src="/vectors/kayaking.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Kayaking
-           
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.skiing").text-xs-center
-              v-img.activities_icon(src="/vectors/skking.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Skiing
-           
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.waterfallRappelling").text-xs-center
-              v-img.activities_icon(src="/vectors/waterfall.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Waterfall Rappel
-           
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.skydiving").text-xs-center
-              v-img.activities_icon(src="/vectors/skydiving.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Sky Diving
-           
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.scubaDiving").text-xs-center
-              v-img.activities_icon(src="/vectors/scuba.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Scuba Diving
-           
-
-            v-flex(xs6 md3 v-show="camp.nearByActivities.hotAirBallon").text-xs-center
-              v-img.activities_icon(src="/vectors/hotair.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Air Ballon
-           
-            v-flex(xs6 md3 v-show="camp.nearByActivities.caving").text-xs-center
-              v-img.activities_icon(src="/vectors/caving.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Caving
+            hooper.large-slider.ml-3(group="group1" :itemsToShow="1" :infiniteScroll="true")
+              slide(v-for="image in camp.images" :key="image")
+                img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+              hooper-pagination(slot="hooper-addons")
+              
           
-            v-flex(xs6 md3 v-show="camp.nearByActivities.trekking").text-xs-center
-              v-img.activities_icon(src="/vectors/trekking.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Trekking
-          
-            v-flex(xs6 md3 v-show="camp.nearByActivities.snorkelling").text-xs-center
-              v-img.activities_icon(src="/vectors/snorkel.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Snorkelling
-           
-            v-flex(xs6 md3 v-show="camp.nearByActivities.cliffJumping").text-xs-center
-              v-img.activities_icon(src="/vectors/cliff.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cliff Jumping
-           
-            v-flex(xs6 md3 v-show="camp.nearByActivities.paragliding").text-xs-center
-              v-img.activities_icon(src="/vectors/paragliding.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Paragliding
+          // Mobile Slider
+          hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
+            slide(v-for="image in camp.images" :key="image")
+              img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
             
-            v-flex(xs6 md3 v-show="camp.nearByActivities.cycling").text-xs-center
-              v-img.activities_icon(src="/vectors/bicycle.svg" height="24" width="24")
-              .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cycling
-           
-            
-
-      v-divider(inset vertical).mx-3
-
-      v-flex(sm12 md5).py-4.pl-4
-        h3.display-1.pb-3 Recent Opinions
-        v-divider
-        v-card(v-for="review in reviews" :key="review").ma-4.pa-4.comment-card
-          v-layout(row wrap)
-            v-flex(md2 sm3)
-              v-avatar(color="red")
-                img(:src="'https://ui-avatars.com/api/?name=' + review.user.name")
-            v-flex(md6 sm7)
-              span.subheading {{review.comment}}
-            v-flex(md3 sm12 offset-md1)
+            hooper-pagination(slot="hooper-addons")
+        v-flex(sm12 md5)
+          v-layout.lightbox.justify-center(column fill-height)
+            .d-flex.image-flex
+              .d-flex.align-self-center
+                h1.display-3.camp-name {{camp.name}}
+              .d-flex.align-self-center
+                h2.camp-name
+                  v-icon where_to_vote
+                  span.ml-1 {{camp.location}}
+              .d-flex.align-self-center
+                v-rating()
+            .d-flex.mt-5
               v-layout(column)
-                span.subtitle.grey--text.text--darken-2.ml-1 {{review.createdAt | moment("from", "now")}}
-                v-rating(readonly small dense v-model="review.stars").mt-1
+                h2 Description
+                p.pt-3(style="text-align: justify") {{camp.longDescription}}
+                .d-flex.justify-center
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="red") whatshot
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="brown") pets
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="red") whatshot
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="brown") pets
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="red") whatshot
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="brown") pets
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="red") whatshot
+                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
+                    v-icon(color="brown") pets  
+    .iframe-container.mt-5
+      iframe(:src="mapUri" allowfullscreen)
+    v-divider.mt-4
+    v-container.mt-4(fluid)
+      h1.page-headings Nearby Activities
+      hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" )
+        slide.px-2(v-if="activities.caving")
+          v-card.activity-card 
+            v-img(src="/activities/cave.jpg" style="height:200px") 
+            v-card-title.headline Caving
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2(v-if="activities.cliffJumping")
+          v-card.activity-card 
+            v-img(src="/activities/cliff.jpg" style="height:200px") 
+            v-card-title.headline Cliff Jumping
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2(v-if="activities.cycling")
+          v-card.activity-card 
+            v-img(src="/activities/cycling.jpg" style="height:200px")
+            v-card-title.headline Cycling
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2(v-if="activities.hotAirBallon")
+          v-card.activity-card 
+            v-img(src="/activities/hotair.jpg" style="height:200px") 
+            v-card-title.headline Hotair Ballon
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2(v-if="activities.kayaking")
+          v-card.activity-card 
+            v-img(src="/activities/kayaking.jpg" style="height:200px") 
+            v-card-title.headline Kayaking
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+        slide.px-2(v-if="activities.paragliding")
+          v-card.activity-card 
+            v-img(src="/activities/paragliding.jpg" style="height:200px")
+            v-card-title.headline Paragliding 
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2(v-if="activities.waterRafting")
+          v-card.activity-card 
+            v-img(src="/activities/rafting.jpg" style="height:200px")
+            v-card-title.headline River Rafting 
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+
+        slide.px-2(v-if="activities.waterfallRappelling")
+          v-card.activity-card 
+            v-img(src="/activities/rappling.jpg" style="height:200px") 
+            v-card-title.headline Waterfall Rappeling
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2(v-if="activities.scubaDiving")
+          v-card.activity-card 
+            v-img(src="/activities/scuba.jpg" style="height:200px") 
+            v-card-title.headline Scuba Diving
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2(v-if="activities.skking")
+          v-card.activity-card 
+            v-img(src="/activities/skiing.jpg" style="height:200px") 
+            v-card-title.headline SkKing
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2(v-if="activities.skydiving")
+          v-card.activity-card 
+            v-img(src="/activities/skydiving.jpg" style="height:200px") 
+            v-card-title.headline Sky Diving
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2(v-if="activities.snorkelling")
+          v-card.activity-card 
+            v-img(src="/activities/snorkelling.jpg" style="height:200px") 
+            v-card-title.headline Snorkelling
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2(v-if="activities.trekking")
+          v-card.activity-card 
+            v-img(src="/activities/trekking.jpg" style="height:200px") 
+            v-card-title.headline Trekking
+            v-card-text.text-primary(style="padding-top:0") Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.    
+        hooper-navigation(slot="hooper-addons")
+      // Mobile Activity Slider
+      hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
+        slide
+          v-card.activity-card 
+            v-img(src="/activities/cave.jpg")
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+        slide
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+        slide
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        hooper-pagination(slot="hooper-addons")   
+    v-divider.mt-4
+    v-container.mt-4(fluid)
+      h1.page-headings Our Customers Reviews
+      v-carousel(hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
+        v-carousel-item(v-for="(slide,i) in slides" :key="i")
+          v-layout.review-layout(column)
+            v-avatar(color="orange" size="62")
+              span AB
+            h1 Ayush Bahuguna
+            v-rating()
+            p.text-xs-center.review-para Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    v-divider.mt-4
+    v-container.mt-4(fluid)
+      h1.page-headings Similar Camps
+      hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" :infiniteScroll="true" )
+        slide.px-2
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        slide.px-2
+          v-card.activity-card
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2
+          v-card.activity-card
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
+        slide.px-2
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.   
+        hooper-navigation(slot="hooper-addons")
+      // Mobile Similar Camps Slider
+      hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
+        slide
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+        slide
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
+        slide
+          v-card.activity-card 
+            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
+            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        hooper-pagination(slot="hooper-addons")
+
+    //- v-responsive(height="90vh")
+    //-   v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center" v-if="camp.heroImage"
+    //-   :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + camp.heroImage")
+    //-     v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
+    //-       .d-flex.image-flex
+    //-         .d-flex.align-self-center
+    //-           h1.display-4.camp-name.hidden-sm-and-down {{camp.name}}
+    //-           h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
+
+    //-         .d-flex.align-self-start.pb-4.px-4(style='width:100%')
+    //-           span.pt-1(style='width:100%')
+    //-             v-icon(dark color="green") star
+    //-             span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
+    //-             span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
+    //-           .d-flex.align-self-end
+    //-             v-btn(v-if='!isInWishList' dark @click='addToWishList(camp.id)')
+    //-               span Add To Wishlist
+    //-               v-icon(color='green').pl-1 bookmarks
+    //-             v-btn(v-else dark @click='removeFromWishList(camp.id)')
+    //-               span Remove from Wishlist
+    //-               v-icon(color='error').pl-1 close
+    //- v-responsive(height="40vh").hidden-sm-and-down
+    //-   v-card(color="grey darken-4" flat height="100%" tile
+    //-   style="align-items: center; display: flex")
+    //-     tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
+    //-     :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
+    //-     :autoplay="true" :autoplay-button-output="false" v-if="camp.images" :autoHeight="true")
+    //-       v-responsive(v-for="image in camp.images" :key="image")
+    //-         v-card
+    //-           v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+    //-   //- For Mobile
+    //- v-responsive(height="40vh").hidden-md-and-up
+    //-   v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
+    //-     tiny-slider(:mouse-drag="true" :loop="true" items="1"
+    //-     :nav="false" :controls="false" :lazyload="true" v-if="camp.images"
+    //-     :autoplay="true" :autoplay-button-output="false")
+    //-       v-responsive(height="50vh" v-for="image in camp.images" :key="image")
+    //-         v-card
+    //-           v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+
+    //- v-layout(row wrap style="min-height: 90vh").py-4
+    //-   v-flex(sm12 md5 offset-md1).py-4.content-flex
+    //-     h1.display-1.pb-3 About {{camp.name}}
+    //-     v-divider
+    //-     p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
+
+    //-     h1.headline.mt-5.px-1.font-weight-bold Amenities
+    //-     v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
+    //-       v-layout(row wrap)
+    //-         v-flex(xs6 md3).text-xs-center
+    //-           v-icon wb_cloudy
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
+    //-           .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.bonfire").text-xs-center
+    //-           v-icon(color="red") whatshot
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Bonfire
+           
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.petsAllowed").text-xs-center
+    //-           v-icon(color="brown") pets
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Pets Allowed
+            
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.chargingPoints").text-xs-center
+    //-           v-icon(color="blue") battery_charging_full
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Charging Points
+            
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.mobileConnectivity").text-xs-center
+    //-           v-icon(color="blue") signal_cellular_4_bar
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Mobile Connectivity
+            
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.washRoomAttached").text-xs-center
+    //-           v-icon(color="pink") meeting_room
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
+            
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.mealsInclude").text-xs-center
+    //-           v-icon(color="orange darken-4") room_service
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
+           
+
+    //-         v-flex(xs6 md3 v-show="camp.amenities.hotWater").text-xs-center
+    //-           v-icon(color="red darken-4") hot_tub
+    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Water
+           
+
+
+    //-     h1.headline.mt-5.px-1.font-weight-bold Location
+    //-     .iframe-container.mt-4
+    //-       iframe(v-if="camp" :src="mapUri" allowfullscreen)
+
+               
+            
+
+    //-   v-divider(inset vertical).mx-3
+
+    //-   v-flex(sm12 md5).py-4.pl-4
+    //-     h3.display-1.pb-3 Recent Opinions
+    //-     v-divider
+    //-     v-card(v-for="review in reviews" :key="review").ma-4.pa-4.comment-card
+    //-       v-layout(row wrap)
+    //-         v-flex(md2 sm3)
+    //-           v-avatar(color="red")
+    //-             img(:src="'https://ui-avatars.com/api/?name=' + review.user.name")
+    //-         v-flex(md6 sm7)
+    //-           span.subheading {{review.comment}}
+    //-         v-flex(md3 sm12 offset-md1)
+    //-           v-layout(column)
+    //-             span.subtitle.grey--text.text--darken-2.ml-1 {{review.createdAt | moment("from", "now")}}
+    //-             v-rating(readonly small dense v-model="review.stars").mt-1
 
 
     //- Bottom Bar
@@ -213,6 +342,13 @@
 /* global Razorpay */
 // import VueTinySlider from 'vue-tiny-slider'
 import { GraphQLClient, request } from 'graphql-request'
+import {
+  Hooper,
+  Slide,
+  Navigation as HooperNavigation,
+  Pagination as HooperPagination
+} from 'hooper'
+import 'hooper/dist/hooper.css'
 import navbar from '../../components/Navbar.vue'
 import SearchImagesDialog from '../../components/SearchImagesDialog.vue'
 import Footer from '../../components/Footer.vue'
@@ -237,6 +373,10 @@ if (process.client) {
 
 export default {
   components: {
+    Hooper,
+    Slide,
+    HooperNavigation,
+    HooperPagination,
     navbar,
     'tiny-slider': VueTinySlider.tiny,
     SearchImagesDialog,
@@ -263,7 +403,9 @@ export default {
       tents: [],
       user: {},
       userWishList: [],
-      isInWishList: false
+      isInWishList: false,
+      slides: ['First', 'Second', 'Third', 'Fourth', 'Fifth'],
+      activities: []
     }
   },
   metaInfo() {
@@ -345,6 +487,9 @@ export default {
       request('https://api.campzy.in/graphql', getCampByUrl, variables)
         .then(data => {
           this.camp = data.campUser
+          // eslint-disable-next-line
+          console.log(this.camp.nearByActivities)
+          this.activities = this.camp.nearByActivities
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.lat},${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
         })
         .catch(() => {
@@ -665,23 +810,6 @@ export default {
   }
 }
 
-.image-flex {
-  flex-direction: column;
-  align-items: center;
-  height: 90%;
-  justify-content: center;
-  & > * {
-    flex-grow: 0 !important;
-    margin-top: auto;
-  }
-}
-
-.camp-name {
-  font-family: 'Permanent Marker', cursive !important;
-  text-shadow: 0px 0px 20px black;
-  text-align: center;
-}
-
 .comment-card {
   @media screen and (max-width: 960px) {
     margin-left: 0 !important;
@@ -705,5 +833,106 @@ export default {
 .activities_icon {
   margin-left: auto;
   margin-right: auto;
+}
+
+// New Camp Page Style
+
+.slide-img {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+}
+
+.image-flex {
+  flex-direction: column;
+  align-items: center;
+  // height: 90%;
+  justify-content: center;
+  & > * {
+    flex-grow: 0 !important;
+    margin-top: auto;
+  }
+}
+
+.lightbox {
+  padding: 0rem 2.5rem;
+  @media screen and (max-width: 960px) {
+    padding: 0rem 1.5rem;
+  }
+}
+.small-slider {
+  height: 100%;
+  width: 18%;
+}
+.large-slider {
+  height: 100%;
+  width: 82%;
+  @media screen and (max-width: 960px) {
+    width: 100%;
+  }
+}
+.camp-name {
+  font-family: 'Permanent Marker', cursive !important;
+  text-align: center;
+}
+.iframe-container {
+  overflow: hidden;
+  padding-top: 21.25%;
+  position: relative;
+  border-style: solid;
+  border-color: rgba($color: gray, $alpha: 0.4);
+  border-width: 1px;
+  @media screen and (max-width: 960px) {
+    height: 280px;
+  }
+
+  iframe {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.activities-slider {
+  width: 100%;
+  height: 100%;
+}
+.activity-card {
+  width: 400px;
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    padding: 0rem 1rem;
+    margin-top: 2rem;
+  }
+}
+
+.page-headings {
+  font-size: 40px;
+  text-align: center;
+  @media screen and (max-width: 960px) {
+    font-size: 30px;
+  }
+}
+
+.review-para {
+  font-size: 22px;
+  color: gray;
+  font-weight: 400;
+  @media screen and (max-width: 960px) {
+    font-size: 15px;
+  }
+}
+
+.review-layout {
+  align-items: center;
+  width: 65%;
+  margin: 4rem auto auto auto;
+  @media screen and (max-width: 960px) {
+    margin: 4rem 0rem;
+    width: 100%;
+  }
 }
 </style>
