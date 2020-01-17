@@ -25,342 +25,182 @@
               img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
             
             hooper-pagination(slot="hooper-addons")
-        v-flex(sm12 md5)
+        v-flex(sm12 md5 style="position:relative")
           v-layout.lightbox.justify-center(column fill-height)
             .d-flex.image-flex
               .d-flex.align-self-center
                 h1.display-3.camp-name {{camp.name}}
               .d-flex.align-self-center
-                h2.camp-name
+                h2.gray-text.text-xs-bold
                   v-icon where_to_vote
                   span.ml-1 {{camp.location}}
               .d-flex.align-self-center
-                v-rating()
+                v-rating(v-model="camp.averageRating" readonly)
             .d-flex.mt-5
               v-layout(column)
                 h2 Description
                 p.pt-3(style="text-align: justify") {{camp.longDescription}}
-                .d-flex.justify-center
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="red") whatshot
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="brown") pets
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="red") whatshot
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="brown") pets
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="red") whatshot
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="brown") pets
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="red") whatshot
-                  v-flex.mx-1.mt-3(xs1 md1).text-xs-center
-                    v-icon(color="brown") pets  
+            .d-flex.align-self-end(style="position:absolute; top: 100%;")
+              v-btn(v-if='!isInWishList' dark @click='addToWishList(camp.id)')
+                span Add To Wishlist
+                v-icon(color='green').pl-1 bookmarks
+              v-btn(v-else dark @click='removeFromWishList(camp.id)')
+                span Remove from Wishlist
+                v-icon(color='error').pl-1 close
+            
+                
     .iframe-container.mt-5
       iframe(:src="mapUri" allowfullscreen)
     v-divider.mt-4
     v-container.mt-4(fluid)
-      h1.page-headings Nearby Activities
-      hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" )
-        slide.px-2(v-if="activities.caving")
-          v-card.activity-card 
-            v-img(src="/activities/cave.jpg" style="height:200px") 
-            v-card-title.headline Caving
-            v-card-text.text-primary(style="padding-top:0") Caving, also known as 'spelunking' and or 'potholing', is the recreational activity of exploring wild, non-man-made, cave systems.
-        slide.px-2(v-if="activities.cliffJumping")
-          v-card.activity-card 
-            v-img(src="/activities/cliff.jpg" style="height:200px") 
-            v-card-title.headline Cliff Jumping
-            v-card-text.text-primary(style="padding-top:0") Cliff jumping is a milder version of this adventure sport. Get ready for some adrenaline pumping action as you climb up a cliff and ready yourself to jump off.  
-        slide.px-2(v-if="activities.cycling")
-          v-card.activity-card 
-            v-img(src="/activities/cycling.jpg" style="height:200px")
-            v-card-title.headline Cycling
-            v-card-text.text-primary(style="padding-top:0") Cycling is mainly an aerobic activity, which means that your heart, blood vessels and lungs all get a workout, which will improve your overall fitness level.  
-        slide.px-2(v-if="activities.hotAirBallon")
-          v-card.activity-card 
-            v-img(src="/activities/hotair.jpg" style="height:200px") 
-            v-card-title.headline Hotair Ballon
-            v-card-text.text-primary(style="padding-top:0") Hot air ballooning is the activity of flying hot air balloons.Since the balloon moves with the direction of the winds, the passengers will feel absolutely no wind.  
-        slide.px-2(v-if="activities.kayaking")
-          v-card.activity-card 
-            v-img(src="/activities/kayaking.jpg" style="height:200px") 
-            v-card-title.headline Kayaking
-            v-card-text.text-primary(style="padding-top:0") Kayaking is a fun activity that involves moving through water in a small water vessel with the aid of a double-bladed paddle.
-        slide.px-2(v-if="activities.paragliding")
-          v-card.activity-card 
-            v-img(src="/activities/paragliding.jpg" style="height:200px")
-            v-card-title.headline Paragliding 
-            v-card-text.text-primary(style="padding-top:0") Paragliding is the recreational and competitive adventure sport of flying paragliders: lightweight, free-flying foot-launched glider aircraft with no rigid primary structure.
-        slide.px-2(v-if="activities.waterRafting")
-          v-card.activity-card 
-            v-img(src="/activities/rafting.jpg" style="height:200px")
-            v-card-title.headline River Rafting 
-            v-card-text.text-primary(style="padding-top:0") Rafting and white water rafting are recreational outdoor activities which use an inflatable raft to navigate a river or other body of water. 
+      v-layout.justify-center(row wrap)
+        v-flex(sm12 md5)
+          v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
+            h1.text-xs-center.page-headings Amenities
+            v-layout.mt-5(row wrap)
+              v-flex(xs4 md3).text-xs-center
+                v-icon wb_cloudy
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
+                .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
 
-        slide.px-2(v-if="activities.waterfallRappelling")
-          v-card.activity-card 
-            v-img(src="/activities/rappling.jpg" style="height:200px") 
-            v-card-title.headline Waterfall Rappeling
-            v-card-text.text-primary(style="padding-top:0") Abseiling or Rappelling is a well-known adventure sport, Waterfall Rappelling is similar to Rappelling except here the participants slide down through a waterfall with the help of a rope.
-        slide.px-2(v-if="activities.scubaDiving")
-          v-card.activity-card 
-            v-img(src="/activities/scuba.jpg" style="height:200px") 
-            v-card-title.headline Scuba Diving
-            v-card-text.text-primary(style="padding-top:0") Scuba diving is a mode of underwater diving where the diver uses a self-contained underwater breathing apparatus (scuba).
-        slide.px-2(v-if="activities.skking")
-          v-card.activity-card 
-            v-img(src="/activities/skiing.jpg" style="height:200px") 
-            v-card-title.headline Skiing
-            v-card-text.text-primary(style="padding-top:0") Skiing is a means of transport using skis to glide on snow. Variations of purpose include basic transport, a recreational activity.
-        slide.px-2(v-if="activities.skydiving")
-          v-card.activity-card 
-            v-img(src="/activities/skydiving.jpg" style="height:200px") 
-            v-card-title.headline Sky Diving
-            v-card-text.text-primary(style="padding-top:0") Skydiving also called parachuting is jumping from an aircraft and safely returning to the ground with the help of a parachute.  
-        slide.px-2(v-if="activities.snorkelling")
-          v-card.activity-card 
-            v-img(src="/activities/snorkelling.jpg" style="height:200px") 
-            v-card-title.headline Snorkelling
-            v-card-text.text-primary(style="padding-top:0") Snorkelling is an activity in which a person swims using a mask, snorkel and swimming aids such as fins, but without using self-contained underwater breathing apparatus (SCUBA).    
-        slide.px-2(v-if="activities.trekking")
-          v-card.activity-card 
-            v-img(src="/activities/trekking.jpg" style="height:200px") 
-            v-card-title.headline Trekking
-            v-card-text.text-primary(style="padding-top:0") Trekking is a form of walking, undertaken with the specific purpose of exploring and enjoying the scenery.It usually takes place on trails in areas of relatively unspoiled wilderness.    
-        hooper-navigation(slot="hooper-addons")
-      // Mobile Activity Slider
-      hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
-        slide(v-if="activities.caving")
-          v-card.activity-card 
-            v-img(src="/activities/cave.jpg" style="height:200px") 
-            v-card-title.headline Caving
-            v-card-text.text-primary(style="padding-top:0") Caving, also known as 'spelunking' and or 'potholing', is the recreational activity of exploring wild, non-man-made, cave systems.
-        slide(v-if="activities.cliffJumping")
-          v-card.activity-card 
-            v-img(src="/activities/cliff.jpg" style="height:200px") 
-            v-card-title.headline Cliff Jumping
-            v-card-text.text-primary(style="padding-top:0") Cliff jumping is a milder version of this adventure sport. Get ready for some adrenaline pumping action as you climb up a cliff and ready yourself to jump off.  
-        slide(v-if="activities.cycling")
-          v-card.activity-card 
-            v-img(src="/activities/cycling.jpg" style="height:200px")
-            v-card-title.headline Cycling
-            v-card-text.text-primary(style="padding-top:0") Cycling is mainly an aerobic activity, which means that your heart, blood vessels and lungs all get a workout, which will improve your overall fitness level.  
-        slide(v-if="activities.hotAirBallon")
-          v-card.activity-card 
-            v-img(src="/activities/hotair.jpg" style="height:200px") 
-            v-card-title.headline Hotair Ballon
-            v-card-text.text-primary(style="padding-top:0") Hot air ballooning is the activity of flying hot air balloons.Since the balloon moves with the direction of the winds, the passengers will feel absolutely no wind.  
-        slide(v-if="activities.kayaking")
-          v-card.activity-card 
-            v-img(src="/activities/kayaking.jpg" style="height:200px") 
-            v-card-title.headline Kayaking
-            v-card-text.text-primary(style="padding-top:0") Kayaking is a fun activity that involves moving through water in a small water vessel with the aid of a double-bladed paddle.
-        slide(v-if="activities.paragliding")
-          v-card.activity-card 
-            v-img(src="/activities/paragliding.jpg" style="height:200px")
-            v-card-title.headline Paragliding 
-            v-card-text.text-primary(style="padding-top:0") Paragliding is the recreational and competitive adventure sport of flying paragliders: lightweight, free-flying foot-launched glider aircraft with no rigid primary structure.
-        slide(v-if="activities.waterRafting")
-          v-card.activity-card 
-            v-img(src="/activities/rafting.jpg" style="height:200px")
-            v-card-title.headline River Rafting 
-            v-card-text.text-primary(style="padding-top:0") Rafting and white water rafting are recreational outdoor activities which use an inflatable raft to navigate a river or other body of water. 
+              v-flex(xs4 md3 v-show="camp.amenities.bonfire").text-xs-center
+                v-icon(color="red") whatshot
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Bonfire
+              
 
-        slide(v-if="activities.waterfallRappelling")
-          v-card.activity-card 
-            v-img(src="/activities/rappling.jpg" style="height:200px") 
-            v-card-title.headline Waterfall Rappeling
-            v-card-text.text-primary(style="padding-top:0") Abseiling or Rappelling is a well-known adventure sport, Waterfall Rappelling is similar to Rappelling except here the participants slide down through a waterfall with the help of a rope.
-        slide(v-if="activities.scubaDiving")
-          v-card.activity-card 
-            v-img(src="/activities/scuba.jpg" style="height:200px") 
-            v-card-title.headline Scuba Diving
-            v-card-text.text-primary(style="padding-top:0") Scuba diving is a mode of underwater diving where the diver uses a self-contained underwater breathing apparatus (scuba).
-        slide(v-if="activities.skking")
-          v-card.activity-card 
-            v-img(src="/activities/skiing.jpg" style="height:200px") 
-            v-card-title.headline Skiing
-            v-card-text.text-primary(style="padding-top:0") Skiing is a means of transport using skis to glide on snow. Variations of purpose include basic transport, a recreational activity.
-        slide(v-if="activities.skydiving")
-          v-card.activity-card 
-            v-img(src="/activities/skydiving.jpg" style="height:200px") 
-            v-card-title.headline Sky Diving
-            v-card-text.text-primary(style="padding-top:0") Skydiving also called parachuting is jumping from an aircraft and safely returning to the ground with the help of a parachute.  
-        slide(v-if="activities.snorkelling")
-          v-card.activity-card 
-            v-img(src="/activities/snorkelling.jpg" style="height:200px") 
-            v-card-title.headline Snorkelling
-            v-card-text.text-primary(style="padding-top:0") Snorkelling is an activity in which a person swims using a mask, snorkel and swimming aids such as fins, but without using self-contained underwater breathing apparatus (SCUBA).    
-        slide(v-if="activities.trekking")
-          v-card.activity-card 
-            v-img(src="/activities/trekking.jpg" style="height:200px") 
-            v-card-title.headline Trekking
-            v-card-text.text-primary(style="padding-top:0") Trekking is a form of walking, undertaken with the specific purpose of exploring and enjoying the scenery.It usually takes place on trails in areas of relatively unspoiled wilderness.
-        hooper-pagination(slot="hooper-addons")   
+              v-flex(xs4 md3 v-show="camp.amenities.petsAllowed").text-xs-center
+                v-icon(color="brown") pets
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Pets Allowed
+              
+
+              v-flex(xs4 md3 v-show="camp.amenities.chargingPoints").text-xs-center
+                v-icon(color="blue") battery_charging_full
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Charging Points
+              
+
+              v-flex(xs4 md3 v-show="camp.amenities.mobileConnectivity").text-xs-center
+                v-icon(color="blue") signal_cellular_4_bar
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Mobile Connectivity
+              
+
+              v-flex(xs4 md3 v-show="camp.amenities.washRoomAttached").text-xs-center
+                v-icon(color="pink") meeting_room
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
+              
+
+              v-flex(xs4 md3 v-show="camp.amenities.mealsInclude").text-xs-center
+                v-icon(color="orange darken-4") room_service
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
+              
+
+              v-flex(xs4 md3 v-show="camp.amenities.hotWater").text-xs-center
+                v-icon(color="red darken-4") hot_tub
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Water
+        v-divider(inset vertical).mx-3.hidden-sm-and-down
+        v-flex(sm12 md5)
+          v-container(grid-list-lg fluid v-if="camp.nearByActivities").mt-2.px-0
+            h1.text-xs-center.page-headings Nearby Activities
+            v-layout.mt-5(row wrap)
+              v-flex(xs4 md3 v-show="camp.nearByActivities.waterRafting").text-xs-center
+                v-img.activities_icon(src="/vectors/rafting.svg" height="24" width="24") 
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Water Rafting
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.kayaking").text-xs-center
+                v-img.activities_icon(src="/vectors/kayaking.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Kayaking
+            
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.skiing").text-xs-center
+                v-img.activities_icon(src="/vectors/skking.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Skiing
+            
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.waterfallRappelling").text-xs-center
+                v-img.activities_icon(src="/vectors/waterfall.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Waterfall Rappel
+            
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.skydiving").text-xs-center
+                v-img.activities_icon(src="/vectors/skydiving.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Sky Diving
+            
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.scubaDiving").text-xs-center
+                v-img.activities_icon(src="/vectors/scuba.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Scuba Diving
+            
+
+              v-flex(xs4 md3 v-show="camp.nearByActivities.hotAirBallon").text-xs-center
+                v-img.activities_icon(src="/vectors/hotair.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Air Ballon
+            
+              v-flex(xs4 md3 v-show="camp.nearByActivities.caving").text-xs-center
+                v-img.activities_icon(src="/vectors/caving.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Caving
+            
+              v-flex(xs4 md3 v-show="camp.nearByActivities.trekking").text-xs-center
+                v-img.activities_icon(src="/vectors/trekking.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Trekking
+            
+              v-flex(xs4 md3 v-show="camp.nearByActivities.snorkelling").text-xs-center
+                v-img.activities_icon(src="/vectors/snorkel.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Snorkelling
+            
+              v-flex(xs4 md3 v-show="camp.nearByActivities.cliffJumping").text-xs-center
+                v-img.activities_icon(src="/vectors/cliff.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cliff Jumping
+            
+              v-flex(xs4 md3 v-show="camp.nearByActivities.paragliding").text-xs-center
+                v-img.activities_icon(src="/vectors/paragliding.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Paragliding
+              
+              v-flex(xs4 md3 v-show="camp.nearByActivities.cycling").text-xs-center
+                v-img.activities_icon(src="/vectors/bicycle.svg" height="24" width="24")
+                .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cycling
+        
     v-divider.mt-4
     v-container.mt-4(fluid)
-      h1.page-headings Our Customers Reviews
-      v-carousel(hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
-        v-carousel-item(v-for="(slide,i) in slides" :key="i")
+      h1.page-headings Recent Opinions
+      v-carousel(cycle hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
+        v-carousel-item(v-for="review in reviews" :key="review")
           v-layout.review-layout(column)
             v-avatar(color="orange" size="62")
-              span AB
-            h1 Ayush Bahuguna
-            v-rating()
-            p.text-xs-center.review-para Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              v-img(:src="'https://ui-avatars.com/api/?name=' + review.user.name")
+            h1 {{review.user.name}}
+            v-rating(readonly small dense v-model="review.stars")
+            span.subtitle.grey--text.text--darken-2.ml-1 {{review.createdAt | moment("from", "now")}}
+            p.text-xs-center.review-para {{review.comment}}
     v-divider.mt-4
     v-container.mt-4(fluid)
       h1.page-headings Similar Camps
-      hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4" :infiniteScroll="true" )
-        slide.px-2
-          v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-        slide.px-2
-          v-card.activity-card
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
-        slide.px-2
-          v-card.activity-card
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.  
-        slide.px-2
-          v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.   
+      hooper.hidden-sm-and-down.mt-5.activities-slider(:itemsToShow="4.5" :infiniteScroll="true" )
+        slide.px-2(v-for="(similarCamp, index) in similarCamps" :key="index")
+          v-card.activity-card(@click="$router.push('/camp/' + similarCamp.url)")
+            v-img.card-image(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + similarCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + similarCamp.heroImage") 
+            v-layout(row)
+              v-flex(md6)
+                v-layout.mx-3.my-2(column)
+                  h5 {{similarCamp.name}}
+                  h5 Chopta, Uttarakhand
+              v-flex(md6)
+                v-rating.text-xs-center.my-2(small readonly)
+            v-card-text.text-primary.gray-text.card-para {{similarCamp.shortDescription}}
+        
         hooper-navigation(slot="hooper-addons")
       // Mobile Similar Camps Slider
-      hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
-        slide
-          v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
-        slide
-          v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
-        slide
-          v-card.activity-card 
-            v-img(src="https://images.pexels.com/photos/1656564/pexels-photo-1656564.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260") 
-            v-card-text.text-primary Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+      hooper.hidden-md-and-up.activities-slider(:itemsToShow="1" :infiniteScroll="true")
+        slide.px-2(v-for="(similarCamp, index) in similarCamps" :key="index")
+          v-card.activity-card(@click="$router.push('/camp/' + similarCamp.url)")
+            v-img.card-image(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + similarCamp.heroImage" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + similarCamp.heroImage") 
+            v-layout(row)
+              v-flex(md6)
+                v-layout.mx-3.my-2(column)
+                  h5 {{similarCamp.name}}
+                  h5 Chopta, Uttarakhand
+              v-flex(md6)
+                v-rating.text-xs-center.my-3(small readonly)
+            v-card-text.text-primary.gray-text.card-para {{similarCamp.shortDescription}}
         hooper-pagination(slot="hooper-addons")
-
-    //- v-responsive(height="90vh")
-    //-   v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + camp.heroImage" height="100%" position="center center" v-if="camp.heroImage"
-    //-   :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + camp.heroImage")
-    //-     v-layout.lightbox.white--text(column fill-height).pt-5.mt-5
-    //-       .d-flex.image-flex
-    //-         .d-flex.align-self-center
-    //-           h1.display-4.camp-name.hidden-sm-and-down {{camp.name}}
-    //-           h1.display-3.camp-name.hidden-md-and-up {{camp.name}}
-
-    //-         .d-flex.align-self-start.pb-4.px-4(style='width:100%')
-    //-           span.pt-1(style='width:100%')
-    //-             v-icon(dark color="green") star
-    //-             span.title.pl-1.green--text.font-weight-bold {{camp.averageRating}}
-    //-             span.subheading.pl-2 ({{camp.ratingsCount}} ratings)
-    //-           .d-flex.align-self-end
-    //-             v-btn(v-if='!isInWishList' dark @click='addToWishList(camp.id)')
-    //-               span Add To Wishlist
-    //-               v-icon(color='green').pl-1 bookmarks
-    //-             v-btn(v-else dark @click='removeFromWishList(camp.id)')
-    //-               span Remove from Wishlist
-    //-               v-icon(color='error').pl-1 close
-    //- v-responsive(height="40vh").hidden-sm-and-down
-    //-   v-card(color="grey darken-4" flat height="100%" tile
-    //-   style="align-items: center; display: flex")
-    //-     tiny-slider(:mouse-drag="true" :loop="false" items="4" gutter="20"
-    //-     :arrowKeys="true" :nav="false" :controls="false" :lazyload="true"
-    //-     :autoplay="true" :autoplay-button-output="false" v-if="camp.images" :autoHeight="true")
-    //-       v-responsive(v-for="image in camp.images" :key="image")
-    //-         v-card
-    //-           v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-    //-   //- For Mobile
-    //- v-responsive(height="40vh").hidden-md-and-up
-    //-   v-card(color="grey darken-4" flat height="100%" tile style="align-items: center").hidden-md-and-up
-    //-     tiny-slider(:mouse-drag="true" :loop="true" items="1"
-    //-     :nav="false" :controls="false" :lazyload="true" v-if="camp.images"
-    //-     :autoplay="true" :autoplay-button-output="false")
-    //-       v-responsive(height="50vh" v-for="image in camp.images" :key="image")
-    //-         v-card
-    //-           v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-
-    //- v-layout(row wrap style="min-height: 90vh").py-4
-    //-   v-flex(sm12 md5 offset-md1).py-4.content-flex
-    //-     h1.display-1.pb-3 About {{camp.name}}
-    //-     v-divider
-    //-     p.pt-4.subheading(style="text-align: justify") {{camp.longDescription}}
-
-    //-     h1.headline.mt-5.px-1.font-weight-bold Amenities
-    //-     v-container(grid-list-lg fluid v-if="camp.amenities").mt-2.px-0
-    //-       v-layout(row wrap)
-    //-         v-flex(xs6 md3).text-xs-center
-    //-           v-icon wb_cloudy
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1(v-if="camp.temperature") {{camp.temperature}} °C ({{camp.temperatureSummary}})
-    //-           .subheading.grey--text.font-weight-regular.mt-1(v-else) Temperature Not Available
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.bonfire").text-xs-center
-    //-           v-icon(color="red") whatshot
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Bonfire
-           
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.petsAllowed").text-xs-center
-    //-           v-icon(color="brown") pets
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Pets Allowed
-            
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.chargingPoints").text-xs-center
-    //-           v-icon(color="blue") battery_charging_full
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Charging Points
-            
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.mobileConnectivity").text-xs-center
-    //-           v-icon(color="blue") signal_cellular_4_bar
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Mobile Connectivity
-            
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.washRoomAttached").text-xs-center
-    //-           v-icon(color="pink") meeting_room
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Washroom Attached
-            
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.mealsInclude").text-xs-center
-    //-           v-icon(color="orange darken-4") room_service
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Meals Included
-           
-
-    //-         v-flex(xs6 md3 v-show="camp.amenities.hotWater").text-xs-center
-    //-           v-icon(color="red darken-4") hot_tub
-    //-           .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Hot Water
-           
-
-
-    //-     h1.headline.mt-5.px-1.font-weight-bold Location
-    //-     .iframe-container.mt-4
-    //-       iframe(v-if="camp" :src="mapUri" allowfullscreen)
-
-               
-            
-
-    //-   v-divider(inset vertical).mx-3
-
-    //-   v-flex(sm12 md5).py-4.pl-4
-    //-     h3.display-1.pb-3 Recent Opinions
-    //-     v-divider
-    //-     v-card(v-for="review in reviews" :key="review").ma-4.pa-4.comment-card
-    //-       v-layout(row wrap)
-    //-         v-flex(md2 sm3)
-    //-           v-avatar(color="red")
-    //-             img(:src="'https://ui-avatars.com/api/?name=' + review.user.name")
-    //-         v-flex(md6 sm7)
-    //-           span.subheading {{review.comment}}
-    //-         v-flex(md3 sm12 offset-md1)
-    //-           v-layout(column)
-    //-             span.subtitle.grey--text.text--darken-2.ml-1 {{review.createdAt | moment("from", "now")}}
-    //-             v-rating(readonly small dense v-model="review.stars").mt-1
-
 
     //- Bottom Bar
     .bottom-nav
@@ -458,8 +298,7 @@ export default {
       user: {},
       userWishList: [],
       isInWishList: false,
-      slides: ['First', 'Second', 'Third', 'Fourth', 'Fifth'],
-      activities: []
+      similarCamps: []
     }
   },
   metaInfo() {
@@ -541,9 +380,7 @@ export default {
       request('https://api.campzy.in/graphql', getCampByUrl, variables)
         .then(data => {
           this.camp = data.campUser
-          // eslint-disable-next-line
-          console.log(this.camp.nearByActivities)
-          this.activities = this.camp.nearByActivities
+          this.getSimilarCamps(this.camp.location)
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.lat},${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
         })
         .catch(() => {
@@ -813,6 +650,80 @@ export default {
         .finally(() => {
           EventBus.$emit('hide-progress-bar')
         })
+    },
+    getSimilarCamps(placeName) {
+      // eslint-disable-next-line
+      console.log(placeName)
+      const client = new GraphQLClient('https://api.campzy.in/graphql', {
+        headers: {
+          Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
+        }
+      })
+      const getCampByPlace = `query($place: String!){
+        getCampsInPlace(place: $place){
+          luxuryCamps{
+            name
+            url
+            inventory {
+              id,
+              bookingPrice
+            }
+            heroImage
+            shortDescription
+          },
+          premiumCamps{
+            name
+            url
+            inventory {
+              id,
+              bookingPrice
+            }
+            heroImage
+            shortDescription
+          },
+          normalCamps{
+            name
+            url
+            inventory {
+              id,
+              bookingPrice
+            }
+            heroImage
+            shortDescription
+          }
+          cheapCamps{
+            name
+            url
+            inventory {
+              id,
+              bookingPrice
+            }
+            heroImage
+            shortDescription
+          }
+        }
+      }`
+      const variables = {
+        place: placeName
+      }
+
+      client
+        .request(getCampByPlace, variables)
+        .then(data => {
+          Object.values(data.getCampsInPlace).forEach(arr => {
+            this.similarCamps.push(...arr)
+          })
+          // eslint-disable-next-line
+          console.log(this.similarCamps)
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
+          EventBus.$emit(
+            'show-error-notification-short',
+            'Unable to get Camps rigth now!'
+          )
+        })
     }
   }
 }
@@ -952,15 +863,18 @@ export default {
 
 .activities-slider {
   width: 100%;
-  height: 100%;
+  height: 400px;
 }
 .activity-card {
-  width: 400px;
+  height: 350px;
   @media screen and (max-width: 960px) {
     width: 100%;
-    padding: 0rem 1rem;
+    // padding: 0rem 1rem;
     margin-top: 2rem;
   }
+}
+.card-image {
+  height: 170px;
 }
 
 .page-headings {
@@ -988,5 +902,28 @@ export default {
     margin: 4rem 0rem;
     width: 100%;
   }
+}
+.gray-text {
+  color: gray;
+}
+.card-para {
+  padding: 0 1rem;
+  text-align: justify;
+  letter-spacing: 0.05rem;
+  @media screen and (min-width: 960px) and (max-width: 1469px) {
+    font-size: 12px;
+    letter-spacing: 0;
+  }
+}
+
+// .hooper-slide {
+//   width: 380px !important;
+//   @media screen and (max-width: 960px) {
+//     width: 100%;
+//   }
+// }
+
+.v-rating i {
+  padding: 2px 2px !important;
 }
 </style>
