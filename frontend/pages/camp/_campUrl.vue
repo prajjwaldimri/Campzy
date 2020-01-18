@@ -8,32 +8,23 @@
       v-layout(row wrap)
         v-flex(sm12 md7)
           v-layout.hidden-sm-and-down.pl-4(row style="height:100%")
-            v-flex(md12)
-              v-carousel
-                v-carousel-item(v-for="image in images" :key="image")
-                  img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-            //- hooper.small-slider.ml-2(group="group1" :vertical="true" :itemsToShow="4" :centerMode="true" :infiniteScroll="true")
-            //-   slide.pb-2(v-for="image in camp.images" :key="image")
-            //-     img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-            //-   hooper-navigation( slot="hooper-addons")
-
-            //- hooper.large-slider.ml-3(group="group1" :itemsToShow="1" :infiniteScroll="true")
-            //-   slide(v-for="image in camp.images" :key="image")
-            //-     img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-            //-   hooper-pagination(slot="hooper-addons")
-              
+            v-flex(md2)
+              v-layout.small-image-slider(column)
+                v-card.mb-3(v-for="img in camp.images" :key="img" style="height: 20%;" @click="setImage(img)")
+                  v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + img")
+            v-flex.ml-4(md9)
+              v-card(style="width:100%; height:100%")
+                img.slide-img(:src="sliderImage" @click="openImageDialog")
+          v-carousel.hidden-md-and-up(hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
+            v-carousel-item(v-for="image in camp.images" :key="image")
+              v-card(style="width:100%; height:100%")
+                img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
           
-          // Mobile Slider
-          hooper.hidden-md-and-up.large-slider(:itemsToShow="1" :infiniteScroll="true")
-            slide(v-for="image in camp.images" :key="image")
-              img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-            
-            hooper-pagination(slot="hooper-addons")
         v-flex(sm12 md5 style="position:relative")
           v-layout.lightbox.justify-center(column fill-height)
             .d-flex.image-flex
               .d-flex.align-self-center
-                h1.display-3.camp-name {{camp.name}}
+                h1.camp-name {{camp.name}}
               .d-flex.align-self-center
                 h2.gray-text.text-xs-bold
                   v-icon where_to_vote
@@ -302,7 +293,8 @@ export default {
       user: {},
       userWishList: [],
       isInWishList: false,
-      similarCamps: []
+      similarCamps: [],
+      sliderImage: ''
     }
   },
   metaInfo() {
@@ -371,6 +363,11 @@ export default {
     this.getUser()
   },
   methods: {
+    setImage(imageToSet) {
+      this.sliderImage =
+        'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' +
+        imageToSet
+    },
     allowedDates(val) {
       return this.$moment(val).isSameOrAfter(Date.now(), 'days')
     },
@@ -385,6 +382,9 @@ export default {
         .then(data => {
           this.camp = data.campUser
           this.getSimilarCamps(this.camp.location)
+          this.sliderImage =
+            'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' +
+            this.camp.heroImage
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.lat},${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
         })
         .catch(() => {
@@ -803,7 +803,6 @@ export default {
 .slide-img {
   height: 100%;
   width: 100%;
-  background-size: cover;
 }
 
 .image-flex {
@@ -818,7 +817,7 @@ export default {
 }
 
 .lightbox {
-  padding: 0rem 2.5rem;
+  padding: 0rem 2.5rem 0rem 0.5rem;
   @media screen and (max-width: 960px) {
     padding: 0rem 1.5rem;
   }
@@ -835,8 +834,13 @@ export default {
   }
 }
 .camp-name {
+  font-size: 56px;
   font-family: 'Permanent Marker', cursive !important;
   text-align: center;
+  @media screen and (max-width: 960px) {
+    margin-top: 1.5rem;
+    font-size: 35px;
+  }
 }
 .iframe-container {
   overflow: hidden;
@@ -923,5 +927,9 @@ export default {
 
 .v-rating i {
   padding: 2px 2px !important;
+}
+
+.small-image-slider {
+  overflow: hidden;
 }
 </style>
