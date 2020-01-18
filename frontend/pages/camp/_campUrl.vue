@@ -8,15 +8,19 @@
       v-layout(row wrap)
         v-flex(sm12 md7)
           v-layout.hidden-sm-and-down.pl-4(row style="height:100%")
-            hooper.small-slider.ml-2(group="group1" :vertical="true" :itemsToShow="4" :centerMode="true" :infiniteScroll="true")
-              slide.pb-2(v-for="image in camp.images" :key="image")
-                img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-              hooper-navigation( slot="hooper-addons")
+            v-flex(md12)
+              v-carousel
+                v-carousel-item(v-for="image in images" :key="image")
+                  img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+            //- hooper.small-slider.ml-2(group="group1" :vertical="true" :itemsToShow="4" :centerMode="true" :infiniteScroll="true")
+            //-   slide.pb-2(v-for="image in camp.images" :key="image")
+            //-     img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+            //-   hooper-navigation( slot="hooper-addons")
 
-            hooper.large-slider.ml-3(group="group1" :itemsToShow="1" :infiniteScroll="true")
-              slide(v-for="image in camp.images" :key="image")
-                img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
-              hooper-pagination(slot="hooper-addons")
+            //- hooper.large-slider.ml-3(group="group1" :itemsToShow="1" :infiniteScroll="true")
+            //-   slide(v-for="image in camp.images" :key="image")
+            //-     img.slide-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + image" @click="openImageDialog" :lazy-src="'https://s3.ap-south-1.amazonaws.com/campzy-images/thumbnails/' + image")
+            //-   hooper-pagination(slot="hooper-addons")
               
           
           // Mobile Slider
@@ -652,8 +656,6 @@ export default {
         })
     },
     getSimilarCamps(placeName) {
-      // eslint-disable-next-line
-      console.log(placeName)
       const client = new GraphQLClient('https://api.campzy.in/graphql', {
         headers: {
           Authorization: `Bearer ${this.$cookie.get('sessionToken')}`
@@ -713,12 +715,8 @@ export default {
           Object.values(data.getCampsInPlace).forEach(arr => {
             this.similarCamps.push(...arr)
           })
-          // eslint-disable-next-line
-          console.log(this.similarCamps)
         })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err)
+        .catch(() => {
           EventBus.$emit(
             'show-error-notification-short',
             'Unable to get Camps rigth now!'
