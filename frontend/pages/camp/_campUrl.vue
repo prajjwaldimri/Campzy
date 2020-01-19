@@ -4,13 +4,13 @@
 
     SearchImagesDialog
     ReviewCampDialog
-    v-container.px-0(fluid)
+    v-container.slider-container(fluid)
       v-layout(row wrap)
         v-flex(sm12 md7)
-          v-layout.hidden-sm-and-down.pl-4(row style="height:100%")
+          v-layout.hidden-sm-and-down.pl-4(row)
             v-flex(md2)
               v-layout.small-image-slider(column)
-                v-card.mb-3(v-for="img in camp.images" :key="img" style="height: 20%;" @click="setImage(img)")
+                v-card.mb-3(v-for="img in camp.images" :key="img" style="height:20%;" @click="setImage(img)")
                   v-img(:src="'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' + img")
             v-flex.ml-4(md9)
               v-card(style="width:100%; height:100%")
@@ -154,7 +154,7 @@
                 .subheading.grey--text.text--darken-3.font-weight-regular.mt-1 Cycling
         
     v-divider.mt-4
-    v-container.mt-4(fluid)
+    v-container.mt-4
       h1.page-headings Recent Opinions
       v-carousel(cycle hide-delimiters hide-delimiter-background show-arrows-on-hover :show-arrows="false" style="box-shadow:none;")
         v-carousel-item(v-for="review in reviews" :key="review")
@@ -294,7 +294,8 @@ export default {
       userWishList: [],
       isInWishList: false,
       similarCamps: [],
-      sliderImage: ''
+      sliderImage: '',
+      campImagess: []
     }
   },
   metaInfo() {
@@ -385,6 +386,10 @@ export default {
           this.sliderImage =
             'https://s3.ap-south-1.amazonaws.com/campzy-images/high-res/' +
             this.camp.heroImage
+
+          // for (let i = 0; i <= 3; i++) {
+          //   this.campImagess.push(this.camp.images[i])
+          // }
           this.mapUri = `https://www.google.com/maps/embed/v1/view?key=AIzaSyDUX5To9kCG343O7JosaLR3YwTjA3_jX6g&center=${this.camp.coordinates.lat},${this.camp.coordinates.lng}&zoom=18&maptype=satellite`
         })
         .catch(() => {
@@ -800,6 +805,13 @@ export default {
 
 // New Camp Page Style
 
+.slider-container {
+  padding: 24px 0;
+  @media screen and (max-width: 960px) {
+    padding: 0px 0px;
+  }
+}
+
 .slide-img {
   height: 100%;
   width: 100%;
@@ -930,6 +942,12 @@ export default {
 }
 
 .small-image-slider {
-  overflow: hidden;
+  overflow-y: scroll;
+  white-space: normal;
+  height: 40em;
+  text-overflow: -o-ellipsis-lastline;
+}
+.small-image-slider::-webkit-scrollbar {
+  display: none !important;
 }
 </style>
