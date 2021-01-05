@@ -34,7 +34,7 @@
     "apexcharts": "^2.1.2",
     "apollo-errors": "^1.9.0",
     "aws-sdk": "^2.306.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "body-parser-graphql": "^1.1.0",
