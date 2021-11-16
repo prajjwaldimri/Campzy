@@ -33,7 +33,7 @@
     "animejs": "^2.2.0",
     "apexcharts": "^2.1.2",
     "apollo-errors": "^1.9.0",
-    "aws-sdk": "^2.306.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
