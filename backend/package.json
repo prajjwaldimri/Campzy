@@ -51,7 +51,7 @@
     "mongoose-validator": "^2.1.0",
     "multer": "^1.3.1",
     "multer-s3": "^2.7.0",
-    "nanoid": "^2.0.1",
+    "nanoid": "^3.1.31",
     "nanoid-good": "^1.2.1",
     "node-mailjet": "^3.2.1",
     "nodemon": "^1.18.3",
